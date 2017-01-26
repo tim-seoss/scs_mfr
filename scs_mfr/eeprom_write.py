@@ -9,6 +9,12 @@ Raspberry Pi:
 https://github.com/raspberrypi/hats/tree/master/eepromutils
 
 BeagleBone:
+http://azkeller.com/blog/?p=62
+
+https://github.com/jbdatko/eeprom_tutorial/blob/master/eeprom.md
+https://github.com/picoflamingo/BBCape_EEPROM
+
+http://papermint-designs.com/community/node/331
 
 
 command line example:
