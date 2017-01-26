@@ -9,6 +9,8 @@ from serial import Serial
 from scs_mfr.power.power_datum import PowerDatum
 
 
+# TODO: put device references in Host
+
 # --------------------------------------------------------------------------------------------------------------------
 
 class PowerMeter(object):
