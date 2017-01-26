@@ -8,6 +8,9 @@ Created on 26 Sep 2016
 Raspberry Pi:
 https://github.com/raspberrypi/hats/tree/master/eepromutils
 
+https://www.raspberrypi.org/documentation/configuration/device-tree.md
+
+
 BeagleBone:
 http://azkeller.com/blog/?p=62
 
@@ -16,13 +19,14 @@ https://github.com/picoflamingo/BBCape_EEPROM
 
 http://papermint-designs.com/community/node/331
 
+https://learn.adafruit.com/introduction-to-the-beaglebone-black-device-tree/compiling-an-overlay
+
 
 command line example:
 ./scs_manufacture/eeprom_write.py /home/pi/hats/eepromutils/myhat.eep
 """
 
 import os.path
-import subprocess
 import sys
 
 from scs_core.data.json import JSONify
@@ -39,8 +43,7 @@ from scs_mfr.cmd.cmd_eeprom_write import CmdEEPROMWrite
 
 # --------------------------------------------------------------------------------------------------------------------
 
-# Enable I2C bus 1 for EEPROM operations on RPi...
-subprocess.call(['sudo', 'dtoverlay', 'i2c-gpio', 'i2c_gpio_sda=0', 'i2c_gpio_scl=1'])
+Host.enable_eeprom_write()
 
 
 # --------------------------------------------------------------------------------------------------------------------
