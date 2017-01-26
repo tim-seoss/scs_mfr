@@ -5,6 +5,12 @@ Created on 26 Sep 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
+Raspberry Pi:
+https://github.com/raspberrypi/hats/tree/master/eepromutils
+
+BeagleBone:
+
+
 command line example:
 ./scs_manufacture/eeprom_write.py /home/pi/hats/eepromutils/myhat.eep
 """
@@ -27,6 +33,7 @@ from scs_mfr.cmd.cmd_eeprom_write import CmdEEPROMWrite
 
 # --------------------------------------------------------------------------------------------------------------------
 
+# Enable I2C bus 1 for EEPROM operations on RPi...
 subprocess.call(['sudo', 'dtoverlay', 'i2c-gpio', 'i2c_gpio_sda=0', 'i2c_gpio_scl=1'])
 
 
