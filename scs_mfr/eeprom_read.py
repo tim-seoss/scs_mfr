@@ -6,7 +6,6 @@ Created on 26 Sep 2016
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
-import subprocess
 import sys
 
 from scs_core.data.json import JSONify
@@ -46,8 +45,8 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # end...
 
-    # except Exception as ex:
-    #     print(JSONify.dumps(ExceptionReport.construct(ex)), file=sys.stderr)
+    except Exception as ex:
+        print(JSONify.dumps(ExceptionReport.construct(ex)), file=sys.stderr)
 
     finally:
         I2C.close()
