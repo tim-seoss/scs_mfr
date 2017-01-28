@@ -11,7 +11,7 @@ import sys
 from scs_core.data.json import JSONify
 from scs_core.sys.exception_report import ExceptionReport
 
-from scs_dfe.board.product_id import ProductID
+from scs_dfe.board.dfe_product_id import DFEProductID
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -23,7 +23,7 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # resource...   scs_data
 
-        product_id = ProductID()
+        product_id = DFEProductID()
 
 
         # ------------------------------------------------------------------------------------------------------------
