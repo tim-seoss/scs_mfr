@@ -6,7 +6,7 @@ Created on 13 Dec 2016
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 command line example:
-./scs_manufacture/sht_conf.py -v -i 0x44
+./scs_mfr/sht_conf.py -v -i 0x44
 """
 
 import sys

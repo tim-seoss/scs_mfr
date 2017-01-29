@@ -6,7 +6,7 @@ Created on 24 Dec 2016
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 command line example:
-./scs_manufacture/gpi.py P9_12 -w 0 -v
+./scs_mfr/gpi.py P9_12 -w 0 -v
 """
 
 import sys

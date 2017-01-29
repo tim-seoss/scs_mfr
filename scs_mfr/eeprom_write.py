@@ -23,7 +23,7 @@ https://learn.adafruit.com/introduction-to-the-beaglebone-black-device-tree/comp
 
 
 command line example:
-./scs_manufacture/eeprom_write.py /home/pi/hats/eepromutils/myhat.eep
+./scs_mfr/eeprom_write.py -v /home/pi/SCS/hat.eep
 """
 
 import os.path
@@ -32,9 +32,12 @@ import sys
 from scs_core.data.json import JSONify
 from scs_core.sys.eeprom_image import EEPROMImage
 from scs_core.sys.exception_report import ExceptionReport
+
 from scs_dfe.board.cat24c32 import CAT24C32
 from scs_dfe.bus.i2c import I2C
+
 from scs_host.sys.host import Host
+
 from scs_mfr.cmd.cmd_eeprom_write import CmdEEPROMWrite
 
 
