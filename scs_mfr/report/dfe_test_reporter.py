@@ -6,10 +6,12 @@ Created on 29 Jan 2017
 
 import sys
 
+from collections import OrderedDict
+
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class TestReporter(object):
+class DFETestReporter(object):
     """
     classdocs
     """
@@ -21,28 +23,32 @@ class TestReporter(object):
         Constructor
         """
         self.__passed = True
+        self.__subjects = OrderedDict()
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def report_test(self, result):
-        report = 'OK' if result else 'FAIL'
+    def report_test(self, subject, ok):
+        report = 'OK' if ok else 'FAIL'
+
+        self.__subjects[subject] = report
 
         print(report, file=sys.stderr)
         print("-", file=sys.stderr)
 
-        if not result:
+        if not ok:
             self.__passed = False
 
 
-    def report_exception(self, exception, is_fatal):
-        print(exception.__class__.__name__, file=sys.stderr)
+    def report_exception(self, subject, exception):
+        report = exception.__class__.__name__
+
+        self.__subjects[subject] = report
+
+        print(report, file=sys.stderr)
+        print("-", file=sys.stderr)
 
         self.__passed = False
-
-        if is_fatal:
-            print("-", file=sys.stderr)
-            raise exception
 
 
     def report_result(self):
@@ -59,7 +65,12 @@ class TestReporter(object):
         return self.__passed
 
 
+    @property
+    def subjects(self):
+        return self.__subjects
+
+
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "TestReporter:{passed:%s}" % (self.passed)
+        return "DFETestReporter:{passed:%s, subjects:%s}" % (self.passed, self.subjects)

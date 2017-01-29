@@ -5,30 +5,15 @@ Created on 29 Jan 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Raspberry Pi:
-https://github.com/raspberrypi/hats/tree/master/eepromutils
-
-https://www.raspberrypi.org/documentation/configuration/device-tree.md
-
-
-BeagleBone:
-http://azkeller.com/blog/?p=62
-
-https://github.com/jbdatko/eeprom_tutorial/blob/master/eeprom.md
-https://github.com/picoflamingo/BBCape_EEPROM
-
-http://papermint-designs.com/community/node/331
-
-https://learn.adafruit.com/introduction-to-the-beaglebone-black-device-tree/compiling-an-overlay
-
-
 command line example:
-./scs_mfr/eeprom_write.py -v /home/pi/SCS/hat.eep
+./scs_mfr/dfe_test.py
 """
 
 import os.path
 import sys
 
+from scs_core.data.json import JSONify
+from scs_core.data.localized_datetime import LocalizedDatetime
 from scs_core.sys.eeprom_image import EEPROMImage
 
 from scs_dfe.board.cat24c32 import CAT24C32
@@ -42,7 +27,8 @@ from scs_dfe.particulate.opc_n2 import OPCN2
 
 from scs_host.sys.host import Host
 
-from scs_mfr.report.dfe_test_reporter import TestReporter
+from scs_mfr.report.dfe_test_datum import DFETestDatum
+from scs_mfr.report.dfe_test_reporter import DFETestReporter
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -51,7 +37,7 @@ from scs_mfr.report.dfe_test_reporter import TestReporter
 eeprom_image_name = '/home/pi/SCS/hat.eep'           # hard-coded path
 opc = None
 
-reporter = TestReporter()
+reporter = DFETestReporter()
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -89,13 +75,11 @@ if __name__ == '__main__':
             eeprom.write(file_image)
 
             ok = eeprom.image == file_image
+            reporter.report_test("EEPROM", ok)
 
         except Exception as ex:
-            reporter.report_exception(ex, True)
+            reporter.report_exception("EEPROM", ex)
             ok = False
-
-        # report...
-        reporter.report_test(ok)
 
     except RuntimeError:
         pass
@@ -118,14 +102,13 @@ if __name__ == '__main__':
             print(datum, file=sys.stderr)
 
             temp = datum.temp
+
             ok = 10 < temp < 50
+            reporter.report_test("BoardTemp", ok)
 
         except Exception as ex:
-            reporter.report_exception(ex, False)
+            reporter.report_exception("BoardTemp", ex)
             ok = False
-
-        # report...
-        reporter.report_test(ok)
 
 
         # ------------------------------------------------------------------------------------------------------------
@@ -134,24 +117,22 @@ if __name__ == '__main__':
         print("OPC...", file=sys.stderr)
 
         try:
-            sensor = OPCN2()
-            sensor.on()
+            opc = OPCN2()
+            opc.on()
 
-            firmware = sensor.firmware()
+            firmware = opc.firmware()
             print(firmware, file=sys.stderr)
 
             ok = len(firmware) > 0
+            reporter.report_test("OPC", ok)
 
         except Exception as ex:
-            reporter.report_exception(ex, False)
+            reporter.report_exception("OPC", ex)
             ok = False
 
         finally:
-            if sensor:
-                sensor.off()
-
-        # report...
-        reporter.report_test(ok)
+            if opc:
+                opc.off()
 
 
         # ------------------------------------------------------------------------------------------------------------
@@ -176,13 +157,11 @@ if __name__ == '__main__':
             temp = datum.temp
 
             ok = 10 < humid < 90 and 10 < temp < 50
+            reporter.report_test("SHT", ok)
 
         except Exception as ex:
-            reporter.report_exception(ex, False)
+            reporter.report_exception("SHT", ex)
             ok = False
-
-        # report...
-        reporter.report_test(ok)
 
 
         # ------------------------------------------------------------------------------------------------------------
@@ -196,31 +175,35 @@ if __name__ == '__main__':
             sensors = conf.sensors()
 
             afe = AFE(pt1000, sensors)
-            datum = afe.sample()
+            afe_datum = afe.sample()
 
-            print(datum, file=sys.stderr)
+            print(afe_datum, file=sys.stderr)
 
-            ok = 0.4 < datum.pt1000.v < 0.6
+            ok = 0.4 < afe_datum.pt1000.v < 0.6
 
-            for gas, sensor in datum.sns.items():
+            for gas, sensor in afe_datum.sns.items():
                 sensor_ok = 0.9 < sensor.weV < 1.1 and 0.9 < sensor.aeV < 1.1
 
                 if not sensor_ok:
                     ok = False
 
+            reporter.report_test("AFE", ok)
+
         except Exception as ex:
-            reporter.report_exception(ex, False)
+            reporter.report_exception("AFE", ex)
             ok = False
             raise ex
-
-        # report...
-        reporter.report_test(ok)
 
 
         # ------------------------------------------------------------------------------------------------------------
         # result...
 
+        print(reporter, file=sys.stderr)
         reporter.report_result()
+
+        recorded = LocalizedDatetime.now()
+        datum = DFETestDatum(recorded, 123, reporter.subjects, afe_datum)
+        print(JSONify.dumps(datum))
 
 
     # ----------------------------------------------------------------------------------------------------------------
