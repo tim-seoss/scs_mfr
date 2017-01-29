@@ -31,10 +31,10 @@ from scs_mfr.report.dfe_test_datum import DFETestDatum
 from scs_mfr.report.dfe_test_reporter import DFETestReporter
 
 
+# TODO: collect serial number and file name from Cmd_
+
 # --------------------------------------------------------------------------------------------------------------------
 # config...
-
-eeprom_image_name = '/home/pi/SCS/hat.eep'           # hard-coded path
 
 opc = None
 afe_datum = None
@@ -46,7 +46,7 @@ reporter = DFETestReporter()
 
 # validate...
 
-if not os.path.isfile(eeprom_image_name):
+if not os.path.isfile(Host.SCS_EEP_IMAGE):
     print("error: eeprom image not found", file=sys.stderr)
     exit()
 
@@ -176,6 +176,7 @@ if __name__ == '__main__':
     finally:
         I2C.close()
 
+
     try:
         I2C.open(Host.I2C_EEPROM)
 
@@ -203,6 +204,7 @@ if __name__ == '__main__':
 
     finally:
         I2C.close()
+
 
     # ----------------------------------------------------------------------------------------------------------------
     # result...
