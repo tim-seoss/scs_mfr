@@ -7,6 +7,8 @@ Created on 29 Jan 2017
 from scs_core.sample.sample_datum import SampleDatum
 
 
+# TODO: add an AFETestDatum class to reduce the amount of rubbish
+
 # --------------------------------------------------------------------------------------------------------------------
 
 class DFETestDatum(SampleDatum):

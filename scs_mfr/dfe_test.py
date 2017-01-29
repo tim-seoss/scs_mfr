@@ -35,7 +35,9 @@ from scs_mfr.report.dfe_test_reporter import DFETestReporter
 # config...
 
 eeprom_image_name = '/home/pi/SCS/hat.eep'           # hard-coded path
+
 opc = None
+afe_datum = None
 
 reporter = DFETestReporter()
 
@@ -59,36 +61,11 @@ Host.enable_eeprom_access()
 if __name__ == '__main__':
 
     try:
-        I2C.open(Host.I2C_EEPROM)
-
+        I2C.open(Host.I2C_SENSORS)
 
         # ------------------------------------------------------------------------------------------------------------
-        # EEPROM...
+        # UID...
 
-        print("EEPROM...", file=sys.stderr)
-
-        # write...
-        try:
-            eeprom = CAT24C32()
-
-            file_image = EEPROMImage.construct_from_file(eeprom_image_name, CAT24C32.SIZE)
-            eeprom.write(file_image)
-
-            ok = eeprom.image == file_image
-            reporter.report_test("EEPROM", ok)
-
-        except Exception as ex:
-            reporter.report_exception("EEPROM", ex)
-            ok = False
-
-    except RuntimeError:
-        pass
-
-    finally:
-        I2C.close()
-
-    try:
-        I2C.open(Host.I2C_SENSORS)
 
         # ------------------------------------------------------------------------------------------------------------
         # Board temp...
@@ -192,25 +169,51 @@ if __name__ == '__main__':
         except Exception as ex:
             reporter.report_exception("AFE", ex)
             ok = False
-            raise ex
 
-
-        # ------------------------------------------------------------------------------------------------------------
-        # result...
-
-        print(reporter, file=sys.stderr)
-        reporter.report_result()
-
-        recorded = LocalizedDatetime.now()
-        datum = DFETestDatum(recorded, 123, reporter.subjects, afe_datum)
-        print(JSONify.dumps(datum))
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-    # end...
-
-    # except Exception as ex:
-    #     pass
+    except RuntimeError:
+        pass
 
     finally:
         I2C.close()
+
+    try:
+        I2C.open(Host.I2C_EEPROM)
+
+        # ------------------------------------------------------------------------------------------------------------
+        # EEPROM...
+
+        print("EEPROM...", file=sys.stderr)
+
+        # write...
+        try:
+            eeprom = CAT24C32()
+
+            file_image = EEPROMImage.construct_from_file(eeprom_image_name, CAT24C32.SIZE)
+            eeprom.write(file_image)
+
+            ok = eeprom.image == file_image
+            reporter.report_test("EEPROM", ok)
+
+        except Exception as ex:
+            reporter.report_exception("EEPROM", ex)
+            ok = False
+
+    except RuntimeError:
+        pass
+
+    finally:
+        I2C.close()
+
+    # ----------------------------------------------------------------------------------------------------------------
+    # result...
+
+    print(reporter, file=sys.stderr)
+    reporter.report_result()
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+    # report...
+
+    recorded = LocalizedDatetime.now()
+    datum = DFETestDatum(recorded, 123, reporter.subjects, afe_datum)
+    print(JSONify.dumps(datum))
