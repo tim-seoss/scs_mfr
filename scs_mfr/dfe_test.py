@@ -46,7 +46,7 @@ reporter = DFETestReporter()
 
 # validate...
 
-if not os.path.isfile(Host.SCS_EEP_IMAGE):
+if not os.path.isfile(Host.DFE_EEP_IMAGE):
     print("error: eeprom image not found", file=sys.stderr)
     exit()
 
@@ -190,7 +190,7 @@ if __name__ == '__main__':
         try:
             eeprom = CAT24C32()
 
-            file_image = EEPROMImage.construct_from_file(Host.SCS_EEP_IMAGE, CAT24C32.SIZE)
+            file_image = EEPROMImage.construct_from_file(Host.DFE_EEP_IMAGE, CAT24C32.SIZE)
             eeprom.write(file_image)
 
             ok = eeprom.image == file_image
