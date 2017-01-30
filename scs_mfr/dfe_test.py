@@ -27,23 +27,12 @@ from scs_dfe.particulate.opc_n2 import OPCN2
 
 from scs_host.sys.host import Host
 
+from scs_mfr.cmd.cmd_dfe_test import CmdDFETest
 from scs_mfr.report.dfe_test_datum import DFETestDatum
 from scs_mfr.report.dfe_test_reporter import DFETestReporter
 
 
-# TODO: collect serial number and file name from Cmd_
-
 # --------------------------------------------------------------------------------------------------------------------
-# config...
-
-opc = None
-afe_datum = None
-
-reporter = DFETestReporter()
-
-
-# --------------------------------------------------------------------------------------------------------------------
-
 # validate...
 
 if not os.path.isfile(Host.DFE_EEP_IMAGE):
@@ -51,7 +40,23 @@ if not os.path.isfile(Host.DFE_EEP_IMAGE):
     exit()
 
 
+# ----------------------------------------------------------------------------------------------------------------
+# cmd...
+
+cmd = CmdDFETest()
+
+if not cmd.is_valid():
+    cmd.print_help(sys.stderr)
+    exit()
+
+
 # --------------------------------------------------------------------------------------------------------------------
+# config...
+
+opc = None
+afe_datum = None
+
+reporter = DFETestReporter(cmd.verbose)
 
 Host.enable_eeprom_access()
 
@@ -70,13 +75,16 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # Board temp...
 
-        print("Board temp...", file=sys.stderr)
+        if cmd.verbose:
+            print("Board temp...", file=sys.stderr)
 
         try:
             sensor = MCP9808(True)
 
             datum = sensor.sample()
-            print(datum, file=sys.stderr)
+
+            if cmd.verbose:
+                print(datum, file=sys.stderr)
 
             temp = datum.temp
 
@@ -91,14 +99,17 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # OPC...
 
-        print("OPC...", file=sys.stderr)
+        if cmd.verbose:
+            print("OPC...", file=sys.stderr)
 
         try:
             opc = OPCN2()
             opc.on()
 
             firmware = opc.firmware()
-            print(firmware, file=sys.stderr)
+
+            if cmd.verbose:
+                print(firmware, file=sys.stderr)
 
             ok = len(firmware) > 0
             reporter.report_test("OPC", ok)
@@ -119,16 +130,18 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # SHT...
 
-        print("SHT...", file=sys.stderr)
+        if cmd.verbose:
+            print("SHT...", file=sys.stderr)
 
         try:
             sht_conf = SHTConf.load(Host)
             sht = sht_conf.ext_sht()
 
             sht.reset()
-
             datum = sht.sample()
-            print(datum, file=sys.stderr)
+
+            if cmd.verbose:
+                print(datum, file=sys.stderr)
 
             humid = datum.humid
             temp = datum.temp
@@ -144,7 +157,8 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # AFE...
 
-        print("AFE...", file=sys.stderr)
+        if cmd.verbose:
+            print("AFE...", file=sys.stderr)
 
         try:
             calib = Pt1000Calib.load(Host)
@@ -156,7 +170,8 @@ if __name__ == '__main__':
             afe = AFE(pt1000, sensors)
             afe_datum = afe.sample()
 
-            print(afe_datum, file=sys.stderr)
+            if cmd.verbose:
+                print(afe_datum, file=sys.stderr)
 
             ok = 0.4 < afe_datum.pt1000.v < 0.6
 
@@ -185,7 +200,8 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # EEPROM...
 
-        print("EEPROM...", file=sys.stderr)
+        if cmd.verbose:
+            print("EEPROM...", file=sys.stderr)
 
         try:
             eeprom = CAT24C32()
@@ -210,7 +226,9 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # result...
 
-    print(reporter, file=sys.stderr)
+    if cmd.verbose:
+        print(reporter, file=sys.stderr)
+
     reporter.report_result()
 
 
@@ -218,5 +236,6 @@ if __name__ == '__main__':
     # report...
 
     recorded = LocalizedDatetime.now()
-    datum = DFETestDatum(recorded, 123, reporter.subjects, afe_datum)
+    datum = DFETestDatum(recorded, cmd.serial_number, reporter.subjects, afe_datum)
+
     print(JSONify.dumps(datum))

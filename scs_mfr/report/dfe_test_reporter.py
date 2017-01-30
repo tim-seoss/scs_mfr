@@ -18,10 +18,12 @@ class DFETestReporter(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self):
+    def __init__(self, verbose=False):
         """
         Constructor
         """
+        self.__verbose = verbose
+
         self.__passed = True
         self.__subjects = OrderedDict()
 
@@ -33,8 +35,9 @@ class DFETestReporter(object):
 
         self.__subjects[subject] = report
 
-        print(report, file=sys.stderr)
-        print("-", file=sys.stderr)
+        if self.__verbose:
+            print(report, file=sys.stderr)
+            print("-", file=sys.stderr)
 
         if not ok:
             self.__passed = False
@@ -45,19 +48,19 @@ class DFETestReporter(object):
 
         self.__subjects[subject] = report
 
-        print(report, file=sys.stderr)
-        print("-", file=sys.stderr)
+        if self.__verbose:
+            print(report, file=sys.stderr)
+            print("-", file=sys.stderr)
 
         self.__passed = False
-
-        # raise exception
 
 
     def report_result(self):
         report = 'OK' if self.__passed else 'FAIL'
 
-        print("result: %s" % report, file=sys.stderr)
-        print("-", file=sys.stderr)
+        if self.__verbose:
+            print("result: %s" % report, file=sys.stderr)
+            print("-", file=sys.stderr)
 
 
     # ----------------------------------------------------------------------------------------------------------------
