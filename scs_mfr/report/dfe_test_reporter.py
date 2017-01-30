@@ -50,6 +50,8 @@ class DFETestReporter(object):
 
         self.__passed = False
 
+        # raise exception
+
 
     def report_result(self):
         report = 'OK' if self.__passed else 'FAIL'

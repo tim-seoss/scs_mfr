@@ -144,6 +144,8 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # AFE...
 
+        print("AFE...", file=sys.stderr)
+
         try:
             calib = Pt1000Calib.load(Host)
             pt1000 = calib.pt1000()
@@ -185,11 +187,10 @@ if __name__ == '__main__':
 
         print("EEPROM...", file=sys.stderr)
 
-        # write...
         try:
             eeprom = CAT24C32()
 
-            file_image = EEPROMImage.construct_from_file(eeprom_image_name, CAT24C32.SIZE)
+            file_image = EEPROMImage.construct_from_file(Host.SCS_EEP_IMAGE, CAT24C32.SIZE)
             eeprom.write(file_image)
 
             ok = eeprom.image == file_image
