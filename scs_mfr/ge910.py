@@ -29,12 +29,14 @@ class CommandSequencer(object):
     """
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, script_name):
+    def __init__(self, script_name, verbose):
         """
         Constructor
         """
         self.__script_name = script_name
         self.__file = sys.stdin if script_name is None else open(script_name)
+
+        self.__verbose = verbose
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -63,6 +65,11 @@ class CommandSequencer(object):
                 if len(line) == 1:
                     continue
 
+                if line.startswith('#'):
+                    if self.__verbose:
+                        print(line, file=sys.stderr)
+                    continue
+
                 text = line.strip()
 
                 print("> %s" % text)
@@ -73,7 +80,7 @@ class CommandSequencer(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "CommandSequencer:{script_name:%s}" % self.__script_name
+        return "CommandSequencer:{script_name:%s, , verbose:%s}" % (self.__script_name, self.__verbose)
 
 
 
@@ -103,7 +110,7 @@ if __name__ == '__main__':
         if cmd.verbose:
             print(modem, file=sys.stderr)
 
-        sequencer = CommandSequencer(cmd.script)
+        sequencer = CommandSequencer(cmd.script, cmd.verbose)
 
 
         # ------------------------------------------------------------------------------------------------------------

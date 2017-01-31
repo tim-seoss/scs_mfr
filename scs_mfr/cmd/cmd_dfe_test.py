@@ -18,7 +18,7 @@ class CmdDFETest(object):
 
         # optional...
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
-                                 help="report sent samples to stderr")
+                                 help="report narrative to stderr")
 
         self.__opts, self.__args = self.__parser.parse_args()
 
