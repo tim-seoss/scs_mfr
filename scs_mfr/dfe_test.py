@@ -15,18 +15,15 @@ import sys
 from scs_core.data.json import JSONify
 from scs_core.data.localized_datetime import LocalizedDatetime
 from scs_core.sys.eeprom_image import EEPROMImage
-
 from scs_dfe.board.cat24c32 import CAT24C32
-from scs_dfe.bus.i2c import I2C
 from scs_dfe.board.mcp9808 import MCP9808
 from scs_dfe.climate.sht_conf import SHTConf
 from scs_dfe.gas.afe import AFE
 from scs_dfe.gas.afe_conf import AFEConf
 from scs_dfe.gas.pt1000_calib import Pt1000Calib
 from scs_dfe.particulate.opc_n2 import OPCN2
-
+from scs_host.bus import I2C
 from scs_host.sys.host import Host
-
 from scs_mfr.cmd.cmd_dfe_test import CmdDFETest
 from scs_mfr.report.dfe_test_datum import DFETestDatum
 from scs_mfr.report.dfe_test_reporter import DFETestReporter
