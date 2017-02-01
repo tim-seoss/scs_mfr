@@ -12,8 +12,6 @@ command line example:
 import sys
 import time
 
-import Adafruit_BBIO.GPIO as GPIO
-
 from scs_core.data.json import JSONify
 from scs_core.sys.exception_report import ExceptionReport
 
@@ -48,7 +46,7 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # resource...
 
-        state = GPIO.HIGH if cmd.level else GPIO.LOW
+        state = HostGPO.HIGH if cmd.level else HostGPO.LOW
 
         gpo = HostGPO(cmd.pin, state)
 
@@ -76,4 +74,4 @@ if __name__ == '__main__':
         print(JSONify.dumps(ExceptionReport.construct(ex)), file=sys.stderr)
 
     finally:
-        GPIO.cleanup()
+        HostGPO.cleanup()

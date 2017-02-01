@@ -11,8 +11,6 @@ command line example:
 
 import sys
 
-import Adafruit_BBIO.GPIO as GPIO
-
 from scs_core.data.json import JSONify
 from scs_core.sys.exception_report import ExceptionReport
 
@@ -54,7 +52,7 @@ if __name__ == '__main__':
         # run...
 
         if cmd.wait is not None:
-            edge = GPIO.RISING if cmd.wait else GPIO.FALLING
+            edge = HostGPI.RISING if cmd.wait else HostGPI.FALLING
             gpi.wait(edge)
 
         print(gpi, file=sys.stderr)
@@ -71,4 +69,4 @@ if __name__ == '__main__':
         print(JSONify.dumps(ExceptionReport.construct(ex)), file=sys.stderr)
 
     finally:
-        GPIO.cleanup()
+        HostGPI.cleanup()
