@@ -10,8 +10,10 @@ import sys
 
 from scs_core.data.json import JSONify
 from scs_core.sys.exception_report import ExceptionReport
+
 from scs_dfe.board.cat24c32 import CAT24C32
-from scs_host.bus import I2C
+
+from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
 
