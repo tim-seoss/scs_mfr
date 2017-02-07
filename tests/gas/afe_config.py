@@ -41,7 +41,7 @@ try:
 
     afe_conf.save(Host)
 
-    afe_conf = AFEConf.load(Host)
+    afe_conf = AFEConf.load_from_host(Host)
     print(JSONify.dumps(afe_conf))
     print("=")
 
@@ -81,7 +81,7 @@ try:
 
     afe_calib.save(Host)
 
-    afe_calib = AFECalib.load(Host)
+    afe_calib = AFECalib.load_from_host(Host)
     print(JSONify.dumps(afe_calib))
     print("=")
 
@@ -107,7 +107,7 @@ try:
 
     pt1000_calib.save(Host)
 
-    pt1000_calib = Pt1000Calib.load(Host)
+    pt1000_calib = Pt1000Calib.load_from_host(Host)
     print(JSONify.dumps(pt1000_calib))
     print("=")
 

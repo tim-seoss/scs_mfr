@@ -134,7 +134,7 @@ if __name__ == '__main__':
             print("SHT...", file=sys.stderr)
 
         try:
-            sht_conf = SHTConf.load(Host)
+            sht_conf = SHTConf.load_from_host(Host)
             sht = sht_conf.ext_sht()
 
             sht.reset()
@@ -161,10 +161,10 @@ if __name__ == '__main__':
             print("AFE...", file=sys.stderr)
 
         try:
-            calib = Pt1000Calib.load(Host)
+            calib = Pt1000Calib.load_from_host(Host)
             pt1000 = calib.pt1000()
 
-            conf = AFEConf.load(Host)
+            conf = AFEConf.load_from_host(Host)
             sensors = conf.sensors()
 
             afe = AFE(pt1000, sensors)
