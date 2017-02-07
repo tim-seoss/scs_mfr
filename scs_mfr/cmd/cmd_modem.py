@@ -9,7 +9,7 @@ import optparse
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class CmdGE910(object):
+class CmdModem(object):
     """
     unix command line handler
     """
@@ -44,4 +44,4 @@ class CmdGE910(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "CmdGE910:{script:%s, verbose:%s, args:%s}" % (self.script, self.verbose, self.args)
+        return "CmdModem:{script:%s, verbose:%s, args:%s}" % (self.script, self.verbose, self.args)

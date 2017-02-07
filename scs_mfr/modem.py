@@ -13,12 +13,15 @@ import sys
 import time
 
 from scs_comms.modem.at_command import ATCommand
-from scs_comms.modem.ge910 import GE910
+from scs_comms.modem.modem import Modem
 
 from scs_core.data.json import JSONify
 from scs_core.sys.exception_report import ExceptionReport
 
-from scs_mfr.cmd.cmd_ge910 import CmdGE910
+from scs_host.bus.i2c import I2C
+from scs_host.sys.host import Host
+
+from scs_mfr.cmd.cmd_modem import CmdModem
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -91,11 +94,13 @@ if __name__ == '__main__':
     cmd = None
     modem = None
 
+    I2C.open(Host.I2C_SENSORS)
+
     try:
         # ------------------------------------------------------------------------------------------------------------
         # cmd...
 
-        cmd = CmdGE910()
+        cmd = CmdModem()
 
         if cmd.verbose:
             print(cmd, file=sys.stderr)
@@ -104,7 +109,7 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # resource...
 
-        modem = GE910(True)
+        modem = Modem(True)
         modem.switch_on()
 
         if cmd.verbose:
@@ -137,3 +142,5 @@ if __name__ == '__main__':
     finally:
         if modem:
             modem.switch_off()
+
+        I2C.close()
