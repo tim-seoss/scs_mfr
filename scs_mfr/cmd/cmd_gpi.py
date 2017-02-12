@@ -18,9 +18,11 @@ class CmdGPI(object):
         self.__parser = optparse.OptionParser(usage="%prog PIN [-w LEVEL] [-v]", version="%prog 1.0")
 
         # optional...
-        self.__parser.add_option("--wait", "-w", type="int", nargs=1, action="store", default=None, dest="wait", help="wait for level")
+        self.__parser.add_option("--wait", "-w", type="int", nargs=1, action="store", default=None, dest="wait",
+                                 help="wait for level")
 
-        self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False, help="report narrative to stderr")
+        self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
+                                 help="report narrative to stderr")
 
         self.__opts, self.__args = self.__parser.parse_args()
 

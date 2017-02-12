@@ -16,10 +16,14 @@ class CmdSHTConf(object):
         self.__parser = optparse.OptionParser(usage="%prog [-i INT_ADDR] [-e EXT_ADDR] [-v]", version="%prog 1.0")
 
         # optional...
-        self.__parser.add_option("--int-addr", "-i", type="int", nargs=1, action="store", dest="int_addr", default=None, help="I2C address of SHT in A4 package")
-        self.__parser.add_option("--ext-addr", "-e", type="int", nargs=1, action="store", dest="ext_addr", default=None, help="I2C address of SHT exposed to air")
+        self.__parser.add_option("--int-addr", "-i", type="int", nargs=1, action="store", dest="int_addr", default=None,
+                                 help="I2C address of SHT in A4 package")
 
-        self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False, help="report narrative to stderr")
+        self.__parser.add_option("--ext-addr", "-e", type="int", nargs=1, action="store", dest="ext_addr", default=None,
+                                 help="I2C address of SHT exposed to air")
+
+        self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
+                                 help="report narrative to stderr")
 
         self.__opts, self.__args = self.__parser.parse_args()
 
