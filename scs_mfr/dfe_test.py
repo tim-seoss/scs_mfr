@@ -104,7 +104,7 @@ if __name__ == '__main__':
 
         try:
             opc = OPCN2()
-            opc.on()
+            opc.operations_on()
 
             firmware = opc.firmware()
 
@@ -120,7 +120,7 @@ if __name__ == '__main__':
 
         finally:
             if opc:
-                opc.off()
+                opc.operations_off()
 
 
         # ------------------------------------------------------------------------------------------------------------
