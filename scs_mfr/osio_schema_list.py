@@ -12,13 +12,13 @@ command line example:
 import sys
 
 from scs_core.data.json import JSONify
-from scs_core.osio.manager.topic_manager import TopicManager
+from scs_core.osio.manager.schema_manager import SchemaManager
 from scs_core.osio.client.api_auth import APIAuth
 
 from scs_host.client.http_client import HTTPClient
 from scs_host.sys.host import Host
 
-from scs_mfr.cmd.cmd_osio_topic_list import CmdOSIOTopicList
+from scs_mfr.cmd.cmd_osio_schema_list import CmdOSIOSchemaList
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -28,10 +28,11 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
-    cmd = CmdOSIOTopicList()
+    cmd = CmdOSIOSchemaList()
 
     if cmd.verbose:
         print(cmd, file=sys.stderr)
+
 
     # ----------------------------------------------------------------------------------------------------------------
     # resource...
@@ -47,10 +48,9 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # run...
 
-    manager = TopicManager(http_client, auth.api_key)
+    manager = SchemaManager(http_client, auth.api_key)
 
-    topics = manager.find_for_org(auth.org_id)
+    schemas = manager.find_all()
 
-    for topic in topics:
-        if topic.path.startswith(cmd.path):
-            print(JSONify.dumps(topic))
+    for schema in schemas:
+        print(JSONify.dumps(schema))
