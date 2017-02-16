@@ -9,12 +9,12 @@ import optparse
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class CmdOSIOTopicSubscribe(object):
+class CmdOSIOTopic(object):
     """unix command line handler"""
 
     def __init__(self):
         """stuff"""
-        self.__parser = optparse.OptionParser(usage="%prog [PATH] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog PATH [-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
@@ -56,5 +56,5 @@ class CmdOSIOTopicSubscribe(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdOSIOTopicSubscribe:{path:%s, verbose:%s, args:%s}" % \
+        return "CmdOSIOTopic:{path:%s, verbose:%s, args:%s}" % \
                     (self.path, self.verbose, self.args)
