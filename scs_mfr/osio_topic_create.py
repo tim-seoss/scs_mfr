@@ -46,13 +46,7 @@ if __name__ == '__main__':
 
     auth = APIAuth.load_from_host(Host)
 
-    if cmd.verbose:
-        print(auth, file=sys.stderr)
-
     manager = TopicManager(http_client, auth.api_key)
-
-    if cmd.verbose:
-        print(manager, file=sys.stderr)
 
 
     # ----------------------------------------------------------------------------------------------------------------

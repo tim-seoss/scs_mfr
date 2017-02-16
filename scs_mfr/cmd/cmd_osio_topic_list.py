@@ -14,12 +14,9 @@ class CmdOSIOTopicList(object):
 
     def __init__(self):
         """stuff"""
-        self.__parser = optparse.OptionParser(usage="%prog [-p PATH] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [PATH] [-v]", version="%prog 1.0")
 
         # optional...
-        self.__parser.add_option("--path", "-p", type="string", nargs=1, action="store", default="/", dest="path",
-                                 help="partial path (default is /)")
-
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
 
@@ -30,7 +27,7 @@ class CmdOSIOTopicList(object):
 
     @property
     def path(self):
-        return self.__opts.path
+        return self.__args[0] if len(self.__args) > 0 else "/"
 
 
     @property

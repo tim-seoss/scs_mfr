@@ -14,13 +14,10 @@ class CmdOSIOTopicCreate(object):
 
     def __init__(self):
         """constructor"""
-        self.__parser = optparse.OptionParser(usage="%prog -p PATH -n NAME -d DESCRIPTION [-s SCHEMA_ID] [-v]",
+        self.__parser = optparse.OptionParser(usage="%prog PATH -n NAME -d DESCRIPTION [-s SCHEMA_ID] [-v]",
                                               version="%prog 1.0")
 
         # compulsory...
-        self.__parser.add_option("--path", "-p", type="string", nargs=1, action="store", dest="path",
-                                 help="path")
-
         self.__parser.add_option("--name", "-n", type="string", nargs=1, action="store", dest="name",
                                  help="name")
 
@@ -50,7 +47,7 @@ class CmdOSIOTopicCreate(object):
 
     @property
     def path(self):
-        return self.__opts.path
+        return self.__args[0] if len(self.__args) > 0 else None
 
 
     @property
