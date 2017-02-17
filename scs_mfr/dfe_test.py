@@ -34,6 +34,10 @@ from scs_mfr.report.dfe_test_datum import DFETestDatum
 from scs_mfr.report.dfe_test_reporter import DFETestReporter
 
 
+# TODO: add UUID read
+
+# TODO: add int / ext sht
+
 # --------------------------------------------------------------------------------------------------------------------
 # validate...
 
@@ -71,7 +75,7 @@ if __name__ == '__main__':
         I2C.open(Host.I2C_SENSORS)
 
         # ------------------------------------------------------------------------------------------------------------
-        # UID...
+        # UUID...
 
 
         # ------------------------------------------------------------------------------------------------------------
@@ -132,8 +136,8 @@ if __name__ == '__main__':
 
         if cmd.ignore_gps:
             reporter.report_ignore("GPS")
-        else:
 
+        else:
             if cmd.verbose:
                 print("GPS...", file=sys.stderr)
 
@@ -240,8 +244,8 @@ if __name__ == '__main__':
 
         if cmd.ignore_eeprom:
             reporter.report_ignore("EEPROM")
-        else:
 
+        else:
             if cmd.verbose:
                 print("EEPROM...", file=sys.stderr)
 
