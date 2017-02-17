@@ -130,7 +130,9 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # GPS...
 
-        if not cmd.ignore_gps:
+        if cmd.ignore_gps:
+            reporter.report_ignore("GPS")
+        else:
 
             if cmd.verbose:
                 print("GPS...", file=sys.stderr)
@@ -236,21 +238,29 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # EEPROM...
 
-        if cmd.verbose:
-            print("EEPROM...", file=sys.stderr)
+        if cmd.ignore_eeprom:
+            reporter.report_ignore("EEPROM")
+        else:
 
-        try:
-            eeprom = CAT24C32()
+            if cmd.verbose:
+                print("EEPROM...", file=sys.stderr)
 
-            file_image = EEPROMImage.construct_from_file(Host.DFE_EEP_IMAGE, CAT24C32.SIZE)
-            eeprom.write(file_image)
+            try:
+                eeprom = CAT24C32()
 
-            ok = eeprom.image == file_image
-            reporter.report_test("EEPROM", ok)
+                file_image = EEPROMImage.construct_from_file(Host.DFE_EEP_IMAGE, CAT24C32.SIZE)
+                eeprom.write(file_image)
 
-        except Exception as ex:
-            reporter.report_exception("EEPROM", ex)
-            ok = False
+                ok = eeprom.image == file_image
+                reporter.report_test("EEPROM", ok)
+
+            except Exception as ex:
+                reporter.report_exception("EEPROM", ex)
+                ok = False
+
+
+        # ------------------------------------------------------------------------------------------------------------
+        # end...
 
     except RuntimeError:
         pass

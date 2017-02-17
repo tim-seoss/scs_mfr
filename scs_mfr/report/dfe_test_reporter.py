@@ -30,6 +30,10 @@ class DFETestReporter(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    def report_ignore(self, subject):
+        self.__subjects[subject] = '-'
+
+
     def report_test(self, subject, ok):
         report = 'OK' if ok else 'FAIL'
 

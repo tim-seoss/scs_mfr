@@ -17,6 +17,9 @@ class CmdDFETest(object):
         self.__parser = optparse.OptionParser(usage="%prog SERIAL_NUMBER [-g] [-n] [-v]", version="%prog 1.0")
 
         # optional...
+        self.__parser.add_option("--eeprom", "-e", action="store_true", dest="ignore_eeprom", default=False,
+                                 help="ignore EEPROM")
+
         self.__parser.add_option("--gps", "-g", action="store_true", dest="ignore_gps", default=False,
                                  help="ignore GPS module")
 
@@ -43,6 +46,11 @@ class CmdDFETest(object):
 
 
     @property
+    def ignore_eeprom(self):
+        return self.__opts.ignore_eeprom
+
+
+    @property
     def ignore_gps(self):
         return self.__opts.ignore_gps
 
@@ -64,5 +72,5 @@ class CmdDFETest(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdDFETest:{serial_number:%s, ignore_gps:%s, verbose:%s, args:%s}" % \
-                    (self.serial_number, self.ignore_gps, self.verbose, self.args)
+        return "CmdDFETest:{serial_number:%s, ignore_eeprom:%s, ignore_gps:%s, verbose:%s, args:%s}" % \
+                    (self.serial_number, self.ignore_eeprom, self.ignore_gps, self.verbose, self.args)
