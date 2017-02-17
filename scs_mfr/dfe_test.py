@@ -6,7 +6,7 @@ Created on 29 Jan 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 command line example:
-./scs_mfr/dfe_test.py
+./scs_mfr/dfe_test.py 123 -g -v
 """
 
 import os.path
