@@ -14,6 +14,7 @@ import sys
 
 from scs_core.data.json import JSONify
 from scs_core.data.localized_datetime import LocalizedDatetime
+from scs_core.location.gprmc import GPRMC
 from scs_core.sys.eeprom_image import EEPROMImage
 
 from scs_dfe.board.cat24c32 import CAT24C32
@@ -22,6 +23,7 @@ from scs_dfe.climate.sht_conf import SHTConf
 from scs_dfe.gas.afe import AFE
 from scs_dfe.gas.afe_conf import AFEConf
 from scs_dfe.gas.pt1000_calib import Pt1000Calib
+from scs_dfe.gps.pam7q import PAM7Q
 from scs_dfe.particulate.opc_n2 import OPCN2
 
 from scs_host.bus.i2c import I2C
@@ -104,6 +106,7 @@ if __name__ == '__main__':
 
         try:
             opc = OPCN2()
+            opc.power_on()
             opc.operations_on()
 
             firmware = opc.firmware()
@@ -121,6 +124,39 @@ if __name__ == '__main__':
         finally:
             if opc:
                 opc.operations_off()
+                opc.power_off()
+
+
+        # ------------------------------------------------------------------------------------------------------------
+        # GPS...
+
+        if not cmd.ignore_gps:
+
+            if cmd.verbose:
+                print("GPS...", file=sys.stderr)
+
+            gps = PAM7Q()
+
+            try:
+                gps.power_on()
+                gps.open()
+
+                msg = gps.report(GPRMC)
+
+                if cmd.verbose:
+                    print(msg, file=sys.stderr)
+
+                ok = msg is not None
+                reporter.report_test("GPS", ok)
+
+            except Exception as ex:
+                reporter.report_exception("GPS", ex)
+                ok = False
+
+            finally:
+                if opc:
+                    gps.close()
+                    gps.power_off()
 
 
         # ------------------------------------------------------------------------------------------------------------
