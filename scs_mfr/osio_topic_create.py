@@ -6,7 +6,7 @@ Created on 16 Feb 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 command line example:
-./scs_mfr/osio_topic_create.py -p /orgs/south-coast-science-dev/test/1/status -n "test" -d "test of status" -s 28 -v
+./scs_mfr/osio_topic_create.py /orgs/south-coast-science-dev/test/1/status -n "test" -d "test of status" -s 28 -v
 """
 
 import sys
