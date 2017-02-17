@@ -8,8 +8,11 @@ Created on 4 Jul 2016
 
 import time
 
+from scs_core.location.gpgga import GPGGA
 from scs_core.location.gpgsa import GPGSA
 from scs_core.location.gprmc import GPRMC
+from scs_core.location.gps_location import GPSLocation
+
 from scs_core.sync.sampler import Sampler
 
 from scs_dfe.gps.pam7q import PAM7Q
@@ -74,30 +77,37 @@ if __name__ == '__main__':
         # run...
 
         start = time.time()
-        prev_gpgsa = None
-        gpmrc = None
+        prev_gsa = None
+        rmc = None
 
-        for gpgsa in gps_sampler.samples():
+        for gsa in gps_sampler.samples():
 
-            if gpgsa != prev_gpgsa:
-                print(gpgsa)
+            if gsa != prev_gsa:
+                print(gsa)
 
-            prev_gpgsa = gpgsa
+            prev_gsa = gsa
 
             gps.open()
-            gpmrc = gps.report(GPRMC)
+            rmc = gps.report(GPRMC)
             gps.close()
 
-            if gpmrc is not None and gpmrc.has_position():
+            if rmc is not None and rmc.has_position():
                 break
 
 
         # ------------------------------------------------------------------------------------------------------------
         # report...
 
-        print("position: %s, %s  time: %s" % (gpmrc.loc.deg_lat(), gpmrc.loc.deg_lng(), gpmrc.datetime.as_iso8601()))
-
         elapsed = int(time.time() - start)
+
+        gps.open()
+        gga = gps.report(GPGGA)
+        gps.close()
+
+        loc = GPSLocation.construct(gga)
+
+        print("time: %s" % rmc.datetime.as_iso8601())
+        print(loc)
         print("elapsed: %ds" % elapsed)
 
         print("-")
