@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-Created on 4 Jul 2016
+Created on 17 Feb 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
@@ -12,7 +12,6 @@ from scs_core.location.gpgga import GPGGA
 from scs_core.location.gpgsa import GPGSA
 from scs_core.location.gprmc import GPRMC
 from scs_core.location.gps_location import GPSLocation
-
 from scs_core.sync.sampler import Sampler
 
 from scs_dfe.gps.pam7q import PAM7Q
