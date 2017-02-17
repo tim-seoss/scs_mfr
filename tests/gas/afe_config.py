@@ -50,7 +50,7 @@ try:
     # Pt1000Calib...
 
     pt1000_calib = Pt1000Calib(date.today(), 0.295)
-    print(pt1000_calib)
+    print("initial: %s" % pt1000_calib)
     print("-")
 
 
@@ -99,10 +99,10 @@ try:
     # Pt1000Calib...
 
     pt1000_datum = afe.sample_temp()
-    v20 = pt1000_datum.v20(20.0)            # TODO: use the SHT temperature as the reference
+    v20 = pt1000_datum.v20(20.0)            # should use the SHT temperature as the reference
 
     pt1000_calib = Pt1000Calib(date.today(), v20)
-    print(pt1000_calib)
+    print("final: %s" % pt1000_calib)
     print("-")
 
     pt1000_calib.save(Host)

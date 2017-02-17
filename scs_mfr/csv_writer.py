@@ -18,8 +18,6 @@ from scs_core.sys.exception_report import ExceptionReport
 from scs_mfr.cmd.cmd_csv_writer import CmdCSVWriter
 
 
-# TODO: needs an "append" mode
-
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
