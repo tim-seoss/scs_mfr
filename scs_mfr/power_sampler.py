@@ -17,7 +17,7 @@ from scs_core.sample.sample_datum import SampleDatum
 from scs_core.sync.sampler import Sampler
 from scs_core.sys.exception_report import ExceptionReport
 
-from scs_mfr.cmd.cmd_scalar import CmdScalar
+from scs_mfr.cmd.cmd_sampler import CmdSampler
 from scs_mfr.power.power_meter import PowerMeter
 
 
@@ -69,7 +69,7 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # cmd...
 
-        cmd = CmdScalar(0.5)
+        cmd = CmdSampler(0.5)
 
         if cmd.verbose:
             print(cmd, file=sys.stderr)
