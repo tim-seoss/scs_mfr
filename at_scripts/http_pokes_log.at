@@ -9,6 +9,9 @@ AT#SLED=1,10,10
 AT+CGDCONT=1,"IP","internet" | 10
 AT#SGACT=1,1 | 10 | 5
 
+# AT+CGDCONT=1,"IP","wap.vodafone.co.uk" | 10
+# AT#SGACT=1,1,"wap","wap" | 10 | 5
+
 # request...
 AT#HTTPCFG=0,"pokemon.p3d.co.uk",80,0,,,0,120,1 | 5
 AT#HTTPQRY=0,0,"/pokes/log" | 10
