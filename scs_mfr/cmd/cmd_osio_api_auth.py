@@ -4,7 +4,7 @@ Created on 18 Feb 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 example document:
-{"username": "southcoastscience-dev", "client-id": "5406", "client-password": "jtxSrK2e"}
+{"org-id": "south-coast-science-dev", "api-key": "43308b72-ad41-4555-b075-b4245c1971db"}
 """
 
 import optparse
@@ -12,19 +12,18 @@ import optparse
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class CmdOSIODeviceAuth(object):
+class CmdOSIOAPIAuth(object):
     """unix command line handler"""
 
     def __init__(self):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-s USERNAME CLIENT_ID CLIENT_PASSWORD] [-v]",
-                                              version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [-s ORG_ID API_KEY] [-v]", version="%prog 1.0")
 
         # optional...
-        self.__parser.add_option("--set", "-s", type="string", nargs=3, action="store", dest="username_client_password",
-                                 help="username, client ID and password")
+        self.__parser.add_option("--set", "-s", type="string", nargs=2, action="store", dest="org_key",
+                                 help="org ID and API key")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
@@ -35,24 +34,19 @@ class CmdOSIODeviceAuth(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def set(self):
-        return self.__opts.username_client_password is not None
+        return self.__opts.org_key is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
-    def username(self):
-        return self.__opts.username_client_password[0] if self.__opts.username_client_password else None
+    def org_id(self):
+        return self.__opts.org_key[0] if self.__opts.org_key else None
 
 
     @property
-    def client_id(self):
-        return self.__opts.username_client_password[1] if self.__opts.username_client_password else None
-
-
-    @property
-    def client_password(self):
-        return self.__opts.username_client_password[2] if self.__opts.username_client_password else None
+    def api_key(self):
+        return self.__opts.org_key[1] if self.__opts.org_key else None
 
 
     @property
@@ -68,5 +62,5 @@ class CmdOSIODeviceAuth(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "CmdOSIODeviceAuth:{username:%s, client_id:%s, client_password:%s, verbose:%s, args:%s}" % \
-               (self.username, self.client_id, self.client_password, self.verbose, self.args)
+        return "CmdOSIOAPIAuth:{org_id:%s, api_key:%s, verbose:%s, args:%s}" % \
+               (self.org_id, self.api_key, self.verbose, self.args)
