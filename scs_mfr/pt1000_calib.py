@@ -36,7 +36,7 @@ if __name__ == '__main__':
         # resource...
 
         sht_conf = SHTConf.load_from_host(Host)
-        sht = sht_conf.ext_sht()                        # TODO: this should be int_sht() but we don't have one yet
+        sht = sht_conf.int_sht()
 
         pt1000_calib = Pt1000Calib(None, v20)
         pt1000 = pt1000_calib.pt1000()
