@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-Created on 14 Feb 2017
+Created on 18 Feb 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
