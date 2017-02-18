@@ -6,7 +6,7 @@ Created on 18 Feb 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 command line example:
-./scs_mfr/osio_device_auth.py -v -s southcoastscience-dev 5406 jtxSrK2e
+./scs_mfr/osio_api_auth.py -v -s south-coast-science-dev 43308b72-ad41-4555-b075-b4245c1971db
 """
 
 import sys

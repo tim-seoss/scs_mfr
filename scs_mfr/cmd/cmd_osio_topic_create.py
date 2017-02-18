@@ -13,7 +13,9 @@ class CmdOSIOTopicCreate(object):
     """unix command line handler"""
 
     def __init__(self):
-        """constructor"""
+        """
+        Constructor
+        """
         self.__parser = optparse.OptionParser(usage="%prog PATH -n NAME -d DESCRIPTION [-s SCHEMA_ID] [-v]",
                                               version="%prog 1.0")
 

@@ -1,5 +1,5 @@
 """
-Created on 17 Nov 2016
+Created on 18 Feb 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
@@ -9,14 +9,21 @@ import optparse
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class CmdOSIOTopic(object):
+class CmdOSIODeviceList(object):
     """unix command line handler"""
 
     def __init__(self):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog PATH [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog {-u | -o} [-v]", version="%prog 1.0")
+
+        # compulsory...
+        self.__parser.add_option("--user", "-u", action="store_true", dest="user", default=False,
+                                 help="list for device auth username")
+
+        self.__parser.add_option("--org", "-o", action="store_true", dest="org", default=False,
+                                 help="list for API auth org ID")
 
         # optional...
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
@@ -28,17 +35,22 @@ class CmdOSIOTopic(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        if self.path is None:
-            return False
+        if self.user or self.org:
+            return True
 
-        return True
+        return False
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
-    def path(self):
-        return self.__args[0] if len(self.__args) > 0 else None
+    def user(self):
+        return self.__opts.user
+
+
+    @property
+    def org(self):
+        return self.__opts.org
 
 
     @property
@@ -58,5 +70,5 @@ class CmdOSIOTopic(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdOSIOTopic:{path:%s, verbose:%s, args:%s}" % \
-                    (self.path, self.verbose, self.args)
+        return "CmdOSIODeviceList:{user:%s, org:%s, verbose:%s, args:%s}" % \
+               (self.user, self.org, self.verbose, self.args)
