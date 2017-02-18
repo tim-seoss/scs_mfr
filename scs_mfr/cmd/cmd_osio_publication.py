@@ -19,11 +19,10 @@ class CmdOSIOPublication(object):
         self.__parser = optparse.OptionParser(usage="%prog [-s LOCATION DEVICE] [-v]",
                                               version="%prog 1.0")
 
-        # compulsory...
+        # optional...
         self.__parser.add_option("--set", "-s", type="string", nargs=2, action="store", dest="location_device",
                                  help="root paths for location and device topics")
 
-        # optional...
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
 
