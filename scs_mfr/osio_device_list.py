@@ -5,7 +5,7 @@ Created on 18 Feb 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Requires APIAuth and DeviceAuth documents.
+Requires APIAuth and ClientAuth documents.
 
 command line example:
 ./scs_mfr/osio_device_list.py -u -v
@@ -16,7 +16,7 @@ import sys
 from scs_core.data.json import JSONify
 from scs_core.osio.manager.device_manager import DeviceManager
 from scs_core.osio.client.api_auth import APIAuth
-from scs_core.osio.client.device_auth import DeviceAuth
+from scs_core.osio.client.client_auth import ClientAuth
 
 from scs_host.client.http_client import HTTPClient
 from scs_host.sys.host import Host
@@ -55,7 +55,7 @@ if __name__ == '__main__':
     if cmd.verbose:
         print(api_auth, file=sys.stderr)
 
-    device_auth = DeviceAuth.load_from_host(Host)
+    client_auth = ClientAuth.load_from_host(Host)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -66,7 +66,7 @@ if __name__ == '__main__':
     if cmd.org:
         devices = manager.find_all_for_org(api_auth.org_id)
     else:
-        devices = manager.find_all_for_user(device_auth.username)
+        devices = manager.find_all_for_user(client_auth.username)
 
     for device in devices:
         print(JSONify.dumps(device))

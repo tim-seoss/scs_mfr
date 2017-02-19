@@ -12,7 +12,7 @@ import optparse
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class CmdOSIODeviceAuth(object):
+class CmdOSIOClientAuth(object):
     """unix command line handler"""
 
     def __init__(self):
@@ -68,5 +68,5 @@ class CmdOSIODeviceAuth(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "CmdOSIODeviceAuth:{username:%s, client_id:%s, client_password:%s, verbose:%s, args:%s}" % \
+        return "CmdOSIOClientAuth:{username:%s, client_id:%s, client_password:%s, verbose:%s, args:%s}" % \
                (self.username, self.client_id, self.client_password, self.verbose, self.args)

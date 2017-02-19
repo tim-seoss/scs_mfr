@@ -6,17 +6,17 @@ Created on 18 Feb 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 command line example:
-./scs_mfr/osio_device_auth.py -v -s southcoastscience-dev 5406 jtxSrK2e
+./scs_mfr/osio_client_auth.py -v -s southcoastscience-dev 5406 jtxSrK2e
 """
 
 import sys
 
 from scs_core.data.json import JSONify
-from scs_core.osio.client.device_auth import DeviceAuth
+from scs_core.osio.client.client_auth import ClientAuth
 
 from scs_host.sys.host import Host
 
-from scs_mfr.cmd.cmd_osio_device_auth import CmdOSIODeviceAuth
+from scs_mfr.cmd.cmd_osio_client_auth import CmdOSIOClientAuth
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -26,7 +26,7 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
-    cmd = CmdOSIODeviceAuth()
+    cmd = CmdOSIOClientAuth()
 
     if cmd.verbose:
         print(cmd, file=sys.stderr)
@@ -36,10 +36,10 @@ if __name__ == '__main__':
     # run...
 
     if cmd.set():
-        auth = DeviceAuth(cmd.username, cmd.client_id, cmd.client_password)
+        auth = ClientAuth(cmd.username, cmd.client_id, cmd.client_password)
         auth.save(Host)
 
     else:
-        auth = DeviceAuth.load_from_host(Host)
+        auth = ClientAuth.load_from_host(Host)
 
     print(JSONify.dumps(auth))
