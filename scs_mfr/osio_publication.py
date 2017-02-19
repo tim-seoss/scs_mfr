@@ -6,7 +6,7 @@ Created on 18 Feb 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 command line example:
-./scs_mfr/osio_publication.py -s /orgs/southcoastscience-dev/uk/test/loc/1 /orgs/southcoastscience-dev/uk/test/device -v
+./scs_mfr/osio_publication.py -s uk/test/loc/1 uk/test/device -v
 """
 
 import sys
@@ -78,9 +78,17 @@ if __name__ == '__main__':
 
     auth = APIAuth.load_from_host(Host)
 
+    if auth is None:
+        print("APIAuth not available.")
+        exit()
+
     manager = TopicManager(http_client, auth.api_key)
 
     device_id = DeviceID.load_from_host(Host)
+
+    if device_id is None:
+        print("DeviceID not available.")
+        exit()
 
     if cmd.verbose:
         print(device_id, file=sys.stderr)
@@ -90,7 +98,7 @@ if __name__ == '__main__':
     # run...
 
     if cmd.set():
-        pub = Publication(cmd.location_path, cmd.device_path)
+        pub = Publication.construct(auth.org_id, cmd.location_path, cmd.device_path)
         pub.save(Host)      # TODO: only save if successful
 
         # TODO: check for existence of topics / create as necessary
@@ -105,6 +113,7 @@ if __name__ == '__main__':
     particulates_topic = pub.particulates_topic()
 
     status_topic = pub.status_topic(device_id)
+    control_topic = pub.control_topic(device_id)
 
 
     if cmd.verbose:
@@ -114,6 +123,7 @@ if __name__ == '__main__':
         print("particulates_topic: %s" % particulates_topic, file=sys.stderr)
 
         print("status_topic:       %s" % status_topic, file=sys.stderr)
+        print("control_topic:      %s" % control_topic, file=sys.stderr)
 
     topic = manager.find(gasses_topic)
     print(topic)
