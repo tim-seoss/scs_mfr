@@ -5,7 +5,7 @@ Created on 18 Feb 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Requires APIAuth, ClientAuth and DeviceID documents.
+Requires APIAuth and DeviceID documents.
 Creates ClientAuth document.
 
 command line example:
@@ -75,18 +75,14 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # run...
 
-    # create device...
+    # create prototype...
     device = Source.device(device_id, api_auth, cmd.lat, cmd.lng, cmd.postcode, cmd.description)
-    print(device)
 
+    # create device...
     device = manager.create(cmd.user_id, device)
-
-    if cmd.verbose:
-        print("created: %s" % device, file=sys.stderr)
+    print(device)
 
     # create client_auth...
     client_auth = ClientAuth(cmd.user_id, device.client_id, device.password)
     client_auth.save(Host)
-
-    if cmd.verbose:
-        print("created: %s" % client_auth, file=sys.stderr)
+    print(client_auth)
