@@ -5,6 +5,8 @@ Created on 14 Feb 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
+Requires APIAuth document.
+
 command line example:
 ./scs_mfr/osio_topic_list.py -p /orgs/south-coast-science-dev/uk -v
 """
@@ -40,6 +42,10 @@ if __name__ == '__main__':
     http_client = HTTPClient()
 
     auth = APIAuth.load_from_host(Host)
+
+    if auth is None:
+        print("APIAuth not available.")
+        exit()
 
     if cmd.verbose:
         print(auth, file=sys.stderr)

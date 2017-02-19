@@ -5,6 +5,8 @@ Created on 16 Feb 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
+Requires APIAuth document.
+
 command line example:
 ./scs_mfr/osio_topic_create.py /orgs/south-coast-science-dev/test/1/status -n "test" -d "test of status" -s 28 -v
 """
@@ -45,6 +47,10 @@ if __name__ == '__main__':
     http_client = HTTPClient()
 
     auth = APIAuth.load_from_host(Host)
+
+    if auth is None:
+        print("APIAuth not available.")
+        exit()
 
     manager = TopicManager(http_client, auth.api_key)
 

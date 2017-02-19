@@ -5,6 +5,8 @@ Created on 18 Feb 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
+Requires APIAuth and DeviceID documents.
+
 command line example:
 ./scs_mfr/osio_publication.py -s uk/test/loc/1 uk/test/device -v
 """

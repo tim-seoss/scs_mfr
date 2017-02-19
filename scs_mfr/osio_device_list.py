@@ -5,6 +5,8 @@ Created on 18 Feb 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
+Requires APIAuth and DeviceAuth documents.
+
 command line example:
 ./scs_mfr/osio_device_list.py -u -v
 """
@@ -45,6 +47,10 @@ if __name__ == '__main__':
     http_client = HTTPClient()
 
     api_auth = APIAuth.load_from_host(Host)
+
+    if api_auth is None:
+        print("APIAuth not available.")
+        exit()
 
     if cmd.verbose:
         print(api_auth, file=sys.stderr)
