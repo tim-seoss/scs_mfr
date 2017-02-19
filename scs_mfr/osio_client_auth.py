@@ -36,7 +36,7 @@ if __name__ == '__main__':
     # run...
 
     if cmd.set():
-        auth = ClientAuth(cmd.username, cmd.client_id, cmd.client_password)
+        auth = ClientAuth(cmd.user_id, cmd.client_id, cmd.client_password)
         auth.save(Host)
 
     else:

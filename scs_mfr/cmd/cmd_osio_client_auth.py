@@ -4,7 +4,7 @@ Created on 18 Feb 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 example document:
-{"username": "southcoastscience-dev", "client-id": "5406", "client-password": "jtxSrK2e"}
+{"user-id": "southcoastscience-dev", "client-id": "5873", "client-password": "d4MctQFa"}
 """
 
 import optparse
@@ -19,12 +19,12 @@ class CmdOSIOClientAuth(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-s USERNAME CLIENT_ID CLIENT_PASSWORD] [-v]",
+        self.__parser = optparse.OptionParser(usage="%prog [-s USER_ID CLIENT_ID CLIENT_PASSWORD] [-v]",
                                               version="%prog 1.0")
 
         # optional...
-        self.__parser.add_option("--set", "-s", type="string", nargs=3, action="store", dest="username_client_password",
-                                 help="username, client ID and password")
+        self.__parser.add_option("--set", "-s", type="string", nargs=3, action="store", dest="user_client_password",
+                                 help="user ID, client ID and client password")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
@@ -35,24 +35,24 @@ class CmdOSIOClientAuth(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def set(self):
-        return self.__opts.username_client_password is not None
+        return self.__opts.user_client_password is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
-    def username(self):
-        return self.__opts.username_client_password[0] if self.__opts.username_client_password else None
+    def user_id(self):
+        return self.__opts.user_client_password[0] if self.__opts.user_client_password else None
 
 
     @property
     def client_id(self):
-        return self.__opts.username_client_password[1] if self.__opts.username_client_password else None
+        return self.__opts.user_client_password[1] if self.__opts.user_client_password else None
 
 
     @property
     def client_password(self):
-        return self.__opts.username_client_password[2] if self.__opts.username_client_password else None
+        return self.__opts.user_client_password[2] if self.__opts.user_client_password else None
 
 
     @property
@@ -68,5 +68,5 @@ class CmdOSIOClientAuth(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "CmdOSIOClientAuth:{username:%s, client_id:%s, client_password:%s, verbose:%s, args:%s}" % \
-               (self.username, self.client_id, self.client_password, self.verbose, self.args)
+        return "CmdOSIOClientAuth:{user_id:%s, client_id:%s, client_password:%s, verbose:%s, args:%s}" % \
+               (self.user_id, self.client_id, self.client_password, self.verbose, self.args)
