@@ -36,7 +36,9 @@ from scs_mfr.report.dfe_test_reporter import DFETestReporter
 
 # TODO: add UUID read
 
-# TODO: add int / ext sht
+# TODO: add int / ext SHT
+
+# TODO: add Pt1000 calibration
 
 # --------------------------------------------------------------------------------------------------------------------
 # validate...
@@ -194,6 +196,10 @@ if __name__ == '__main__':
         except Exception as ex:
             reporter.report_exception("SHT", ex)
             ok = False
+
+
+        # ------------------------------------------------------------------------------------------------------------
+        # Pt1000 calibration...
 
 
         # ------------------------------------------------------------------------------------------------------------

@@ -16,6 +16,8 @@ import sys
 from scs_core.data.json import JSONify
 from scs_core.osio.client.api_auth import APIAuth
 from scs_core.osio.config.publication import Publication
+from scs_core.osio.data.topic import Topic
+from scs_core.osio.data.topic_info import TopicInfo
 from scs_core.osio.manager.topic_manager import TopicManager
 from scs_core.sys.device_id import DeviceID
 
@@ -44,14 +46,23 @@ class TopicCreator(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def construct_topic(self, path, name, description, schema_id):
-        topic = self.__topic_manager.find(path)
+        # topic = self.__topic_manager.find(path)
 
-        if topic:
-            print("Warning: topic already exists: %s")
-            # TODO: update topic with field params
-            return
+        # if topic:
+        #     print("Warning: topic already exists: %s")
+        #     TODO: update topic with field params
+            # return
 
-        success = self.__topic_manager.create()
+        # success = self.__topic_manager.create()
+
+        topic_info = TopicInfo(TopicInfo.FORMAT_JSON, None, None, None)  # for the v2 API, schema_id goes in Topic
+        topic = Topic(path, name, description, True, True, topic_info, schema_id)
+
+        print(topic)
+
+        success = self.__topic_manager.create(topic)
+
+        return success
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -84,7 +95,6 @@ if __name__ == '__main__':
         print("APIAuth not available.")
         exit()
 
-    manager = TopicManager(http_client, auth.api_key)
 
     device_id = DeviceID.load_from_host(Host)
 
@@ -96,6 +106,11 @@ if __name__ == '__main__':
         print(device_id, file=sys.stderr)
 
 
+    manager = TopicManager(http_client, auth.api_key)
+
+    creator = TopicCreator(manager)
+
+
     # ----------------------------------------------------------------------------------------------------------------
     # run...
 
@@ -103,29 +118,32 @@ if __name__ == '__main__':
         pub = Publication.construct(auth.org_id, cmd.location_path, cmd.device_path)
         pub.save(Host)      # TODO: only save if successful
 
-        # TODO: check for existence of topics / create as necessary
+        print(JSONify.dumps(pub))
+
+        creator.construct_topic(pub.climate_topic(), Publication.CLIMATE_NAME,
+                                Publication.CLIMATE_DESCRIPTION, Publication.CLIMATE_SCHEMA)
+
+        creator.construct_topic(pub.gasses_topic(), Publication.GASES_NAME,
+                                Publication.GASES_DESCRIPTION, Publication.GASES_SCHEMA)
+
+        creator.construct_topic(pub.particulates_topic(), Publication.PARTICULATES_NAME,
+                                Publication.PARTICULATES_DESCRIPTION, Publication.PARTICULATES_SCHEMA)
+
+        creator.construct_topic(pub.status_topic(device_id), Publication.STATUS_NAME,
+                                Publication.STATUS_DESCRIPTION, Publication.STATUS_SCHEMA)
+
+        creator.construct_topic(pub.control_topic(device_id), Publication.CONTROL_NAME,
+                                Publication.CONTROL_DESCRIPTION, Publication.CONTROL_SCHEMA)
 
     else:
         pub = Publication.load_from_host(Host)
-
-    print(JSONify.dumps(pub))
-
-    climate_topic = pub.climate_topic()
-    gasses_topic = pub.gasses_topic()
-    particulates_topic = pub.particulates_topic()
-
-    status_topic = pub.status_topic(device_id)
-    control_topic = pub.control_topic(device_id)
-
+        print(JSONify.dumps(pub))
 
     if cmd.verbose:
         print("-", file=sys.stderr)
-        print("climate_topic:      %s" % climate_topic, file=sys.stderr)
-        print("gasses_topic:       %s" % gasses_topic, file=sys.stderr)
-        print("particulates_topic: %s" % particulates_topic, file=sys.stderr)
+        print("climate_topic:      %s" % pub.climate_topic(), file=sys.stderr)
+        print("gasses_topic:       %s" % pub.gasses_topic(), file=sys.stderr)
+        print("particulates_topic: %s" % pub.particulates_topic(), file=sys.stderr)
 
-        print("status_topic:       %s" % status_topic, file=sys.stderr)
-        print("control_topic:      %s" % control_topic, file=sys.stderr)
-
-    topic = manager.find(gasses_topic)
-    print(topic)
+        print("status_topic:       %s" % pub.status_topic(device_id), file=sys.stderr)
+        print("control_topic:      %s" % pub.control_topic(device_id), file=sys.stderr)
