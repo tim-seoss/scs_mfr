@@ -121,20 +121,20 @@ if __name__ == '__main__':
 
         print(JSONify.dumps(pub))
 
-        # creator.construct_topic(pub.climate_topic(), Publication.CLIMATE_NAME,
-        #                         Publication.CLIMATE_DESCRIPTION, Publication.CLIMATE_SCHEMA)
+        creator.construct_topic(pub.climate_topic(), Publication.CLIMATE_NAME,
+                                Publication.CLIMATE_DESCRIPTION, Publication.CLIMATE_SCHEMA)
 
         creator.construct_topic(pub.gases_topic(), Publication.GASES_NAME,
                                 Publication.GASES_DESCRIPTION, Publication.GASES_SCHEMA)
 
-        # creator.construct_topic(pub.particulates_topic(), Publication.PARTICULATES_NAME,
-        #                         Publication.PARTICULATES_DESCRIPTION, Publication.PARTICULATES_SCHEMA)
+        creator.construct_topic(pub.particulates_topic(), Publication.PARTICULATES_NAME,
+                                Publication.PARTICULATES_DESCRIPTION, Publication.PARTICULATES_SCHEMA)
 
-        # creator.construct_topic(pub.status_topic(device_id), Publication.STATUS_NAME,
-        #                         Publication.STATUS_DESCRIPTION, Publication.STATUS_SCHEMA)
+        creator.construct_topic(pub.status_topic(device_id), Publication.STATUS_NAME,
+                                Publication.STATUS_DESCRIPTION, Publication.STATUS_SCHEMA)
 
-        # creator.construct_topic(pub.control_topic(device_id), Publication.CONTROL_NAME,
-        #                         Publication.CONTROL_DESCRIPTION, Publication.CONTROL_SCHEMA)
+        creator.construct_topic(pub.control_topic(device_id), Publication.CONTROL_NAME,
+                                Publication.CONTROL_DESCRIPTION, Publication.CONTROL_SCHEMA)
 
     else:
         pub = Publication.load_from_host(Host)
