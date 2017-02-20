@@ -124,7 +124,7 @@ if __name__ == '__main__':
         creator.construct_topic(pub.climate_topic(), Publication.CLIMATE_NAME,
                                 Publication.CLIMATE_DESCRIPTION, Publication.CLIMATE_SCHEMA)
 
-        creator.construct_topic(pub.gasses_topic(), Publication.GASES_NAME,
+        creator.construct_topic(pub.gases_topic(), Publication.GASES_NAME,
                                 Publication.GASES_DESCRIPTION, Publication.GASES_SCHEMA)
 
         creator.construct_topic(pub.particulates_topic(), Publication.PARTICULATES_NAME,
@@ -143,7 +143,7 @@ if __name__ == '__main__':
     if cmd.verbose:
         print("-", file=sys.stderr)
         print("climate_topic:      %s" % pub.climate_topic(), file=sys.stderr)
-        print("gasses_topic:       %s" % pub.gasses_topic(), file=sys.stderr)
+        print("gases_topic:       %s" % pub.gases_topic(), file=sys.stderr)
         print("particulates_topic: %s" % pub.particulates_topic(), file=sys.stderr)
 
         print("status_topic:       %s" % pub.status_topic(device_id), file=sys.stderr)
