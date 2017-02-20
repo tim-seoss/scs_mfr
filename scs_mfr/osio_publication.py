@@ -9,7 +9,7 @@ Requires APIAuth and DeviceID documents.
 Creates Publication document.
 
 command line example:
-./scs_mfr/osio_publication.py -s uk/test/loc/1 uk/test/device -v
+./scs_mfr/osio_publication.py -s development/loc/2 development/device -v
 """
 
 import sys
@@ -143,7 +143,7 @@ if __name__ == '__main__':
     if cmd.verbose:
         print("-", file=sys.stderr)
         print("climate_topic:      %s" % pub.climate_topic(), file=sys.stderr)
-        print("gases_topic:       %s" % pub.gases_topic(), file=sys.stderr)
+        print("gases_topic:        %s" % pub.gases_topic(), file=sys.stderr)
         print("particulates_topic: %s" % pub.particulates_topic(), file=sys.stderr)
 
         print("status_topic:       %s" % pub.status_topic(device_id), file=sys.stderr)
