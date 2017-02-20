@@ -112,6 +112,8 @@ if __name__ == '__main__':
         modem = Modem(True)
         modem.switch_on()
 
+        modem.setup_serial()
+
         if cmd.verbose:
             print(modem, file=sys.stderr)
 
