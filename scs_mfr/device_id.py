@@ -5,6 +5,9 @@ Created on 17 Feb 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
+workflow:
+Creates CmdDeviceID document.
+
 command line example:
 ./scs_mfr/device_id.py -s Praxis BGB 123 -v
 """

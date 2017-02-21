@@ -5,6 +5,9 @@ Created on 18 Feb 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
+workflow:
+Creates APIAuth document.
+
 command line example:
 ./scs_mfr/osio_api_auth.py -v -s south-coast-science-dev 43308b72-ad41-4555-b075-b4245c1971db
 """
