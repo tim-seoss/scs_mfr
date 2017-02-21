@@ -5,7 +5,7 @@ Created on 18 Feb 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-workflow:
+workflow 3 of 4:
 Requires APIAuth and DeviceID documents.
 Creates ClientAuth document.
 

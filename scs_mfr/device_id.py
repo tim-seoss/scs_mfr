@@ -5,7 +5,7 @@ Created on 17 Feb 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-workflow:
+workflow 1 of 4:
 Creates CmdDeviceID document.
 
 command line example:
