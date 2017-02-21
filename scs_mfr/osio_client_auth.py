@@ -5,6 +5,9 @@ Created on 18 Feb 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
+workflow:
+Use osio_publication instead.
+
 command line example:
 ./scs_mfr/osio_client_auth.py -v -s southcoastscience-dev 5406 jtxSrK2e
 """
