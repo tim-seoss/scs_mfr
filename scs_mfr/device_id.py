@@ -9,7 +9,7 @@ workflow 1 of 4:
 Creates CmdDeviceID document.
 
 command line example:
-./scs_mfr/device_id.py -s Praxis BGB 123 -v
+./scs_mfr/device_id.py -v -s Praxis BGB 2
 """
 
 import sys

@@ -10,7 +10,7 @@ Requires APIAuth and DeviceID documents.
 Creates Publication document.
 
 command line example:
-./scs_mfr/osio_publication.py -s development/loc/2 development/device -v
+./scs_mfr/osio_publication.py -v -s exhibition/loc/2 exhibition/device
 """
 
 import sys
