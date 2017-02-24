@@ -5,6 +5,11 @@ Created on 28 Dec 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
+Warning:
+in /home/debian/bin/sampling.sh
+
+comment out ifup ppp0 and reboot before running
+
 command line example:
 ./scs_mfr/gpi.py P9_12 -w 0 -v
 """
