@@ -6,11 +6,16 @@ Created on 18 Feb 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 workflow 4 of 4:
+1: ./scs_mfr/device_id.py
+2: ./scs_mfr/osio_api_auth.py
+3: ./scs_mfr/osio_device_create.py
+4: ./scs_mfr/osio_publication.py
+
 Requires APIAuth and DeviceID documents.
 Creates Publication document.
 
 command line example:
-./scs_mfr/osio_publication.py -v -s exhibition/loc/2 exhibition/device
+./scs_mfr/osio_publication.py -v -s exhibition 2 -g 28
 """
 
 import sys
@@ -57,12 +62,15 @@ class TopicCreator(object):
 
         # success = self.__topic_manager.create()
 
-        topic_info = TopicInfo(TopicInfo.FORMAT_JSON, None, None, None)  # for the v2 API, schema_id goes in Topic
+        topic_info = TopicInfo(TopicInfo.FORMAT_JSON, None, None, None)     # for the v2 API, schema_id goes in Topic
         topic = Topic(path, name, description, True, True, topic_info, schema_id)
 
         print(topic)
 
-        success = self.__topic_manager.create(topic)
+        try:
+            success = self.__topic_manager.create(topic)
+        except:
+            success= False
 
         return success
 
@@ -117,25 +125,27 @@ if __name__ == '__main__':
     # run...
 
     if cmd.set():
-        pub = Publication.construct(auth.org_id, cmd.location_path, cmd.device_path)
-        pub.save(Host)      # TODO: only save if successful
+        pub = Publication.construct(auth.org_id, cmd.group, cmd.location_id)
 
         print(JSONify.dumps(pub))
 
-        creator.construct_topic(pub.climate_topic(), Publication.CLIMATE_NAME,
+        creator.construct_topic(pub.climate_topic_path(), Publication.CLIMATE_NAME,
                                 Publication.CLIMATE_DESCRIPTION, Publication.CLIMATE_SCHEMA)
 
-        creator.construct_topic(pub.gases_topic(), Publication.GASES_NAME,
-                                Publication.GASES_DESCRIPTION, Publication.GASES_SCHEMA)
+        creator.construct_topic(pub.gases_topic_path(), Publication.GASES_NAME,
+                                Publication.GASES_DESCRIPTION, cmd.gases_schema_id)
 
-        creator.construct_topic(pub.particulates_topic(), Publication.PARTICULATES_NAME,
+        creator.construct_topic(pub.particulates_topic_path(), Publication.PARTICULATES_NAME,
                                 Publication.PARTICULATES_DESCRIPTION, Publication.PARTICULATES_SCHEMA)
 
-        creator.construct_topic(pub.status_topic(device_id), Publication.STATUS_NAME,
+        creator.construct_topic(pub.status_topic_path(device_id), Publication.STATUS_NAME,
                                 Publication.STATUS_DESCRIPTION, Publication.STATUS_SCHEMA)
 
-        creator.construct_topic(pub.control_topic(device_id), Publication.CONTROL_NAME,
+        creator.construct_topic(pub.control_topic_path(device_id), Publication.CONTROL_NAME,
                                 Publication.CONTROL_DESCRIPTION, Publication.CONTROL_SCHEMA)
+
+        pub.save(Host)      # TODO: only save if successful
+
 
     else:
         pub = Publication.load_from_host(Host)
@@ -143,9 +153,9 @@ if __name__ == '__main__':
 
     if cmd.verbose:
         print("-", file=sys.stderr)
-        print("climate_topic:      %s" % pub.climate_topic(), file=sys.stderr)
-        print("gases_topic:        %s" % pub.gases_topic(), file=sys.stderr)
-        print("particulates_topic: %s" % pub.particulates_topic(), file=sys.stderr)
+        print("climate_topic:      %s" % pub.climate_topic_path(), file=sys.stderr)
+        print("gases_topic:        %s" % pub.gases_topic_path(), file=sys.stderr)
+        print("particulates_topic: %s" % pub.particulates_topic_path(), file=sys.stderr)
 
-        print("status_topic:       %s" % pub.status_topic(device_id), file=sys.stderr)
-        print("control_topic:      %s" % pub.control_topic(device_id), file=sys.stderr)
+        print("status_topic:       %s" % pub.status_topic_path(device_id), file=sys.stderr)
+        print("control_topic:      %s" % pub.control_topic_path(device_id), file=sys.stderr)

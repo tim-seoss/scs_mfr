@@ -6,6 +6,11 @@ Created on 17 Feb 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 workflow 1 of 4:
+1: ./scs_mfr/device_id.py
+2: ./scs_mfr/osio_api_auth.py
+3: ./scs_mfr/osio_device_create.py
+4: ./scs_mfr/osio_publication.py
+
 Creates CmdDeviceID document.
 
 command line example:
