@@ -5,11 +5,11 @@ Created on 18 Feb 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-workflow 4 of 4:
-1: ./scs_mfr/device_id.py
-2: ./scs_mfr/osio_api_auth.py
-3: ./scs_mfr/osio_device_create.py
-4: ./scs_mfr/osio_publication.py
+workflow:
+  1: ./scs_mfr/device_id.py
+  2: ./scs_mfr/osio_api_auth.py
+  3: ./scs_mfr/osio_device_create.py
+> 4: ./scs_mfr/osio_publication.py
 
 Requires APIAuth and DeviceID documents.
 Creates Publication document.
@@ -33,6 +33,8 @@ from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_osio_publication import CmdOSIOPublication
 
+
+# TODO: update device description with location path
 
 # --------------------------------------------------------------------------------------------------------------------
 

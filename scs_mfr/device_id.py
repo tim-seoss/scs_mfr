@@ -5,11 +5,11 @@ Created on 17 Feb 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-workflow 1 of 4:
-1: ./scs_mfr/device_id.py
-2: ./scs_mfr/osio_api_auth.py
-3: ./scs_mfr/osio_device_create.py
-4: ./scs_mfr/osio_publication.py
+workflow:
+> 1: ./scs_mfr/device_id.py
+  2: ./scs_mfr/osio_api_auth.py
+  3: ./scs_mfr/osio_device_create.py
+  4: ./scs_mfr/osio_publication.py
 
 Creates CmdDeviceID document.
 
@@ -51,6 +51,6 @@ if __name__ == '__main__':
 
     print(JSONify.dumps(id))
 
-    if cmd.verbose:
+    if cmd.verbose and id is not None:
         print("box:   %s" % id.box_label(), file=sys.stderr)
         print("topic: %s" % id.topic_label(), file=sys.stderr)
