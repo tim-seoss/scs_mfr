@@ -64,12 +64,12 @@ class CmdOSIOPublication(object):
 
     @property
     def group(self):
-        return self.__opts.group_location[0] if len(self.__opts.group_location) > 0 else None
+        return self.__opts.group_location[0] if self.__opts.gases_schema_id is not None else None
 
 
     @property
     def location_id(self):
-        return int(self.__opts.group_location[1]) if len(self.__opts.group_location) > 1 else None
+        return int(self.__opts.group_location[1]) if self.__opts.gases_schema_id is not None else None
 
 
     @property
