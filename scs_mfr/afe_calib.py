@@ -8,7 +8,7 @@ Created on 27 Feb 2017
 Creates AFECalib document.
 
 command line example:
-./scs_mfr/afe_calib.py -v
+./scs_mfr/afe_calib.py -v -s 15-000064
 """
 
 import json
@@ -17,6 +17,7 @@ import sys
 from collections import OrderedDict
 
 from scs_core.data.json import JSONify
+from scs_core.sys.exception_report import ExceptionReport
 
 from scs_dfe.gas.afe_calib import AFECalib
 
@@ -44,18 +45,20 @@ if __name__ == '__main__':
 
     if cmd.set():
         client = HTTPClient()
-        client.connect("www.alphasense-technology.co.uk")
+        client.connect(AFECalib.HOST)
 
         try:
-            response = client.get("/api/v1/boards/" + cmd.serial_number, None, {"Accept": "application/json"})
+            path = AFECalib.PATH + cmd.serial_number
+            response = client.get(path, None, AFECalib.HEADER)
             jdict = json.loads(response, object_pairs_hook=OrderedDict)
-            print("jdict:[%s]" % jdict)
-            print("-")
 
             calib = AFECalib.construct_from_jdict(jdict)
             calib.save(Host)
 
-        except RuntimeError:
+        except RuntimeError as ex:
+            report = ExceptionReport.construct(ex)
+            print(JSONify.dumps(report.summary), file=sys.stderr)
+
             calib = None
 
         finally:
