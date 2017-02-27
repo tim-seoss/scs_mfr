@@ -64,4 +64,5 @@ class CmdSHTConf(object):
 
     def __str__(self, *args, **kwargs):
         return "CmdSHTConf:{int_addr:%s, ext_addr:%s, verbose:%s, args:%s}" % \
-                    (CmdSHTConf.__addr_str(self.int_addr), CmdSHTConf.__addr_str(self.ext_addr), self.verbose, self.args)
+                    (CmdSHTConf.__addr_str(self.int_addr), CmdSHTConf.__addr_str(self.ext_addr), self.verbose,
+                     self.args)

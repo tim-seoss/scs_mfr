@@ -21,7 +21,7 @@ from scs_dfe.board.cat24c32 import CAT24C32
 from scs_dfe.board.mcp9808 import MCP9808
 from scs_dfe.climate.sht_conf import SHTConf
 from scs_dfe.gas.afe import AFE
-from scs_dfe.gas.afe_conf import AFEConf
+from scs_dfe.gas.afe_calib import AFECalib
 from scs_dfe.gas.pt1000_calib import Pt1000Calib
 from scs_dfe.gps.pam7q import PAM7Q
 from scs_dfe.particulate.opc_n2 import OPCN2
@@ -212,8 +212,8 @@ if __name__ == '__main__':
             calib = Pt1000Calib.load_from_host(Host)
             pt1000 = calib.pt1000()
 
-            conf = AFEConf.load_from_host(Host)
-            sensors = conf.sensors()
+            calib = AFECalib.load_from_host(Host)
+            sensors = calib.sensors()
 
             afe = AFE(pt1000, sensors)
             afe_datum = afe.sample()
