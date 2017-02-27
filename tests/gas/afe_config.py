@@ -33,7 +33,7 @@ try:
     # ----------------------------------------------------------------------------------------------------------------
     # AFEConf...
 
-    sensor_types = [Sensor.NO2_A43F, Sensor.OX_A431, Sensor.NO_A4, Sensor.CO_A4]
+    sensor_types = [Sensor.NO2_A4, Sensor.OX_A4, Sensor.NO_A4, Sensor.CO_A4]
 
     afe_conf = AFEConf(afe_type, sensor_types)
     print(afe_conf)
