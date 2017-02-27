@@ -53,11 +53,14 @@ if __name__ == '__main__':
             jdict = json.loads(response, object_pairs_hook=OrderedDict)
 
             calib = AFECalib.construct_from_jdict(jdict)
-            calib.save(Host)
+
+            if calib is not None:
+                calib.save(Host)
 
         except RuntimeError as ex:
-            report = ExceptionReport.construct(ex)
-            print(JSONify.dumps(report.summary), file=sys.stderr)
+            if cmd.verbose:
+                report = ExceptionReport.construct(ex)
+                print(JSONify.dumps(report.summary), file=sys.stderr)
 
             calib = None
 
