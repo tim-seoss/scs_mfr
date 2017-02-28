@@ -52,9 +52,6 @@ if __name__ == '__main__':
             response = client.get(path, None, AFECalib.HEADER)
             jdict = json.loads(response, object_pairs_hook=OrderedDict)
 
-            print(jdict)
-            print("-")
-
             calib = AFECalib.construct_from_jdict(jdict)
 
             if calib is not None:
