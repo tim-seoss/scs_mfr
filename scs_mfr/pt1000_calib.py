@@ -18,6 +18,8 @@ from scs_dfe.gas.pt1000_calib import Pt1000Calib
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
+from scs_mfr.cmd.cmd_pt1000_calib import CmdPt1000Calib
+
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -30,6 +32,14 @@ if __name__ == '__main__':
 
     try:
         I2C.open(Host.I2C_SENSORS)
+
+        # ----------------------------------------------------------------------------------------------------------------
+        # cmd...
+
+        cmd = CmdPt1000Calib()
+
+        if cmd.verbose:
+            print(cmd, file=sys.stderr)
 
 
         # ------------------------------------------------------------------------------------------------------------
@@ -47,17 +57,35 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # run...
 
+        # SHT...
         sht_datum = sht.sample()
 
+        if cmd.verbose:
+            print(sht_datum, file=sys.stderr)
+
+        # Pt1000 initial...
         pt1000_datum = pt1000.sample(afe)
 
-        v20 = pt1000_datum.v20(sht_datum.temp)
+        if cmd.set:
+            # Pt1000 correction...
+            v20 = pt1000_datum.v20(sht_datum.temp)
 
-        pt1000_calib = Pt1000Calib(None, v20)
-        pt1000_calib.save(Host)
+            pt1000_calib = Pt1000Calib(None, v20)
+            pt1000_calib.save(Host)
 
-        jstr = JSONify.dumps(pt1000_calib)
-        print(jstr)
+            # Pt1000 final...
+            if cmd.verbose:
+                pt1000 = pt1000_calib.pt1000()
+                afe = AFE(pt1000, [])
+
+                pt1000_datum = pt1000.sample(afe)
+
+                print(pt1000_datum, file=sys.stderr)
+
+        # calibration...
+        pt1000_calib = Pt1000Calib.load_from_host(Host)
+
+        print(JSONify.dumps(pt1000_calib))
 
 
     # ----------------------------------------------------------------------------------------------------------------
