@@ -88,6 +88,15 @@ if __name__ == '__main__':
         print(JSONify.dumps(pt1000_calib))
 
 
+        if cmd.verbose:
+            pt1000_calib = Pt1000Calib.load_from_host(Host)
+            pt1000 = pt1000_calib.pt1000()
+
+            afe = AFE(pt1000, [])
+
+            print(pt1000.sample(afe), file=sys.stderr)
+
+
     # ----------------------------------------------------------------------------------------------------------------
     # end...
 
