@@ -5,6 +5,8 @@ Created on 29 Jan 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
+Note: this script uses the Pt1000 temp sensor for temperature compensation.
+
 command line example:
 ./scs_mfr/dfe_test.py 123 -g -v
 """
