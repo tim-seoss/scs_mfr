@@ -19,7 +19,7 @@ class PowerMeter(object):
     """
     __MAX_CURR = 969.0
 
-    __DEVICE = '/dev/ttyUSB0'           # '/dev/tty.usbserial-A4014EG7'
+    __DEVICE = '/dev/ttyUSB0'           # hard-coded path '/dev/tty.usbserial-A4014EG7'
 
 
     # ----------------------------------------------------------------------------------------------------------------
