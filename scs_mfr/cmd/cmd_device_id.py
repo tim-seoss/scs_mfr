@@ -16,11 +16,11 @@ class CmdDeviceID(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-s MODEL CONFIG SERIAL] [-v]",
+        self.__parser = optparse.OptionParser(usage="%prog [-s VENDOR_ID MODEL_ID MODEL_NAME CONFIG SERIAL] [-v]",
                                               version="%prog 1.0")
 
         # compulsory...
-        self.__parser.add_option("--set", "-s", type="string", nargs=3, action="store", dest="model_config_serial",
+        self.__parser.add_option("--set", "-s", type="string", nargs=5, action="store", dest="model_config_serial",
                                  help="SERIAL must be an integer")
 
         # optional...
@@ -39,18 +39,28 @@ class CmdDeviceID(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
-    def model(self):
+    def vendor_id(self):
         return self.__opts.model_config_serial[0] if self.__opts.model_config_serial else None
 
 
     @property
+    def model_id(self):
+        return self.__opts.model_config_serial[1] if self.__opts.model_config_serial else None
+
+
+    @property
+    def model_name(self):
+        return self.__opts.model_config_serial[2] if self.__opts.model_config_serial else None
+
+
+    @property
     def configuration(self):
-        return self.__opts.model_config_serial[1].upper() if self.__opts.model_config_serial else None
+        return self.__opts.model_config_serial[3].upper() if self.__opts.model_config_serial else None
 
 
     @property
     def serial_number(self):
-        return int(self.__opts.model_config_serial[2]) if self.__opts.model_config_serial else None
+        return int(self.__opts.model_config_serial[4]) if self.__opts.model_config_serial else None
 
 
     @property
@@ -66,5 +76,7 @@ class CmdDeviceID(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "CmdDeviceID:{model:%s, configuration:%s, serial_number:%s, verbose:%s, args:%s}" % \
-               (self.model, self.configuration, self.serial_number, self.verbose, self.args)
+        return "CmdDeviceID:{vendor_id:%s, model_id:%s, model_name:%s, " \
+               "configuration:%s, serial_number:%s, verbose:%s, args:%s}" % \
+               (self.vendor_id, self.model_id, self.model_name,
+                self.configuration, self.serial_number, self.verbose, self.args)

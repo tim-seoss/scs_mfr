@@ -44,7 +44,7 @@ if __name__ == '__main__':
     # run...
 
     if cmd.set():
-        id = DeviceID(cmd.model, cmd.configuration, cmd.serial_number)
+        id = DeviceID(cmd.vendor_id, cmd.model_id, cmd.model_name, cmd.configuration, cmd.serial_number)
         id.save(Host)
     else:
         id = DeviceID.load_from_host(Host)
@@ -54,3 +54,4 @@ if __name__ == '__main__':
     if cmd.verbose and id is not None:
         print("box:   %s" % id.box_label(), file=sys.stderr)
         print("topic: %s" % id.topic_label(), file=sys.stderr)
+        print("tag:   %s" % id.message_tag(), file=sys.stderr)
