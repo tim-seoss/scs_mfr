@@ -34,7 +34,7 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_osio_publication import CmdOSIOPublication
 
 
-# TODO: update device description with location path
+# TODO: balk if there already are any topics with the given paths (override with -f)
 
 # --------------------------------------------------------------------------------------------------------------------
 

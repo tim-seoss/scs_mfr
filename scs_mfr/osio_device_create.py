@@ -34,6 +34,8 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_osio_device_create import CmdOSIODeviceCreate
 
 
+# TODO: balk if there already is a device with the device ID (override with -f)
+
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':

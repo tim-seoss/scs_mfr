@@ -22,6 +22,8 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_osio_client_auth import CmdOSIOClientAuth
 
 
+# TODO: check whether the USER_ID exists on OSIO?
+
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':

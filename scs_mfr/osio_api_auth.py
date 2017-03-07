@@ -27,6 +27,8 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_osio_api_auth import CmdOSIOAPIAuth
 
 
+# TODO: check whether the ORG_ID exists on OSIO?
+
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
