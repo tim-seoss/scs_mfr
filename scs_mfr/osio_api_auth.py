@@ -14,7 +14,7 @@ workflow:
 Creates APIAuth document.
 
 command line example:
-./scs_mfr/osio_api_auth.py -v -s south-coast-science-dev 43308b72-ad41-4555-b075-b4245c1971db
+./scs_mfr/osio_api_auth.py -v -s south-coast-science-test-user 9fdfb841-3433-45b8-b223-3f5a283ceb8e
 """
 
 import sys
