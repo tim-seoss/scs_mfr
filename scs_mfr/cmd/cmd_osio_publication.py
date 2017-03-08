@@ -69,7 +69,7 @@ class CmdOSIOPublication(object):
 
     @property
     def location_id(self):
-        return int(self.__opts.group_location[1]) if self.__opts.gases_schema_id is not None else None
+        return self.__opts.group_location[1] if self.__opts.gases_schema_id is not None else None
 
 
     @property
