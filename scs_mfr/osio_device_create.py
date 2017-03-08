@@ -15,8 +15,8 @@ Requires APIAuth and DeviceID documents.
 Creates ClientAuth document.
 
 command line examples:
-./scs_mfr/osio_device_create.py -v -u southcoastscience-dev -l 50.823130 -0.122922 "BN2 0DA" -d "test 1"
-./scs_mfr/osio_device_create.py -v -u southcoastscience-dev -l 50.819456, -0.128336 "BN2 1AF" -d "BB dev platform"
+./scs_mfr/osio_device_create.py -v -u south-coast-science-test-user -l 50.823130 -0.122922 "BN2 0DA" -d "test 1"
+./scs_mfr/osio_device_create.py -v -u south-coast-science-test-user -l 50.819456, -0.128336 "BN2 1AF" -d "BB dev platform"
 """
 
 import sys
