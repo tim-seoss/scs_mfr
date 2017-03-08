@@ -21,7 +21,7 @@ class CmdDeviceID(object):
 
         # compulsory...
         self.__parser.add_option("--set", "-s", type="string", nargs=5, action="store", dest="model_config_serial",
-                                 help="SERIAL must be an integer")
+                                 help="SERIAL is normally integer")
 
         # optional...
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
@@ -60,7 +60,7 @@ class CmdDeviceID(object):
 
     @property
     def serial_number(self):
-        return int(self.__opts.model_config_serial[4]) if self.__opts.model_config_serial else None
+        return self.__opts.model_config_serial[4] if self.__opts.model_config_serial else None
 
 
     @property
