@@ -71,8 +71,8 @@ class TopicCreator(object):
 
         try:
             success = self.__topic_manager.create(topic)
-        except:
-            success= False
+        except RuntimeError:
+            success = False
 
         return success
 

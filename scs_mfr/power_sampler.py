@@ -5,6 +5,8 @@ Created on 2 Oct 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
+Requires DeviceID document.
+
 command line example:
 ./scs_mfr/power_sampler.py -i 2 -n 10
 """
@@ -15,7 +17,10 @@ from scs_core.data.json import JSONify
 from scs_core.data.localized_datetime import LocalizedDatetime
 from scs_core.sample.sample_datum import SampleDatum
 from scs_core.sync.sampler import Sampler
+from scs_core.sys.device_id import DeviceID
 from scs_core.sys.exception_report import ExceptionReport
+
+from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_sampler import CmdSampler
 from scs_mfr.power.power_meter import PowerMeter
@@ -78,6 +83,16 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # resource...
 
+        device_id = DeviceID.load_from_host(Host)
+
+        if device_id is None:
+            print("DeviceID not available.")
+            exit()
+
+        if cmd.verbose:
+            print(device_id, file=sys.stderr)
+
+
         sampler = PowerSampler(cmd.interval, cmd.samples)
 
         if cmd.verbose:
@@ -89,7 +104,7 @@ if __name__ == '__main__':
 
         for power_datum in sampler.samples():
             recorded = LocalizedDatetime.now()
-            datum = SampleDatum(recorded, power_datum)
+            datum = SampleDatum(device_id.message_tag(), recorded, power_datum)
 
             print(JSONify.dumps(datum))
             sys.stdout.flush()
