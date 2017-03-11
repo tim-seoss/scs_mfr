@@ -55,7 +55,7 @@ class CmdDeviceID(object):
 
     @property
     def configuration(self):
-        return self.__opts.model_config_serial[3].upper() if self.__opts.model_config_serial else None
+        return self.__opts.model_config_serial[3] if self.__opts.model_config_serial else None
 
 
     @property
