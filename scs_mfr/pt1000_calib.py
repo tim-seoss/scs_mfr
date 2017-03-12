@@ -64,7 +64,7 @@ if __name__ == '__main__':
             print(sht_datum, file=sys.stderr)
 
         # Pt1000 initial...
-        pt1000_datum = pt1000.sample(afe)
+        pt1000_datum = afe.sample_temp()
 
         if cmd.set:
             # Pt1000 correction...
@@ -78,7 +78,7 @@ if __name__ == '__main__':
                 pt1000 = pt1000_calib.pt1000()
                 afe = AFE(pt1000, [])
 
-                pt1000_datum = pt1000.sample(afe)
+                pt1000_datum = afe.sample_temp()
 
                 print(pt1000_datum, file=sys.stderr)
 
