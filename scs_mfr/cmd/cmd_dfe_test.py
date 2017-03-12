@@ -13,7 +13,9 @@ class CmdDFETest(object):
     """unix command line handler"""
 
     def __init__(self):
-        """stuff"""
+        """
+        Constructor
+        """
         self.__parser = optparse.OptionParser(usage="%prog SERIAL_NUMBER [-g] [-n] [-v]", version="%prog 1.0")
 
         # optional...

@@ -13,7 +13,9 @@ class CmdOSIOSchemaList(object):
     """unix command line handler"""
 
     def __init__(self):
-        """stuff"""
+        """
+        Constructor
+        """
         self.__parser = optparse.OptionParser(usage="%prog [-v]", version="%prog 1.0")
 
         # optional...
