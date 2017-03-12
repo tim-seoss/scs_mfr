@@ -48,6 +48,8 @@ class DFETestReporter(object):
 
 
     def report_exception(self, subject, exception):
+        # print(exception, file=sys.stderr)
+
         report = exception.__class__.__name__
 
         self.__subjects[subject] = report

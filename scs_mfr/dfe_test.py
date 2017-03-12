@@ -23,6 +23,7 @@ from scs_dfe.board.cat24c32 import CAT24C32
 from scs_dfe.board.mcp9808 import MCP9808
 from scs_dfe.climate.sht_conf import SHTConf
 from scs_dfe.gas.afe import AFE
+from scs_dfe.gas.afe_baseline import AFEBaseline
 from scs_dfe.gas.afe_calib import AFECalib
 from scs_dfe.gas.pt1000_calib import Pt1000Calib
 from scs_dfe.gps.pam7q import PAM7Q
@@ -179,18 +180,20 @@ if __name__ == '__main__':
         if cmd.verbose:
             print("SHT...", file=sys.stderr)
 
+        sht_datum = None
+
         try:
             sht_conf = SHTConf.load_from_host(Host)
             sht = sht_conf.ext_sht()
 
             sht.reset()
-            datum = sht.sample()
+            sht_datum = sht.sample()
 
             if cmd.verbose:
-                print(datum, file=sys.stderr)
+                print(sht_datum, file=sys.stderr)
 
-            humid = datum.humid
-            temp = datum.temp
+            humid = sht_datum.humid
+            temp = sht_datum.temp
 
             ok = 10 < humid < 90 and 10 < temp < 50
             reporter.report_test("SHT", ok)
@@ -203,6 +206,47 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # Pt1000 calibration...
 
+        if cmd.verbose:
+            print("Pt1000...", file=sys.stderr)
+
+        pt1000 = None
+
+        try:
+            # resource...
+            calib = Pt1000Calib.load_from_host(Host)
+            pt1000 = calib.pt1000()
+
+            afe = AFE(pt1000, [])
+
+            # initial sample...
+            pt1000_datum = afe.sample_temp()
+
+            v20 = pt1000_datum.v20(sht_datum.temp)
+
+            # calibrate...
+            calib = Pt1000Calib(None, v20)
+            calib.save(Host)
+
+            # new resource...
+            pt1000 = calib.pt1000()
+
+            afe = AFE(pt1000, [])
+
+            # final sample...
+            pt1000_datum = afe.sample_temp()
+
+            if cmd.verbose:
+                print(pt1000_datum, file=sys.stderr)
+
+            temp_diff = abs(pt1000_datum.temp - sht_datum.temp)
+
+            ok = temp_diff < 0.2
+            reporter.report_test("Pt1000", ok)
+
+        except Exception as ex:
+            reporter.report_exception("Pt1000", ex)
+            ok = False
+
 
         # ------------------------------------------------------------------------------------------------------------
         # AFE...
@@ -211,11 +255,10 @@ if __name__ == '__main__':
             print("AFE...", file=sys.stderr)
 
         try:
-            calib = Pt1000Calib.load_from_host(Host)
-            pt1000 = calib.pt1000()
+            afe_baseline = AFEBaseline.load_from_host(Host)
 
             calib = AFECalib.load_from_host(Host)
-            sensors = calib.sensors()
+            sensors = calib.sensors(afe_baseline)
 
             afe = AFE(pt1000, sensors)
             afe_datum = afe.sample()
@@ -226,7 +269,7 @@ if __name__ == '__main__':
             ok = 0.4 < afe_datum.pt1000.v < 0.6
 
             for gas, sensor in afe_datum.sns.items():
-                sensor_ok = 0.9 < sensor.weV < 1.1 and 0.9 < sensor.aeV < 1.1
+                sensor_ok = 0.9 < sensor.we_v < 1.1 and 0.9 < sensor.ae_v < 1.1
 
                 if not sensor_ok:
                     ok = False
