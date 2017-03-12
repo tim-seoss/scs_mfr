@@ -41,8 +41,6 @@ from scs_mfr.report.dfe_test_reporter import DFETestReporter
 
 # TODO: add int / ext SHT
 
-# TODO: add Pt1000 calibration
-
 # --------------------------------------------------------------------------------------------------------------------
 # validate...
 
