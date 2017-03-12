@@ -173,10 +173,39 @@ if __name__ == '__main__':
 
 
         # ------------------------------------------------------------------------------------------------------------
-        # SHT...
+        # Int SHT...
 
         if cmd.verbose:
-            print("SHT...", file=sys.stderr)
+            print("IntSHT...", file=sys.stderr)
+
+        sht_datum = None
+
+        try:
+            sht_conf = SHTConf.load_from_host(Host)
+            sht = sht_conf.int_sht()
+
+            sht.reset()
+            sht_datum = sht.sample()
+
+            if cmd.verbose:
+                print(sht_datum, file=sys.stderr)
+
+            humid = sht_datum.humid
+            temp = sht_datum.temp
+
+            ok = 10 < humid < 90 and 10 < temp < 50
+            reporter.report_test("IntSHT", ok)
+
+        except Exception as ex:
+            reporter.report_exception("IntSHT", ex)
+            ok = False
+
+
+        # ------------------------------------------------------------------------------------------------------------
+        # Ext SHT...
+
+        if cmd.verbose:
+            print("ExtSHT...", file=sys.stderr)
 
         sht_datum = None
 
@@ -194,10 +223,10 @@ if __name__ == '__main__':
             temp = sht_datum.temp
 
             ok = 10 < humid < 90 and 10 < temp < 50
-            reporter.report_test("SHT", ok)
+            reporter.report_test("ExtSHT", ok)
 
         except Exception as ex:
-            reporter.report_exception("SHT", ex)
+            reporter.report_exception("ExtSHT", ex)
             ok = False
 
 
