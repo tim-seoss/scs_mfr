@@ -178,20 +178,20 @@ if __name__ == '__main__':
         if cmd.verbose:
             print("IntSHT...", file=sys.stderr)
 
-        sht_datum = None
+        int_sht_datum = None
 
         try:
             sht_conf = SHTConf.load_from_host(Host)
             sht = sht_conf.int_sht()
 
             sht.reset()
-            sht_datum = sht.sample()
+            int_sht_datum = sht.sample()
 
             if cmd.verbose:
-                print(sht_datum, file=sys.stderr)
+                print(int_sht_datum, file=sys.stderr)
 
-            humid = sht_datum.humid
-            temp = sht_datum.temp
+            humid = int_sht_datum.humid
+            temp = int_sht_datum.temp
 
             ok = 10 < humid < 90 and 10 < temp < 50
             reporter.report_test("IntSHT", ok)
@@ -207,20 +207,20 @@ if __name__ == '__main__':
         if cmd.verbose:
             print("ExtSHT...", file=sys.stderr)
 
-        sht_datum = None
+        ext_sht_datum = None
 
         try:
             sht_conf = SHTConf.load_from_host(Host)
             sht = sht_conf.ext_sht()
 
             sht.reset()
-            sht_datum = sht.sample()
+            ext_sht_datum = sht.sample()
 
             if cmd.verbose:
-                print(sht_datum, file=sys.stderr)
+                print(ext_sht_datum, file=sys.stderr)
 
-            humid = sht_datum.humid
-            temp = sht_datum.temp
+            humid = ext_sht_datum.humid
+            temp = ext_sht_datum.temp
 
             ok = 10 < humid < 90 and 10 < temp < 50
             reporter.report_test("ExtSHT", ok)
@@ -248,7 +248,7 @@ if __name__ == '__main__':
             # initial sample...
             pt1000_datum = afe.sample_temp()
 
-            v20 = pt1000_datum.v20(sht_datum.temp)
+            v20 = pt1000_datum.v20(int_sht_datum.temp)
 
             # calibrate...
             calib = Pt1000Calib(None, v20)
