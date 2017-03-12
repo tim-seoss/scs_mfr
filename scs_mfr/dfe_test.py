@@ -265,7 +265,7 @@ if __name__ == '__main__':
             if cmd.verbose:
                 print(pt1000_datum, file=sys.stderr)
 
-            temp_diff = abs(pt1000_datum.temp - sht_datum.temp)
+            temp_diff = abs(pt1000_datum.temp - int_sht_datum.temp)
 
             ok = temp_diff < 0.2
             reporter.report_test("Pt1000", ok)
