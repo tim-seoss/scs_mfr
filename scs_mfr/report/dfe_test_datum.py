@@ -18,8 +18,8 @@ class DFETestDatum(SampleDatum):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, rec, serial_number, subjects, afe):
+    def __init__(self, tag, rec, serial_number, subjects, afe):
         """
         Constructor
         """
-        super().__init__(rec, ('sn', serial_number), ('subjects', subjects), ('afe', afe))
+        super().__init__(tag, rec, ('sn', serial_number), ('subjects', subjects), ('afe', afe))

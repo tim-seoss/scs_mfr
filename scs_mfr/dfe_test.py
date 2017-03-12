@@ -17,6 +17,7 @@ import sys
 from scs_core.data.json import JSONify
 from scs_core.data.localized_datetime import LocalizedDatetime
 from scs_core.location.gprmc import GPRMC
+from scs_core.sys.device_id import DeviceID
 from scs_core.sys.eeprom_image import EEPROMImage
 
 from scs_dfe.board.cat24c32 import CAT24C32
@@ -38,8 +39,6 @@ from scs_mfr.report.dfe_test_reporter import DFETestReporter
 
 
 # TODO: add UUID read
-
-# TODO: add int / ext SHT
 
 # --------------------------------------------------------------------------------------------------------------------
 # validate...
@@ -73,6 +72,22 @@ Host.enable_eeprom_access()
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
+
+    # ----------------------------------------------------------------------------------------------------------------
+    # resource...
+
+    device_id = DeviceID.load_from_host(Host)
+
+    if device_id is None:
+        print("DeviceID not available.")
+        exit()
+
+    if cmd.verbose:
+        print(device_id, file=sys.stderr)
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+    # run...
 
     try:
         I2C.open(Host.I2C_SENSORS)
@@ -176,7 +191,7 @@ if __name__ == '__main__':
         # Int SHT...
 
         if cmd.verbose:
-            print("IntSHT...", file=sys.stderr)
+            print("Int SHT...", file=sys.stderr)
 
         int_sht_datum = None
 
@@ -194,10 +209,10 @@ if __name__ == '__main__':
             temp = int_sht_datum.temp
 
             ok = 10 < humid < 90 and 10 < temp < 50
-            reporter.report_test("IntSHT", ok)
+            reporter.report_test("Int SHT", ok)
 
         except Exception as ex:
-            reporter.report_exception("IntSHT", ex)
+            reporter.report_exception("Int SHT", ex)
             ok = False
 
 
@@ -205,7 +220,7 @@ if __name__ == '__main__':
         # Ext SHT...
 
         if cmd.verbose:
-            print("ExtSHT...", file=sys.stderr)
+            print("Ext SHT...", file=sys.stderr)
 
         ext_sht_datum = None
 
@@ -223,10 +238,10 @@ if __name__ == '__main__':
             temp = ext_sht_datum.temp
 
             ok = 10 < humid < 90 and 10 < temp < 50
-            reporter.report_test("ExtSHT", ok)
+            reporter.report_test("Ext SHT", ok)
 
         except Exception as ex:
-            reporter.report_exception("ExtSHT", ex)
+            reporter.report_exception("Ext SHT", ex)
             ok = False
 
 
@@ -235,6 +250,7 @@ if __name__ == '__main__':
 
         if cmd.verbose:
             print("Pt1000...", file=sys.stderr)
+            print("(calibrating with Int SHT)", file=sys.stderr)
 
         pt1000 = None
 
@@ -364,6 +380,6 @@ if __name__ == '__main__':
     # report...
 
     recorded = LocalizedDatetime.now()
-    datum = DFETestDatum(recorded, cmd.serial_number, reporter.subjects, afe_datum)
+    datum = DFETestDatum(device_id.message_tag(), recorded, cmd.serial_number, reporter.subjects, afe_datum)
 
     print(JSONify.dumps(datum))
