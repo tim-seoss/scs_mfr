@@ -188,35 +188,6 @@ if __name__ == '__main__':
 
 
         # ------------------------------------------------------------------------------------------------------------
-        # Int SHT...
-
-        if cmd.verbose:
-            print("Int SHT...", file=sys.stderr)
-
-        int_sht_datum = None
-
-        try:
-            sht_conf = SHTConf.load_from_host(Host)
-            sht = sht_conf.int_sht()
-
-            sht.reset()
-            int_sht_datum = sht.sample()
-
-            if cmd.verbose:
-                print(int_sht_datum, file=sys.stderr)
-
-            humid = int_sht_datum.humid
-            temp = int_sht_datum.temp
-
-            ok = 10 < humid < 90 and 10 < temp < 50
-            reporter.report_test("Int SHT", ok)
-
-        except Exception as ex:
-            reporter.report_exception("Int SHT", ex)
-            ok = False
-
-
-        # ------------------------------------------------------------------------------------------------------------
         # Ext SHT...
 
         if cmd.verbose:
@@ -242,6 +213,35 @@ if __name__ == '__main__':
 
         except Exception as ex:
             reporter.report_exception("Ext SHT", ex)
+            ok = False
+
+
+        # ------------------------------------------------------------------------------------------------------------
+        # Int SHT...
+
+        if cmd.verbose:
+            print("Int SHT...", file=sys.stderr)
+
+        int_sht_datum = None
+
+        try:
+            sht_conf = SHTConf.load_from_host(Host)
+            sht = sht_conf.int_sht()
+
+            sht.reset()
+            int_sht_datum = sht.sample()
+
+            if cmd.verbose:
+                print(int_sht_datum, file=sys.stderr)
+
+            humid = int_sht_datum.humid
+            temp = int_sht_datum.temp
+
+            ok = 10 < humid < 90 and 10 < temp < 50
+            reporter.report_test("Int SHT", ok)
+
+        except Exception as ex:
+            reporter.report_exception("Int SHT", ex)
             ok = False
 
 
