@@ -59,7 +59,7 @@ if __name__ == '__main__':
     api_auth = APIAuth.load_from_host(Host)
 
     if api_auth is None:
-        print("APIAuth not available.")
+        print("APIAuth not available.", file=sys.stderr)
         exit()
 
     if cmd.verbose:
@@ -69,7 +69,7 @@ if __name__ == '__main__':
     device_id = DeviceID.load_from_host(Host)
 
     if device_id is None:
-        print("DeviceID not available.")
+        print("DeviceID not available.", file=sys.stderr)
         exit()
 
     if cmd.verbose:
