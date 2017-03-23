@@ -9,14 +9,17 @@ workflow:
   1: ./scs_mfr/device_id.py
   2: ./scs_mfr/osio_api_auth.py
 > 3: ./scs_mfr/osio_device_create.py
-  4: ./scs_mfr/osio_publication.py
+  4: ./scs_mfr/osio_project.py
 
 Requires APIAuth and DeviceID documents.
 Creates ClientAuth document.
 
 command line examples:
-./scs_mfr/osio_device_create.py -v -u south-coast-science-test-user -l 50.823130 -0.122922 "BN2 0DA" -d "test 1"
-./scs_mfr/osio_device_create.py -v -u south-coast-science-test-user -l 50.819456, -0.128336 "BN2 1AF" -d "BB dev platform"
+./scs_mfr/osio_device_create.py -v -u south-coast-science-test-user \
+ -l 50.823130 -0.122922 "BN2 0DA" -d "test 1"
+
+./scs_mfr/osio_device_create.py -v -u south-coast-science-test-user \
+-l 50.819456, -0.128336 "BN2 1AF" -d "BB dev platform"
 """
 
 import sys

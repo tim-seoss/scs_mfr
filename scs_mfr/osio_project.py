@@ -9,13 +9,13 @@ workflow:
   1: ./scs_mfr/device_id.py
   2: ./scs_mfr/osio_api_auth.py
   3: ./scs_mfr/osio_device_create.py
-> 4: ./scs_mfr/osio_publication.py
+> 4: ./scs_mfr/osio_project.py
 
 Requires APIAuth and DeviceID documents.
 Creates Project document.
 
 command line example:
-./scs_mfr/osio_publication.py -v -s field-trial 2 -g 28
+./scs_mfr/osio_project.py -v -s field-trial 2 -g 28
 """
 
 import sys
@@ -31,10 +31,8 @@ from scs_core.sys.device_id import DeviceID
 from scs_host.client.http_client import HTTPClient
 from scs_host.sys.host import Host
 
-from scs_mfr.cmd.cmd_osio_publication import CmdOSIOPublication
+from scs_mfr.cmd.cmd_osio_project import CmdOSIOProject
 
-
-# TODO: rename as "osio_project"
 
 # TODO: balk if there already are any topics with the given paths (override with -f)
 
@@ -92,7 +90,7 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
-    cmd = CmdOSIOPublication()
+    cmd = CmdOSIOProject()
 
     if cmd.verbose:
         print(cmd, file=sys.stderr)
@@ -129,37 +127,37 @@ if __name__ == '__main__':
     # run...
 
     if cmd.set():
-        pub = Project.construct(auth.org_id, cmd.group, cmd.location_id)
+        project = Project.construct(auth.org_id, cmd.group, cmd.location_id)
 
-        print(JSONify.dumps(pub))
+        print(JSONify.dumps(project))
 
-        creator.construct_topic(pub.climate_topic_path(), Project.CLIMATE_NAME,
+        creator.construct_topic(project.climate_topic_path(), Project.CLIMATE_NAME,
                                 Project.CLIMATE_DESCRIPTION, Project.CLIMATE_SCHEMA)
 
-        creator.construct_topic(pub.gases_topic_path(), Project.GASES_NAME,
+        creator.construct_topic(project.gases_topic_path(), Project.GASES_NAME,
                                 Project.GASES_DESCRIPTION, cmd.gases_schema_id)
 
-        creator.construct_topic(pub.particulates_topic_path(), Project.PARTICULATES_NAME,
+        creator.construct_topic(project.particulates_topic_path(), Project.PARTICULATES_NAME,
                                 Project.PARTICULATES_DESCRIPTION, Project.PARTICULATES_SCHEMA)
 
-        creator.construct_topic(pub.status_topic_path(device_id), Project.STATUS_NAME,
+        creator.construct_topic(project.status_topic_path(device_id), Project.STATUS_NAME,
                                 Project.STATUS_DESCRIPTION, Project.STATUS_SCHEMA)
 
-        creator.construct_topic(pub.control_topic_path(device_id), Project.CONTROL_NAME,
+        creator.construct_topic(project.control_topic_path(device_id), Project.CONTROL_NAME,
                                 Project.CONTROL_DESCRIPTION, Project.CONTROL_SCHEMA)
 
-        pub.save(Host)      # TODO: only save if successful
+        project.save(Host)      # TODO: only save if successful
 
 
     else:
-        pub = Project.load_from_host(Host)
-        print(JSONify.dumps(pub))
+        project = Project.load_from_host(Host)
+        print(JSONify.dumps(project))
 
     if cmd.verbose:
         print("-", file=sys.stderr)
-        print("climate_topic:      %s" % pub.climate_topic_path(), file=sys.stderr)
-        print("gases_topic:        %s" % pub.gases_topic_path(), file=sys.stderr)
-        print("particulates_topic: %s" % pub.particulates_topic_path(), file=sys.stderr)
+        print("climate_topic:      %s" % project.climate_topic_path(), file=sys.stderr)
+        print("gases_topic:        %s" % project.gases_topic_path(), file=sys.stderr)
+        print("particulates_topic: %s" % project.particulates_topic_path(), file=sys.stderr)
 
-        print("status_topic:       %s" % pub.status_topic_path(device_id), file=sys.stderr)
-        print("control_topic:      %s" % pub.control_topic_path(device_id), file=sys.stderr)
+        print("status_topic:       %s" % project.status_topic_path(device_id), file=sys.stderr)
+        print("control_topic:      %s" % project.control_topic_path(device_id), file=sys.stderr)
