@@ -7,11 +7,11 @@ Created on 18 Feb 2017
 import optparse
 
 
-# TODO: add a field to override topic or location pre-existence
+# TODO: add a field to override topic or location pre-existence?
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class CmdOSIOPublication(object):
+class CmdOSIOProject(object):
     """unix command line handler"""
 
     def __init__(self):
@@ -94,5 +94,5 @@ class CmdOSIOPublication(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdOSIOPublication:{group:%s, location_id:%s, gases_schema_id:%s, verbose:%s, args:%s}" % \
+        return "CmdOSIOProject:{group:%s, location_id:%s, gases_schema_id:%s, verbose:%s, args:%s}" % \
                (self.group, self.location_id, self.gases_schema_id, self.verbose, self.args)

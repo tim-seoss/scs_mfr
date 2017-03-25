@@ -28,7 +28,7 @@ class PowerMeter(object):
         """
         Constructor
         """
-        self.__ser = Serial(PowerMeter.__DEVICE, 115200, timeout = 1)
+        self.__ser = Serial(PowerMeter.__DEVICE, 115200, timeout=1.0)
 
 
     # ----------------------------------------------------------------------------------------------------------------
