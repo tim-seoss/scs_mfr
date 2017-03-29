@@ -34,7 +34,9 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_osio_project import CmdOSIOProject
 
 
-# TODO: balk if there already are any topics with the given paths (override with -f)
+# TODO: schema_id must be derived from afe_calib.json using OSIO mapping class
+
+# TODO: check if the project already exists - if so do update, rather than create
 
 # --------------------------------------------------------------------------------------------------------------------
 
