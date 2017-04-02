@@ -46,6 +46,7 @@ class CmdOSIOProject(object):
             except ValueError:
                 return False
 
+        if self.__opts.gases_schema_id is not None:
             try:
                 int(self.__opts.gases_schema_id)
             except ValueError:
@@ -64,12 +65,12 @@ class CmdOSIOProject(object):
 
     @property
     def group(self):
-        return self.__opts.group_location[0] if self.__opts.gases_schema_id is not None else None
+        return self.__opts.group_location[0] if self.__opts.group_location is not None else None
 
 
     @property
     def location_id(self):
-        return self.__opts.group_location[1] if self.__opts.gases_schema_id is not None else None
+        return self.__opts.group_location[1] if self.__opts.group_location is not None else None
 
 
     @property
