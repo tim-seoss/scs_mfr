@@ -25,8 +25,6 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_osio_organisation_create import CmdOSIOOrganisationCreate
 
 
-# TODO: balk if there already is an organisation with the org ID (override with -f)
-
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
