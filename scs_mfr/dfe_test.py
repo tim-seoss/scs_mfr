@@ -74,8 +74,9 @@ Host.enable_eeprom_access()
 if __name__ == '__main__':
 
     # ----------------------------------------------------------------------------------------------------------------
-    # resource...
+    # resources...
 
+    # DeviceID...
     device_id = DeviceID.load_from_host(Host)
 
     if device_id is None:
@@ -255,7 +256,7 @@ if __name__ == '__main__':
         pt1000 = None
 
         try:
-            # resource...
+            # resources...
             calib = Pt1000Calib.load_from_host(Host)
             pt1000 = calib.pt1000()
 

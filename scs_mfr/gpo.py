@@ -44,7 +44,7 @@ if __name__ == '__main__':
 
 
         # ------------------------------------------------------------------------------------------------------------
-        # resource...
+        # resources...
 
         state = HostGPO.HIGH if cmd.level else HostGPO.LOW
 

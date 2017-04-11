@@ -43,7 +43,7 @@ if __name__ == '__main__':
 
 
         # ------------------------------------------------------------------------------------------------------------
-        # resource...
+        # resources...
 
         sht_conf = SHTConf.load_from_host(Host)
         sht = sht_conf.int_sht()
