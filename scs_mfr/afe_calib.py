@@ -67,7 +67,6 @@ if __name__ == '__main__':
         finally:
             client.close()
 
-    else:
-        calib = AFECalib.load_from_host(Host)
+    calib = AFECalib.load_from_host(Host)
 
     print(JSONify.dumps(calib))
