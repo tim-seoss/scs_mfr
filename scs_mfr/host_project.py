@@ -60,22 +60,16 @@ class HostProject(object):
     def construct_topic(self, path, schema):
         topic = self.__topic_manager.find(path)
 
-        print("-")
-
         if topic:
-            print("topic already exists: %s" % path)
-
             updated = Topic(None, schema.name, schema.description, topic.is_public, topic.info, None, None)
-            print(updated)
 
             self.__topic_manager.update(topic.path, updated)
 
         else:
             info = TopicInfo(TopicInfo.FORMAT_JSON, None, None, None)     # for the v2 API, schema_id goes in Topic
-            topic = Topic(path, schema.name, schema.description, True, True, info, schema.schema_id)
-            print(topic)
+            constructed = Topic(path, schema.name, schema.description, True, True, info, schema.schema_id)
 
-            self.__topic_manager.create(topic)
+            self.__topic_manager.create(constructed)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -146,7 +140,10 @@ if __name__ == '__main__':
 
         creator.construct_topic(project.climate_topic_path(), ProjectSchema.CLIMATE)
         creator.construct_topic(project.gases_topic_path(), gases_schema)
-        creator.construct_topic(project.particulates_topic_path(), ProjectSchema.PARTICULATES)
+
+        if cmd.particulates:
+            creator.construct_topic(project.particulates_topic_path(), ProjectSchema.PARTICULATES)
+
         creator.construct_topic(project.status_topic_path(system_id), ProjectSchema.STATUS)
         creator.construct_topic(project.control_topic_path(system_id), ProjectSchema.CONTROL)
 
@@ -157,9 +154,28 @@ if __name__ == '__main__':
 
     if cmd.verbose:
         print("-", file=sys.stderr)
-        print("climate_topic:      %s" % project.climate_topic_path(), file=sys.stderr)
-        print("gases_topic:        %s" % project.gases_topic_path(), file=sys.stderr)
-        print("particulates_topic: %s" % project.particulates_topic_path(), file=sys.stderr)
 
-        print("status_topic:       %s" % project.status_topic_path(system_id), file=sys.stderr)
-        print("control_topic:      %s" % project.control_topic_path(system_id), file=sys.stderr)
+        found = manager.find(project.climate_topic_path())
+
+        if found is not None:
+            print("climate_topic:      %s" % found.path, file=sys.stderr)
+
+        found = manager.find(project.gases_topic_path())
+
+        if found is not None:
+            print("gases_topic:        %s" % found.path, file=sys.stderr)
+
+        found = manager.find(project.particulates_topic_path())
+
+        if found is not None:
+            print("particulates_topic: %s" % found.path, file=sys.stderr)
+
+        found = manager.find(project.status_topic_path(system_id))
+
+        if found is not None:
+            print("status_topic:       %s" % found.path, file=sys.stderr)
+
+        found = manager.find(project.control_topic_path(system_id))
+
+        if found is not None:
+            print("control_topic:      %s" % found.path, file=sys.stderr)

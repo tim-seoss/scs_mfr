@@ -16,12 +16,15 @@ class CmdHostProject(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-s GROUP LOCATION_ID] [-v]",
+        self.__parser = optparse.OptionParser(usage="%prog [-s GROUP LOCATION_ID [-p]] [-v]",
                                               version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--set", "-s", type="string", nargs=2, action="store", dest="group_location",
                                  help="set topic group and location ID")
+
+        self.__parser.add_option("--particulates", "-p", action="store_true", dest="particulates",
+                                 help="include particulates topic")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
@@ -33,13 +36,13 @@ class CmdHostProject(object):
 
     def is_valid(self):
         if self.__opts.group_location is not None:
-            if len(self.__opts.group_location) != 2:
-                return False
-
             try:
                 int(self.__opts.group_location[1])
             except ValueError:
                 return False
+
+        if self.__opts.group_location is None:
+            return self.particulates is None
 
         return True
 
@@ -63,6 +66,11 @@ class CmdHostProject(object):
 
 
     @property
+    def particulates(self):
+        return self.__opts.particulates
+
+
+    @property
     def verbose(self):
         return self.__opts.verbose
 
@@ -79,5 +87,5 @@ class CmdHostProject(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdHostProject:{group:%s, location_id:%s, verbose:%s, args:%s}" % \
-               (self.group, self.location_id, self.verbose, self.args)
+        return "CmdHostProject:{group:%s, location_id:%s, particulates:%s, verbose:%s, args:%s}" % \
+               (self.group, self.location_id, self.particulates, self.verbose, self.args)

@@ -23,7 +23,7 @@ import sys
 from scs_core.data.json import JSONify
 from scs_core.osio.client.api_auth import APIAuth
 from scs_core.osio.client.client_auth import ClientAuth
-from scs_core.osio.config.source import Source
+from scs_core.osio.config.project_source import ProjectSource
 from scs_core.osio.manager.device_manager import DeviceManager
 from scs_core.sys.system_id import SystemID
 
@@ -85,7 +85,7 @@ if __name__ == '__main__':
             client_auth = ClientAuth.load_from_host(Host)
 
             # update Device...
-            updated = Source.update(device, cmd.lat, cmd.lng, cmd.postcode, cmd.description)
+            updated = ProjectSource.update(device, cmd.lat, cmd.lng, cmd.postcode, cmd.description)
             manager.update(api_auth.org_id, device.client_id, updated)
 
             # find updated device...
@@ -97,7 +97,7 @@ if __name__ == '__main__':
                 exit()
 
             # create Device...
-            device = Source.create(system_id, api_auth, cmd.lat, cmd.lng, cmd.postcode, cmd.description)
+            device = ProjectSource.create(system_id, api_auth, cmd.lat, cmd.lng, cmd.postcode, cmd.description)
             device = manager.create(cmd.user_id, device)
 
             # create ClientAuth...
