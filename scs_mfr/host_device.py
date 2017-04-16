@@ -108,10 +108,6 @@ if __name__ == '__main__':
             device = manager.find(api_auth.org_id, device.client_id)
 
         else:
-            if not cmd.is_complete():
-                cmd.print_help(sys.stderr)
-                exit()
-
             # create Device...
             device = ProjectSource.create(system_id, api_auth, cmd.lat, cmd.lng, cmd.postcode, cmd.description, tags)
             device = manager.create(cmd.user_id, device)
