@@ -383,7 +383,7 @@ if __name__ == '__main__':
     # report...
 
     recorded = LocalizedDatetime.now()
-    datum = DFETestDatum(device_id.message_tag(), recorded, Host.serial_number(), cmd.serial_number,
+    datum = DFETestDatum(device_id.message_tag(), recorded, Host.serial_number(), cmd.dfe_serial_number,
                          reporter.subjects, afe_datum)
 
     print(JSONify.dumps(datum))
