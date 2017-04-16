@@ -310,9 +310,11 @@ if __name__ == '__main__':
             if cmd.verbose:
                 print(afe_datum, file=sys.stderr)
 
+            # noinspection PyTypeChecker
             ok = 0.4 < afe_datum.pt1000.v < 0.6
 
             for gas, sensor in afe_datum.sns.items():
+                # noinspection PyTypeChecker
                 sensor_ok = 0.9 < sensor.we_v < 1.1 and 0.9 < sensor.ae_v < 1.1
 
                 if not sensor_ok:
@@ -381,6 +383,7 @@ if __name__ == '__main__':
     # report...
 
     recorded = LocalizedDatetime.now()
-    datum = DFETestDatum(device_id.message_tag(), recorded, cmd.serial_number, reporter.subjects, afe_datum)
+    datum = DFETestDatum(device_id.message_tag(), recorded, Host.serial_number(), cmd.serial_number,
+                         reporter.subjects, afe_datum)
 
     print(JSONify.dumps(datum))
