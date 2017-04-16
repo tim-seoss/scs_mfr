@@ -7,15 +7,15 @@ Created on 18 Feb 2017
 
 workflow:
   1: ./scs_mfr/system_id.py
-  2: ./scs_mfr/osio_api_auth.py
-  3: ./scs_mfr/osio_device_create.py
-> 4: ./scs_mfr/osio_project.py
+  2: ./scs_mfr/api_auth.py
+  3: ./scs_mfr/host_device.py
+> 4: ./scs_mfr/host_project.py
 
 Requires APIAuth and SystemID documents.
 Creates Project document.
 
 command line example:
-./scs_mfr/osio_project.py -v -s field-trial 2 -g 28
+./scs_mfr/host_project.py -v -s field-trial 2 -g 28
 """
 
 import sys
@@ -31,12 +31,12 @@ from scs_core.sys.system_id import SystemID
 from scs_host.client.http_client import HTTPClient
 from scs_host.sys.host import Host
 
-from scs_mfr.cmd.cmd_osio_project import CmdOSIOProject
+from scs_mfr.cmd.cmd_host_project import CmdHostProject
 
+
+# TODO: check if the project / topics already exist - if so do update, rather than create
 
 # TODO: schema_id must be derived from afe_calib.json using OSIO mapping class
-
-# TODO: check if the project already exists - if so do update, rather than create
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -92,7 +92,7 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
-    cmd = CmdOSIOProject()
+    cmd = CmdHostProject()
 
     if cmd.verbose:
         print(cmd, file=sys.stderr)

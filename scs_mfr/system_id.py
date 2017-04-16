@@ -11,7 +11,7 @@ workflow:
   3: ./scs_mfr/osio_device_create.py
   4: ./scs_mfr/osio_project.py
 
-Creates CmdSystemID document.
+Creates SystemID document.
 
 command line example:
 ./scs_mfr/system_id.py -v -s Praxis BGB 2

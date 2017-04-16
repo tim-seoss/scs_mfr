@@ -11,7 +11,7 @@ import optparse
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class CmdOSIOProject(object):
+class CmdHostProject(object):
     """unix command line handler"""
 
     def __init__(self):
@@ -23,10 +23,10 @@ class CmdOSIOProject(object):
 
         # optional...
         self.__parser.add_option("--set", "-s", type="string", nargs=2, action="store", dest="group_location",
-                                 help="topic group and location ID")
+                                 help="set topic group and location ID")
 
         self.__parser.add_option("--gases", "-g", type="string", nargs=1, action="store", dest="gases_schema_id",
-                                 help="gases schema ID")
+                                 help="set gases schema ID")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
@@ -46,7 +46,6 @@ class CmdOSIOProject(object):
             except ValueError:
                 return False
 
-        if self.__opts.gases_schema_id is not None:
             try:
                 int(self.__opts.gases_schema_id)
             except ValueError:
@@ -65,12 +64,12 @@ class CmdOSIOProject(object):
 
     @property
     def group(self):
-        return self.__opts.group_location[0] if self.__opts.group_location is not None else None
+        return self.__opts.group_location[0] if self.__opts.gases_schema_id is not None else None
 
 
     @property
     def location_id(self):
-        return self.__opts.group_location[1] if self.__opts.group_location is not None else None
+        return self.__opts.group_location[1] if self.__opts.gases_schema_id is not None else None
 
 
     @property
@@ -95,5 +94,5 @@ class CmdOSIOProject(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdOSIOProject:{group:%s, location_id:%s, gases_schema_id:%s, verbose:%s, args:%s}" % \
+        return "CmdHostProject:{group:%s, location_id:%s, gases_schema_id:%s, verbose:%s, args:%s}" % \
                (self.group, self.location_id, self.gases_schema_id, self.verbose, self.args)

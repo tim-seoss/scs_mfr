@@ -9,7 +9,7 @@ import optparse
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class CmdOSIODeviceCreate(object):
+class CmdHostDevice(object):
     """
     unix command line handler
     """
@@ -18,19 +18,18 @@ class CmdOSIODeviceCreate(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog -u USER_ID -l LAT LNG POSTCODE [-d DESCRIPTION] [-v]",
+        self.__parser = optparse.OptionParser(usage="%prog [-u USER_ID] [-l LAT LNG POSTCODE] [-d DESCRIPTION] [-v]",
                                               version="%prog 1.0")
 
-        # compulsory...
+        # optional...
         self.__parser.add_option("--user", "-u", type="string", nargs=1, action="store", dest="user_id",
-                                 help="user-id")
+                                 help="set user-id (only if device has not yet been registered)")
 
         self.__parser.add_option("--loc", "-l", type="string", nargs=3, action="store", dest="lat_lng_postcode",
-                                 help="device location")
+                                 help="set device location (required if device has not yet been registered)")
 
-        # optional...
         self.__parser.add_option("--desc", "-d", type="string", nargs=1, action="store", dest="description",
-                                 help="device description")
+                                 help="set optional device description")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
@@ -40,11 +39,24 @@ class CmdOSIODeviceCreate(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def is_valid(self):
-        if self.user_id and self.__opts.lat_lng_postcode:
-            return True
+    def is_valid(self, device):
+        if device is None:
+            return self.is_complete()
 
-        return False
+        return True
+
+
+    def is_complete(self):
+        if self.user_id is None or self.__opts.lat_lng_postcode is None:
+            return False
+
+        return True
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def set(self):
+        return self.user_id is not None or self.__opts.lat_lng_postcode is not None or self.description is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -53,19 +65,20 @@ class CmdOSIODeviceCreate(object):
     def user_id(self):
         return self.__opts.user_id
 
+
     @property
     def lat(self):
-        return self.__opts.lat_lng_postcode[0] if len(self.__opts.lat_lng_postcode) > 0 else None
+        return self.__opts.lat_lng_postcode[0] if self.__opts.lat_lng_postcode else None
 
 
     @property
     def lng(self):
-        return self.__opts.lat_lng_postcode[1] if len(self.__opts.lat_lng_postcode) > 1 else None
+        return self.__opts.lat_lng_postcode[1] if self.__opts.lat_lng_postcode else None
 
 
     @property
     def postcode(self):
-        return self.__opts.lat_lng_postcode[2] if len(self.__opts.lat_lng_postcode) > 2 else None
+        return self.__opts.lat_lng_postcode[2] if self.__opts.lat_lng_postcode else None
 
 
     @property
@@ -90,5 +103,5 @@ class CmdOSIODeviceCreate(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdOSIODeviceCreate:{user_id:%s, lat:%s, lng:%s, postcode:%s, description:%s, verbose:%s, args:%s}" % \
+        return "CmdHostDevice:{user_id:%s, lat:%s, lng:%s, postcode:%s, description:%s, verbose:%s, args:%s}" % \
                     (self.user_id, self.lat, self.lng, self.postcode, self.description, self.verbose, self.args)
