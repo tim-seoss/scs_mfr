@@ -17,7 +17,7 @@ import sys
 from scs_core.data.json import JSONify
 from scs_core.data.localized_datetime import LocalizedDatetime
 from scs_core.location.gprmc import GPRMC
-from scs_core.sys.device_id import DeviceID
+from scs_core.sys.system_id import SystemID
 from scs_core.sys.eeprom_image import EEPROMImage
 
 from scs_dfe.board.cat24c32 import CAT24C32
@@ -76,15 +76,15 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # resources...
 
-    # DeviceID...
-    device_id = DeviceID.load_from_host(Host)
+    # SystemID...
+    system_id = SystemID.load_from_host(Host)
 
-    if device_id is None:
-        print("DeviceID not available.", file=sys.stderr)
+    if system_id is None:
+        print("SystemID not available.", file=sys.stderr)
         exit()
 
     if cmd.verbose:
-        print(device_id, file=sys.stderr)
+        print(system_id, file=sys.stderr)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -310,9 +310,11 @@ if __name__ == '__main__':
             if cmd.verbose:
                 print(afe_datum, file=sys.stderr)
 
+            # noinspection PyTypeChecker
             ok = 0.4 < afe_datum.pt1000.v < 0.6
 
             for gas, sensor in afe_datum.sns.items():
+                # noinspection PyTypeChecker
                 sensor_ok = 0.9 < sensor.we_v < 1.1 and 0.9 < sensor.ae_v < 1.1
 
                 if not sensor_ok:
@@ -381,6 +383,7 @@ if __name__ == '__main__':
     # report...
 
     recorded = LocalizedDatetime.now()
-    datum = DFETestDatum(device_id.message_tag(), recorded, cmd.serial_number, reporter.subjects, afe_datum)
+    datum = DFETestDatum(system_id.message_tag(), recorded, Host.serial_number(), cmd.dfe_serial_number,
+                         reporter.subjects, afe_datum)
 
     print(JSONify.dumps(datum))

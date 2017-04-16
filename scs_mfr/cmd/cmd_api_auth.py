@@ -12,7 +12,7 @@ import optparse
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class CmdOSIOAPIAuth(object):
+class CmdAPIAuth(object):
     """unix command line handler"""
 
     def __init__(self):
@@ -23,7 +23,7 @@ class CmdOSIOAPIAuth(object):
 
         # optional...
         self.__parser.add_option("--set", "-s", type="string", nargs=2, action="store", dest="org_key",
-                                 help="org ID and API key")
+                                 help="set org ID and API key")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
@@ -62,5 +62,5 @@ class CmdOSIOAPIAuth(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "CmdOSIOAPIAuth:{org_id:%s, api_key:%s, verbose:%s, args:%s}" % \
+        return "CmdAPIAuth:{org_id:%s, api_key:%s, verbose:%s, args:%s}" % \
                (self.org_id, self.api_key, self.verbose, self.args)

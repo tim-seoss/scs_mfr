@@ -16,7 +16,7 @@ class CmdDFETest(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog SERIAL_NUMBER [-g] [-n] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog DFE_SERIAL_NUMBER [-g] [-n] [-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--eeprom", "-e", action="store_true", dest="ignore_eeprom", default=False,
@@ -34,7 +34,7 @@ class CmdDFETest(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        if self.serial_number is None:
+        if self.dfe_serial_number is None:
             return False
 
         return True
@@ -43,7 +43,7 @@ class CmdDFETest(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
-    def serial_number(self):
+    def dfe_serial_number(self):
         return self.__args[0] if len(self.__args) > 0 else None
 
 
@@ -74,5 +74,5 @@ class CmdDFETest(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdDFETest:{serial_number:%s, ignore_eeprom:%s, ignore_gps:%s, verbose:%s, args:%s}" % \
-                    (self.serial_number, self.ignore_eeprom, self.ignore_gps, self.verbose, self.args)
+        return "CmdDFETest:{dfe_serial_number:%s, ignore_eeprom:%s, ignore_gps:%s, verbose:%s, args:%s}" % \
+                    (self.dfe_serial_number, self.ignore_eeprom, self.ignore_gps, self.verbose, self.args)

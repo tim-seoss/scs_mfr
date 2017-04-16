@@ -7,8 +7,6 @@ Created on 29 Jan 2017
 from scs_core.sample.sample_datum import SampleDatum
 
 
-# TODO: add an AFETestDatum class to reduce the amount of rubbish
-
 # --------------------------------------------------------------------------------------------------------------------
 
 class DFETestDatum(SampleDatum):
@@ -18,8 +16,9 @@ class DFETestDatum(SampleDatum):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, tag, rec, serial_number, subjects, afe):
+    def __init__(self, tag, rec, host_serial_number, dfe_serial_number, subjects, afe):
         """
         Constructor
         """
-        super().__init__(tag, rec, ('sn', serial_number), ('subjects', subjects), ('afe', afe))
+        super().__init__(tag, rec, ('host-sn', host_serial_number), ('dfe-sn', dfe_serial_number),
+                         ('subjects', subjects), ('afe', afe))

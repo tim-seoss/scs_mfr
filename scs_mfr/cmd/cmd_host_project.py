@@ -7,26 +7,24 @@ Created on 18 Feb 2017
 import optparse
 
 
-# TODO: schema_id must be derived from afe_calib.json using OSIO mapping class
-
 # --------------------------------------------------------------------------------------------------------------------
 
-class CmdOSIOProject(object):
+class CmdHostProject(object):
     """unix command line handler"""
 
     def __init__(self):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-s GROUP LOCATION_ID [-g GASES_SCHEMA_ID]] [-v]",
+        self.__parser = optparse.OptionParser(usage="%prog [-s GROUP LOCATION_ID [-p]] [-v]",
                                               version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--set", "-s", type="string", nargs=2, action="store", dest="group_location",
-                                 help="topic group and location ID")
+                                 help="set topic group and location ID")
 
-        self.__parser.add_option("--gases", "-g", type="string", nargs=1, action="store", dest="gases_schema_id",
-                                 help="gases schema ID")
+        self.__parser.add_option("--particulates", "-p", action="store_true", dest="particulates",
+                                 help="include particulates topic")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
@@ -38,19 +36,13 @@ class CmdOSIOProject(object):
 
     def is_valid(self):
         if self.__opts.group_location is not None:
-            if len(self.__opts.group_location) != 2:
-                return False
-
             try:
                 int(self.__opts.group_location[1])
             except ValueError:
                 return False
 
-        if self.__opts.gases_schema_id is not None:
-            try:
-                int(self.__opts.gases_schema_id)
-            except ValueError:
-                return False
+        if self.__opts.group_location is None:
+            return self.particulates is None
 
         return True
 
@@ -74,8 +66,8 @@ class CmdOSIOProject(object):
 
 
     @property
-    def gases_schema_id(self):
-        return int(self.__opts.gases_schema_id) if self.__opts.gases_schema_id is not None else None
+    def particulates(self):
+        return self.__opts.particulates
 
 
     @property
@@ -95,5 +87,5 @@ class CmdOSIOProject(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdOSIOProject:{group:%s, location_id:%s, gases_schema_id:%s, verbose:%s, args:%s}" % \
-               (self.group, self.location_id, self.gases_schema_id, self.verbose, self.args)
+        return "CmdHostProject:{group:%s, location_id:%s, particulates:%s, verbose:%s, args:%s}" % \
+               (self.group, self.location_id, self.particulates, self.verbose, self.args)
