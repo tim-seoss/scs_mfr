@@ -95,11 +95,14 @@ if __name__ == '__main__':
     # resources...
 
     # APIAuth...
-    auth = APIAuth.load_from_host(Host)
+    api_auth = APIAuth.load_from_host(Host)
 
-    if auth is None:
+    if api_auth is None:
         print("APIAuth not available.", file=sys.stderr)
         exit()
+
+    if cmd.verbose:
+        print(api_auth, file=sys.stderr)
 
 
     # SystemID...
@@ -125,7 +128,7 @@ if __name__ == '__main__':
 
 
     # manager...
-    manager = TopicManager(HTTPClient(), auth.api_key)
+    manager = TopicManager(HTTPClient(), api_auth.api_key)
 
     creator = HostProject(manager)
 
@@ -134,7 +137,7 @@ if __name__ == '__main__':
     # run...
 
     if cmd.set():
-        project = Project.construct(auth.org_id, cmd.group, cmd.location_id)
+        project = Project.construct(api_auth.org_id, cmd.group, cmd.location_id)
 
         gases_schema = ProjectSchema.find_gas_schema(afe_calib.gas_names())
 
