@@ -7,8 +7,6 @@ Created on 18 Feb 2017
 import optparse
 
 
-# TODO: schema_id must be derived from afe_calib.json using OSIO mapping class
-
 # --------------------------------------------------------------------------------------------------------------------
 
 class CmdHostProject(object):
@@ -18,15 +16,12 @@ class CmdHostProject(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-s GROUP LOCATION_ID [-g GASES_SCHEMA_ID]] [-v]",
+        self.__parser = optparse.OptionParser(usage="%prog [-s GROUP LOCATION_ID] [-v]",
                                               version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--set", "-s", type="string", nargs=2, action="store", dest="group_location",
                                  help="set topic group and location ID")
-
-        self.__parser.add_option("--gases", "-g", type="string", nargs=1, action="store", dest="gases_schema_id",
-                                 help="set gases schema ID")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
@@ -46,11 +41,6 @@ class CmdHostProject(object):
             except ValueError:
                 return False
 
-            try:
-                int(self.__opts.gases_schema_id)
-            except ValueError:
-                return False
-
         return True
 
 
@@ -64,17 +54,12 @@ class CmdHostProject(object):
 
     @property
     def group(self):
-        return self.__opts.group_location[0] if self.__opts.gases_schema_id is not None else None
+        return self.__opts.group_location[0] if self.__opts.group_location is not None else None
 
 
     @property
     def location_id(self):
-        return self.__opts.group_location[1] if self.__opts.gases_schema_id is not None else None
-
-
-    @property
-    def gases_schema_id(self):
-        return int(self.__opts.gases_schema_id) if self.__opts.gases_schema_id is not None else None
+        return self.__opts.group_location[1] if self.__opts.group_location is not None else None
 
 
     @property
@@ -94,5 +79,5 @@ class CmdHostProject(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdHostProject:{group:%s, location_id:%s, gases_schema_id:%s, verbose:%s, args:%s}" % \
-               (self.group, self.location_id, self.gases_schema_id, self.verbose, self.args)
+        return "CmdHostProject:{group:%s, location_id:%s, verbose:%s, args:%s}" % \
+               (self.group, self.location_id, self.verbose, self.args)

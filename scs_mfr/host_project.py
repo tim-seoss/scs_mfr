@@ -11,11 +11,13 @@ workflow:
   3: ./scs_mfr/host_device.py
 > 4: ./scs_mfr/host_project.py
 
-Requires APIAuth and SystemID documents.
+Requires APIAuth, SystemID and AFECalib documents.
 Creates Project document.
 
+Warning: schema IDs are not updated when an existing topic is updated - create a new topic instead. 
+
 command line example:
-./scs_mfr/host_project.py -v -s field-trial 2 -g 28
+./scs_mfr/host_project.py -v -s field-trial 2
 """
 
 import sys
@@ -23,10 +25,13 @@ import sys
 from scs_core.data.json import JSONify
 from scs_core.osio.client.api_auth import APIAuth
 from scs_core.osio.config.project import Project
+from scs_core.osio.config.project_schema import ProjectSchema
 from scs_core.osio.data.topic import Topic
 from scs_core.osio.data.topic_info import TopicInfo
 from scs_core.osio.manager.topic_manager import TopicManager
 from scs_core.sys.system_id import SystemID
+
+from scs_dfe.gas.afe_calib import AFECalib
 
 from scs_host.client.http_client import HTTPClient
 from scs_host.sys.host import Host
@@ -34,13 +39,9 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_host_project import CmdHostProject
 
 
-# TODO: check if the project / topics already exist - if so do update, rather than create
-
-# TODO: schema_id must be derived from afe_calib.json using OSIO mapping class
-
 # --------------------------------------------------------------------------------------------------------------------
 
-class TopicCreator(object):
+class HostProject(object):
     """
     classdocs
     """
@@ -56,33 +57,31 @@ class TopicCreator(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def construct_topic(self, path, name, description, schema_id):
-        # topic = self.__topic_manager.find(path)
+    def construct_topic(self, path, schema):
+        topic = self.__topic_manager.find(path)
 
-        # if topic:
-        #     print("Warning: topic already exists: %s")
-        #     TODO: update topic with field params
-            # return
+        print("-")
 
-        # success = self.__topic_manager.create()
+        if topic:
+            print("topic already exists: %s" % path)
 
-        info = TopicInfo(TopicInfo.FORMAT_JSON, None, None, None)     # for the v2 API, schema_id goes in Topic
-        topic = Topic(path, name, description, True, True, info, schema_id)
+            updated = Topic(None, schema.name, schema.description, topic.is_public, topic.info, None, None)
+            print(updated)
 
-        print(topic)
+            self.__topic_manager.update(topic.path, updated)
 
-        try:
-            success = self.__topic_manager.create(topic)
-        except RuntimeError:
-            success = False
+        else:
+            info = TopicInfo(TopicInfo.FORMAT_JSON, None, None, None)     # for the v2 API, schema_id goes in Topic
+            topic = Topic(path, schema.name, schema.description, True, True, info, schema.schema_id)
+            print(topic)
 
-        return success
+            self.__topic_manager.create(topic)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "TopicCreator:{topic_manager:%s}" % self.__topic_manager
+        return "HostProject:{topic_manager:%s}" % self.__topic_manager
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -108,6 +107,7 @@ if __name__ == '__main__':
         print("APIAuth not available.", file=sys.stderr)
         exit()
 
+
     # SystemID...
     system_id = SystemID.load_from_host(Host)
 
@@ -118,10 +118,22 @@ if __name__ == '__main__':
     if cmd.verbose:
         print(system_id, file=sys.stderr)
 
+
+    # AFECalib...
+    afe_calib = AFECalib.load_from_host(Host)
+
+    if afe_calib is None:
+        print("AFECalib not available.", file=sys.stderr)
+        exit()
+
+    if cmd.verbose:
+        print(afe_calib, file=sys.stderr)
+
+
     # manager...
     manager = TopicManager(HTTPClient(), auth.api_key)
 
-    creator = TopicCreator(manager)
+    creator = HostProject(manager)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -130,29 +142,18 @@ if __name__ == '__main__':
     if cmd.set():
         project = Project.construct(auth.org_id, cmd.group, cmd.location_id)
 
-        print(JSONify.dumps(project))
+        gases_schema = ProjectSchema.find_gas_schema(afe_calib.gas_names())
 
-        creator.construct_topic(project.climate_topic_path(), Project.CLIMATE_NAME,
-                                Project.CLIMATE_DESCRIPTION, Project.CLIMATE_SCHEMA)
+        creator.construct_topic(project.climate_topic_path(), ProjectSchema.CLIMATE)
+        creator.construct_topic(project.gases_topic_path(), gases_schema)
+        creator.construct_topic(project.particulates_topic_path(), ProjectSchema.PARTICULATES)
+        creator.construct_topic(project.status_topic_path(system_id), ProjectSchema.STATUS)
+        creator.construct_topic(project.control_topic_path(system_id), ProjectSchema.CONTROL)
 
-        creator.construct_topic(project.gases_topic_path(), Project.GASES_NAME,
-                                Project.GASES_DESCRIPTION, cmd.gases_schema_id)
+        project.save(Host)
 
-        creator.construct_topic(project.particulates_topic_path(), Project.PARTICULATES_NAME,
-                                Project.PARTICULATES_DESCRIPTION, Project.PARTICULATES_SCHEMA)
-
-        creator.construct_topic(project.status_topic_path(system_id), Project.STATUS_NAME,
-                                Project.STATUS_DESCRIPTION, Project.STATUS_SCHEMA)
-
-        creator.construct_topic(project.control_topic_path(system_id), Project.CONTROL_NAME,
-                                Project.CONTROL_DESCRIPTION, Project.CONTROL_SCHEMA)
-
-        project.save(Host)      # TODO: only save if successful
-
-
-    else:
-        project = Project.load_from_host(Host)
-        print(JSONify.dumps(project))
+    project = Project.load_from_host(Host)
+    print(JSONify.dumps(project))
 
     if cmd.verbose:
         print("-", file=sys.stderr)
