@@ -6,7 +6,7 @@ Created on 19 Aug 2016
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 command line example:
-./scs_mfr/dfe_test.py | ./scs_mfr/csv_writer.py test.csv -e
+./dfe_test.py | ./csv_writer.py test.csv -e
 """
 
 import sys

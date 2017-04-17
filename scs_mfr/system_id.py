@@ -6,15 +6,15 @@ Created on 17 Feb 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 workflow:
-> 1: ./scs_mfr/system_id.py
-  2: ./scs_mfr/osio_api_auth.py
-  3: ./scs_mfr/osio_device_create.py
-  4: ./scs_mfr/osio_project.py
+> 1: ./system_id.py
+  2: ./osio_api_auth.py
+  3: ./osio_device_create.py
+  4: ./osio_project.py
 
 Creates SystemID document.
 
 command line example:
-./scs_mfr/system_id.py -v -s Praxis BGB 2
+./system_id.py -v -s Praxis BGB 2
 """
 
 import sys

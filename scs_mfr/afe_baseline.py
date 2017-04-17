@@ -8,7 +8,7 @@ Created on 1 Mar 2017
 Creates AFECalib document.
 
 command line example:
-./scs_mfr/afe_calib.py -v -s 15-000064
+./afe_calib.py -v -s 15-000064
 """
 
 import datetime

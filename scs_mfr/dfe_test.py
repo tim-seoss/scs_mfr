@@ -8,7 +8,7 @@ Created on 29 Jan 2017
 Note: this script uses the Pt1000 temp sensor for temperature compensation.
 
 command line example:
-./scs_mfr/dfe_test.py 123 -g -v
+./dfe_test.py 123 -g -v
 """
 
 import os.path

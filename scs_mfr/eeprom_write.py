@@ -23,7 +23,7 @@ https://learn.adafruit.com/introduction-to-the-beaglebone-black-device-tree/comp
 
 
 command line example:
-./scs_mfr/eeprom_write.py -v /home/pi/SCS/hat.eep
+./eeprom_write.py -v /home/pi/SCS/hat.eep
 """
 
 import os.path

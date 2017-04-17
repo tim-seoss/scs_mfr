@@ -11,7 +11,7 @@ in /home/debian/bin/sampling.sh
 comment out ifup ppp0 and reboot before running
 
 command line example:
-./scs_mfr/gpi.py P9_12 -w 0 -v
+./gpi.py P9_12 -w 0 -v
 """
 
 import sys

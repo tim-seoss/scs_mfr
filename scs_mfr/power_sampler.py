@@ -8,7 +8,7 @@ Created on 2 Oct 2016
 Requires SystemID document.
 
 command line example:
-./scs_mfr/power_sampler.py -i 2 -n 10
+./power_sampler.py -i 2 -n 10
 """
 
 import sys
