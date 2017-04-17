@@ -6,10 +6,11 @@ Created on 18 Feb 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 workflow:
-  1: ./system_id.py
-> 2: ./api_auth.py
-  3: ./host_device.py
-  4: ./host_project.py
+  1: ./afe_calib -s SERIAL_NUMBER
+  2: ./system_id.py -s VENDOR_ID MODEL_ID MODEL_NAME CONFIG SYSTEM_SERIAL
+> 3: ./api_auth.py -s ORG_ID API_KEY
+  4: ./host_device.py -s -u USER_ID -l LAT LNG POSTCODE -p
+  5: ./host_project.py -s GROUP LOCATION_ID -p
 
 Creates APIAuth document.
 
