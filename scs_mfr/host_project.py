@@ -6,10 +6,10 @@ Created on 18 Feb 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 workflow:
-  1: ./scs_mfr/system_id.py
-  2: ./scs_mfr/api_auth.py
-  3: ./scs_mfr/host_device.py
-> 4: ./scs_mfr/host_project.py
+  1: ./system_id.py
+  2: ./api_auth.py
+  3: ./host_device.py
+> 4: ./host_project.py
 
 Requires APIAuth, SystemID and AFECalib documents.
 Creates Project document.
@@ -17,7 +17,7 @@ Creates Project document.
 Warning: schema IDs are not updated when an existing topic is updated - create a new topic instead. 
 
 command line example:
-./scs_mfr/host_project.py -v -s field-trial 2
+./host_project.py -v -s field-trial 2
 """
 
 import sys

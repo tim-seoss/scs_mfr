@@ -6,16 +6,16 @@ Created on 18 Feb 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 workflow:
-  1: ./scs_mfr/system_id.py
-  2: ./scs_mfr/api_auth.py
-> 3: ./scs_mfr/host_device.py
-  4: ./scs_mfr/host_project.py
+  1: ./system_id.py
+  2: ./api_auth.py
+> 3: ./host_device.py
+  4: ./host_project.py
 
 Requires APIAuth and SystemID documents.
 Creates ClientAuth document.
 
 command line example:
-./scs_mfr/host_device.py -s -u south-coast-science-test-user -l 50.819456, -0.128336 "BN2 1AF" -p -v
+./host_device.py -s -u south-coast-science-test-user -l 50.819456, -0.128336 "BN2 1AF" -p -v
 """
 
 import sys

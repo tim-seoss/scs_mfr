@@ -10,7 +10,7 @@ Requires APIAuth document.
 Note: the APIAuth document arguably should be updated by this script, but currently it is not.
 
 command line example:
-./scs_mfr/host_organisation.py -v -o test-org-1 -n "Test Org 1" -w www.southcoastscience.com \
+./host_organisation.py -v -o test-org-1 -n "Test Org 1" -w www.southcoastscience.com \
 -d "a test organisation" -e test1@southcoastscience.com
 """
 

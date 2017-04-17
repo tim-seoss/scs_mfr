@@ -6,7 +6,7 @@ Created on 24 Dec 2016
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 command line example:
-./scs_mfr/gpo.py P9_12 0 -v
+./gpo.py P9_12 0 -v
 """
 
 import sys
