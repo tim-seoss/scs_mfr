@@ -16,10 +16,8 @@ Requires APIAuth, SystemID and AFECalib documents.
 
 Creates Project document.
 
-Warning: schema IDs are not updated when an existing topic is updated - create a new topic instead. 
-
 command line example:
-./host_project.py -v -s field-trial 2
+./host_project.py -v -s field-trial 2 -p
 """
 
 import sys
@@ -40,6 +38,8 @@ from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_host_project import CmdHostProject
 
+
+# TODO: for each Topic - if it already exists - check the schema ID is the same - BEFORE doing ANY updates
 
 # --------------------------------------------------------------------------------------------------------------------
 
