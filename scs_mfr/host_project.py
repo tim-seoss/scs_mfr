@@ -6,12 +6,14 @@ Created on 18 Feb 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 workflow:
-  1: ./system_id.py
-  2: ./api_auth.py
-  3: ./host_device.py
-> 4: ./host_project.py
+  1: ./afe_calib -s SERIAL_NUMBER
+  2: ./system_id.py -s VENDOR_ID MODEL_ID MODEL_NAME CONFIG SYSTEM_SERIAL
+  3: ./api_auth.py -s ORG_ID API_KEY
+  4: ./host_device.py -s -u USER_ID -l LAT LNG POSTCODE -p
+> 5: ./host_project.py -s GROUP LOCATION_ID -p
 
 Requires APIAuth, SystemID and AFECalib documents.
+
 Creates Project document.
 
 Warning: schema IDs are not updated when an existing topic is updated - create a new topic instead. 
@@ -25,7 +27,7 @@ import sys
 from scs_core.data.json import JSONify
 from scs_core.osio.client.api_auth import APIAuth
 from scs_core.osio.config.project import Project
-from scs_core.osio.config.project_schema import ProjectSchema
+from scs_core.osio.config.project_topic import ProjectTopic
 from scs_core.osio.data.topic import Topic
 from scs_core.osio.data.topic_info import TopicInfo
 from scs_core.osio.manager.topic_manager import TopicManager
@@ -139,16 +141,16 @@ if __name__ == '__main__':
     if cmd.set():
         project = Project.construct(api_auth.org_id, cmd.group, cmd.location_id)
 
-        gases_schema = ProjectSchema.find_gas_schema(afe_calib.gas_names())
+        gases_schema = ProjectTopic.find_gas_schema(afe_calib.gas_names())
 
-        creator.construct_topic(project.climate_topic_path(), ProjectSchema.CLIMATE)
+        creator.construct_topic(project.climate_topic_path(), ProjectTopic.CLIMATE)
         creator.construct_topic(project.gases_topic_path(), gases_schema)
 
         if cmd.particulates:
-            creator.construct_topic(project.particulates_topic_path(), ProjectSchema.PARTICULATES)
+            creator.construct_topic(project.particulates_topic_path(), ProjectTopic.PARTICULATES)
 
-        creator.construct_topic(project.status_topic_path(system_id), ProjectSchema.STATUS)
-        creator.construct_topic(project.control_topic_path(system_id), ProjectSchema.CONTROL)
+        creator.construct_topic(project.status_topic_path(system_id), ProjectTopic.STATUS)
+        creator.construct_topic(project.control_topic_path(system_id), ProjectTopic.CONTROL)
 
         project.save(Host)
 
