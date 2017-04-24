@@ -20,17 +20,13 @@ command line example:
 
 import json
 import sys
-
 from collections import OrderedDict
 
 from scs_core.data.json import JSONify
+from scs_core.gas.afe_calib import AFECalib
 from scs_core.sys.exception_report import ExceptionReport
-
-from scs_dfe.gas.afe_calib import AFECalib
-
 from scs_host.client.http_client import HTTPClient
 from scs_host.sys.host import Host
-
 from scs_mfr.cmd.cmd_afe_calib import CmdAFECalib
 
 
