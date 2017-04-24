@@ -16,18 +16,25 @@ import sys
 
 from scs_core.data.json import JSONify
 from scs_core.data.localized_datetime import LocalizedDatetime
+
 from scs_core.location.gprmc import GPRMC
-from scs_core.sys.system_id import SystemID
+
 from scs_core.sys.eeprom_image import EEPROMImage
+from scs_core.sys.system_id import SystemID
+
+from scs_core.gas.afe_baseline import AFEBaseline
+from scs_core.gas.afe_calib import AFECalib
+from scs_core.gas.pt1000_calib import Pt1000Calib
 
 from scs_dfe.board.cat24c32 import CAT24C32
 from scs_dfe.board.mcp9808 import MCP9808
+
 from scs_dfe.climate.sht_conf import SHTConf
+
 from scs_dfe.gas.afe import AFE
-from scs_dfe.gas.afe_baseline import AFEBaseline
-from scs_dfe.gas.afe_calib import AFECalib
-from scs_dfe.gas.pt1000_calib import Pt1000Calib
+from scs_dfe.gas.pt1000 import Pt1000
 from scs_dfe.gps.pam7q import PAM7Q
+
 from scs_dfe.particulate.opc_n2 import OPCN2
 
 from scs_host.bus.i2c import I2C
@@ -258,7 +265,7 @@ if __name__ == '__main__':
         try:
             # resources...
             calib = Pt1000Calib.load_from_host(Host)
-            pt1000 = calib.pt1000()
+            pt1000 = Pt1000(calib)
 
             afe = AFE(pt1000, [])
 
@@ -272,7 +279,7 @@ if __name__ == '__main__':
             calib.save(Host)
 
             # new resource...
-            pt1000 = calib.pt1000()
+            pt1000 = Pt1000(calib)
 
             afe = AFE(pt1000, [])
 
