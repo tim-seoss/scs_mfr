@@ -66,7 +66,7 @@ class HostProject(object):
 
         else:
             info = TopicInfo(TopicInfo.FORMAT_JSON, None, None, None)     # for the v2 API, schema_id goes in Topic
-            constructed = Topic(path, schema.name, schema.description, True, True, info, schema.schema_id)
+            constructed = Topic(path, schema.name, schema.description, True, info, True, schema.schema_id)
 
             self.__topic_manager.create(constructed)
 
