@@ -21,6 +21,8 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_sht_conf import CmdSHTConf
 
 
+# TODO: why does this not work?
+
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
