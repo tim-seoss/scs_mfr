@@ -114,5 +114,5 @@ class CmdHostDevice(object):
     def __str__(self, *args, **kwargs):
         return "CmdHostDevice:{set:%s, user_id:%s, lat:%s, lng:%s, postcode:%s, description:%s, particulates:%s, " \
                "verbose:%s, args:%s}" % \
-               (self.set, self.user_id, self.lat, self.lng, self.postcode, self.description, self.particulates,
+               (self.set(), self.user_id, self.lat, self.lng, self.postcode, self.description, self.particulates,
                 self.verbose, self.args)
