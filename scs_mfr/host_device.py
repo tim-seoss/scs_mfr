@@ -17,7 +17,7 @@ Requires APIAuth and SystemID documents.
 Creates ClientAuth document.
 
 command line example:
-./host_device.py -s -u south-coast-science-test-user -l 50.819456, -0.128336 "BN2 1AF" -p -v
+./host_device.py -s -u south-coast-science-test-user -l 50.823130 -0.122922 "BN2 0DA" -p -v
 """
 
 import sys
