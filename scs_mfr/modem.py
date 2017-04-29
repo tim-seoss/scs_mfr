@@ -121,6 +121,7 @@ if __name__ == '__main__':
 
         if cmd.verbose:
             print(modem, file=sys.stderr)
+            sys.stderr.flush()
 
         sequencer = CommandSequencer(cmd.script, cmd.verbose)
 

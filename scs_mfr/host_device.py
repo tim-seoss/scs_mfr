@@ -91,6 +91,7 @@ if __name__ == '__main__':
         print(api_auth, file=sys.stderr)
         print(system_id, file=sys.stderr)
         print(afe_calib, file=sys.stderr)
+        sys.stderr.flush()
 
 
     # ----------------------------------------------------------------------------------------------------------------

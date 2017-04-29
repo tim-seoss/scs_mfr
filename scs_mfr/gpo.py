@@ -50,6 +50,10 @@ if __name__ == '__main__':
 
         gpo = HostGPO(cmd.pin, state)
 
+        if cmd.verbose:
+            print(gpo, file=sys.stderr)
+            sys.stderr.flush()
+
 
         # ------------------------------------------------------------------------------------------------------------
         # run...

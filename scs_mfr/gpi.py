@@ -47,6 +47,9 @@ if __name__ == '__main__':
 
         gpi = HostGPI(cmd.pin)
 
+        if cmd.verbose:
+            print(gpi, file=sys.stderr)
+            sys.stderr.flush()
 
         # ------------------------------------------------------------------------------------------------------------
         # run...

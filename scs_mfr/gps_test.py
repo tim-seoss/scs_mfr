@@ -6,6 +6,7 @@ Created on 17 Feb 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
+import sys
 import time
 
 from scs_core.location.gpgga import GPGGA
@@ -70,6 +71,9 @@ if __name__ == '__main__':
         gps.power_on()
 
         gps_sampler = GPSSampler(gps, 10)
+
+        print(gps_sampler, file=sys.stderr)
+        sys.stderr.flush()
 
 
         # ------------------------------------------------------------------------------------------------------------
