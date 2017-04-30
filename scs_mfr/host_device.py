@@ -111,6 +111,10 @@ if __name__ == '__main__':
         tags = ProjectSource.tags(afe_calib, cmd.particulates)
 
         if device:
+            if cmd.user_id:
+                print("Device owner-id cannot be updated.", file=sys.stderr)
+                exit()
+
             # find ClientAuth...
             client_auth = ClientAuth.load_from_host(Host)
 
