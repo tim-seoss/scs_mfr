@@ -30,6 +30,7 @@ from scs_core.osio.client.api_auth import APIAuth
 from scs_core.osio.client.client_auth import ClientAuth
 from scs_core.osio.config.project_source import ProjectSource
 from scs_core.osio.manager.device_manager import DeviceManager
+from scs_core.osio.manager.user_manager import UserManager
 
 from scs_core.sys.system_id import SystemID
 
@@ -53,14 +54,12 @@ if __name__ == '__main__':
         print("APIAuth not available.", file=sys.stderr)
         exit()
 
-
     # SystemID...
     system_id = SystemID.load_from_host(Host)
 
     if system_id is None:
         print("SystemID not available.", file=sys.stderr)
         exit()
-
 
     # AFECalib...
     afe_calib = AFECalib.load_from_host(Host)
@@ -69,12 +68,14 @@ if __name__ == '__main__':
         print("AFECalib not available.", file=sys.stderr)
         exit()
 
+    # User manager...
+    user_manager = UserManager(HTTPClient(), api_auth.api_key)
 
-    # manager...
-    manager = DeviceManager(HTTPClient(), api_auth.api_key)
+    # Device manager...
+    device_manager = DeviceManager(HTTPClient(), api_auth.api_key)
 
     # check for existing registration...
-    device = manager.find_for_name(api_auth.org_id, system_id.box_label())
+    device = device_manager.find_for_name(api_auth.org_id, system_id.box_label())
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -98,24 +99,36 @@ if __name__ == '__main__':
     # run...
 
     if cmd.set():
+        # User...
+        if cmd.user_id:
+            user = user_manager.find_public(cmd.user_id)
+
+            if user is None:
+                print("User not available.", file=sys.stderr)
+                exit()
+
         # tags...
         tags = ProjectSource.tags(afe_calib, cmd.particulates)
 
         if device:
+            if cmd.user_id:
+                print("Device owner-id cannot be updated.", file=sys.stderr)
+                exit()
+
             # find ClientAuth...
             client_auth = ClientAuth.load_from_host(Host)
 
             # update Device...
             updated = ProjectSource.update(device, cmd.lat, cmd.lng, cmd.postcode, cmd.description, tags)
-            manager.update(api_auth.org_id, device.client_id, updated)
+            device_manager.update(api_auth.org_id, device.client_id, updated)
 
             # find updated device...
-            device = manager.find(api_auth.org_id, device.client_id)
+            device = device_manager.find(api_auth.org_id, device.client_id)
 
         else:
             # create Device...
             device = ProjectSource.create(system_id, api_auth, cmd.lat, cmd.lng, cmd.postcode, cmd.description, tags)
-            device = manager.create(cmd.user_id, device)
+            device = device_manager.create(cmd.user_id, device)
 
             # create ClientAuth...
             client_auth = ClientAuth(cmd.user_id, device.client_id, device.password)
