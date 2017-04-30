@@ -23,20 +23,23 @@ command line example:
 import sys
 
 from scs_core.data.json import JSONify
+
 from scs_core.gas.afe_calib import AFECalib
+
 from scs_core.osio.client.api_auth import APIAuth
 from scs_core.osio.config.project import Project
 from scs_core.osio.config.project_topic import ProjectTopic
 from scs_core.osio.data.topic import Topic
 from scs_core.osio.data.topic_info import TopicInfo
 from scs_core.osio.manager.topic_manager import TopicManager
+
 from scs_core.sys.system_id import SystemID
+
 from scs_host.client.http_client import HTTPClient
 from scs_host.sys.host import Host
+
 from scs_mfr.cmd.cmd_host_project import CmdHostProject
 
-
-# TODO: for each Topic - if it already exists - check the schema ID is the same - BEFORE doing ANY updates
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -89,6 +92,10 @@ if __name__ == '__main__':
     if cmd.verbose:
         print(cmd, file=sys.stderr)
 
+    if not cmd.is_valid():
+        cmd.print_help(sys.stderr)
+        exit()
+
 
     # ----------------------------------------------------------------------------------------------------------------
     # resources...
@@ -131,17 +138,29 @@ if __name__ == '__main__':
 
     creator = HostProject(manager)
 
+    # gases schema...
+    gases_topic = ProjectTopic.find_gases_topic(afe_calib.gas_names())
+
 
     # ----------------------------------------------------------------------------------------------------------------
     # run...
 
+    # set...
     if cmd.set():
         project = Project.construct(api_auth.org_id, cmd.group, cmd.location_id)
 
-        gases_schema = ProjectTopic.find_gas_schema(afe_calib.gas_names())
+        # existing gases topic...
+        existing_gases_topics = manager.find_for_org(api_auth.org_id, project.gases_topic_path())
+        existing_gases_topic = existing_gases_topics[0] if len(existing_gases_topics) else None
 
+        if existing_gases_topic and existing_gases_topic.schema.id != gases_topic.schema_id:
+            print("Existing gases schema (%d) does not match new gases schema (%d)." %
+                  (existing_gases_topic.schema.id, gases_topic.schema_id), file=sys.stderr)
+            exit()
+
+        # set topics...
         creator.construct_topic(project.climate_topic_path(), ProjectTopic.CLIMATE)
-        creator.construct_topic(project.gases_topic_path(), gases_schema)
+        creator.construct_topic(project.gases_topic_path(), gases_topic)
 
         if cmd.particulates:
             creator.construct_topic(project.particulates_topic_path(), ProjectTopic.PARTICULATES)
@@ -154,7 +173,11 @@ if __name__ == '__main__':
     project = Project.load_from_host(Host)
     print(JSONify.dumps(project))
 
+    # report...
     if cmd.verbose:
+        print("-", file=sys.stderr)
+
+        print("gases_topic:       %s" % gases_topic, file=sys.stderr)
         print("-", file=sys.stderr)
 
         found = manager.find(project.climate_topic_path())
