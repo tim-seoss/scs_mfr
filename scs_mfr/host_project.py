@@ -177,7 +177,7 @@ if __name__ == '__main__':
     if cmd.verbose:
         print("-", file=sys.stderr)
 
-        print("gases_topic:       %s" % gases_topic, file=sys.stderr)
+        print("gases_project:      %s" % gases_topic, file=sys.stderr)
         print("-", file=sys.stderr)
 
         found = manager.find(project.climate_topic_path())
