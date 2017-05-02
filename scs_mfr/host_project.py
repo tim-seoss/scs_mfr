@@ -9,7 +9,7 @@ workflow:
   1: ./afe_calib -s SERIAL_NUMBER
   2: ./system_id.py -s VENDOR_ID MODEL_ID MODEL_NAME CONFIG SYSTEM_SERIAL
   3: ./api_auth.py -s ORG_ID API_KEY
-  4: ./host_device.py -s -u USER_ID -l LAT LNG POSTCODE -p
+  4: ./host_client.py -s -u USER_ID -l LAT LNG POSTCODE -p
 > 5: ./host_project.py -s GROUP LOCATION_ID -p
 
 Requires APIAuth, SystemID and AFECalib documents.

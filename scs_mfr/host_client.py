@@ -9,7 +9,7 @@ workflow:
   1: ./afe_calib -s SERIAL_NUMBER
   2: ./system_id.py -s VENDOR_ID MODEL_ID MODEL_NAME CONFIG SYSTEM_SERIAL
   3: ./api_auth.py -s ORG_ID API_KEY
-> 4: ./host_device.py -s -u USER_ID -l LAT LNG POSTCODE -p
+> 4: ./host_client.py -s -u USER_ID -l LAT LNG POSTCODE -p
   5: ./host_project.py -s GROUP LOCATION_ID -p
 
 Requires APIAuth and SystemID documents.
@@ -17,7 +17,7 @@ Requires APIAuth and SystemID documents.
 Creates ClientAuth document.
 
 command line example:
-./host_device.py -s -u south-coast-science-test-user -l 50.823130 -0.122922 "BN2 0DA" -p -v
+./host_client.py -s -u south-coast-science-test-user -l 50.823130 -0.122922 "BN2 0DA" -p -v
 """
 
 import sys
@@ -37,7 +37,7 @@ from scs_core.sys.system_id import SystemID
 from scs_host.client.http_client import HTTPClient
 from scs_host.sys.host import Host
 
-from scs_mfr.cmd.cmd_host_device import CmdHostDevice
+from scs_mfr.cmd.cmd_host_client import CmdHostClient
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -81,7 +81,7 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
-    cmd = CmdHostDevice()
+    cmd = CmdHostClient()
 
     if not cmd.is_valid(device):
         cmd.print_help(sys.stderr)
