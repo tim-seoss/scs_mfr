@@ -9,7 +9,7 @@ workflow:
   1: ./afe_calib -s SERIAL_NUMBER
   2: ./system_id.py -s VENDOR_ID MODEL_ID MODEL_NAME CONFIG SYSTEM_SERIAL
   3: ./api_auth.py -s ORG_ID API_KEY
-  4: ./host_device.py -s -u USER_ID -l LAT LNG POSTCODE -p
+  4: ./host_client.py -s -u USER_ID -l LAT LNG POSTCODE -p
 > 5: ./host_project.py -s GROUP LOCATION_ID -p
 
 Requires APIAuth, SystemID and AFECalib documents.
@@ -154,7 +154,7 @@ if __name__ == '__main__':
         existing_gases_topic = existing_gases_topics[0] if len(existing_gases_topics) else None
 
         if existing_gases_topic and existing_gases_topic.schema.id != gases_topic.schema_id:
-            print("Existing gases schema (%d) does not match new gases schema (%d)." %
+            print("Existing gases schema (%s) does not match new gases schema (%s)." %
                   (existing_gases_topic.schema.id, gases_topic.schema_id), file=sys.stderr)
             exit()
 
@@ -177,7 +177,7 @@ if __name__ == '__main__':
     if cmd.verbose:
         print("-", file=sys.stderr)
 
-        print("gases_topic:       %s" % gases_topic, file=sys.stderr)
+        print("gases_project:      %s" % gases_topic, file=sys.stderr)
         print("-", file=sys.stderr)
 
         found = manager.find(project.climate_topic_path())
