@@ -5,14 +5,16 @@ Created on 13 Dec 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
+example:
+{"int": "0x44", "ext": "0x45"}
+
 command line example:
-./sht_conf.py -v -i 0x44
+./sht_conf.py -v -i 0x44 -e 0x45
 """
 
 import sys
 
 from scs_core.data.json import JSONify
-from scs_core.sys.exception_report import ExceptionReport
 
 from scs_dfe.climate.sht_conf import SHTConf
 
@@ -21,18 +23,25 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_sht_conf import CmdSHTConf
 
 
-# TODO: why does this not work?
-
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
 
-    sampler = None
+    # ----------------------------------------------------------------------------------------------------------------
+    # resources...
+
+    # SHTConf...
+    conf = SHTConf.load_from_host(Host)
+
 
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
     cmd = CmdSHTConf()
+
+    if not cmd.is_valid(conf):
+        cmd.print_help(sys.stderr)
+        exit()
 
     if cmd.verbose:
         print(cmd, file=sys.stderr)
@@ -42,13 +51,17 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # run...
 
-    try:
-        conf = SHTConf(cmd.int_addr, cmd.ext_addr)
+    if cmd.set():
+        if conf is None and not cmd.is_complete():
+            cmd.print_help(sys.stderr)
+            exit()
 
-        if cmd.verbose:
-            print(conf, file=sys.stderr)
+        int_addr = cmd.int_addr if cmd.int_addr else conf.int_addr
+        ext_addr = cmd.ext_addr if cmd.ext_addr else conf.ext_addr
+
+        conf = SHTConf(int_addr, ext_addr)
 
         conf.save(Host)
 
-    except Exception as ex:
-        print(JSONify.dumps(ExceptionReport.construct(ex)), file=sys.stderr)
+    if conf:
+        print(JSONify.dumps(conf))
