@@ -53,7 +53,7 @@ if __name__ == '__main__':
 
     print(JSONify.dumps(system_id))
 
-    if cmd.verbose and id is not None:
+    if cmd.verbose and system_id is not None:
         print("-", file=sys.stderr)
         print("box:   %s" % system_id.box_label(), file=sys.stderr)
         print("topic: %s" % system_id.topic_label(), file=sys.stderr)
