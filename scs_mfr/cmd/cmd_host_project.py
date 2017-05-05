@@ -21,7 +21,7 @@ class CmdHostProject(object):
 
         # optional...
         self.__parser.add_option("--set", "-s", type="string", nargs=2, action="store", dest="group_location",
-                                 help="set topic group and location ID")
+                                 help="set topic group and integer location ID")
 
         self.__parser.add_option("--particulates", "-p", action="store_true", dest="particulates",
                                  help="include particulates topic")

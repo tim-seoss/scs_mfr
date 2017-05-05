@@ -5,12 +5,13 @@ Created on 18 Feb 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-workflow:
+OpenSensors workflow:
   1: ./afe_calib -s SERIAL_NUMBER
   2: ./system_id.py -s VENDOR_ID MODEL_ID MODEL_NAME CONFIG SYSTEM_SERIAL
   3: ./api_auth.py -s ORG_ID API_KEY
-  4: ./host_client.py -s -u USER_ID -l LAT LNG POSTCODE -p
-> 5: ./host_project.py -s GROUP LOCATION_ID -p
+  4: ./host_organisation.py -o ORG_ID -n NAME -w WEB -d DESCRIPTION -e EMAIL -v
+  5: ./host_client.py -s -u USER_ID -l LAT LNG POSTCODE -p
+> 6: ./host_project.py -s GROUP LOCATION_ID -p
 
 Requires APIAuth, SystemID and AFECalib documents.
 
