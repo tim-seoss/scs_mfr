@@ -18,8 +18,8 @@ class CmdHostOrganisation(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-o ORG_ID] [-n NAME] [-w WEB] [-d DESCRIPTION] [-e EMAIL]"
-                                                    " [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [-o ORG_ID] [-n NAME] [-w WEBSITE] [-d DESCRIPTION] "
+                                                    "[-e EMAIL] [-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--org", "-o", type="string", nargs=1, action="store", dest="org_id",
