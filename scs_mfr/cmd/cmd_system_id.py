@@ -16,12 +16,12 @@ class CmdSystemID(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-s VENDOR_ID MODEL_ID MODEL_NAME CONFIG SYSTEM_SERIAL] "
-                                                    "[-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [-s VENDOR_ID MODEL_ID MODEL_NAME CONFIG "
+                                                    "SYSTEM_SERIAL_NUMBER] [-v]", version="%prog 1.0")
 
         # compulsory...
         self.__parser.add_option("--set", "-s", type="string", nargs=5, action="store", dest="model_config_serial",
-                                 help="SYSTEM_SERIAL is normally integer")
+                                 help="set system identification")
 
         # optional...
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,

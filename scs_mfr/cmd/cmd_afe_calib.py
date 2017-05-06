@@ -16,11 +16,11 @@ class CmdAFECalib(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-s SERIAL_NUMBER] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [-s AFE_SERIAL_NUMBER] [-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--set", "-s", type="string", nargs=1, action="store", dest="serial_number",
-                                 help="serial number")
+                                 help="set AFE serial number")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
