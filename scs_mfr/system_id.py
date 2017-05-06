@@ -5,6 +5,8 @@ Created on 17 Feb 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
+Warning: changing system ID components can cause host client access to fail.
+
 SCS workflow:
     1: ./afe_calib -s SERIAL_NUMBER
     2: ./afe_baseline.py -v -1 SN1_OFFSET -2 SN2_OFFSET -3 SN3_OFFSET -4 SN3_OFFSET
