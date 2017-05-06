@@ -90,16 +90,16 @@ if __name__ == '__main__':
 
     cmd = CmdHostClient()
 
-    if not cmd.is_valid(device):
-        cmd.print_help(sys.stderr)
-        exit()
-
     if cmd.verbose:
         print(cmd, file=sys.stderr)
         print(api_auth, file=sys.stderr)
         print(system_id, file=sys.stderr)
         print(afe_calib, file=sys.stderr)
         sys.stderr.flush()
+
+    if not cmd.is_valid(device):
+        cmd.print_help(sys.stderr)
+        exit()
 
 
     # ----------------------------------------------------------------------------------------------------------------
