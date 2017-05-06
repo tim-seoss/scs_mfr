@@ -16,8 +16,8 @@ class CmdAFEBaseline(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-1 SN1] [-2 SN2] [-3 SN3] [-4 SN4] [-v]",
-                                              version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [-1 SN1_OFFSET] [-2 SN2_OFFSET] [-3 SN3_OFFSET] "
+                                                    "[-4 SN3_OFFSET] [-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--sn1", "-1", type="int", nargs=1, action="store", dest="sn1_offset",
