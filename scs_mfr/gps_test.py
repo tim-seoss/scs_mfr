@@ -30,7 +30,7 @@ class GPSSampler(Sampler):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, gps_module, interval, sample_count=0):
+    def __init__(self, gps_module, interval, sample_count=None):
         """
         Constructor
         """
@@ -84,7 +84,6 @@ if __name__ == '__main__':
         rmc = None
 
         for gsa in gps_sampler.samples():
-
             if gsa != prev_gsa:
                 print(gsa)
 
@@ -108,6 +107,7 @@ if __name__ == '__main__':
         gps.close()
 
         loc = GPSLocation.construct(gga)
+
 
         print("time: %s" % rmc.datetime.as_iso8601())
         print(loc)
