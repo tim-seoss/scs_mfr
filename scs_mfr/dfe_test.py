@@ -319,7 +319,7 @@ if __name__ == '__main__':
                 print(afe_datum, file=sys.stderr)
 
             # noinspection PyTypeChecker
-            ok = 0.4 < afe_datum.pt1000.v < 0.6
+            ok = 0.3 < afe_datum.pt1000.v < 0.6
 
             for gas, sensor in afe_datum.sns.items():
                 # noinspection PyTypeChecker
