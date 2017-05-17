@@ -5,7 +5,7 @@ Created on 29 Jan 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Note: this script uses the Pt1000 temp sensor for temperature compensation.
+Warning: this script calibrates the Pt1000 - this is not appropriate if a standard load is being used.
 
 command line example:
 ./dfe_test.py 123 -g -v
@@ -319,7 +319,7 @@ if __name__ == '__main__':
                 print(afe_datum, file=sys.stderr)
 
             # noinspection PyTypeChecker
-            ok = 0.3 < afe_datum.pt1000.v < 0.6
+            ok = 0.4 < afe_datum.pt1000.v < 0.6
 
             for gas, sensor in afe_datum.sns.items():
                 # noinspection PyTypeChecker
