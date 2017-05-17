@@ -257,6 +257,8 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # Pt1000 calibration...
 
+        # TODO: remove Pt1000 calibration
+
         if cmd.verbose:
             print("Pt1000...", file=sys.stderr)
             print("(calibrating with Int SHT)", file=sys.stderr)
