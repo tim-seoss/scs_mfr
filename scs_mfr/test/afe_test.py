@@ -63,7 +63,7 @@ class AFETest(Test):
 
             ok = True
 
-            # criterion...
+            # test criterion...
             for gas, sensor in self.datum.sns.items():
                 sensor_ok = 0.9 < sensor.we_v < 1.1 and 0.9 < sensor.ae_v < 1.1
 

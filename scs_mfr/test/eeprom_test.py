@@ -53,7 +53,7 @@ class EEPROMTest(Test):
             file_image = EEPROMImage.construct_from_file(Host.DFE_EEP_IMAGE, CAT24C32.SIZE)
             eeprom.write(file_image)
 
-            # criterion...
+            # test criterion...
             return eeprom.image == file_image
 
         finally:

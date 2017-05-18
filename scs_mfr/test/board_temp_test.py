@@ -47,7 +47,7 @@ class BoardTempTest(Test):
 
             temp = datum.temp
 
-            # criterion...
+            # test criterion...
             return 10 < temp < 50
 
         finally:

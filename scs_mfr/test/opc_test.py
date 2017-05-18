@@ -49,7 +49,7 @@ class OPCTest(Test):
             if self.verbose:
                 print(firmware, file=sys.stderr)
 
-            # criterion...
+            # test criterion...
             return len(firmware) > 0
 
         finally:

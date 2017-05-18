@@ -53,7 +53,7 @@ class Pt1000Test(Test):
             if self.verbose:
                 print(datum, file=sys.stderr)
 
-            # criterion...
+            # test criterion...
             return 0.4 < datum.v < 0.6
 
         finally:

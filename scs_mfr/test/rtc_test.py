@@ -59,7 +59,7 @@ class RTCTest(Test):
 
             diff = localized_datetime - now
 
-            # criterion...
+            # test criterion...
             return diff.seconds >= 1
 
         finally:
