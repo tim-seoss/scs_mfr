@@ -37,6 +37,7 @@ class GPSTest(Test):
         try:
             # resources...
             gps = PAM7Q()
+
             gps.power_on()
             gps.open()
 
