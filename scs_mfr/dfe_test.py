@@ -10,77 +10,47 @@ command line example:
 ./dfe_test.py 123 -g -v
 """
 
-import os.path
 import sys
 
 from scs_core.data.json import JSONify
 from scs_core.data.localized_datetime import LocalizedDatetime
 
-from scs_core.sys.eeprom_image import EEPROMImage
 from scs_core.sys.system_id import SystemID
-
-from scs_core.gas.afe_baseline import AFEBaseline
-from scs_core.gas.afe_calib import AFECalib
-from scs_core.gas.pt1000_calib import Pt1000Calib
-
-from scs_dfe.board.cat24c32 import CAT24C32
 
 from scs_dfe.climate.sht_conf import SHTConf
 
-from scs_dfe.gas.afe import AFE
-from scs_dfe.gas.pt1000 import Pt1000
-from scs_dfe.gas.pt1000_conf import Pt1000Conf
-
-from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_dfe_test import CmdDFETest
+
 from scs_mfr.report.dfe_test_datum import DFETestDatum
 from scs_mfr.report.dfe_test_reporter import DFETestReporter
 
+from scs_mfr.test.afe_test import AFETest
 from scs_mfr.test.board_temp_test import BoardTempTest
+from scs_mfr.test.eeprom_test import EEPROMTest
 from scs_mfr.test.gps_test import GPSTest
 from scs_mfr.test.opc_test import OPCTest
+from scs_mfr.test.pt1000_test import Pt1000Test
 from scs_mfr.test.rtc_test import RTCTest
 from scs_mfr.test.sht_test import SHTTest
 
 
-# TODO: remove Pt1000 calibration
-# TODO: add result to output
 # TODO: add UUID read
-
-# --------------------------------------------------------------------------------------------------------------------
-# validate...
-
-if not os.path.isfile(Host.DFE_EEP_IMAGE):
-    print("error: eeprom image not found", file=sys.stderr)
-    exit()
-
-
-# ----------------------------------------------------------------------------------------------------------------
-# cmd...
-
-cmd = CmdDFETest()
-
-if not cmd.is_valid():
-    cmd.print_help(sys.stderr)
-    exit()
-
-
-# --------------------------------------------------------------------------------------------------------------------
-# config...
-
-opc = None
-afe_datum = None
-
-reporter = DFETestReporter(cmd.verbose)
-
-Host.enable_eeprom_access()
-
 
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
+
+    # ----------------------------------------------------------------------------------------------------------------
+    # cmd...
+
+    cmd = CmdDFETest()
+
+    if not cmd.is_valid():
+        cmd.print_help(sys.stderr)
+        exit()
+
 
     # ----------------------------------------------------------------------------------------------------------------
     # resources...
@@ -94,211 +64,160 @@ if __name__ == '__main__':
 
     if cmd.verbose:
         print(system_id, file=sys.stderr)
-    sys.stderr.flush()
+        sys.stderr.flush()
 
-    # Pt1000...
-    pt1000_conf = Pt1000Conf.load_from_host(Host)
-    pt1000_calib = Pt1000Calib.load_from_host(Host)
-    pt1000 = Pt1000(pt1000_calib)
+    reporter = DFETestReporter(cmd.verbose)
 
 
     # ----------------------------------------------------------------------------------------------------------------
     # run...
 
-    dfe_ok = True
-
-    try:
-        I2C.open(Host.I2C_SENSORS)
-
-        # ------------------------------------------------------------------------------------------------------------
-        # UUID...
+    afe_datum = None
 
 
-        # ------------------------------------------------------------------------------------------------------------
-        # RTC...
+    # ----------------------------------------------------------------------------------------------------------------
+    # UUID...
 
+
+    # ----------------------------------------------------------------------------------------------------------------
+    # RTC...
+
+    if cmd.ignore_rtc:
+        reporter.report_ignore("RTC")
+
+    else:
         try:
-            test_ok = RTCTest.conduct(cmd.verbose)
+            test = RTCTest(cmd.verbose)
+
+            test_ok = test.conduct()
             reporter.report_test("RTC", test_ok)
 
         except Exception as ex:
             reporter.report_exception("RTC", ex)
-            test_ok = False
-
-        if not test_ok:
-            dfe_ok = False
 
 
-        # ------------------------------------------------------------------------------------------------------------
-        # Board temp...
-
-        try:
-            test_ok = BoardTempTest.conduct(cmd.verbose)
-            reporter.report_test("BoardTemp", test_ok)
-
-        except Exception as ex:
-            reporter.report_exception("BoardTemp", ex)
-            test_ok = False
-
-        if not test_ok:
-            dfe_ok = False
-
-
-        # ------------------------------------------------------------------------------------------------------------
-        # OPC...
-
-        try:
-            test_ok = OPCTest.conduct(cmd.verbose)
-            reporter.report_test("OPC", test_ok)
-
-        except Exception as ex:
-            reporter.report_exception("OPC", ex)
-            test_ok = False
-
-        if not test_ok:
-            dfe_ok = False
-
-
-        # ------------------------------------------------------------------------------------------------------------
-        # GPS...
-
-        if cmd.ignore_gps:
-            reporter.report_ignore("GPS")
-
-        else:
-            try:
-                test_ok = GPSTest.conduct(cmd.verbose)
-                reporter.report_test("GPS", test_ok)
-
-            except Exception as ex:
-                reporter.report_exception("GPS", ex)
-                test_ok = False
-
-            if not test_ok:
-                dfe_ok = False
-
-
-        # ------------------------------------------------------------------------------------------------------------
-        # NDIR...
-
-
-        # ------------------------------------------------------------------------------------------------------------
-        # Ext SHT...
-
-        try:
-            sht_conf = SHTConf.load_from_host(Host)
-            sht = sht_conf.ext_sht()
-
-            test_ok = SHTTest.conduct("Ext SHT", sht, cmd.verbose)
-            reporter.report_test("Ext SHT", test_ok)
-
-        except Exception as ex:
-            reporter.report_exception("Ext SHT", ex)
-            test_ok = False
-
-        if not test_ok:
-            dfe_ok = False
-
-
-        # ------------------------------------------------------------------------------------------------------------
-        # Int SHT...
-
-        try:
-            sht_conf = SHTConf.load_from_host(Host)
-            sht = sht_conf.int_sht()
-
-            test_ok = SHTTest.conduct("Int SHT", sht, cmd.verbose)
-            reporter.report_test("Int SHT", test_ok)
-
-        except Exception as ex:
-            reporter.report_exception("Int SHT", ex)
-            test_ok = False
-
-        if not test_ok:
-            dfe_ok = False
-
-
-        # ------------------------------------------------------------------------------------------------------------
-        # Pt1000...
-
-
-
-        # ------------------------------------------------------------------------------------------------------------
-        # AFE...
-
-        if cmd.verbose:
-            print("AFE...", file=sys.stderr)
-
-        try:
-            afe_baseline = AFEBaseline.load_from_host(Host)
-
-            calib = AFECalib.load_from_host(Host)
-            sensors = calib.sensors(afe_baseline)
-
-            afe = AFE(pt1000_conf, pt1000, sensors)
-            afe_datum = afe.sample()
-
-            if cmd.verbose:
-                print(afe_datum, file=sys.stderr)
-
-            # noinspection PyTypeChecker
-            ok = 0.4 < afe_datum.pt1000.v < 0.6
-
-            for gas, sensor in afe_datum.sns.items():
-                # noinspection PyTypeChecker
-                sensor_ok = 0.9 < sensor.we_v < 1.1 and 0.9 < sensor.ae_v < 1.1
-
-                if not sensor_ok:
-                    ok = False
-
-            reporter.report_test("AFE", ok)
-
-        except Exception as ex:
-            reporter.report_exception("AFE", ex)
-            ok = False
-
-    except RuntimeError:
-        pass
-
-    finally:
-        I2C.close()
-
+    # ----------------------------------------------------------------------------------------------------------------
+    # Board temp...
 
     try:
-        I2C.open(Host.I2C_EEPROM)
+        test = BoardTempTest(cmd.verbose)
 
-        # ------------------------------------------------------------------------------------------------------------
-        # EEPROM...
+        test_ok = test.conduct()
+        reporter.report_test("BoardTemp", test_ok)
 
-        if cmd.ignore_eeprom:
-            reporter.report_ignore("EEPROM")
-
-        else:
-            if cmd.verbose:
-                print("EEPROM...", file=sys.stderr)
-
-            try:
-                eeprom = CAT24C32()
-
-                file_image = EEPROMImage.construct_from_file(Host.DFE_EEP_IMAGE, CAT24C32.SIZE)
-                eeprom.write(file_image)
-
-                ok = eeprom.image == file_image
-                reporter.report_test("EEPROM", ok)
-
-            except Exception as ex:
-                reporter.report_exception("EEPROM", ex)
-                ok = False
+    except Exception as ex:
+        reporter.report_exception("BoardTemp", ex)
 
 
-        # ------------------------------------------------------------------------------------------------------------
-        # end...
+    # ----------------------------------------------------------------------------------------------------------------
+    # OPC...
 
-    except RuntimeError:
-        pass
+    try:
+        test = OPCTest(cmd.verbose)
 
-    finally:
-        I2C.close()
+        test_ok = test.conduct()
+        reporter.report_test("OPC", test_ok)
+
+    except Exception as ex:
+        reporter.report_exception("OPC", ex)
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+    # GPS...
+
+    if cmd.ignore_gps:
+        reporter.report_ignore("GPS")
+
+    else:
+        try:
+            test = GPSTest(cmd.verbose)
+
+            test_ok = test.conduct()
+            reporter.report_test("GPS", test_ok)
+
+        except Exception as ex:
+            reporter.report_exception("GPS", ex)
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+    # NDIR...
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+    # Int SHT...
+
+    try:
+        sht_conf = SHTConf.load_from_host(Host)
+        sht = sht_conf.int_sht()
+
+        test = SHTTest("Int SHT", sht, cmd.verbose)
+
+        test_ok = test.conduct()
+        reporter.report_test("Int SHT", test_ok)
+
+    except Exception as ex:
+        reporter.report_exception("Int SHT", ex)
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+    # Ext SHT...
+
+    try:
+        sht_conf = SHTConf.load_from_host(Host)
+        sht = sht_conf.ext_sht()
+
+        test = SHTTest("Ext SHT", sht, cmd.verbose)
+
+        test_ok = test.conduct()
+        reporter.report_test("Ext SHT", test_ok)
+
+    except Exception as ex:
+        reporter.report_exception("Ext SHT", ex)
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+    # Pt1000...
+
+    try:
+        test = Pt1000Test(cmd.verbose)
+
+        test_ok = test.conduct()
+        reporter.report_test("Pt1000", test_ok)
+
+    except Exception as ex:
+        reporter.report_exception("Pt1000", ex)
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+    # AFE...
+
+    try:
+        test = AFETest(cmd.verbose)
+
+        test_ok = test.conduct()
+        reporter.report_test("AFE", test_ok)
+
+        afe_datum = test.datum
+
+    except Exception as ex:
+        reporter.report_exception("AFE", ex)
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+    # EEPROM...
+
+    if cmd.ignore_eeprom:
+        reporter.report_ignore("EEPROM")
+
+    else:
+        try:
+            test = EEPROMTest(cmd.verbose)
+
+            test_ok = test.conduct()
+            reporter.report_test("EEPROM", test_ok)
+
+        except Exception as ex:
+            reporter.report_exception("EEPROM", ex)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -306,8 +225,8 @@ if __name__ == '__main__':
 
     if cmd.verbose:
         print(reporter, file=sys.stderr)
-
-    reporter.report_result()
+        print(reporter.result, file=sys.stderr)
+        print("-")
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -315,6 +234,6 @@ if __name__ == '__main__':
 
     recorded = LocalizedDatetime.now()
     datum = DFETestDatum(system_id.message_tag(), recorded, Host.serial_number(), cmd.dfe_serial_number,
-                         reporter.subjects, afe_datum)
+                         reporter.subjects, afe_datum, reporter.result)
 
     print(JSONify.dumps(datum))

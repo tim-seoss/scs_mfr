@@ -8,29 +8,47 @@ import sys
 
 from scs_dfe.board.mcp9808 import MCP9808
 
+from scs_host.bus.i2c import I2C
+from scs_host.sys.host import Host
+
+from scs_mfr.test.test import Test
+
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class BoardTempTest(object):
+class BoardTempTest(Test):
     """
     test script
     """
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    @classmethod
-    def conduct(cls, verbose):
-        if verbose:
+    def __init__(self, verbose):
+        Test.__init__(self, verbose)
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def conduct(self):
+        if self.verbose:
             print("Board temp...", file=sys.stderr)
 
-        sensor = MCP9808(True)
+        try:
+            I2C.open(Host.I2C_SENSORS)
 
-        datum = sensor.sample()
+            # resources...
+            sensor = MCP9808(True)
 
-        if verbose:
-            print(datum, file=sys.stderr)
+            # test...
+            datum = sensor.sample()
 
-        temp = datum.temp
+            if self.verbose:
+                print(datum, file=sys.stderr)
 
-        # test criterion...
-        return 10 < temp < 50
+            temp = datum.temp
+
+            # criterion...
+            return 10 < temp < 50
+
+        finally:
+            I2C.close()

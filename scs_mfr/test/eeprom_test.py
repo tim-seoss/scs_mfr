@@ -4,14 +4,12 @@ Created on 18 May 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
+import os.path
 import sys
-import time
-import tzlocal
 
-from scs_core.data.localized_datetime import LocalizedDatetime
-from scs_core.data.rtc_datetime import RTCDatetime
+from scs_core.sys.eeprom_image import EEPROMImage
 
-from scs_dfe.time.ds1338 import DS1338
+from scs_dfe.board.cat24c32 import CAT24C32
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -21,7 +19,7 @@ from scs_mfr.test.test import Test
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class RTCTest(Test):
+class EEPROMTest(Test):
     """
     test script
     """
@@ -35,32 +33,28 @@ class RTCTest(Test):
     # ----------------------------------------------------------------------------------------------------------------
 
     def conduct(self):
-        if self.verbose:
-            print("RTC...", file=sys.stderr)
+        if self.__verbose:
+            print("EEPROM...", file=sys.stderr)
+
+        # validate...
+        if not os.path.isfile(Host.DFE_EEP_IMAGE):
+            print("error: eeprom image not found", file=sys.stderr)
+            exit()
 
         try:
-            I2C.open(Host.I2C_SENSORS)
+            I2C.open(Host.I2C_EEPROM)
 
             # resources...
-            now = LocalizedDatetime.now()
+            Host.enable_eeprom_access()
 
-            DS1338.init()
+            eeprom = CAT24C32()
 
             # test...
-            rtc_datetime = RTCDatetime.construct_from_localized_datetime(now)
-            DS1338.set_time(rtc_datetime)
-
-            time.sleep(2)
-
-            rtc_datetime = DS1338.get_time()
-            localized_datetime = rtc_datetime.as_localized_datetime(tzlocal.get_localzone())
-
-            # TODO: print datum
-
-            diff = localized_datetime - now
+            file_image = EEPROMImage.construct_from_file(Host.DFE_EEP_IMAGE, CAT24C32.SIZE)
+            eeprom.write(file_image)
 
             # criterion...
-            return diff.seconds >= 1
+            return eeprom.image == file_image
 
         finally:
             I2C.close()

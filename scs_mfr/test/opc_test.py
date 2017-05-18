@@ -8,37 +8,53 @@ import sys
 
 from scs_dfe.particulate.opc_n2 import OPCN2
 
+from scs_host.bus.i2c import I2C
+from scs_host.sys.host import Host
+
+from scs_mfr.test.test import Test
+
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class OPCTest(object):
+class OPCTest(Test):
     """
     test script
     """
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    @classmethod
-    def conduct(cls, verbose):
-        if verbose:
+    def __init__(self, verbose):
+        Test.__init__(self, verbose)
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def conduct(self):
+        if self.verbose:
             print("OPC...", file=sys.stderr)
 
         opc = None
 
         try:
+            I2C.open(Host.I2C_SENSORS)
+
+            # resources...
             opc = OPCN2()
             opc.power_on()
             opc.operations_on()
 
+            # test...
             firmware = opc.firmware()
 
-            if verbose:
+            if self.verbose:
                 print(firmware, file=sys.stderr)
 
-            # test criterion...
+            # criterion...
             return len(firmware) > 0
 
         finally:
             if opc:
                 opc.operations_off()
                 opc.power_off()
+
+            I2C.close()
