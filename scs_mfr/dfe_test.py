@@ -29,6 +29,7 @@ from scs_dfe.climate.sht_conf import SHTConf
 
 from scs_dfe.gas.afe import AFE
 from scs_dfe.gas.pt1000 import Pt1000
+from scs_dfe.gas.pt1000_conf import Pt1000Conf
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -93,7 +94,12 @@ if __name__ == '__main__':
 
     if cmd.verbose:
         print(system_id, file=sys.stderr)
-        sys.stderr.flush()
+    sys.stderr.flush()
+
+    # Pt1000...
+    pt1000_conf = Pt1000Conf.load_from_host(Host)
+    pt1000_calib = Pt1000Calib.load_from_host(Host)
+    pt1000 = Pt1000(pt1000_calib)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -213,49 +219,8 @@ if __name__ == '__main__':
 
 
         # ------------------------------------------------------------------------------------------------------------
-        # Pt1000 calibration...
+        # Pt1000...
 
-        if cmd.verbose:
-            print("Pt1000...", file=sys.stderr)
-            print("(calibrating with Int SHT)", file=sys.stderr)
-
-        pt1000 = None
-
-        try:
-            # resources...
-            calib = Pt1000Calib.load_from_host(Host)
-            pt1000 = Pt1000(calib)
-
-            afe = AFE(pt1000, [])
-
-            # initial sample...
-            pt1000_datum = afe.sample_temp()
-
-            v20 = pt1000_datum.v20(int_sht_datum.temp)
-
-            # calibrate...
-            calib = Pt1000Calib(None, v20)
-            calib.save(Host)
-
-            # new resource...
-            pt1000 = Pt1000(calib)
-
-            afe = AFE(pt1000, [])
-
-            # final sample...
-            pt1000_datum = afe.sample_temp()
-
-            if cmd.verbose:
-                print(pt1000_datum, file=sys.stderr)
-
-            temp_diff = abs(pt1000_datum.temp - int_sht_datum.temp)
-
-            ok = temp_diff < 0.2
-            reporter.report_test("Pt1000", ok)
-
-        except Exception as ex:
-            reporter.report_exception("Pt1000", ex)
-            ok = False
 
 
         # ------------------------------------------------------------------------------------------------------------
@@ -270,7 +235,7 @@ if __name__ == '__main__':
             calib = AFECalib.load_from_host(Host)
             sensors = calib.sensors(afe_baseline)
 
-            afe = AFE(pt1000, sensors)
+            afe = AFE(pt1000_conf, pt1000, sensors)
             afe_datum = afe.sample()
 
             if cmd.verbose:

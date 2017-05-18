@@ -9,7 +9,7 @@ import optparse
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class CmdSHTConf(object):
+class CmdPt1000Conf(object):
     """
     unix command line handler
     """
@@ -27,14 +27,11 @@ class CmdSHTConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self):
-        self.__parser = optparse.OptionParser(usage="%prog [-i INT_ADDR] [-e EXT_ADDR] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [-a ADDR] [-v]", version="%prog 1.0")
 
         # optional...
-        self.__parser.add_option("--int-addr", "-i", type="int", nargs=1, action="store", dest="int_addr", default=None,
-                                 help="set I2C address of SHT in A4 package (required if conf has not yet been set)")
-
-        self.__parser.add_option("--ext-addr", "-e", type="int", nargs=1, action="store", dest="ext_addr", default=None,
-                                 help="set I2C address of SHT exposed to air (required if conf has not yet been set)")
+        self.__parser.add_option("--addr", "-a", type="int", nargs=1, action="store", dest="addr", default=None,
+                                 help="set I2C address of the Pt1000 ADC (required if conf has not yet been set)")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
@@ -52,26 +49,21 @@ class CmdSHTConf(object):
 
 
     def is_complete(self):
-        if self.int_addr is None or self.ext_addr is None:
+        if self.addr is None:
             return False
 
         return True
 
 
     def set(self):
-        return self.int_addr is not None or self.ext_addr is not None
+        return self.addr is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
-    def int_addr(self):
-        return self.__opts.int_addr
-
-
-    @property
-    def ext_addr(self):
-        return self.__opts.ext_addr
+    def addr(self):
+        return self.__opts.addr
 
 
     @property
@@ -91,5 +83,5 @@ class CmdSHTConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdSHTConf:{int_addr:%s, ext_addr:%s, verbose:%s, args:%s}" % \
-               (CmdSHTConf.__addr_str(self.int_addr), CmdSHTConf.__addr_str(self.ext_addr), self.verbose, self.args)
+        return "CmdPt1000Conf:{addr:%s, verbose:%s, args:%s}" % \
+               (CmdPt1000Conf.__addr_str(self.addr), self.verbose, self.args)
