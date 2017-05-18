@@ -6,6 +6,8 @@ Created on 29 Jan 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
+A standard load should be connected to the DFE's AFE port before this test is run.
+
 command line example:
 ./dfe_test.py 123 -g -v
 """
