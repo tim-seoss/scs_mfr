@@ -5,8 +5,6 @@ Created on 29 Jan 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Warning: this script calibrates the Pt1000 - this is not appropriate if a standard load is being used.
-
 command line example:
 ./dfe_test.py 123 -g -v
 """
@@ -45,6 +43,9 @@ from scs_mfr.report.dfe_test_datum import DFETestDatum
 from scs_mfr.report.dfe_test_reporter import DFETestReporter
 
 
+# TODO: add RTC test
+# TODO: remove Pt1000 calibration
+# TODO: add result to output
 # TODO: add UUID read
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -256,8 +257,6 @@ if __name__ == '__main__':
 
         # ------------------------------------------------------------------------------------------------------------
         # Pt1000 calibration...
-
-        # TODO: remove Pt1000 calibration
 
         if cmd.verbose:
             print("Pt1000...", file=sys.stderr)
