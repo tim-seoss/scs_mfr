@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+# noinspection PyUnboundLocalVariable
 """
 Created on 29 Jan 2017
 
@@ -15,8 +16,6 @@ import sys
 from scs_core.data.json import JSONify
 from scs_core.data.localized_datetime import LocalizedDatetime
 
-from scs_core.location.gprmc import GPRMC
-
 from scs_core.sys.eeprom_image import EEPROMImage
 from scs_core.sys.system_id import SystemID
 
@@ -25,15 +24,11 @@ from scs_core.gas.afe_calib import AFECalib
 from scs_core.gas.pt1000_calib import Pt1000Calib
 
 from scs_dfe.board.cat24c32 import CAT24C32
-from scs_dfe.board.mcp9808 import MCP9808
 
 from scs_dfe.climate.sht_conf import SHTConf
 
 from scs_dfe.gas.afe import AFE
 from scs_dfe.gas.pt1000 import Pt1000
-from scs_dfe.gps.pam7q import PAM7Q
-
-from scs_dfe.particulate.opc_n2 import OPCN2
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -42,8 +37,13 @@ from scs_mfr.cmd.cmd_dfe_test import CmdDFETest
 from scs_mfr.report.dfe_test_datum import DFETestDatum
 from scs_mfr.report.dfe_test_reporter import DFETestReporter
 
+from scs_mfr.test.board_temp_test import BoardTempTest
+from scs_mfr.test.gps_test import GPSTest
+from scs_mfr.test.opc_test import OPCTest
+from scs_mfr.test.rtc_test import RTCTest
+from scs_mfr.test.sht_test import SHTTest
 
-# TODO: add RTC test
+
 # TODO: remove Pt1000 calibration
 # TODO: add result to output
 # TODO: add UUID read
@@ -99,6 +99,8 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # run...
 
+    dfe_ok = True
+
     try:
         I2C.open(Host.I2C_SENSORS)
 
@@ -107,56 +109,48 @@ if __name__ == '__main__':
 
 
         # ------------------------------------------------------------------------------------------------------------
-        # Board temp...
-
-        if cmd.verbose:
-            print("Board temp...", file=sys.stderr)
+        # RTC...
 
         try:
-            sensor = MCP9808(True)
+            test_ok = RTCTest.conduct(cmd.verbose)
+            reporter.report_test("RTC", test_ok)
 
-            datum = sensor.sample()
+        except Exception as ex:
+            reporter.report_exception("RTC", ex)
+            test_ok = False
 
-            if cmd.verbose:
-                print(datum, file=sys.stderr)
+        if not test_ok:
+            dfe_ok = False
 
-            temp = datum.temp
 
-            ok = 10 < temp < 50
-            reporter.report_test("BoardTemp", ok)
+        # ------------------------------------------------------------------------------------------------------------
+        # Board temp...
+
+        try:
+            test_ok = BoardTempTest.conduct(cmd.verbose)
+            reporter.report_test("BoardTemp", test_ok)
 
         except Exception as ex:
             reporter.report_exception("BoardTemp", ex)
-            ok = False
+            test_ok = False
+
+        if not test_ok:
+            dfe_ok = False
 
 
         # ------------------------------------------------------------------------------------------------------------
         # OPC...
 
-        if cmd.verbose:
-            print("OPC...", file=sys.stderr)
-
         try:
-            opc = OPCN2()
-            opc.power_on()
-            opc.operations_on()
-
-            firmware = opc.firmware()
-
-            if cmd.verbose:
-                print(firmware, file=sys.stderr)
-
-            ok = len(firmware) > 0
-            reporter.report_test("OPC", ok)
+            test_ok = OPCTest.conduct(cmd.verbose)
+            reporter.report_test("OPC", test_ok)
 
         except Exception as ex:
             reporter.report_exception("OPC", ex)
-            ok = False
+            test_ok = False
 
-        finally:
-            if opc:
-                opc.operations_off()
-                opc.power_off()
+        if not test_ok:
+            dfe_ok = False
 
 
         # ------------------------------------------------------------------------------------------------------------
@@ -166,31 +160,16 @@ if __name__ == '__main__':
             reporter.report_ignore("GPS")
 
         else:
-            if cmd.verbose:
-                print("GPS...", file=sys.stderr)
-
-            gps = PAM7Q()
-
             try:
-                gps.power_on()
-                gps.open()
-
-                msg = gps.report(GPRMC)
-
-                if cmd.verbose:
-                    print(msg, file=sys.stderr)
-
-                ok = msg is not None
-                reporter.report_test("GPS", ok)
+                test_ok = GPSTest.conduct(cmd.verbose)
+                reporter.report_test("GPS", test_ok)
 
             except Exception as ex:
                 reporter.report_exception("GPS", ex)
-                ok = False
+                test_ok = False
 
-            finally:
-                if opc:
-                    gps.close()
-                    gps.power_off()
+            if not test_ok:
+                dfe_ok = False
 
 
         # ------------------------------------------------------------------------------------------------------------
@@ -200,59 +179,37 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # Ext SHT...
 
-        if cmd.verbose:
-            print("Ext SHT...", file=sys.stderr)
-
-        ext_sht_datum = None
-
         try:
             sht_conf = SHTConf.load_from_host(Host)
             sht = sht_conf.ext_sht()
 
-            sht.reset()
-            ext_sht_datum = sht.sample()
-
-            if cmd.verbose:
-                print(ext_sht_datum, file=sys.stderr)
-
-            humid = ext_sht_datum.humid
-            temp = ext_sht_datum.temp
-
-            ok = 10 < humid < 90 and 10 < temp < 50
-            reporter.report_test("Ext SHT", ok)
+            test_ok = SHTTest.conduct("Ext SHT", sht, cmd.verbose)
+            reporter.report_test("Ext SHT", test_ok)
 
         except Exception as ex:
             reporter.report_exception("Ext SHT", ex)
-            ok = False
+            test_ok = False
+
+        if not test_ok:
+            dfe_ok = False
 
 
         # ------------------------------------------------------------------------------------------------------------
         # Int SHT...
 
-        if cmd.verbose:
-            print("Int SHT...", file=sys.stderr)
-
-        int_sht_datum = None
-
         try:
             sht_conf = SHTConf.load_from_host(Host)
             sht = sht_conf.int_sht()
 
-            sht.reset()
-            int_sht_datum = sht.sample()
-
-            if cmd.verbose:
-                print(int_sht_datum, file=sys.stderr)
-
-            humid = int_sht_datum.humid
-            temp = int_sht_datum.temp
-
-            ok = 10 < humid < 90 and 10 < temp < 50
-            reporter.report_test("Int SHT", ok)
+            test_ok = SHTTest.conduct("Int SHT", sht, cmd.verbose)
+            reporter.report_test("Int SHT", test_ok)
 
         except Exception as ex:
             reporter.report_exception("Int SHT", ex)
-            ok = False
+            test_ok = False
+
+        if not test_ok:
+            dfe_ok = False
 
 
         # ------------------------------------------------------------------------------------------------------------
