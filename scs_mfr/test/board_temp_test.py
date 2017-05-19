@@ -40,12 +40,12 @@ class BoardTempTest(Test):
             sensor = MCP9808(True)
 
             # test...
-            datum = sensor.sample()
+            self.datum = sensor.sample()
 
             if self.verbose:
-                print(datum, file=sys.stderr)
+                print(self.datum, file=sys.stderr)
 
-            temp = datum.temp
+            temp = self.datum.temp
 
             # test criterion...
             return 10 < temp < 50

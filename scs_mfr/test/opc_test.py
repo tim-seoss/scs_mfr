@@ -44,13 +44,13 @@ class OPCTest(Test):
             opc.operations_on()
 
             # test...
-            firmware = opc.firmware()
+            self.datum = opc.firmware()
 
             if self.verbose:
-                print(firmware, file=sys.stderr)
+                print(self.datum, file=sys.stderr)
 
             # test criterion...
-            return len(firmware) > 0
+            return len(self.datum) > 0
 
         finally:
             if opc:

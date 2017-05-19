@@ -37,7 +37,7 @@ class Test(object):
 
 
     @datum.setter
-    def datum(self, value):             # because Python is a steaming pile of shit, as is its type checker
+    def datum(self, value):
         self.__datum = value
 
 

@@ -55,12 +55,13 @@ class RTCTest(Test):
             rtc_datetime = DS1338.get_time()
             localized_datetime = rtc_datetime.as_localized_datetime(tzlocal.get_localzone())
 
-            # TODO: print datum
+            if self.verbose:
+                print(self.datum, file=sys.stderr)
 
-            diff = localized_datetime - now
+            self.datum = localized_datetime - now
 
             # test criterion...
-            return diff.seconds >= 1
+            return self.datum.seconds >= 1
 
         finally:
             I2C.close()

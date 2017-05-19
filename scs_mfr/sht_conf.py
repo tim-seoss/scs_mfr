@@ -5,6 +5,14 @@ Created on 13 Dec 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
+SCS workflow:
+    1: ./rtc.py -i -s -v
+  > 2: ./sht_conf.py -i INT_ADDR -e EXT_ADDR -v
+    3: ./afe_calib -s AFE_SERIAL_NUMBER
+    4: ./afe_baseline.py -v -1 SN1_OFFSET -2 SN2_OFFSET -3 SN3_OFFSET -4 SN3_OFFSET
+
+Creates SHTConf document.
+
 example:
 {"int": "0x44", "ext": "0x45"}
 

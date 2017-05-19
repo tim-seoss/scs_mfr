@@ -48,13 +48,13 @@ class Pt1000Test(Test):
             afe = AFE(pt1000_conf, pt1000, [])
 
             # test...
-            datum = afe.sample_temp()
+            self.datum = afe.sample_temp()
 
             if self.verbose:
-                print(datum, file=sys.stderr)
+                print(self.datum, file=sys.stderr)
 
             # test criterion...
-            return 0.4 < datum.v < 0.6
+            return 0.4 < self.datum.v < 0.6
 
         finally:
             I2C.close()
