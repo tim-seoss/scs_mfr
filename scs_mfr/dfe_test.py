@@ -228,7 +228,7 @@ if __name__ == '__main__':
     if cmd.verbose:
         print(reporter, file=sys.stderr)
         print(reporter.result, file=sys.stderr)
-        print("-")
+        print("-", file=sys.stderr)
 
 
     # ----------------------------------------------------------------------------------------------------------------

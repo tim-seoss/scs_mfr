@@ -5,9 +5,9 @@ Created on 27 Feb 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-SCS workflow:
+calibration workflow:
     1: ./rtc.py -i -s -v
-    2: ./sht_conf.py -i INT_ADDR -e EXT_ADDR -v
+    2: ./pt1000_calib.py -s -v
   > 3: ./afe_calib -s AFE_SERIAL_NUMBER
     4: ./afe_baseline.py -v -1 SN1_OFFSET -2 SN2_OFFSET -3 SN3_OFFSET -4 SN3_OFFSET
 

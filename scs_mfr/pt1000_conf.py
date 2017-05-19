@@ -1,15 +1,21 @@
 #!/usr/bin/env python3
 
 """
-Created on 13 Dec 2016
+Created on 18 May 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-example:
-{"int": "0x44", "ext": "0x45"}
+configuration workflow:
+  > 1: ./pt1000_conf.py -a ADDR -v
+    2: ./sht_conf.py -i INT_ADDR -e EXT_ADDR -v
+
+Creates Pt1000Conf document.
+
+document example:
+{"addr": "0x69"}
 
 command line example:
-./sht_conf.py -v -i 0x44 -e 0x45
+./pt1000_conf.py -a 0x69 -v
 """
 
 import sys

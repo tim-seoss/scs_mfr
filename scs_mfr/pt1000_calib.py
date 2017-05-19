@@ -4,6 +4,20 @@
 Created on 1 Oct 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
+
+calibration workflow:
+    1: ./rtc.py -i -s -v
+  > 2: ./pt1000_calib.py -s -v
+    3: ./afe_calib -s AFE_SERIAL_NUMBER
+    4: ./afe_baseline.py -v -1 SN1_OFFSET -2 SN2_OFFSET -3 SN3_OFFSET -4 SN3_OFFSET
+
+Creates Pt1000Calib document.
+
+document example:
+{"calibrated_on": "2017-05-18", "v20": 0.508592}
+
+command line example:
+./pt1000_calib.py -v
 """
 
 import sys
