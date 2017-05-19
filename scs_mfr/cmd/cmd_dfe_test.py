@@ -16,7 +16,8 @@ class CmdDFETest(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog DFE_SERIAL_NUMBER [-e] [-g] [-n] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog DFE_SERIAL_NUMBER [-e] [-g] [-g] [-n] [-v]",
+                                              version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--eeprom", "-e", action="store_true", dest="ignore_eeprom", default=False,
@@ -24,6 +25,9 @@ class CmdDFETest(object):
 
         self.__parser.add_option("--gps", "-g", action="store_true", dest="ignore_gps", default=False,
                                  help="ignore GPS module")
+
+        self.__parser.add_option("--rtc", "-r", action="store_true", dest="ignore_rtc", default=False,
+                                 help="ignore real-time clock")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
@@ -58,6 +62,11 @@ class CmdDFETest(object):
 
 
     @property
+    def ignore_rtc(self):
+        return self.__opts.ignore_rtc
+
+
+    @property
     def verbose(self):
         return self.__opts.verbose
 
@@ -74,5 +83,7 @@ class CmdDFETest(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdDFETest:{dfe_serial_number:%s, ignore_eeprom:%s, ignore_gps:%s, verbose:%s, args:%s}" % \
-                    (self.dfe_serial_number, self.ignore_eeprom, self.ignore_gps, self.verbose, self.args)
+        return "CmdDFETest:{dfe_serial_number:%s, ignore_eeprom:%s, ignore_gps:%s, ignore_rtc:%s, " \
+               "verbose:%s, args:%s}" % \
+                    (self.dfe_serial_number, self.ignore_eeprom, self.ignore_gps, self.ignore_rtc,
+                     self.verbose, self.args)

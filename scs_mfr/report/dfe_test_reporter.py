@@ -61,14 +61,6 @@ class DFETestReporter(object):
         self.__passed = False
 
 
-    def report_result(self):
-        report = 'OK' if self.__passed else 'FAIL'
-
-        if self.__verbose:
-            print("result: %s" % report, file=sys.stderr)
-            print("-", file=sys.stderr)
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
@@ -79,6 +71,11 @@ class DFETestReporter(object):
     @property
     def subjects(self):
         return self.__subjects
+
+
+    @property
+    def result(self):
+        return 'OK' if self.__passed else 'FAIL'
 
 
     # ----------------------------------------------------------------------------------------------------------------

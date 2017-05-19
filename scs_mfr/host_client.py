@@ -5,10 +5,6 @@ Created on 18 Feb 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-SCS workflow:
-    1: ./afe_calib -s AFE_SERIAL_NUMBER
-    2: ./afe_baseline.py -v -1 SN1_OFFSET -2 SN2_OFFSET -3 SN3_OFFSET -4 SN3_OFFSET
-
 OpenSensors workflow:
     1: ./host_id.py
     2: ./system_id.py -s VENDOR_ID MODEL_ID MODEL_NAME CONFIG SYSTEM_SERIAL_NUMBER
@@ -22,7 +18,7 @@ Requires APIAuth and SystemID documents.
 Creates ClientAuth document.
 
 command line example:
-./host_client.py -s -u south-coast-science-test-user -l 50.823130 -0.122922 "BN2 0DA" -p -v
+./host_client.py -s -u south-coast-science-test-user -l 50.823130 -0.122922 "BN2 0DF" -p -v
 """
 
 import sys

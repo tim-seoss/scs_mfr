@@ -1,32 +1,32 @@
 #!/usr/bin/env python3
 
 """
-Created on 13 Dec 2016
+Created on 18 May 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 configuration workflow:
-    1: ./pt1000_conf.py -a ADDR -v
-  > 2: ./sht_conf.py -i INT_ADDR -e EXT_ADDR -v
+  > 1: ./pt1000_conf.py -a ADDR -v
+    2: ./sht_conf.py -i INT_ADDR -e EXT_ADDR -v
 
-Creates SHTConf document.
+Creates Pt1000Conf document.
 
-example:
-{"int": "0x44", "ext": "0x45"}
+document example:
+{"addr": "0x69"}
 
 command line example:
-./sht_conf.py -v -i 0x44 -e 0x45
+./pt1000_conf.py -a 0x69 -v
 """
 
 import sys
 
 from scs_core.data.json import JSONify
 
-from scs_dfe.climate.sht_conf import SHTConf
+from scs_dfe.gas.pt1000_conf import Pt1000Conf
 
 from scs_host.sys.host import Host
 
-from scs_mfr.cmd.cmd_sht_conf import CmdSHTConf
+from scs_mfr.cmd.cmd_pt1000_conf import CmdPt1000Conf
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -36,14 +36,14 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # resources...
 
-    # SHTConf...
-    conf = SHTConf.load_from_host(Host)
+    # Pt1000Conf...
+    conf = Pt1000Conf.load_from_host(Host)
 
 
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
-    cmd = CmdSHTConf()
+    cmd = CmdPt1000Conf()
 
     if not cmd.is_valid(conf):
         cmd.print_help(sys.stderr)
@@ -62,11 +62,7 @@ if __name__ == '__main__':
             cmd.print_help(sys.stderr)
             exit()
 
-        int_addr = cmd.int_addr if cmd.int_addr else conf.int_addr
-        ext_addr = cmd.ext_addr if cmd.ext_addr else conf.ext_addr
-
-        conf = SHTConf(int_addr, ext_addr)
-
+        conf = Pt1000Conf(cmd.addr)
         conf.save(Host)
 
     if conf:

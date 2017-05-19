@@ -14,7 +14,7 @@ import sys
 from scs_core.data.json import JSONify
 from scs_core.sys.exception_report import ExceptionReport
 
-from scs_dfe.network.socket_sender import SocketSender
+from scs_host.network.socket_sender import SocketSender
 
 from scs_mfr.cmd.cmd_socket_sender import CmdSocketSender
 
