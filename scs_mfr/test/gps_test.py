@@ -10,6 +10,9 @@ from scs_core.location.gprmc import GPRMC
 
 from scs_dfe.gps.pam7q import PAM7Q
 
+from scs_host.bus.i2c import I2C
+from scs_host.sys.host import Host
+
 from scs_mfr.test.test import Test
 
 
@@ -33,9 +36,11 @@ class GPSTest(Test):
             print("GPS...", file=sys.stderr)
 
         gps = None
-        
+
         try:
-            # resources...
+            I2C.open(Host.I2C_SENSORS)
+
+            # GPS...
             gps = PAM7Q()
 
             gps.power_on()
@@ -54,3 +59,5 @@ class GPSTest(Test):
             if gps:
                 gps.close()
                 gps.power_off()
+
+            I2C.close()
