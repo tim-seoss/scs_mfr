@@ -13,8 +13,14 @@ calibration workflow:
 
 Creates AFEBaseline document.
 
+document example:
+{"sn1": {"calibrated_on": "2017-04-24", "offset": 0}, 
+"sn2": {"calibrated_on": "2017-04-24", "offset": 0}, 
+"sn3": {"calibrated_on": "2017-04-24", "offset": 0}, 
+"sn4": {"calibrated_on": "2017-04-25", "offset": 30}}
+
 command line example:
-./afe_baseline.py -v -1 -22
+./afe_baseline.py -v -4 30
 """
 
 import datetime
