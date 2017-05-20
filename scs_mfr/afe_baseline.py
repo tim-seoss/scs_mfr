@@ -35,6 +35,8 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_afe_baseline import CmdAFEBaseline
 
 
+# TODO: add a "clear all baselines" function
+
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
