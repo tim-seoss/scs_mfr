@@ -14,8 +14,6 @@ from scs_core.sys.exception_report import ExceptionReport
 from scs_dfe.board.dfe_product_id import DFEProductID
 
 
-# TODO: rename as dfe_id
-
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
@@ -23,7 +21,7 @@ if __name__ == '__main__':
     try:
 
         # ------------------------------------------------------------------------------------------------------------
-        # resources...   scs_data
+        # resources...
 
         product_id = DFEProductID()
 
