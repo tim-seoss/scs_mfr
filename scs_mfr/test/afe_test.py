@@ -65,6 +65,7 @@ class AFETest(Test):
 
             # test criterion...
             for gas, sensor in self.datum.sns.items():
+                # noinspection PyTypeChecker,PyTypeChecker
                 sensor_ok = 0.9 < sensor.we_v < 1.1 and 0.9 < sensor.ae_v < 1.1
 
                 if not sensor_ok:
