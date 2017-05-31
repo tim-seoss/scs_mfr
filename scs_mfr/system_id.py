@@ -9,7 +9,7 @@ Warning: changing system ID components can cause host client access to fail.
 
 OpenSensors workflow:
     1: ./host_id.py
-  > 2: ./system_id.py -s VENDOR_ID MODEL_ID MODEL_NAME CONFIG SYSTEM_SERIAL_NUMBER
+  > 2: ./system_id.py -d VENDOR_ID -m MODEL_ID -n MODEL_NAME -c CONFIG -s SYSTEM_SERIAL_NUMBER -v
     3: ./api_auth.py -s ORG_ID API_KEY
 (   4: ./host_organisation.py -o ORG_ID -n NAME -w WEB -d DESCRIPTION -e EMAIL -v )
     5: ./host_client.py -s -u USER_ID -l LAT LNG POSTCODE -p
@@ -18,7 +18,7 @@ OpenSensors workflow:
 Creates SystemID document.
 
 command line example:
-./system_id.py -v -s SCS BGX Praxis BGX 111 
+./system_id.py -v -d SCS -m BGX -n Praxis -c BGX -s 111
 """
 
 import sys
