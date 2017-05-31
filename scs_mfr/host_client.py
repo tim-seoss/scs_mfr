@@ -41,8 +41,6 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_host_client import CmdHostClient
 
 
-# TODO: maybe we should use the device-type field?
-
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
