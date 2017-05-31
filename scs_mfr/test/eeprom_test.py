@@ -2,6 +2,8 @@
 Created on 18 May 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
+
+Note that this test updates the EEPROM contents.
 """
 
 import os.path
@@ -33,7 +35,7 @@ class EEPROMTest(Test):
     # ----------------------------------------------------------------------------------------------------------------
 
     def conduct(self):
-        if self.__verbose:
+        if self.verbose:
             print("EEPROM...", file=sys.stderr)
 
         # validate...
@@ -42,10 +44,10 @@ class EEPROMTest(Test):
             exit()
 
         try:
-            I2C.open(Host.I2C_EEPROM)
-
             # resources...
             Host.enable_eeprom_access()
+
+            I2C.open(Host.I2C_EEPROM)
 
             eeprom = CAT24C32()
 

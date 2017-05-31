@@ -9,7 +9,7 @@ Warning: changing system ID components can cause host client access to fail.
 
 OpenSensors workflow:
     1: ./host_id.py
-  > 2: ./system_id.py -s VENDOR_ID MODEL_ID MODEL_NAME CONFIG SYSTEM_SERIAL_NUMBER
+  > 2: ./system_id.py -d VENDOR_ID -m MODEL_ID -n MODEL_NAME -c CONFIG -s SYSTEM_SERIAL_NUMBER -v
     3: ./api_auth.py -s ORG_ID API_KEY
 (   4: ./host_organisation.py -o ORG_ID -n NAME -w WEB -d DESCRIPTION -e EMAIL -v )
     5: ./host_client.py -s -u USER_ID -l LAT LNG POSTCODE -p
@@ -18,7 +18,7 @@ OpenSensors workflow:
 Creates SystemID document.
 
 command line example:
-./system_id.py -v -s SCS BGX Praxis BGX 111 
+./system_id.py -v -d SCS -m BGX -n Praxis -c BGX -s 111
 """
 
 import sys
@@ -30,8 +30,6 @@ from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_system_id import CmdSystemID
 
-
-# TODO: enable user to set fields individually, if the document exists
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -48,13 +46,28 @@ if __name__ == '__main__':
 
 
     # ----------------------------------------------------------------------------------------------------------------
+    # resources...
+
+    # check for existing document...
+    system_id = SystemID.load_from_host(Host)
+
+
+    # ----------------------------------------------------------------------------------------------------------------
     # run...
 
     if cmd.set():
-        system_id = SystemID(cmd.vendor_id, cmd.model_id, cmd.model_name, cmd.configuration, cmd.serial_number)
+        if system_id is None and not cmd.is_complete():
+            cmd.print_help(sys.stderr)
+            exit()
+
+        vendor_id = system_id.vendor_id if cmd.vendor_id is None else cmd.vendor_id
+        model_id = system_id.model_id if cmd.model_id is None else cmd.model_id
+        model_name = system_id.model_name if cmd.model_name is None else cmd.model_name
+        configuration = system_id.configuration if cmd.configuration is None else cmd.configuration
+        serial_number = system_id.system_serial_number if cmd.serial_number is None else cmd.serial_number
+
+        system_id = SystemID(vendor_id, model_id, model_name, configuration, serial_number)
         system_id.save(Host)
-    else:
-        system_id = SystemID.load_from_host(Host)
 
     print(JSONify.dumps(system_id))
 

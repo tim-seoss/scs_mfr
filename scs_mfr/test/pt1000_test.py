@@ -54,6 +54,7 @@ class Pt1000Test(Test):
                 print(self.datum, file=sys.stderr)
 
             # test criterion...
+            # noinspection PyTypeChecker
             return 0.4 < self.datum.v < 0.6
 
         finally:
