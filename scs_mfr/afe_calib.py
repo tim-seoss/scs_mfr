@@ -24,7 +24,6 @@ from collections import OrderedDict
 
 from scs_core.data.json import JSONify
 from scs_core.gas.afe_calib import AFECalib
-from scs_core.sys.exception_report import ExceptionReport
 
 from scs_host.client.http_client import HTTPClient
 from scs_host.sys.host import Host
@@ -50,28 +49,26 @@ if __name__ == '__main__':
     # run...
 
     if cmd.set():
-        client = HTTPClient()
-        client.connect(AFECalib.HOST)
+        if cmd.test:
+            jstr = AFECalib.TEST_JSON
 
-        try:
-            path = AFECalib.PATH + cmd.serial_number
-            response = client.get(path, None, AFECalib.HEADER)
-            jdict = json.loads(response, object_pairs_hook=OrderedDict)
+        else:
+            client = HTTPClient()
+            client.connect(AFECalib.HOST)
 
-            calib = AFECalib.construct_from_jdict(jdict)
+            try:
+                path = AFECalib.PATH + cmd.serial_number
+                jstr = client.get(path, None, AFECalib.HEADER)
 
-            if calib is not None:
-                calib.save(Host)
+            finally:
+                client.close()
 
-        except RuntimeError as ex:
-            if cmd.verbose:
-                report = ExceptionReport.construct(ex)
-                print(JSONify.dumps(report.summary), file=sys.stderr)
+        jdict = json.loads(jstr, object_pairs_hook=OrderedDict)
 
-            calib = None
+        calib = AFECalib.construct_from_jdict(jdict)
 
-        finally:
-            client.close()
+        if calib is not None:
+            calib.save(Host)
 
     calib = AFECalib.load_from_host(Host)
 
