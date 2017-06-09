@@ -16,11 +16,14 @@ class CmdAFECalib(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-s AFE_SERIAL_NUMBER] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{-s AFE_SERIAL_NUMBER | -t}] [-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--set", "-s", type="string", nargs=1, action="store", dest="serial_number",
                                  help="set AFE serial number")
+
+        self.__parser.add_option("--test", "-t", action="store_true", dest="test", default=False,
+                                 help="set AFE to test load")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
@@ -30,8 +33,17 @@ class CmdAFECalib(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    def is_valid(self, org):
+        if self.serial_number is not None & self.test:
+            return False
+
+        return True
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
     def set(self):
-        return self.__opts.serial_number is not None
+        return self.serial_number is not None or self.test
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -39,6 +51,11 @@ class CmdAFECalib(object):
     @property
     def serial_number(self):
         return self.__opts.serial_number
+
+
+    @property
+    def test(self):
+        return self.__opts.test
 
 
     @property
@@ -53,6 +70,10 @@ class CmdAFECalib(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    def print_help(self, file):
+        self.__parser.print_help(file)
+
+
     def __str__(self, *args, **kwargs):
-        return "CmdAFECalib:{serial_number:%s, verbose:%s, args:%s}" % \
-               (self.serial_number, self.verbose, self.args)
+        return "CmdAFECalib:{serial_number:%s, test:%s, verbose:%s, args:%s}" % \
+               (self.serial_number, self.test, self.verbose, self.args)
