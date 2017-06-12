@@ -15,9 +15,12 @@ class CmdModem(object):
     """
 
     def __init__(self):
-        self.__parser = optparse.OptionParser(usage="%prog [SCRIPT] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [SCRIPT] [-l] [-v]", version="%prog 1.0")
 
         # optional...
+        self.__parser.add_option("--leds", "-l", action="store_true", dest="use_leds", default=False,
+                                 help="use modem LEDs")
+
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
 
@@ -29,6 +32,11 @@ class CmdModem(object):
     @property
     def script(self):
         return self.__args[0] if len(self.__args) > 0 else None
+
+
+    @property
+    def use_leds(self):
+        return self.__opts.use_leds
 
 
     @property
@@ -44,4 +52,5 @@ class CmdModem(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "CmdModem:{script:%s, verbose:%s, args:%s}" % (self.script, self.verbose, self.args)
+        return "CmdModem:{script:%s, use_leds:%s, verbose:%s, args:%s}" % \
+               (self.script, self.use_leds, self.verbose, self.args)

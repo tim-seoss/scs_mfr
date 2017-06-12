@@ -114,7 +114,7 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # resources...
 
-        modem = Modem(True)
+        modem = Modem()
         modem.switch_on()
 
         modem.setup_serial()
@@ -129,6 +129,14 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # run...
 
+        # LEDs...
+        if cmd.use_leds:
+            response = modem.execute(ATCommand.construct("AT#SLED=1"))
+
+            if cmd.verbose:
+                print(response, file=sys.stderr)
+
+        # commands...
         for command in sequencer.commands():
             start_time = time.time()
             response = modem.execute(command)
@@ -142,7 +150,7 @@ if __name__ == '__main__':
 
     except KeyboardInterrupt as ex:
         if cmd.verbose:
-            print("ge910: KeyboardInterrupt", file=sys.stderr)
+            print("modem: KeyboardInterrupt", file=sys.stderr)
 
     except Exception as ex:
         print(JSONify.dumps(ExceptionReport.construct(ex)), file=sys.stderr)
