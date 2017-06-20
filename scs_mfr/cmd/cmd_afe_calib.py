@@ -33,7 +33,7 @@ class CmdAFECalib(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def is_valid(self, org):
+    def is_valid(self):
         if self.serial_number is not None & self.test:
             return False
 
