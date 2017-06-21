@@ -8,6 +8,7 @@ Created on 13 Dec 2016
 configuration workflow:
     1: ./pt1000_conf.py -a ADDR -v
   > 2: ./sht_conf.py -i INT_ADDR -e EXT_ADDR -v
+    3: ./ndir_conf.py -p { 1 | 0 } -v
 
 Creates SHTConf document.
 
