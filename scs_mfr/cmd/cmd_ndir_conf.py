@@ -1,5 +1,5 @@
 """
-Created on 27 Feb 2017
+Created on 21 Jun 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
@@ -9,21 +9,18 @@ import optparse
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class CmdAFECalib(object):
+class CmdNDIRConf(object):
     """unix command line handler"""
 
     def __init__(self):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [{-s AFE_SERIAL_NUMBER | -t}] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [-p { 1 | 0 }] [-v]", version="%prog 1.0")
 
         # optional...
-        self.__parser.add_option("--set", "-s", type="string", nargs=1, action="store", dest="serial_number",
-                                 help="set AFE serial number")
-
-        self.__parser.add_option("--test", "-t", action="store_true", dest="test", default=False,
-                                 help="set AFE to test load")
+        self.__parser.add_option("--present", "-p", type="int", nargs=1, action="store", dest="present", default=None,
+                                 help="set NDIR as present or absent")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
@@ -34,28 +31,23 @@ class CmdAFECalib(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        if self.serial_number is not None & self.test:
-            return False
+        if self.__opts.present is None or self.__opts.present == 0 or self.__opts.present == 1:
+            return True
 
-        return True
+        return False
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def set(self):
-        return self.serial_number is not None or self.test
+        return self.__opts.present is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
-    def serial_number(self):
-        return self.__opts.serial_number
-
-
-    @property
-    def test(self):
-        return self.__opts.test
+    def present(self):
+        return bool(self.__opts.present)
 
 
     @property
@@ -75,5 +67,5 @@ class CmdAFECalib(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdAFECalib:{serial_number:%s, test:%s, verbose:%s, args:%s}" % \
-               (self.serial_number, self.test, self.verbose, self.args)
+        return "CmdNDIRConf:{present:%s, verbose:%s, args:%s}" % \
+                    (self.present, self.verbose, self.args)
