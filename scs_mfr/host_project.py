@@ -155,9 +155,8 @@ if __name__ == '__main__':
         existing_gases_topic = existing_gases_topics[0] if len(existing_gases_topics) else None
 
         if existing_gases_topic and existing_gases_topic.schema_id != gases_topic.schema_id:
-            print("Existing OpenSensors gases schema (%s) does not match device gases schema (%s)." %
+            print("warning: existing OpenSensors gases schema (%s) does not match device gases schema (%s)" %
                   (existing_gases_topic.schema_id, gases_topic.schema_id), file=sys.stderr)
-            exit()
 
         # set topics...
         creator.construct_topic(project.climate_topic_path(), ProjectTopic.CLIMATE)
