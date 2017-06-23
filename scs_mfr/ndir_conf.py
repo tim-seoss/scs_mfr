@@ -7,7 +7,8 @@ Created on 21 Jun 2017
 
 configuration workflow:
     1: ./pt1000_conf.py -a ADDR -v
-  > 2: ./sht_conf.py -i INT_ADDR -e EXT_ADDR -v
+    2: ./sht_conf.py -i INT_ADDR -e EXT_ADDR -v
+  > 3: ./ndir_conf.py -p { 1 | 0 } -v
 
 Creates NDIRConf document.
 
@@ -15,7 +16,7 @@ example:
 {"present": true}
 
 command line example:
-./ndir_conf.py -v -p 1
+./ndir_conf.py -p 1 -v
 """
 
 import sys

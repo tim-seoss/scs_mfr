@@ -154,9 +154,9 @@ if __name__ == '__main__':
         existing_gases_topics = manager.find_for_org(api_auth.org_id, project.gases_topic_path())
         existing_gases_topic = existing_gases_topics[0] if len(existing_gases_topics) else None
 
-        if existing_gases_topic and existing_gases_topic.schema.id != gases_topic.schema_id:
+        if existing_gases_topic and existing_gases_topic.schema_id != gases_topic.schema_id:
             print("Existing OpenSensors gases schema (%s) does not match device gases schema (%s)." %
-                  (existing_gases_topic.schema.id, gases_topic.schema_id), file=sys.stderr)
+                  (existing_gases_topic.schema_id, gases_topic.schema_id), file=sys.stderr)
             exit()
 
         # set topics...
