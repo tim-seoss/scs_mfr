@@ -14,19 +14,20 @@ calibration workflow:
 Creates AFEBaseline document.
 
 document example:
-{"sn1": {"calibrated_on": "2017-04-24", "offset": 0}, 
-"sn2": {"calibrated_on": "2017-04-24", "offset": 0}, 
-"sn3": {"calibrated_on": "2017-04-24", "offset": 0}, 
-"sn4": {"calibrated_on": "2017-04-25", "offset": 30}}
+{"sn1": {"calibrated_on": "2017-06-20T00:00:00.000+01:00", "offset": 0},
+"sn2": {"calibrated_on": "2017-06-20T00:00:00.000+01:00", "offset": 0},
+"sn3": {"calibrated_on": "2017-06-20T00:00:00.000+01:00", "offset": 0},
+"sn4": {"calibrated_on": "2017-06-20T00:00:00.000+01:00", "offset": 30}}
 
 command line example:
 ./afe_baseline.py -v -4 30
 """
 
-import datetime
 import sys
 
 from scs_core.data.json import JSONify
+from scs_core.data.localized_datetime import LocalizedDatetime
+
 from scs_core.gas.afe_baseline import AFEBaseline
 from scs_core.gas.sensor_baseline import SensorBaseline
 
@@ -34,8 +35,6 @@ from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_afe_baseline import CmdAFEBaseline
 
-
-# TODO: add a "clear all baselines" function
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -54,14 +53,14 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # run...
 
-    now = datetime.datetime.now()
+    now = LocalizedDatetime.now()
 
     baseline = AFEBaseline.load_from_host(Host)
 
     if cmd.set():
         for i, offset in cmd.offsets.items():
             if offset is not None:
-                baseline.set_sensor_baseline(i, SensorBaseline(now.date(), offset))
+                baseline.set_sensor_baseline(i, SensorBaseline(now, offset))
 
         baseline.save(Host)
 
