@@ -27,6 +27,8 @@ import datetime
 import sys
 
 from scs_core.data.json import JSONify
+from scs_core.data.localized_datetime import LocalizedDatetime
+
 from scs_core.gas.afe_baseline import AFEBaseline
 from scs_core.gas.sensor_baseline import SensorBaseline
 
@@ -61,7 +63,7 @@ if __name__ == '__main__':
     if cmd.set():
         for i, offset in cmd.offsets.items():
             if offset is not None:
-                baseline.set_sensor_baseline(i, SensorBaseline(now.date(), offset))
+                baseline.set_sensor_baseline(i, SensorBaseline(LocalizedDatetime.now(), offset))
 
         baseline.save(Host)
 
