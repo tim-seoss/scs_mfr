@@ -23,7 +23,6 @@ command line example:
 ./afe_baseline.py -v -4 30
 """
 
-import datetime
 import sys
 
 from scs_core.data.json import JSONify
@@ -36,8 +35,6 @@ from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_afe_baseline import CmdAFEBaseline
 
-
-# TODO: add a "clear all baselines" function
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -56,14 +53,14 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # run...
 
-    now = datetime.datetime.now()
+    now = LocalizedDatetime.now()
 
     baseline = AFEBaseline.load_from_host(Host)
 
     if cmd.set():
         for i, offset in cmd.offsets.items():
             if offset is not None:
-                baseline.set_sensor_baseline(i, SensorBaseline(LocalizedDatetime.now(), offset))
+                baseline.set_sensor_baseline(i, SensorBaseline(now, offset))
 
         baseline.save(Host)
 
