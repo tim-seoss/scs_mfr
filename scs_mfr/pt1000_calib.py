@@ -38,6 +38,8 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_pt1000_calib import CmdPt1000Calib
 
 
+# TODO change to use LocalisedDatetime, like afe_baseline
+
 # --------------------------------------------------------------------------------------------------------------------
 
 v20 = 0.295         # a "representative" v20 - we need this to kick the process off
