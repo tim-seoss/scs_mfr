@@ -10,7 +10,6 @@ import sys
 import time
 
 from scs_core.location.gpgga import GPGGA
-from scs_core.location.gpgsa import GPGSA
 from scs_core.location.gprmc import GPRMC
 from scs_core.location.gps_location import GPSLocation
 
@@ -21,39 +20,7 @@ from scs_dfe.gps.pam7q import PAM7Q
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
-
-# --------------------------------------------------------------------------------------------------------------------
-
-class GPSSampler(TimedRunner):
-    """
-    classdocs
-    """
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    def __init__(self, gps_module, interval, sample_count=None):
-        """
-        Constructor
-        """
-        TimedRunner.__init__(self, interval, sample_count)
-
-        self.__gps = gps_module
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    def sample(self):
-        self.__gps.open()
-        sample = self.__gps.report(GPGSA)
-        self.__gps.close()
-
-        return sample
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    def __str__(self, *args, **kwargs):
-        return "GPSSampler:{gps:%s}" % self.__gps
+from scs_mfr.sampler.gps_sampler import GPSSampler
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -71,7 +38,11 @@ if __name__ == '__main__':
         print("power on...")
         gps.power_on()
 
-        gps_sampler = GPSSampler(gps, 10)
+        # runner...
+        runner = TimedRunner(10)
+
+        # sampler...
+        gps_sampler = GPSSampler(runner, gps)
 
         print(gps_sampler, file=sys.stderr)
         sys.stderr.flush()
@@ -109,13 +80,11 @@ if __name__ == '__main__':
 
         loc = GPSLocation.construct(gga)
 
-
         print("time: %s" % rmc.datetime.as_iso8601())
         print(loc)
         print("elapsed: %ds" % elapsed)
 
         print("-")
-
 
     except KeyboardInterrupt as ex:
         print("pamq7_test: " + type(ex).__name__)
