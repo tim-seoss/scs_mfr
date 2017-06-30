@@ -13,7 +13,8 @@ from scs_core.location.gpgga import GPGGA
 from scs_core.location.gpgsa import GPGSA
 from scs_core.location.gprmc import GPRMC
 from scs_core.location.gps_location import GPSLocation
-from scs_core.sync.sampler import Sampler
+
+from scs_core.sync.timed_sampler import TimedSampler
 
 from scs_dfe.gps.pam7q import PAM7Q
 
@@ -23,7 +24,7 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class GPSSampler(Sampler):
+class GPSSampler(TimedSampler):
     """
     classdocs
     """
@@ -34,7 +35,7 @@ class GPSSampler(Sampler):
         """
         Constructor
         """
-        Sampler.__init__(self, interval, sample_count)
+        TimedSampler.__init__(self, interval, sample_count)
 
         self.__gps = gps_module
 

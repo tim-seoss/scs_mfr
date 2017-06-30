@@ -15,8 +15,11 @@ import sys
 
 from scs_core.data.json import JSONify
 from scs_core.data.localized_datetime import LocalizedDatetime
+
 from scs_core.sample.sample_datum import SampleDatum
-from scs_core.sync.sampler import Sampler
+
+from scs_core.sync.timed_sampler import TimedSampler
+
 from scs_core.sys.system_id import SystemID
 from scs_core.sys.exception_report import ExceptionReport
 
@@ -28,7 +31,7 @@ from scs_mfr.power.power_meter import PowerMeter
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class PowerSampler(Sampler):
+class PowerSampler(TimedSampler):
     """
     classdocs
     """
@@ -39,7 +42,7 @@ class PowerSampler(Sampler):
         """
         Constructor
         """
-        Sampler.__init__(self, interval, sample_count)
+        TimedSampler.__init__(self, interval, sample_count)
 
         self.__meter = PowerMeter()
         self.__meter.reset()
