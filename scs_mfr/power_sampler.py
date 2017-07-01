@@ -23,6 +23,7 @@ from scs_core.sync.timed_runner import TimedRunner
 from scs_core.sys.system_id import SystemID
 from scs_core.sys.exception_report import ExceptionReport
 
+from scs_host.sync.schedule_runner import ScheduleRunner
 from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_sampler import CmdSampler
@@ -40,7 +41,7 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # cmd...
 
-        cmd = CmdSampler(0.5)
+        cmd = CmdSampler()
 
         if cmd.verbose:
             print(cmd, file=sys.stderr)
@@ -59,8 +60,10 @@ if __name__ == '__main__':
         if cmd.verbose:
             print(system_id, file=sys.stderr)
 
+
         # runner...
-        runner = TimedRunner(cmd.interval, cmd.samples)
+        runner = TimedRunner(cmd.interval, cmd.samples) if cmd.semaphore is None \
+            else ScheduleRunner(cmd.semaphore, cmd.verbose)
 
         # sampler...
         sampler = PowerSampler(runner)
