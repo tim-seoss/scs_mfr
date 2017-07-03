@@ -24,6 +24,7 @@ from scs_core.data.json import JSONify
 from scs_core.sys.exception_report import ExceptionReport
 
 from scs_host.bus.i2c import I2C
+from scs_host.comms.stdio import StdIO
 from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_modem import CmdModem
@@ -54,14 +55,10 @@ class CommandSequencer(object):
 
         while True:
             if self.__script_name is None:
-                print("> ", end="")
-                sys.stdout.flush()
+                line = StdIO.prompt('> ')
 
-                line = self.__file.readline()
-                sys.stdout.flush()
-
-                if len(line) > 1:
-                    text = line.strip()
+                if len(line) > 0:
+                    text = line
 
             else:
                 line = self.__file.readline()

@@ -10,6 +10,7 @@ calibration workflow:
   > 2: ./pt1000_calib.py -s -v
     3: ./afe_calib -s AFE_SERIAL_NUMBER
     4: ./afe_baseline.py -v -1 SN1_OFFSET -2 SN2_OFFSET -3 SN3_OFFSET -4 SN3_OFFSET
+    5: ./schedule.py [{-s NAME INTERVAL COUNT | -c NAME }] [-v]
 
 Creates Pt1000Calib document.
 
@@ -37,6 +38,8 @@ from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_pt1000_calib import CmdPt1000Calib
 
+
+# TODO change to use LocalisedDatetime, like afe_baseline
 
 # --------------------------------------------------------------------------------------------------------------------
 
