@@ -5,10 +5,12 @@ Created on 18 May 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-configuration workflow:
+Act I of III: Configuration workflow:
+
   > 1: ./pt1000_conf.py -a ADDR -v
     2: ./sht_conf.py -i INT_ADDR -e EXT_ADDR -v
     3: ./ndir_conf.py -p { 1 | 0 } -v
+    4: ./schedule.py [{-s NAME INTERVAL COUNT | -c NAME }] [-v]
 
 Creates Pt1000Conf document.
 
@@ -22,17 +24,24 @@ command line example:
 import sys
 
 from scs_core.data.json import JSONify
-
 from scs_dfe.gas.pt1000_conf import Pt1000Conf
-
 from scs_host.sys.host import Host
-
 from scs_mfr.cmd.cmd_pt1000_conf import CmdPt1000Conf
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
+
+    # ----------------------------------------------------------------------------------------------------------------
+    # cmd...
+
+    cmd = CmdPt1000Conf()
+
+    if cmd.verbose:
+        print(cmd, file=sys.stderr)
+        sys.stderr.flush()
+
 
     # ----------------------------------------------------------------------------------------------------------------
     # resources...
@@ -42,17 +51,12 @@ if __name__ == '__main__':
 
 
     # ----------------------------------------------------------------------------------------------------------------
-    # cmd...
+    # validate...
 
-    cmd = CmdPt1000Conf()
-
-    if not cmd.is_valid(conf):
+    if conf is None and cmd.set() and not cmd.is_complete():
+        print("No configuration is stored. pt1000_conf must therefore set an address:", file=sys.stderr)
         cmd.print_help(sys.stderr)
         exit()
-
-    if cmd.verbose:
-        print(cmd, file=sys.stderr)
-        sys.stderr.flush()
 
 
     # ----------------------------------------------------------------------------------------------------------------
