@@ -29,7 +29,9 @@ import sys
 
 from scs_core.data.json import JSONify
 from scs_core.sys.system_id import SystemID
+
 from scs_host.sys.host import Host
+
 from scs_mfr.cmd.cmd_system_id import CmdSystemID
 
 
