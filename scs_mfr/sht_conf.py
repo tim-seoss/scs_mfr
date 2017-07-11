@@ -24,8 +24,11 @@ command line example:
 import sys
 
 from scs_core.data.json import JSONify
+
 from scs_dfe.climate.sht_conf import SHTConf
+
 from scs_host.sys.host import Host
+
 from scs_mfr.cmd.cmd_sht_conf import CmdSHTConf
 
 
@@ -54,7 +57,7 @@ if __name__ == '__main__':
     # validate...
 
     if conf is None and cmd.set() and not cmd.is_complete():
-        print("No configuration is stored. sht_conf must therefore set both addresses:", file=sys.stderr)
+        print("No configuration is stored. sht_conf should therefore set both addresses:", file=sys.stderr)
         cmd.print_help(sys.stderr)
         exit()
 

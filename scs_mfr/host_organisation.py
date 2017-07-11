@@ -78,7 +78,7 @@ if __name__ == '__main__':
     # validate...
 
     if org is None and not cmd.is_complete():
-        print("No organisation is registered. host_organisation must therefore set all fields:", file=sys.stderr)
+        print("No organisation is registered. host_organisation should therefore set all fields:", file=sys.stderr)
         cmd.print_help(sys.stderr)
         exit()
 

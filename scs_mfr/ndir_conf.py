@@ -9,8 +9,9 @@ Act I of III: Configuration workflow:
 
     1: ./pt1000_conf.py -a ADDR -v
     2: ./sht_conf.py -i INT_ADDR -e EXT_ADDR -v
-  > 3: ./ndir_conf.py -p { 1 | 0 } -v
-    4: ./schedule.py [{-s NAME INTERVAL COUNT | -c NAME }] [-v]
+    3: ./opc_conf.py -s SAMPLE_PERIOD -p { 0 | 1 } -v
+  > 4: ./ndir_conf.py -p { 1 | 0 } -v
+    5: ./schedule.py [{-s NAME INTERVAL COUNT | -c NAME }] [-v]
 
 Creates NDIRConf document.
 

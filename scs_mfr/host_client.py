@@ -101,9 +101,10 @@ if __name__ == '__main__':
     # validate...
 
     if device is None and not cmd.is_complete():
-        print("No device is registered. host_client must therefore set user and location:", file=sys.stderr)
+        print("No device is registered. host_client should therefore set user and location:", file=sys.stderr)
         cmd.print_help(sys.stderr)
         exit()
+
 
     # ----------------------------------------------------------------------------------------------------------------
     # run...
