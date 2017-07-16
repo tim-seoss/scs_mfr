@@ -26,9 +26,12 @@ command line example:
 import sys
 
 from scs_core.data.json import JSONify
+
 from scs_core.sync.schedule import Schedule
 from scs_core.sync.schedule import ScheduleItem
+
 from scs_host.sys.host import Host
+
 from scs_mfr.cmd.cmd_schedule import CmdSchedule
 
 

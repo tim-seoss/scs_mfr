@@ -26,8 +26,11 @@ command line example:
 import sys
 
 from scs_core.data.json import JSONify
+
 from scs_dfe.gas.pt1000_conf import Pt1000Conf
+
 from scs_host.sys.host import Host
+
 from scs_mfr.cmd.cmd_pt1000_conf import CmdPt1000Conf
 
 
