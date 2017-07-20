@@ -21,8 +21,10 @@ Creates ClientAuth document.
 document example:
 {"user_id": "southcoastscience-dev", "client-id": "5403", "client-password": "rtxSrK2f"}
 
-command line example:
+command line examples:
 ./host_client.py -s -u south-coast-science-test-user -l 50.823130 -0.122922 "BN2 0DF" -p -v
+./host_client.py -s -u southcoastscience-dev -l 51.865448 0.521049 CM77 7AA -p -v
+./host_client.py -s -u southcoastscience-dev -l 52.197832 0.125050 CB2 1EW -p -v
 """
 
 import sys
@@ -44,6 +46,8 @@ from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_host_client import CmdHostClient
 
+
+# TODO: use OPCConf to determine whether particulates are included
 
 # --------------------------------------------------------------------------------------------------------------------
 

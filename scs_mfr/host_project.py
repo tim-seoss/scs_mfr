@@ -46,6 +46,8 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_host_project import CmdHostProject
 
 
+# TODO: use OPCConf to determine whether particulates are included
+
 # --------------------------------------------------------------------------------------------------------------------
 
 class HostProject(object):
