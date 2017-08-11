@@ -4,7 +4,7 @@ Created on 30 Jun 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
-from scs_core.location.gpgsa import GPGSA
+from scs_core.position.gpgsa import GPGSA
 from scs_core.sampler.sampler import Sampler
 
 

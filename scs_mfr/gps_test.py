@@ -9,9 +9,9 @@ Created on 17 Feb 2017
 import sys
 import time
 
-from scs_core.location.gpgga import GPGGA
-from scs_core.location.gprmc import GPRMC
-from scs_core.location.gps_location import GPSLocation
+from scs_core.position.gpgga import GPGGA
+from scs_core.position.gprmc import GPRMC
+from scs_core.position.gps_location import GPSLocation
 
 from scs_core.sync.timed_runner import TimedRunner
 
