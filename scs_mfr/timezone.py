@@ -15,7 +15,7 @@ Act III of III: Deployment workflow:
     6: ./host_project.py -s GROUP LOCATION_ID
   > 7: ./timezone.py -v -s ZONE
 
-Creates Timezone document.
+Creates TimezoneConf document.
 
 document example:
 {"set-on": "2017-08-12T11:20:28.740+00:00", "name": "Europe/London"}
@@ -88,5 +88,5 @@ if __name__ == '__main__':
     print(JSONify.dumps(conf))
 
     if cmd.verbose:
-        print(JSONify.dumps(conf.timezone()))
+        print(JSONify.dumps(conf.timezone()), file=sys.stderr)
 
