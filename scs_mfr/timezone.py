@@ -5,8 +5,6 @@ Created on 12 Aug 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Act I of III: Configuration workflow:
-
 Act III of III: Deployment workflow:
 
     1: ./host_id.py
