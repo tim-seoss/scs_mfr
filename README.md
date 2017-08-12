@@ -32,7 +32,7 @@ PYTHONPATH=\~/SCS/scs_dev:\~/SCS/scs_osio:\~/SCS/scs_mfr:\~/SCS/scs_psu:\~/SCS/s
 
 
 
-Act I of III: Configuration workflow:
+Act I: Configuration workflow:
 
     1: ./afe_conf.py -p { 1 | 0 } -v
     2: ./pt1000_conf.py -a ADDR -v
@@ -44,7 +44,7 @@ Act I of III: Configuration workflow:
     8: ./schedule.py [{-s NAME INTERVAL COUNT | -c NAME }] [-v]
 
 
-Act II of III: Calibration workflow:
+Act II: Calibration workflow:
 
     1: ./rtc.py -i -s -v
     2: ./pt1000_calib.py -s -v
@@ -52,7 +52,7 @@ Act II of III: Calibration workflow:
     4: ./afe_baseline.py -v -1 SN1_OFFSET -2 SN2_OFFSET -3 SN3_OFFSET -4 SN3_OFFSET
 
 
-Act III of III: Deployment workflow:
+Act III: Deployment workflow:
 
     1: ./host_id.py
     2: ./system_id.py -d VENDOR_ID -m MODEL_ID -n MODEL_NAME -c CONFIG -s SYSTEM_SERIAL_NUMBER -v
