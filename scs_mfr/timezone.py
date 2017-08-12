@@ -81,7 +81,7 @@ if __name__ == '__main__':
             conf.save(Host)
 
     elif cmd.link:
-        if not conf.uses_system_name():
+        if not conf.uses_system_name() or conf.set_on is None:
             conf = TimezoneConf(now, None)
             conf.save(Host)
 
