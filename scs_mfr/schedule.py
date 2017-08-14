@@ -63,6 +63,11 @@ if __name__ == '__main__':
 
     if cmd.set():
         item = ScheduleItem(cmd.name, cmd.interval, cmd.count)
+
+        # if not item.is_valid():
+        #     print("Item is not valid: %s" % item)
+        #     exit(1)
+
         schedule.set(item)
         schedule.save(Host)
 
