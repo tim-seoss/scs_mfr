@@ -187,13 +187,13 @@ if __name__ == '__main__':
     print(JSONify.dumps(project))
 
     # report...
-    if cmd.verbose:
+    if cmd.verbose and project is not None:
         print("-", file=sys.stderr)
 
         print("     gases_project: %s" % gases_topic, file=sys.stderr)
         print("-", file=sys.stderr)
 
-        found = manager.find(project.climate_topic_path())
+        found = manager.find(project.climate_topic_path())      # TODO: not if project is None!!
 
         if found is not None:
             print("     climate_topic: %s" % found.path, file=sys.stderr)
