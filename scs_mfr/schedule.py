@@ -20,7 +20,7 @@ Creates Schedule document.
 
 document example:
 {"scs-climate": {"interval": 60.0, "tally": 1}, "scs-gases": {"interval": 10.0, "tally": 1},
-"scs-status": {"interval": 60.0, "tally": 1}, "scs-particulates": {"interval": 10.0, "tally": 1}}
+"scs-particulates": {"interval": 10.0, "tally": 1}, "scs-status": {"interval": 60.0, "tally": 1}}
 
 command line example:
 ./schedule.py -s scs-climate 10.0 1
