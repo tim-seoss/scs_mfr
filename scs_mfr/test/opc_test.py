@@ -5,6 +5,7 @@ Created on 18 May 2017
 """
 
 import sys
+import time
 
 from scs_dfe.particulate.opc_n2 import OPCN2
 
@@ -13,6 +14,8 @@ from scs_host.sys.host import Host
 
 from scs_mfr.test.test import Test
 
+
+# TODO: should reject the string "000000000000000000000000000000000000000000000000000000000000"
 
 # --------------------------------------------------------------------------------------------------------------------
 
