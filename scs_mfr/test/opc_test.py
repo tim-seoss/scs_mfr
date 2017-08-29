@@ -15,8 +15,6 @@ from scs_host.sys.host import Host
 from scs_mfr.test.test import Test
 
 
-# TODO: should reject the string "000000000000000000000000000000000000000000000000000000000000"
-
 # --------------------------------------------------------------------------------------------------------------------
 
 class OPCTest(Test):
@@ -53,7 +51,7 @@ class OPCTest(Test):
                 print(self.datum, file=sys.stderr)
 
             # test criterion...
-            return len(self.datum) > 0
+            return len(self.datum) > 0 and self.datum.startswith('OPC')
 
         finally:
             if opc:
