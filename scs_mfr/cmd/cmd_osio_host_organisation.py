@@ -7,6 +7,8 @@ Created on 8 Apr 2017
 import optparse
 
 
+# TODO: didn't work for south-cost-science-demo
+
 # --------------------------------------------------------------------------------------------------------------------
 
 class CmdOSIOHostOrganisation(object):
