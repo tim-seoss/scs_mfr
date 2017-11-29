@@ -21,6 +21,7 @@ Creates SystemID document.
 
 document example:
 {"vendor-id": "scs", "model-id": "ap1", "model": "Alpha Pi Eng", "config": "V1", "system-sn": 6}
+{"vendor-id": "SCS", "model-id": "BGX", "model": "Praxis", "config": "BGX", "system-sn": 401}
 
 command line example:
 ./system_id.py -v -d SCS -m BGX -n Praxis -c BGX -s 111
