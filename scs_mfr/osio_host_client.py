@@ -50,6 +50,8 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_osio_host_client import CmdOSIOHostClient
 
 
+# TODO: rename as osio_device_auth
+
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
@@ -116,10 +118,16 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # validate...
 
-    if device is None and not cmd.is_complete():
-        print("No device is registered. host_client must therefore set a user and location:", file=sys.stderr)
-        cmd.print_help(sys.stderr)
-        exit(1)
+    # TODO: check whether remote device and local client auth match
+
+    if device is None:
+        if cmd.set() and not cmd.is_complete():
+            print("No device is registered. osio_host_client must therefore set a user and location:", file=sys.stderr)
+            cmd.print_help(sys.stderr)
+            exit(1)
+
+        if not cmd.set():
+            exit(0)
 
 
     # ----------------------------------------------------------------------------------------------------------------
