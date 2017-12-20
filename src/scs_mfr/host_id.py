@@ -5,7 +5,7 @@ Created on 16 Apr 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-WARNING: for Raspberry Pi, the host ID appears to be derrived from the MAC address of the active interface.
+WARNING: for Raspberry Pi, the host ID appears to be derived from the MAC address of the active interface.
 
 Act III of III: Deployment workflow:
 
