@@ -39,7 +39,8 @@ class OPCTest(Test):
             I2C.open(Host.I2C_SENSORS)
 
             # resources...
-            opc = OPCN2()
+            opc = OPCN2(Host.OPC_SPI_BUS, Host.OPC_SPI_DEVICE)
+
             opc.power_on()
             opc.operations_on()
 
