@@ -13,23 +13,24 @@ High-level scripts and command-line applications for South Coast Science environ
 
 **Example PYTHONPATH:**
 
-**Raspberry Pi, in /home/pi/.bashrc:**
+Raspberry Pi, in /home/pi/.bashrc:
 
     export PYTHONPATH=\~/SCS/scs_analysis/src:\~/SCS/scs_dev/src:\~/SCS/scs_osio/src:\~/SCS/scs_mfr/src:\~/SCS/scs_dfe_eng/src:\~/SCS/scs_ndir_alphasense/src:\~/SCS/scs_host_rpi/src:\~/SCS/scs_core/src:$PYTHONPATH
 
 
-**BeagleBone, in /root/.bashrc:**
+BeagleBone, in /root/.bashrc:
 
     export PYTHONPATH=/home/debian/SCS/scs_dev/src:/home/debian/SCS/scs_osio/src:/home/debian/SCS/scs_mfr/src:/home/debian/SCS/scs_psu/src:/home/debian/SCS/scs_comms_ge910/src:/home/debian/SCS/scs_dfe_eng/src:/home/debian/SCS/scs_ndir_alphasense/src:/home/debian/SCS/scs_host_bbe/src:/home/debian/SCS/scs_core/src:$PYTHONPATH
 
 
-**BeagleBone, in /home/debian/.bashrc:**
+BeagleBone, in /home/debian/.bashrc:
 
     export PYTHONPATH=\~/SCS/scs_dev/src:\~/SCS/scs_osio/src:\~/SCS/scs_mfr/src:\~/SCS/scs_psu/src:\~/SCS/scs_comms_ge910/src:\~/SCS/scs_dfe_eng/src:\~/SCS/scs_ndir_alphasense/src:\~/SCS/scs_host_bbe/src:\~/SCS/scs_core/src:$PYTHONPATH
 
 
+**Configuration workflow**
 
-Act I: Configuration workflow:
+Part 1 of 3: Configuration:
 
     1: ./afe_conf.py -p { 1 | 0 } -v
     2: ./pt1000_conf.py -a ADDR -v
@@ -41,7 +42,7 @@ Act I: Configuration workflow:
     8: ./schedule.py [{-s NAME INTERVAL COUNT | -c NAME }] [-v]
 
 
-Act II: Calibration workflow:
+Part 2 of 3: Calibration:
 
     1: ./rtc.py -i -s -v 
     2: ./afe_calib -s AFE_SERIAL_NUMBER
@@ -49,7 +50,7 @@ Act II: Calibration workflow:
     4: ./afe_baseline.py -v -1 SN1_OFFSET -2 SN2_OFFSET -3 SN3_OFFSET -4 SN3_OFFSET
 
 
-Act III: Deployment workflow:
+Part 3 of 3: Deployment:
 
     1: ./host_id.py (requires superuser)
     2: ./system_id.py -d VENDOR_ID -m MODEL_ID -n MODEL_NAME -c CONFIG -s SYSTEM_SERIAL_NUMBER -v
