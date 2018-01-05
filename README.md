@@ -50,7 +50,7 @@ Part 2 of 3: Calibration:
     4: ./afe_baseline.py -v -1 SN1_OFFSET -2 SN2_OFFSET -3 SN3_OFFSET -4 SN3_OFFSET
 
 
-Part 3 of 3: Deployment:
+Part 3 of 3: Communication:
 
     1: ./host_id.py (requires superuser)
     2: ./system_id.py -d VENDOR_ID -m MODEL_ID -n MODEL_NAME -c CONFIG -s SYSTEM_SERIAL_NUMBER -v
