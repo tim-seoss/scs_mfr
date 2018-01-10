@@ -5,13 +5,13 @@ Created on 13 Jul 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Act I of III: Configuration workflow:
+Part 1 of 3: Configuration:
 
     1: ./afe_conf.py -p { 1 | 0 } -v
     2: ./pt1000_conf.py -a ADDR -v
     3: ./sht_conf.py -i INT_ADDR -e EXT_ADDR -v
   > 4: ./opc_conf.py -m MODEL -s SAMPLE_PERIOD -p { 0 | 1 } -v
-    5: ./psu_conf.py -p { 1 | 0 } -v
+    5: ./psu_conf.py -m { PrototypeV1 | OsloV1 } -v
     6: ./ndir_conf.py -p { 1 | 0 } -v
     7: ./gps_conf.py -m MODEL -v
     8: ./schedule.py [{-s NAME INTERVAL COUNT | -c NAME }] [-v]
