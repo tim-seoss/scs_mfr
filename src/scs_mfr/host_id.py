@@ -7,7 +7,7 @@ Created on 16 Apr 2017
 
 WARNING: for Raspberry Pi, the host ID appears to be derived from the MAC address of the active interface.
 
-Act III of III: Deployment workflow:
+Part 3 of 3: Deployment:
 
   > 1: ./host_id.py
     2: ./system_id.py -d VENDOR_ID -m MODEL_ID -n MODEL_NAME -c CONFIG -s SYSTEM_SERIAL_NUMBER -v

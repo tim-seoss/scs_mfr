@@ -7,7 +7,7 @@ Created on 17 Feb 2017
 
 Warning: changing system ID components can cause host client access to fail.
 
-Act III of III: Deployment workflow:
+Part 3 of 3: Deployment:
 
     1: ./host_id.py
   > 2: ./system_id.py -d VENDOR_ID -m MODEL_ID -n MODEL_NAME -c CONFIG -s SYSTEM_SERIAL_NUMBER -v

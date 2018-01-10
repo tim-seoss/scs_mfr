@@ -5,7 +5,7 @@ Created on 27 Feb 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Act II of III: Calibration workflow:
+Part 2 of 3: Calibration:
 
 (   1: ./rtc.py -i -s -v )
   > 2: ./afe_calib -s AFE_SERIAL_NUMBER
