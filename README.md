@@ -1,6 +1,8 @@
 # scs_mfr
 High-level scripts and command-line applications for South Coast Science environmental monitor manufacturing, test and calibration.
 
+_Contains command line utilities and library classes._
+
 **Required libraries:** 
 
 * Third party: paho-mqtt, pyserial
