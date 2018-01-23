@@ -7,11 +7,12 @@ with open('requirements.txt') as req_txt:
 setup(
     name='scs_mfr',
     version='0.1.0',
-    description='High-level scripts and command-line applications for South Coast Science environmental monitor manufacturing, test and calibration.',
+    description='High-level scripts and command-line applications for South Coast Science environmental monitor \
+    manufacturing, test and calibration.',
     author='South Coast Science',
     author_email='contact@southcoastscience.com',
     url='https://github.com/south-coast-science/scs_mfr',
-    package_dir={'':'src'},
+    package_dir={'': 'src'},
     packages=find_packages('src'),
     classifiers=[
         'Development Status :: 4 - Beta',
