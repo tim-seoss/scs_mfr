@@ -10,8 +10,6 @@ example document:
 import optparse
 
 
-# TODO: help text for --set looks funny
-
 # --------------------------------------------------------------------------------------------------------------------
 
 class CmdOSIOAPIAuth(object):
