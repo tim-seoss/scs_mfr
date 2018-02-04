@@ -16,7 +16,7 @@ class CmdPSUConf(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [{-m { PrototypeV1 | OsloV1 } | -x}] [-v]",
+        self.__parser = optparse.OptionParser(usage="%prog [{-m { PrototypeV1 | OsloV1 } | -r}] [-v]",
                                               version="%prog 1.0")
 
         # optional...
