@@ -10,10 +10,9 @@ Part 3 of 3: Deployment:
     1: ./host_id.py
     2: ./system_id.py -d VENDOR_ID -m MODEL_ID -n MODEL_NAME -c CONFIG -s SYSTEM_SERIAL_NUMBER -v
     3: ./osio_api_auth.py -s ORG_ID API_KEY
-(   4: ./osio_host_organisation.py -o ORG_ID -n NAME -w WEB -d DESCRIPTION -e EMAIL -v )
-  > 5: ./osio_host_client.py -u USER_ID -l LAT LNG POSTCODE
-    6: ./osio_host_project.py -s GROUP LOCATION_ID
-    7: ./timezone.py -v -s ZONE
+  > 4: ./osio_client_auth.py -u USER_ID -l LAT LNG POSTCODE
+    5: ./osio_host_project.py -s GROUP LOCATION_ID
+    6: ./timezone.py -v -s ZONE
 
 Requires APIAuth and SystemID documents.
 
@@ -22,10 +21,8 @@ Creates ClientAuth document.
 document example:
 {"user_id": "southcoastscience-dev", "client-id": "5403", "client-password": "rtxSrK2f"}
 
-command line examples:
-./osio_host_client.py -u south-coast-science-test-user -l 50.823130 -0.122922 "BN2 0DF" -v
-./osio_host_client.py -u southcoastscience-dev -l 51.865448 0.521049 CM77 7AA -v
-./osio_host_client.py -u southcoastscience-dev -l 52.197832 0.125050 CB2 1EW -v
+command line example:
+./osio_client_auth.py -u south-coast-science-test-user -l 50.823130 -0.122922 "BN2 0DF" -v
 """
 
 import sys
@@ -49,8 +46,6 @@ from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_osio_host_client import CmdOSIOHostClient
 
-
-# TODO: rename as osio_device_auth
 
 # --------------------------------------------------------------------------------------------------------------------
 
