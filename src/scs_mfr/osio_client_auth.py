@@ -44,7 +44,7 @@ from scs_dfe.particulate.opc_conf import OPCConf
 from scs_host.client.http_client import HTTPClient
 from scs_host.sys.host import Host
 
-from scs_mfr.cmd.cmd_osio_host_client import CmdOSIOHostClient
+from scs_mfr.cmd.cmd_osio_client_auth import CmdOSIOClientAuth
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -54,7 +54,7 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
-    cmd = CmdOSIOHostClient()
+    cmd = CmdOSIOClientAuth()
 
     if cmd.verbose:
         print(cmd, file=sys.stderr)
