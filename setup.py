@@ -38,7 +38,7 @@ setup(
         'src/scs_mfr/ndir_conf.py',
         'src/scs_mfr/opc_conf.py',
         'src/scs_mfr/osio_api_auth.py',
-        'src/scs_mfr/osio_host_client.py',
+        'src/scs_mfr/osio_client_auth.py',
         'src/scs_mfr/osio_host_organisation.py',
         'src/scs_mfr/osio_host_project.py',
         'src/scs_mfr/psu_conf.py',
