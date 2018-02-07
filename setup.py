@@ -6,7 +6,7 @@ with open('requirements.txt') as req_txt:
 
 setup(
     name='scs_mfr',
-    version='0.1.2',
+    version='0.1.3',
     description='High-level scripts and command-line applications for South Coast Science environmental monitor manufacturing, test and calibration.',
     author='South Coast Science',
     author_email='contact@southcoastscience.com',
@@ -38,7 +38,7 @@ setup(
         'src/scs_mfr/ndir_conf.py',
         'src/scs_mfr/opc_conf.py',
         'src/scs_mfr/osio_api_auth.py',
-        'src/scs_mfr/osio_host_client.py',
+        'src/scs_mfr/osio_client_auth.py',
         'src/scs_mfr/osio_host_organisation.py',
         'src/scs_mfr/osio_host_project.py',
         'src/scs_mfr/psu_conf.py',
