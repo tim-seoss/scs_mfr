@@ -13,7 +13,7 @@ Part 3 of 3: Deployment:
     2: ./system_id.py -d VENDOR_ID -m MODEL_ID -n MODEL_NAME -c CONFIG -s SYSTEM_SERIAL_NUMBER -v
     3: ./osio_api_auth.py -s ORG_ID API_KEY
     4: ./osio_client_auth.py -u USER_ID -l LAT LNG POSTCODE
-    5: ./osio_host_project.py -s GROUP LOCATION_ID
+    5: ./osio_host_project.py -v -s GROUP LOCATION_ID
     6: ./timezone.py -v -s ZONE
 
 command line example:
