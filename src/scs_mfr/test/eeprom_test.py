@@ -39,7 +39,7 @@ class EEPROMTest(Test):
             print("EEPROM...", file=sys.stderr)
 
         # validate...
-        if not os.path.isfile(Host.DFE_EEP_IMAGE):
+        if not os.path.isfile(Host.eep_image()):
             print("error: eeprom image not found", file=sys.stderr)
             exit(1)
 
@@ -52,7 +52,7 @@ class EEPROMTest(Test):
             eeprom = CAT24C32()
 
             # test...
-            file_image = EEPROMImage.construct_from_file(Host.DFE_EEP_IMAGE, CAT24C32.SIZE)
+            file_image = EEPROMImage.construct_from_file(Host.eep_image(), CAT24C32.SIZE)
             eeprom.write(file_image)
 
             # test criterion...
