@@ -36,6 +36,8 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_opc_conf import CmdOPCConf
 
 
+# TODO: needs a way of indicating "no OPC"
+
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
