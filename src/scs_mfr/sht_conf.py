@@ -74,8 +74,8 @@ if __name__ == '__main__':
             cmd.print_help(sys.stderr)
             exit(1)
 
-        int_addr = cmd.int_addr if cmd.int_addr else conf.int_addr
-        ext_addr = cmd.ext_addr if cmd.ext_addr else conf.ext_addr
+        int_addr = cmd.int_addr if cmd.int_addr is not None else conf.int_addr
+        ext_addr = cmd.ext_addr if cmd.ext_addr is not None else conf.ext_addr
 
         conf = SHTConf(int_addr, ext_addr)
 
