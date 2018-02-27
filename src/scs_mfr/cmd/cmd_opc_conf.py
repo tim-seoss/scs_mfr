@@ -70,7 +70,7 @@ class CmdOPCConf(object):
 
     @property
     def power_saving(self):
-        return bool(self.__opts.power_saving) if self.__opts.power_saving is not None else None
+        return None if self.__opts.power_saving is None else bool(self.__opts.power_saving)
 
 
     @property

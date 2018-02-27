@@ -47,7 +47,7 @@ class CmdNDIRConf(object):
 
     @property
     def present(self):
-        return bool(self.__opts.present) if self.__opts.present is not None else None
+        return None if self.__opts.present is None else bool(self.__opts.present)
 
 
     @property

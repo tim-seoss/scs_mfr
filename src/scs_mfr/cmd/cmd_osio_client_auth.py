@@ -65,17 +65,17 @@ class CmdOSIOClientAuth(object):
 
     @property
     def lat(self):
-        return self.__opts.lat_lng_postcode[0] if self.__opts.lat_lng_postcode else None
+        return None if self.__opts.lat_lng_postcode is None else self.__opts.lat_lng_postcode[0]
 
 
     @property
     def lng(self):
-        return self.__opts.lat_lng_postcode[1] if self.__opts.lat_lng_postcode else None
+        return None if self.__opts.lat_lng_postcode is None else self.__opts.lat_lng_postcode[1]
 
 
     @property
     def postcode(self):
-        return self.__opts.lat_lng_postcode[2] if self.__opts.lat_lng_postcode else None
+        return None if self.__opts.lat_lng_postcode is None else self.__opts.lat_lng_postcode[2]
 
 
     @property

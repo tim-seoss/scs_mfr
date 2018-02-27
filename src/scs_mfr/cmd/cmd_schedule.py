@@ -71,12 +71,12 @@ class CmdSchedule(object):
 
     @property
     def interval(self):
-        return self.__opts.set[1] if self.__opts.set is not None else None
+        return None if self.__opts.set is None else self.__opts.set[1]
 
 
     @property
     def count(self):
-        return self.__opts.set[2] if self.__opts.set is not None else None
+        return None if self.__opts.set is None else self.__opts.set[2]
 
 
     @property
