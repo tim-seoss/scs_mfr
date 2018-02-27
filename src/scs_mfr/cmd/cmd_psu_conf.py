@@ -52,9 +52,6 @@ class CmdPSUConf(object):
 
     @property
     def model(self):
-        if self.__opts.remove:
-            return None
-
         return self.__opts.model
 
 
