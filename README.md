@@ -42,14 +42,13 @@ BeagleBone, in /home/debian/.bashrc:
 
 Part 1 of 3: Configuration:
 
-    1: ./afe_conf.py -p { 1 | 0 } -v
-    2: ./pt1000_conf.py -a ADDR -v
-    3: ./sht_conf.py -i INT_ADDR -e EXT_ADDR -v
-    4: ./opc_conf.py -m MODEL -s SAMPLE_PERIOD -p { 0 | 1 } -v
-    5: ./psu_conf.py -m { PrototypeV1 | OsloV1 } -v
-    6: ./ndir_conf.py -p { 1 | 0 } -v
-    7: ./gps_conf.py -m MODEL -v
-    8: ./schedule.py [{-s NAME INTERVAL COUNT | -c NAME }] [-v]
+    1: ./dfe_conf.py -v -s -p PT1000_ADDR
+    2: ./sht_conf.py -v -i INT_ADDR -e EXT_ADDR
+    3: ./ndir_conf.py -v -m MODEL
+    4: ./opc_conf.py -v -m MODEL -s SAMPLE_PERIOD -p { 0 | 1 }
+    5: ./psu_conf.py -v -m MODEL
+    6: ./gps_conf.py -v -m MODEL
+    7: ./schedule.py -v [{-s NAME INTERVAL COUNT | -c NAME }]
 
 
 Part 2 of 3: Calibration:
