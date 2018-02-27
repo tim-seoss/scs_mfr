@@ -5,10 +5,14 @@ Created on 13 Dec 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
+SHT
+    Internal I2C addr or None
+    External I2C addr or None
+
 Part 1 of 3: Configuration:
 
     1: ./afe_conf.py -p { 1 | 0 } -v
-    2: ./pt1000_conf.py -a ADDR -v
+    2: ./dfe_conf.py -a ADDR -v
   > 3: ./sht_conf.py -i INT_ADDR -e EXT_ADDR -v
     4: ./opc_conf.py -m MODEL -s SAMPLE_PERIOD -p { 0 | 1 } -v
     5: ./psu_conf.py -m { PrototypeV1 | OsloV1 } -v

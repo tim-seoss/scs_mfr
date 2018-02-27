@@ -1,5 +1,5 @@
 """
-Created on 13 Jul 2016
+Created on 27 Feb 2018
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
@@ -9,7 +9,7 @@ import optparse
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class CmdPt1000Conf(object):
+class CmdDFEConf(object):
     """
     unix command line handler
     """
@@ -27,11 +27,17 @@ class CmdPt1000Conf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self):
-        self.__parser = optparse.OptionParser(usage="%prog [-a ADDR] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ -s [-p ADDR] | -d }] [-v]", version="%prog 1.0")
 
         # optional...
-        self.__parser.add_option("--addr", "-a", type="int", nargs=1, action="store", dest="addr", default=None,
-                                 help="set I2C address of the Pt1000 ADC (required if conf has not yet been set)")
+        self.__parser.add_option("--set", "-s", action="store_true", dest="set",
+                                 help="create a DFE configuration")
+
+        self.__parser.add_option("--pt1000", "-p", type="int", nargs=1, action="store", dest="pt1000", default=None,
+                                 help="set I2C address of the Pt1000 ADC (if present)")
+
+        self.__parser.add_option("--delete", "-d", action="store_true", dest="delete",
+                                 help="delete the DFE configuration")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
@@ -41,22 +47,31 @@ class CmdPt1000Conf(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def is_complete(self):
-        if self.addr is None:
+    def is_valid(self):
+        if self.set is not None and self.delete is not None:
+            return False
+
+        if self.set is None and self.pt1000_addr is not None:
             return False
 
         return True
 
 
-    def set(self):
-        return self.addr is not None
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
-    def addr(self):
-        return self.__opts.addr
+    def set(self):
+        return self.__opts.set
+
+
+    @property
+    def pt1000_addr(self):
+        return self.__opts.pt1000
+
+
+    @property
+    def delete(self):
+        return self.__opts.delete
 
 
     @property
@@ -76,5 +91,5 @@ class CmdPt1000Conf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdPt1000Conf:{addr:%s, verbose:%s, args:%s}" % \
-               (CmdPt1000Conf.__addr_str(self.addr), self.verbose, self.args)
+        return "CmdDFEConf:{set:%s, pt1000:%s, delete:%s, verbose:%s, args:%s}" % \
+               (self.set, CmdDFEConf.__addr_str(self.pt1000_addr), self.delete, self.verbose, self.args)
