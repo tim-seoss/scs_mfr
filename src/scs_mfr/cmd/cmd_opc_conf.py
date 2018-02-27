@@ -17,8 +17,8 @@ class CmdOPCConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self):
-        self.__parser = optparse.OptionParser(usage="%prog [-m MODEL] [-s SAMPLE_PERIOD] [-p { 0 | 1 }] [-v]",
-                                              version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ [-m MODEL] [-s SAMPLE_PERIOD] [-p { 0 | 1 }] | -d }] "
+                                                    "[-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--model", "-m", type="string", nargs=1, action="store", dest="model",
@@ -30,6 +30,9 @@ class CmdOPCConf(object):
         self.__parser.add_option("--power-saving", "-p", type="int", nargs=1, action="store", dest="power_saving",
                                  help="set power saving mode (required if conf has not yet been set)")
 
+        self.__parser.add_option("--delete", "-d", action="store_true", dest="delete",
+                                 help="delete the OPC configuration")
+
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
 
@@ -39,6 +42,9 @@ class CmdOPCConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
+        if self.set() and self.delete:
+            return False
+
         if self.__opts.power_saving is None or self.__opts.power_saving == 0 or self.__opts.power_saving == 1:
             return True
 
@@ -74,6 +80,11 @@ class CmdOPCConf(object):
 
 
     @property
+    def delete(self):
+        return self.__opts.delete
+
+
+    @property
     def verbose(self):
         return self.__opts.verbose
 
@@ -90,5 +101,5 @@ class CmdOPCConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdOPCConf:{model:%s, sample_period:%s, ext_addr:%s, verbose:%s, args:%s}" % \
-               (self.model, self.sample_period, self.power_saving, self.verbose, self.args)
+        return "CmdOPCConf:{model:%s, sample_period:%s, ext_addr:%s, delete:%s, verbose:%s, args:%s}" % \
+               (self.model, self.sample_period, self.power_saving, self.delete, self.verbose, self.args)

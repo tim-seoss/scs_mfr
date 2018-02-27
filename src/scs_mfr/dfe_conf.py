@@ -8,15 +8,15 @@ Created on 27 Feb 2018
 
 Part 1 of 3: Configuration:
 
-  > 1: ./dfe_conf.py -v -p 0x69
-    2: ./sht_conf.py -i INT_ADDR -e EXT_ADDR -v
-    3: ./opc_conf.py -m MODEL -s SAMPLE_PERIOD -p { 0 | 1 } -v
-    4: ./psu_conf.py -m { PrototypeV1 | OsloV1 } -v
-    5: ./ndir_conf.py -p { 1 | 0 } -v
-    6: ./gps_conf.py -m MODEL -v
-    7: ./schedule.py [{-s NAME INTERVAL COUNT | -c NAME }] [-v]
+  > 1: ./dfe_conf.py -v -s -p PT1000_ADDR
+    2: ./sht_conf.py -v -i INT_ADDR -e EXT_ADDR
+    3: ./ndir_conf.py -v -m MODEL
+    4: ./opc_conf.py -v -m MODEL -s SAMPLE_PERIOD -p { 0 | 1 }
+    5: ./psu_conf.py -v -m MODEL
+    6: ./gps_conf.py -v -m MODEL
+    7: ./schedule.py -v [{-s NAME INTERVAL COUNT | -c NAME }]
 
-Creates DFEConf document.
+Creates or deletes DFEConf document.
 
 document example:
 {"pt1000-addr": "0x69"}
@@ -64,7 +64,7 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # run...
 
-    if cmd.set:
+    if cmd.set():
         conf = DFEConf(cmd.pt1000_addr)
         conf.save(Host)
 

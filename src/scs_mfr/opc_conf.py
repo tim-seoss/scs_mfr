@@ -12,16 +12,15 @@ OPC
 
 Part 1 of 3: Configuration:
 
-    1: ./afe_conf.py -p { 1 | 0 } -v
-    2: ./dfe_conf.py -a ADDR -v
-    3: ./sht_conf.py -i INT_ADDR -e EXT_ADDR -v
-  > 4: ./opc_conf.py -m MODEL -s SAMPLE_PERIOD -p { 0 | 1 } -v
-    5: ./psu_conf.py -m { PrototypeV1 | OsloV1 } -v
-    6: ./ndir_conf.py -p { 1 | 0 } -v
-    7: ./gps_conf.py -m MODEL -v
-    8: ./schedule.py [{-s NAME INTERVAL COUNT | -c NAME }] [-v]
+    1: ./dfe_conf.py -v -s -p PT1000_ADDR
+    2: ./sht_conf.py -v -i INT_ADDR -e EXT_ADDR
+    3: ./ndir_conf.py -v -m MODEL
+  > 4: ./opc_conf.py -v -m MODEL -s SAMPLE_PERIOD -p { 0 | 1 }
+    5: ./psu_conf.py -v -m MODEL
+    6: ./gps_conf.py -v -m MODEL
+    7: ./schedule.py -v [{-s NAME INTERVAL COUNT | -c NAME }]
 
-Creates OPCConf document.
+Creates or deletes OPCConf document.
 
 document example:
 {"model": "N2", "sample-period": 10, "power-saving": false}
@@ -40,8 +39,6 @@ from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_opc_conf import CmdOPCConf
 
-
-# TODO: needs a way of indicating "no OPC"
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -90,8 +87,11 @@ if __name__ == '__main__':
         power_saving = cmd.power_saving if cmd.power_saving is not None else conf.power_saving
 
         conf = OPCConf(model, sample_period, power_saving)
-
         conf.save(Host)
+
+    elif cmd.delete:
+        conf.delete(Host)
+        conf = None
 
     if conf:
         print(JSONify.dumps(conf))
