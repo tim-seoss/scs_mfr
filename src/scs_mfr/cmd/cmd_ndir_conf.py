@@ -16,11 +16,15 @@ class CmdNDIRConf(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [{ -m MODEL | -d }] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ [-m MODEL] [-a AVERAGING_PERIOD] | -d }] [-v]",
+                                              version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--model", "-m", type="string", nargs=1, action="store", dest="model",
                                  help="set the NDIR MODEL")
+
+        self.__parser.add_option("--avg-period", "-a", type="int", nargs=1, action="store", dest="avg_period",
+                                 help="set the averaging period")
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete",
                                  help="delete the NDIR configuration")
@@ -40,8 +44,15 @@ class CmdNDIRConf(object):
         return True
 
 
+    def is_complete(self):
+        if self.model is None or self.avg_period is None:
+            return False
+
+        return True
+
+
     def set(self):
-        return self.__opts.model
+        return self.__opts.model is not None or self.__opts.avg_period is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -49,6 +60,11 @@ class CmdNDIRConf(object):
     @property
     def model(self):
         return self.__opts.model
+
+
+    @property
+    def avg_period(self):
+        return self.__opts.avg_period
 
 
     @property
@@ -73,5 +89,5 @@ class CmdNDIRConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdNDIRConf:{model:%s, delete:%s, verbose:%s, args:%s}" % \
-                    (self.model, self.delete, self.verbose, self.args)
+        return "CmdNDIRConf:{model:%s, avg_period:%s, delete:%s, verbose:%s, args:%s}" % \
+                    (self.model, self.avg_period, self.delete, self.verbose, self.args)

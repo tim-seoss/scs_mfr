@@ -12,7 +12,7 @@ Part 1 of 3: Configuration:
 
     1: ./dfe_conf.py -v -s -p PT1000_ADDR
     2: ./sht_conf.py -v -i INT_ADDR -e EXT_ADDR
-  > 3: ./ndir_conf.py -v -m MODEL
+  > 3: ./ndir_conf.py -v -m MODEL -a AVERAGING_PERIOD
     4: ./opc_conf.py -v -m MODEL -s SAMPLE_PERIOD -p { 0 | 1 }
     5: ./psu_conf.py -v -m MODEL
     6: ./gps_conf.py -v -m MODEL
@@ -43,13 +43,6 @@ from scs_ndir.gas.ndir_conf import NDIRConf
 if __name__ == '__main__':
 
     # ----------------------------------------------------------------------------------------------------------------
-    # resources...
-
-    # NDIRConf...
-    conf = NDIRConf.load(Host)
-
-
-    # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
     cmd = CmdNDIRConf()
@@ -64,10 +57,25 @@ if __name__ == '__main__':
 
 
     # ----------------------------------------------------------------------------------------------------------------
+    # resources...
+
+    # NDIRConf...
+    conf = NDIRConf.load(Host)
+
+
+    # ----------------------------------------------------------------------------------------------------------------
     # run...
 
     if cmd.set():
-        conf = NDIRConf(cmd.model)
+        if conf is None and not cmd.is_complete():
+            print("No configuration is stored. ndir_conf must therefore set all fields:", file=sys.stderr)
+            cmd.print_help(sys.stderr)
+            exit(1)
+
+        model = cmd.model if cmd.model else conf.model
+        avg_period = cmd.avg_period if cmd.avg_period else conf.avg_period
+
+        conf = NDIRConf(model, avg_period)
         conf.save(Host)
 
     elif cmd.delete:
