@@ -73,7 +73,7 @@ if __name__ == '__main__':
             exit(1)
 
         model = cmd.model if cmd.model else conf.model
-        tally = cmd.tally if cmd.tally else conf.avg_period
+        tally = cmd.tally if cmd.tally else conf.tally
 
         conf = NDIRConf(model, tally)
         conf.save(Host)
