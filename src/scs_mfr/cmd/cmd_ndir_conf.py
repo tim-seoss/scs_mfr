@@ -16,15 +16,15 @@ class CmdNDIRConf(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [{ [-m MODEL] [-a AVERAGING_PERIOD] | -d }] [-v]",
+        self.__parser = optparse.OptionParser(usage="%prog [{ [-m MODEL] [-t AVERAGING_TALLY] | -d }] [-v]",
                                               version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--model", "-m", type="string", nargs=1, action="store", dest="model",
                                  help="set the NDIR MODEL")
 
-        self.__parser.add_option("--avg-period", "-a", type="int", nargs=1, action="store", dest="avg_period",
-                                 help="set the averaging period")
+        self.__parser.add_option("--tally", "-t", type="int", nargs=1, action="store", dest="tally",
+                                 help="set the averaging tally")
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete",
                                  help="delete the NDIR configuration")
@@ -45,14 +45,14 @@ class CmdNDIRConf(object):
 
 
     def is_complete(self):
-        if self.model is None or self.avg_period is None:
+        if self.model is None or self.tally is None:
             return False
 
         return True
 
 
     def set(self):
-        return self.__opts.model is not None or self.__opts.avg_period is not None
+        return self.__opts.model is not None or self.__opts.tally is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -63,8 +63,8 @@ class CmdNDIRConf(object):
 
 
     @property
-    def avg_period(self):
-        return self.__opts.avg_period
+    def tally(self):
+        return self.__opts.tally
 
 
     @property
@@ -89,5 +89,5 @@ class CmdNDIRConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdNDIRConf:{model:%s, avg_period:%s, delete:%s, verbose:%s, args:%s}" % \
-                    (self.model, self.avg_period, self.delete, self.verbose, self.args)
+        return "CmdNDIRConf:{model:%s, tally:%s, delete:%s, verbose:%s, args:%s}" % \
+                    (self.model, self.tally, self.delete, self.verbose, self.args)
