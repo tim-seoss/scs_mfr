@@ -21,7 +21,7 @@ Part 1 of 3: Configuration:
 Creates or deletes NDIRConf document.
 
 document example:
-{"model": "PrototypeV1"}
+{"model": "Prototype1", "avg-period": 10}
 
 command line example:
 ./ndir_conf.py -p 1 -v
