@@ -29,8 +29,8 @@ from scs_core.gas.pt1000_calib import Pt1000Calib
 
 from scs_core.sys.exception_report import ExceptionReport
 
+from scs_dfe.board.dfe_conf import DFEConf
 from scs_dfe.climate.sht_conf import SHTConf
-from scs_dfe.gas.afe_conf import AFEConf
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -68,8 +68,8 @@ if __name__ == '__main__':
         sht = sht_conf.int_sht()
 
         # AFE...
-        afe_conf = AFEConf.load(Host)
-        afe = afe_conf.afe(Host)
+        dfe_conf = DFEConf.load(Host)
+        afe = dfe_conf.afe(Host)
 
 
         # ------------------------------------------------------------------------------------------------------------
@@ -82,7 +82,7 @@ if __name__ == '__main__':
             print(sht_datum, file=sys.stderr)
 
         # Pt1000 initial...
-        pt1000_datum = afe.sample_temp()
+        pt1000_datum = afe.sample_pt1000()
 
         if cmd.set:
             # Pt1000 correction...
@@ -97,8 +97,8 @@ if __name__ == '__main__':
         print(JSONify.dumps(pt1000_calib))
 
         if cmd.verbose:
-            afe = afe_conf.afe(Host)
-            pt1000_datum = afe.sample_temp()
+            afe = dfe_conf.afe(Host)
+            pt1000_datum = afe.sample_pt1000()
 
             print(pt1000_datum, file=sys.stderr)
 

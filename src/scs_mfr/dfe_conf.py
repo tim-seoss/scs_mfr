@@ -1,41 +1,39 @@
 #!/usr/bin/env python3
 
 """
-Created on 21 Jun 2017
+Created on 27 Feb 2018
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-GPS
-    Model or None
 
 Part 1 of 3: Configuration:
 
-    1: ./dfe_conf.py -v -s -p PT1000_ADDR
+  > 1: ./dfe_conf.py -v -s -p PT1000_ADDR
     2: ./sht_conf.py -v -i INT_ADDR -e EXT_ADDR
     3: ./ndir_conf.py -v -m MODEL -t AVERAGING_TALLY
     4: ./opc_conf.py -v -m MODEL -s SAMPLE_PERIOD -p { 0 | 1 }
     5: ./psu_conf.py -v -m MODEL
-  > 6: ./gps_conf.py -v -m MODEL
+    6: ./gps_conf.py -v -m MODEL
     7: ./schedule.py -v [{-s NAME INTERVAL COUNT | -c NAME }]
 
-Creates or deletes GPSConf document.
+Creates or deletes DFEConf document.
 
 document example:
-{"model": "PAM7Q"}
+{"pt1000-addr": "0x69"}
 
 command line example:
-./gps_conf.py -m PAM7Q -v
+./dfe_conf.py -v -p 0x69
 """
 
 import sys
 
 from scs_core.data.json import JSONify
 
-from scs_dfe.gps.gps_conf import GPSConf
+from scs_dfe.board.dfe_conf import DFEConf
 
 from scs_host.sys.host import Host
 
-from scs_mfr.cmd.cmd_gps_conf import CmdGPSConf
+from scs_mfr.cmd.cmd_dfe_conf import CmdDFEConf
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -43,16 +41,13 @@ from scs_mfr.cmd.cmd_gps_conf import CmdGPSConf
 if __name__ == '__main__':
 
     # ----------------------------------------------------------------------------------------------------------------
-    # resources...
-
-    # GPSConf...
-    conf = GPSConf.load(Host)
-
-
-    # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
-    cmd = CmdGPSConf()
+    cmd = CmdDFEConf()
+
+    if not cmd.is_valid():
+        cmd.print_help(sys.stderr)
+        exit(2)
 
     if cmd.verbose:
         print(cmd, file=sys.stderr)
@@ -60,10 +55,17 @@ if __name__ == '__main__':
 
 
     # ----------------------------------------------------------------------------------------------------------------
+    # resources...
+
+    # DFEConf...
+    conf = DFEConf.load(Host)
+
+
+    # ----------------------------------------------------------------------------------------------------------------
     # run...
 
     if cmd.set():
-        conf = GPSConf(cmd.model)
+        conf = DFEConf(cmd.pt1000_addr)
         conf.save(Host)
 
     elif cmd.delete:

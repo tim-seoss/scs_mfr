@@ -16,11 +16,18 @@ class CmdNDIRConf(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-p { 1 | 0 }] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ [-m MODEL] [-t AVERAGING_TALLY] | -d }] [-v]",
+                                              version="%prog 1.0")
 
         # optional...
-        self.__parser.add_option("--present", "-p", type="int", nargs=1, action="store", dest="present",
-                                 help="set NDIR as present or absent")
+        self.__parser.add_option("--model", "-m", type="string", nargs=1, action="store", dest="model",
+                                 help="set the NDIR MODEL")
+
+        self.__parser.add_option("--tally", "-t", type="int", nargs=1, action="store", dest="tally",
+                                 help="set the averaging tally")
+
+        self.__parser.add_option("--delete", "-d", action="store_true", dest="delete",
+                                 help="delete the NDIR configuration")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
@@ -31,23 +38,38 @@ class CmdNDIRConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        if self.__opts.present is None or self.__opts.present == 0 or self.__opts.present == 1:
-            return True
+        if self.__opts.model is not None and self.delete:
+            return False
 
-        return False
+        return True
 
 
-    # ----------------------------------------------------------------------------------------------------------------
+    def is_complete(self):
+        if self.model is None or self.tally is None:
+            return False
+
+        return True
+
 
     def set(self):
-        return self.present is not None
+        return self.__opts.model is not None or self.__opts.tally is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
-    def present(self):
-        return bool(self.__opts.present) if self.__opts.present is not None else None
+    def model(self):
+        return self.__opts.model
+
+
+    @property
+    def tally(self):
+        return self.__opts.tally
+
+
+    @property
+    def delete(self):
+        return self.__opts.delete
 
 
     @property
@@ -67,5 +89,5 @@ class CmdNDIRConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdNDIRConf:{present:%s, verbose:%s, args:%s}" % \
-                    (self.present, self.verbose, self.args)
+        return "CmdNDIRConf:{model:%s, tally:%s, delete:%s, verbose:%s, args:%s}" % \
+                    (self.model, self.tally, self.delete, self.verbose, self.args)

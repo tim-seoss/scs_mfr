@@ -16,15 +16,15 @@ class CmdPSUConf(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [{-m { PrototypeV1 | OsloV1 } | -r}] [-v]",
+        self.__parser = optparse.OptionParser(usage="%prog [{ -m MODEL | -d }] [-v]",
                                               version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--model", "-m", type="string", nargs=1, action="store", dest="model",
-                                 help="set PSU model")
+                                 help="set PSU model (may be PrototypeV1 or OsloV1)")
 
-        self.__parser.add_option("--remove", "-r", action="store_true", dest="remove", default=False,
-                                 help="remove PSU model")
+        self.__parser.add_option("--delete", "-d", action="store_true", dest="delete",
+                                 help="delete the PSU configuration")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
@@ -35,7 +35,7 @@ class CmdPSUConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        if self.__opts.remove and self.__opts.model is not None:
+        if self.model is not None and self.delete:
             return False
 
         if self.__opts.model is not None and self.__opts.model != 'PrototypeV1' and self.__opts.model != 'OsloV1':
@@ -44,20 +44,20 @@ class CmdPSUConf(object):
         return True
 
 
-    # ----------------------------------------------------------------------------------------------------------------
-
     def set(self):
-        return self.__opts.remove or self.__opts.model is not None
+        return self.__opts.model
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
     def model(self):
-        if self.__opts.remove:
-            return None
-
         return self.__opts.model
+
+
+    @property
+    def delete(self):
+        return self.__opts.delete
 
 
     @property
@@ -77,4 +77,5 @@ class CmdPSUConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdPSUConf:{model:%s, verbose:%s, args:%s}" % (self.model, self.verbose, self.args)
+        return "CmdPSUConf:{model:%s, delete:%s, verbose:%s, args:%s}" % \
+               (self.model, self.delete, self.verbose, self.args)

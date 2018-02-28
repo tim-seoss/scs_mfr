@@ -51,12 +51,12 @@ class CmdOSIOHostProject(object):
 
     @property
     def group(self):
-        return self.__opts.group_location[0] if self.__opts.group_location is not None else None
+        return None if self.__opts.group_location is None else self.__opts.group_location[0]
 
 
     @property
     def location_id(self):
-        return self.__opts.group_location[1] if self.__opts.group_location is not None else None
+        return None if self.__opts.group_location is None else self.__opts.group_location[1]
 
 
     @property

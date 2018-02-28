@@ -6,9 +6,11 @@ Created on 18 May 2017
 
 import sys
 
-from scs_dfe.gas.afe_conf import AFEConf
+from scs_dfe.board.dfe_conf import DFEConf
+
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
+
 from scs_mfr.test.test import Test
 
 
@@ -35,8 +37,8 @@ class AFETest(Test):
             I2C.open(Host.I2C_SENSORS)
 
             # AFE...
-            afe_conf = AFEConf.load(Host)
-            afe = afe_conf.afe(Host)
+            dfe_conf = DFEConf.load(Host)
+            afe = dfe_conf.afe(Host)
 
             # test...
             self.datum = afe.sample()

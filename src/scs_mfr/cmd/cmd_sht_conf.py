@@ -27,7 +27,8 @@ class CmdSHTConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self):
-        self.__parser = optparse.OptionParser(usage="%prog [-i INT_ADDR] [-e EXT_ADDR] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ [-i INT_ADDR] [-e EXT_ADDR] | -d }] [-v]",
+                                              version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--int-addr", "-i", type="int", nargs=1, action="store", dest="int_addr", default=None,
@@ -36,6 +37,9 @@ class CmdSHTConf(object):
         self.__parser.add_option("--ext-addr", "-e", type="int", nargs=1, action="store", dest="ext_addr", default=None,
                                  help="set I2C address of SHT exposed to air (required if conf has not yet been set)")
 
+        self.__parser.add_option("--delete", "-d", action="store_true", dest="delete",
+                                 help="delete the SHT configuration")
+
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
 
@@ -43,6 +47,13 @@ class CmdSHTConf(object):
 
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    def is_valid(self):
+        if self.set() and self.delete:
+            return False
+
+        return True
+
 
     def is_complete(self):
         if self.int_addr is None or self.ext_addr is None:
@@ -68,6 +79,11 @@ class CmdSHTConf(object):
 
 
     @property
+    def delete(self):
+        return self.__opts.delete
+
+
+    @property
     def verbose(self):
         return self.__opts.verbose
 
@@ -84,5 +100,6 @@ class CmdSHTConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdSHTConf:{int_addr:%s, ext_addr:%s, verbose:%s, args:%s}" % \
-               (CmdSHTConf.__addr_str(self.int_addr), CmdSHTConf.__addr_str(self.ext_addr), self.verbose, self.args)
+        return "CmdSHTConf:{int_addr:%s, ext_addr:%s, delete:%s, verbose:%s, args:%s}" % \
+               (CmdSHTConf.__addr_str(self.int_addr), CmdSHTConf.__addr_str(self.ext_addr),
+                self.delete, self.verbose, self.args)

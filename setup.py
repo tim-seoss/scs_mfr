@@ -44,7 +44,7 @@ setup(
         'src/scs_mfr/osio_host_project.py',
         'src/scs_mfr/psu_conf.py',
         'src/scs_mfr/pt1000_calib.py',
-        'src/scs_mfr/pt1000_conf.py',
+        'src/scs_mfr/dfe_conf.py',
         'src/scs_mfr/rtc.py',
         'src/scs_mfr/schedule.py',
         'src/scs_mfr/sht_conf.py',
