@@ -158,6 +158,8 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # run...
 
+    include_particulates = False if opc_conf is None else opc_conf.has_monitor()
+
     # set...
     if cmd.set():
         project = Project.construct(api_auth.org_id, cmd.group, cmd.location_id)
@@ -174,7 +176,7 @@ if __name__ == '__main__':
         creator.construct_topic(project.climate_topic_path(), ProjectTopic.CLIMATE)
         creator.construct_topic(project.gases_topic_path(), gases_topic)
 
-        if opc_conf.has_monitor():
+        if include_particulates:
             creator.construct_topic(project.particulates_topic_path(), ProjectTopic.PARTICULATES)
 
         creator.construct_topic(project.status_topic_path(system_id), ProjectTopic.STATUS)
@@ -202,12 +204,13 @@ if __name__ == '__main__':
         if found is not None:
             print("       gases_topic: %s" % found.path, file=sys.stderr)
 
-        found = manager.find(project.particulates_topic_path())
+        if include_particulates:
+            found = manager.find(project.particulates_topic_path())
 
-        if found is not None:
-            print("particulates_topic: %s" % found.path, file=sys.stderr)
+            if found is not None:
+                print("particulates_topic: %s" % found.path, file=sys.stderr)
 
-        found = manager.find(project.status_topic_path(system_id))
+            found = manager.find(project.status_topic_path(system_id))
 
         if found is not None:
             print("      status_topic: %s" % found.path, file=sys.stderr)
