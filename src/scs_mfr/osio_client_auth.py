@@ -138,7 +138,8 @@ if __name__ == '__main__':
                 exit(1)
 
         # tags...
-        tags = ProjectSource.tags(afe_calib, opc_conf.has_monitor())
+        include_particulates = False if opc_conf is None else opc_conf.has_monitor()
+        tags = ProjectSource.tags(afe_calib, include_particulates)
 
         if device:
             if cmd.user_id:
