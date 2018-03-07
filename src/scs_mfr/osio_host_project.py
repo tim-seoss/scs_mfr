@@ -48,6 +48,8 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_osio_host_project import CmdOSIOHostProject
 
 
+# TODO: handle the cases where individual confs are not present
+
 # --------------------------------------------------------------------------------------------------------------------
 
 class HostProject(object):
