@@ -21,10 +21,10 @@ Part 1 of 3: Configuration:
 Creates or deletes NDIRConf document.
 
 document example:
-{"model": "Prototype1", "avg-period": 10}
+{"model": "SPINDIRv1", "tally": 10}
 
 command line example:
-./ndir_conf.py -p 1 -v
+./ndir_conf.py -m SPINDIRv1 -t 1
 """
 
 import sys
