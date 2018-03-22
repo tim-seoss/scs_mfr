@@ -61,7 +61,7 @@ Part 2 of 3: Calibration:
 
 Part 3 of 3: Communication:
 
-    1: ./host_id.py (requires superuser)
+    1: ./host_id.py (may require superuser)
     2: ./system_id.py -d VENDOR_ID -m MODEL_ID -n MODEL_NAME -c CONFIG -s SYSTEM_SERIAL_NUMBER -v
     3: ./osio_api_auth.py -s ORG_ID API_KEY
     4: ./osio_client_auth.py.py -u USER_ID -l LAT LNG POSTCODE
