@@ -52,7 +52,7 @@ if __name__ == '__main__':
     api_auth = APIAuth.load(Host)
 
     if api_auth is None:
-        print("APIAuth not available.", file=sys.stderr)
+        print("osio_host_organisation: APIAuth not available.", file=sys.stderr)
         exit(1)
 
     if cmd.verbose:
@@ -70,7 +70,8 @@ if __name__ == '__main__':
     # validate...
 
     if org is None and not cmd.is_complete():
-        print("No organisation is registered. host_organisation must therefore set all fields:", file=sys.stderr)
+        print("osio_host_organisation: No organisation is registered. You must therefore set all fields.",
+              file=sys.stderr)
         cmd.print_help(sys.stderr)
         exit(1)
 

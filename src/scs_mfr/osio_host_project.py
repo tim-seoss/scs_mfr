@@ -118,7 +118,7 @@ if __name__ == '__main__':
     api_auth = APIAuth.load(Host)
 
     if api_auth is None:
-        print("APIAuth not available.", file=sys.stderr)
+        print("osio_host_project: APIAuth not available.", file=sys.stderr)
         exit(1)
 
     if cmd.verbose:
@@ -129,7 +129,7 @@ if __name__ == '__main__':
     system_id = SystemID.load(Host)
 
     if system_id is None:
-        print("SystemID not available.", file=sys.stderr)
+        print("osio_host_project: SystemID not available.", file=sys.stderr)
         exit(1)
 
     if cmd.verbose:
@@ -140,7 +140,7 @@ if __name__ == '__main__':
     afe_calib = AFECalib.load(Host)
 
     if afe_calib is None:
-        print("AFECalib not available.", file=sys.stderr)
+        print("osio_host_project: AFECalib not available.", file=sys.stderr)
         exit(1)
 
     if cmd.verbose:
