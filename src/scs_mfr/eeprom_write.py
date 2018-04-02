@@ -76,7 +76,7 @@ if __name__ == '__main__':
             exit(2)
 
         if not path.isfile(cmd.filename):
-            print("error: file not found", file=sys.stderr)
+            print("eeprom_write: file not found", file=sys.stderr)
             I2C.close()
             exit(1)
 
@@ -109,7 +109,7 @@ if __name__ == '__main__':
         verified = eeprom.image == file_image
 
         if not verified:
-            print("error: verification failed", file=sys.stderr)
+            print("eeprom_write: verification failed", file=sys.stderr)
             I2C.close()
             exit(1)
 
