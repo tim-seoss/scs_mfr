@@ -30,9 +30,7 @@ from os import path
 
 import sys
 
-from scs_core.data.json import JSONify
 from scs_core.sys.eeprom_image import EEPROMImage
-from scs_core.sys.exception_report import ExceptionReport
 
 from scs_dfe.board.cat24c32 import CAT24C32
 
@@ -119,9 +117,6 @@ if __name__ == '__main__':
 
     # ----------------------------------------------------------------------------------------------------------------
     # end...
-
-    except Exception as ex:
-        print(JSONify.dumps(ExceptionReport.construct(ex)), file=sys.stderr)
 
     finally:
         I2C.close()

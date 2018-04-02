@@ -28,8 +28,6 @@ from scs_core.data.json import JSONify
 
 from scs_core.gas.pt1000_calib import Pt1000Calib
 
-from scs_core.sys.exception_report import ExceptionReport
-
 from scs_dfe.board.dfe_conf import DFEConf
 from scs_dfe.climate.sht_conf import SHTConf
 
@@ -106,9 +104,6 @@ if __name__ == '__main__':
 
     # ----------------------------------------------------------------------------------------------------------------
     # end...
-
-    except Exception as ex:
-        print(JSONify.dumps(ExceptionReport.construct(ex)), file=sys.stderr)
 
     finally:
         I2C.close()
