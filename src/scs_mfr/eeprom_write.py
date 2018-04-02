@@ -26,7 +26,8 @@ command line example:
 ./eeprom_write.py -v /home/pi/SCS/hat.eep
 """
 
-import os.path
+from os import path
+
 import sys
 
 from scs_core.data.json import JSONify
@@ -74,7 +75,7 @@ if __name__ == '__main__':
             I2C.close()
             exit(2)
 
-        if not os.path.isfile(cmd.filename):
+        if not path.isfile(cmd.filename):
             print("error: file not found", file=sys.stderr)
             I2C.close()
             exit(1)

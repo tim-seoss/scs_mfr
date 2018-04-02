@@ -11,6 +11,7 @@ Part 2 of 3: Calibration:
     2: ./afe_calib -s AFE_SERIAL_NUMBER
   > 3: ./pt1000_calib.py -s -v
     4: ./afe_baseline.py -v -1 SN1_OFFSET -2 SN2_OFFSET -3 SN3_OFFSET -4 SN3_OFFSET
+    5: ./timezone.py -v -s ZONE
 
 Creates Pt1000Calib document.
 

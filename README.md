@@ -57,14 +57,14 @@ Part 2 of 3: Calibration:
     2: ./afe_calib -s AFE_SERIAL_NUMBER
     3: ./pt1000_calib.py -s -v
     4: ./afe_baseline.py -v -1 SN1_OFFSET -2 SN2_OFFSET -3 SN3_OFFSET -4 SN3_OFFSET
+    5: ./timezone.py -v -s ZONE
 
 
 Part 3 of 3: Communication:
 
-    1: ./host_id.py (may require superuser)
+    1: ./shared_secret.py -g
     2: ./system_id.py -d VENDOR_ID -m MODEL_ID -n MODEL_NAME -c CONFIG -s SYSTEM_SERIAL_NUMBER -v
     3: ./osio_api_auth.py -s ORG_ID API_KEY
     4: ./osio_client_auth.py.py -u USER_ID -l LAT LNG POSTCODE
     5: ./osio_host_project.py -v -s GROUP LOCATION_ID
-    6: ./timezone.py -v -s ZONE
 

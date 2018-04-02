@@ -6,7 +6,8 @@ Created on 18 May 2017
 Note that this test updates the EEPROM contents.
 """
 
-import os.path
+from os import path
+
 import sys
 
 from scs_core.sys.eeprom_image import EEPROMImage
@@ -39,7 +40,7 @@ class EEPROMTest(Test):
             print("EEPROM...", file=sys.stderr)
 
         # validate...
-        if not os.path.isfile(Host.eep_image()):
+        if not path.isfile(Host.eep_image()):
             print("error: eeprom image not found", file=sys.stderr)
             exit(1)
 
