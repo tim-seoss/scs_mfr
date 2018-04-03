@@ -124,7 +124,6 @@ if __name__ == '__main__':
     if cmd.verbose:
         print(api_auth, file=sys.stderr)
 
-
     # SystemID...
     system_id = SystemID.load(Host)
 
@@ -134,7 +133,6 @@ if __name__ == '__main__':
 
     if cmd.verbose:
         print(system_id, file=sys.stderr)
-
 
     # AFECalib...
     afe_calib = AFECalib.load(Host)
