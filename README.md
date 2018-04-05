@@ -54,10 +54,10 @@ Part 1 of 3: Configuration:
 Part 2 of 3: Calibration:
 
     1: ./rtc.py -i -s -v 
-    2: ./afe_calib -s AFE_SERIAL_NUMBER
-    3: ./pt1000_calib.py -s -v
-    4: ./afe_baseline.py -v -1 SN1_OFFSET -2 SN2_OFFSET -3 SN3_OFFSET -4 SN3_OFFSET
-    5: ./timezone.py -v -s ZONE
+    2: ./timezone.py -v -s ZONE
+    3: ./afe_calib -s AFE_SERIAL_NUMBER
+    4: ./pt1000_calib.py -s -v
+    5: ./afe_baseline.py -v -1 SN1_OFFSET -2 SN2_OFFSET -3 SN3_OFFSET -4 SN3_OFFSET
 
 
 Part 3 of 3: Communication:
