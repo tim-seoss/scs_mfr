@@ -37,6 +37,8 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_schedule import CmdSchedule
 
 
+# TODO: implement tally / averaging functionality on sampling processes
+
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
