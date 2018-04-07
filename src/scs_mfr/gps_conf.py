@@ -5,26 +5,25 @@ Created on 21 Jun 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-GPS
-    Model or None
+DESCRIPTION
+The gps_conf utility is used to specify whether a GPS receiver module is present and if so, which model is provided.
 
-Part 1 of 3: Configuration:
+Currently, only the u-blox PAM7Q module is supported.
 
-    1: ./dfe_conf.py -v -s -p PT1000_ADDR
-    2: ./sht_conf.py -v -i INT_ADDR -e EXT_ADDR
-    3: ./ndir_conf.py -v -m MODEL -t AVERAGING_TALLY
-    4: ./opc_conf.py -v -m MODEL -s SAMPLE_PERIOD -p { 0 | 1 }
-    5: ./psu_conf.py -v -m MODEL
-  > 6: ./gps_conf.py -v -m MODEL
-    7: ./schedule.py -v [{-s NAME INTERVAL COUNT | -c NAME }]
+SYNOPSIS
+gps_conf.py [{ -m MODEL | -d }] [-v]
 
-Creates or deletes GPSConf document.
+EXAMPLES
+./gps_conf.py -m PAM7Q
 
-document example:
+DOCUMENT EXAMPLE
 {"model": "PAM7Q"}
 
-command line example:
-./gps_conf.py -m PAM7Q -v
+FILES
+~/SCS/conf/gps_conf.json
+
+SEE ALSO
+scs_dev/status_sampler
 """
 
 import sys

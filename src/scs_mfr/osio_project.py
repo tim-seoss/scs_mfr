@@ -5,23 +5,54 @@ Created on 18 Feb 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Part 3 of 3: Communication:
+DESCRIPTION
+The osio_project utility is used to specify the topic path names for devices using the OpenSensors.io Community Edition
+messaging infrastructure. For each device, topics are divided into two groups:
 
-    1: ./shared_secret.py -g
-    2: ./system_id.py -d VENDOR_ID -m MODEL_ID -n MODEL_NAME -c CONFIG -s SYSTEM_SERIAL_NUMBER -v
-    3: ./osio_api_auth.py -s ORG_ID API_KEY
-    4: ./osio_client_auth.py -u USER_ID -l LAT LNG POSTCODE
-  > 5: ./osio_host_project.py -v -s GROUP LOCATION_ID
+Location path, e.g.:
 
-Requires APIAuth, SystemID and AFECalib documents.
+* /orgs/south-coast-science-dev/development/loc/1/climate
+* /orgs/south-coast-science-dev/development/loc/1/gases
+* /orgs/south-coast-science-dev/development/loc/1/particulates
 
-Creates Project document.
+Device path, e.g.:
 
-document example:
-{"location-path": "/orgs/southcoastscience-dev/test/loc/1", "device-path": "/orgs/southcoastscience-dev/test/device"}
+* /orgs/south-coast-science-dev/development/device/alpha-pi-eng-000006/control
+* /orgs/south-coast-science-dev/development/device/alpha-pi-eng-000006/status
 
-command line example:
-./osio_host_project.py -v -s field-trial 2
+Typically, the device paths should remain fixed throughout the lifetime of the device. In contrast, a given set of
+location paths are used by the device only when it is installed at a given location.
+
+The location ID must be an integer.
+
+When the osio_project utility is executed, any topics required are created on the OpenSensors.io infrastructure.
+
+When the "verbose" "-v" flag is used, the osio_project utility reports all of the topic paths derived from
+its specification.
+
+Note that the scs_mfr/osio_mqtt_client process must be restarted for changes to take effect.
+
+SYNOPSIS
+osio_project.py [-s GROUP LOCATION_ID] [-v]
+
+EXAMPLES
+./osio_project.py -s south-coast-science-dev development 1
+
+DOCUMENT EXAMPLE
+{"location-path": "/orgs/south-coast-science-dev/development/loc/3",
+"device-path": "/orgs/south-coast-science-dev/development/device"}
+
+FILES
+~/SCS/osio/osio_project.json
+
+SEE ALSO
+scs_dev/osio_mqtt_client
+scs_mfr/osio_api_auth
+scs_mfr/osio_client_auth
+
+BUGS
+If a topic is deleted on the OpenSensors.io infrastructure, any future attempt to re-create it results in a
+server error.
 """
 
 import sys
@@ -44,7 +75,7 @@ from scs_dfe.particulate.opc_conf import OPCConf
 from scs_host.client.http_client import HTTPClient
 from scs_host.sys.host import Host
 
-from scs_mfr.cmd.cmd_osio_host_project import CmdOSIOHostProject
+from scs_mfr.cmd.cmd_osio_project import CmdOSIOProject
 
 
 # TODO: handle the cases where individual confs are not present
@@ -95,7 +126,7 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
-    cmd = CmdOSIOHostProject()
+    cmd = CmdOSIOProject()
 
     if not cmd.is_valid():
         cmd.print_help(sys.stderr)
@@ -118,7 +149,7 @@ if __name__ == '__main__':
     api_auth = APIAuth.load(Host)
 
     if api_auth is None:
-        print("osio_host_project: APIAuth not available.", file=sys.stderr)
+        print("osio_project: APIAuth not available.", file=sys.stderr)
         exit(1)
 
     if cmd.verbose:
@@ -128,7 +159,7 @@ if __name__ == '__main__':
     system_id = SystemID.load(Host)
 
     if system_id is None:
-        print("osio_host_project: SystemID not available.", file=sys.stderr)
+        print("osio_project: SystemID not available.", file=sys.stderr)
         exit(1)
 
     if cmd.verbose:
@@ -138,7 +169,7 @@ if __name__ == '__main__':
     afe_calib = AFECalib.load(Host)
 
     if afe_calib is None:
-        print("osio_host_project: AFECalib not available.", file=sys.stderr)
+        print("osio_project: AFECalib not available.", file=sys.stderr)
         exit(1)
 
     if cmd.verbose:

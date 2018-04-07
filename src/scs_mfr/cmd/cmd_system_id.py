@@ -21,19 +21,19 @@ class CmdSystemID(object):
 
         # optional...
         self.__parser.add_option("--vendor", "-d", type="string", nargs=1, action="store", dest="vendor_id",
-                                 help="set vendor ID (required if there is no current record)")
+                                 help="set vendor ID")
 
         self.__parser.add_option("--model", "-m", type="string", nargs=1, action="store", dest="model_id",
-                                 help="set model ID (required if there is no current record)")
+                                 help="set model ID")
 
         self.__parser.add_option("--name", "-n", type="string", nargs=1, action="store", dest="model_name",
-                                 help="set model name (required if there is no current record)")
+                                 help="set model name")
 
         self.__parser.add_option("--config", "-c", type="string", nargs=1, action="store", dest="configuration",
-                                 help="set device configuration (required if there is no current record)")
+                                 help="set device configuration")
 
         self.__parser.add_option("--serial", "-s", type="int", nargs=1, action="store", dest="serial_number",
-                                 help="set serial number (required if there is no current record)")
+                                 help="set serial number")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")

@@ -5,26 +5,33 @@ Created on 21 Jun 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-NDIR
-    Model or None
+DESCRIPTION
+The ndir_conf utility is used to specify whether a South Coast Science SPI interface NDIR CO2 sensor board is present
+and if so, which model is provided.
 
-Part 1 of 3: Configuration:
+The specification also includes the number of number of NDIR readings to be averaged. The NDIR monitor sub-process
+maintains a rolling average with a base sampling rate of one second. Thus, setting the tally to 10 results in an
+independent reading every 10 seconds.
 
-    1: ./dfe_conf.py -v -s -p PT1000_ADDR
-    2: ./sht_conf.py -v -i INT_ADDR -e EXT_ADDR
-  > 3: ./ndir_conf.py -v -m MODEL -t AVERAGING_TALLY
-    4: ./opc_conf.py -v -m MODEL -s SAMPLE_PERIOD -p { 0 | 1 }
-    5: ./psu_conf.py -v -m MODEL
-    6: ./gps_conf.py -v -m MODEL
-    7: ./schedule.py -v [{-s NAME INTERVAL COUNT | -c NAME }]
+Sampling is performed by the scs_dev/gasses_sampler utility if an ndir_conf.json document is present. If the document
+is not present, the NDIR sensor board is ignored.
 
-Creates or deletes NDIRConf document.
+Note that the scs_analysis/gasses_sampler process must be restarted for changes to take effect.
 
-document example:
-{"model": "SPINDIRv1", "tally": 10}
+SYNOPSIS
+ndir_conf.py [{ [-m MODEL] [-t AVERAGING_TALLY] | -d }] [-v]
 
-command line example:
-./ndir_conf.py -m SPINDIRv1 -t 1
+EXAMPLES
+./ndir_conf.py -m NDIRv1 -t 10
+
+DOCUMENT EXAMPLE
+{"model": "NDIRv1", "tally": 10}
+
+FILES
+~/SCS/conf/ndir_conf.json
+
+SEE ALSO
+scs_dev/gases_sampler
 """
 
 import sys

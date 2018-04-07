@@ -6,8 +6,15 @@ Created on 2 Apr 2018
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The aws_api_auth utility is used to store or read the API key required by the South Coast Science / AWS historic data
-retrieval system.
+The aws_client_auth utility is used to store or read the endpoint host name, client ID and client certificate ID
+required by the South Coast Science / AWS messaging infrastructure.
+
+The certificate files - created using the AWS IoT tools - must be installed by hand.
+
+Note that the scs_mfr/aws_mqtt_client process must be restarted for changes to take effect.
+
+SYNOPSIS
+aws_client_auth.py [{ [-e ENDPOINT] [-c CLIENT_ID] [-I CERT_ID] | -d }] [-v]
 
 EXAMPLES
 ./aws_client_auth.py -e asrft7e5j5ecz.iot.us-west-2.amazonaws.com -c bruno -i 9f08402232
@@ -25,6 +32,8 @@ DOCUMENT EXAMPLE
 
 SEE ALSO
 scs_dev/aws_mqtt_client
+scs_mfr/aws_api_auth
+scs_mfr/aws_project
 """
 
 import sys

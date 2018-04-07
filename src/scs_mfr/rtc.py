@@ -5,16 +5,21 @@ Created on 18 May 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Part 2 of 3: Calibration:
+DESCRIPTION
+The rtc utility is used to set the real-time clock on the South Coast Science digital front-end (DFE) for
+BeagleBone.
 
-( > 1: ./rtc.py -i -s -v )
-    2: ./afe_calib -s AFE_SERIAL_NUMBER
-    3: ./pt1000_calib.py -s -v
-    4: ./afe_baseline.py -v -1 SN1_OFFSET -2 SN2_OFFSET -3 SN3_OFFSET -4 SN3_OFFSET
-    5: ./timezone.py -v -s ZONE
+The real-time clock is not available on Raspberry Pi systems.
 
-command line example:
-./rtc.py -v
+SYNOPSIS
+rtc.py [-i] [-s] [-v]
+
+EXAMPLES
+./rtc.py -s
+
+BUGS
+In some operating system configurations, the real-time clock is under control of the operating system time module,
+and therefore the user is not granted access.
 """
 
 import sys

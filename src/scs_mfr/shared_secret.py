@@ -5,21 +5,25 @@ Created on 2 Apr 2018
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Part 3 of 3: Communication:
+DESCRIPTION
+The shared_secret utility generates a digest key used by the scs_analysis/mqtt_control and scs_dev/control_receiver
+utilities. The key is typically generated when a device is manufactured, and securely stored on a remote device
+management system.
 
-  > 1: ./shared_secret.py -g
-    2: ./system_id.py -d VENDOR_ID -m MODEL_ID -n MODEL_NAME -c CONFIG -s SYSTEM_SERIAL_NUMBER -v
-    3: ./osio_api_auth.py -s ORG_ID API_KEY
-    4: ./osio_client_auth.py -u USER_ID -l LAT LNG POSTCODE
-    5: ./osio_host_project.py -v -s GROUP LOCATION_ID
+SYNOPSIS
+shared_secret.py [{ -g | -d }] [-v]
 
-Creates or deletes SharedSecret document.
+EXAMPLES
+./shared_secret.py -g
 
-document example:
+DOCUMENT EXAMPLE
 {"key": "sxBhncFybpbMwZUa"}
 
-command line example:
-./shared_secret.py -g
+FILES
+~/SCS/conf/shared_secret.conf
+
+SEE ALSO
+scs_dev/control_receiver
 """
 
 import sys

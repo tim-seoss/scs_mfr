@@ -5,21 +5,29 @@ Created on 1 Oct 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Part 2 of 3: Calibration:
+DESCRIPTION
+The pt1000_calib utility is used to determine and save the voltage offset for each Pt1000 sensor.
 
-(   1: ./rtc.py -i -s -v )
-    2: ./afe_calib -s AFE_SERIAL_NUMBER
-  > 3: ./pt1000_calib.py -s -v
-    4: ./afe_baseline.py -v -1 SN1_OFFSET -2 SN2_OFFSET -3 SN3_OFFSET -4 SN3_OFFSET
-    5: ./timezone.py -v -s ZONE
+The utility operates by measuring the temperature using a Sensirion SHT sensor, measuring the voltage output of the
+Pt1000 sensor, and back-calculating the voltage offset.
 
-Creates Pt1000Calib document.
+Note that the scs_analysis/gases_sampler process must be restarted for changes to take effect.
 
-document example:
-{"calibrated_on": "2017-05-18", "v20": 0.508592}
+SYNOPSIS
+pt1000_calib.py [-s] [-v]
 
-command line example:
-./pt1000_calib.py -v
+EXAMPLES
+./pt1000_calib.py -s
+
+DOCUMENT EXAMPLE
+{"calibrated-on": "2018-02-27T12:50:28.028+00:00", "v20": 0.321605}
+
+FILES
+~/SCS/conf/pt1000_calib.json
+
+SEE ALSO
+scs_dev/gases_sampler
+scs_mfr/dfe_conf
 """
 
 import sys

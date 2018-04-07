@@ -5,26 +5,30 @@ Created on 21 Jun 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-PSU
-    Model or None
+DESCRIPTION
+The psu_conf utility is used to specify whether a South Coast Science power supply (PSU) board is present
+and if so, which model is provided. Two models are currently available:
 
-Part 1 of 3: Configuration:
+* PrototypeV1
+* OsloV1
 
-    1: ./dfe_conf.py -v -s -p PT1000_ADDR
-    2: ./sht_conf.py -v -i INT_ADDR -e EXT_ADDR
-    3: ./ndir_conf.py -v -m MODEL -t AVERAGING_TALLY
-    4: ./opc_conf.py -v -m MODEL -s SAMPLE_PERIOD -p { 0 | 1 }
-  > 5: ./psu_conf.py -v -m MODEL
-    6: ./gps_conf.py -v -m MODEL
-    7: ./schedule.py -v [{-s NAME INTERVAL COUNT | -c NAME }]
+Note that the scs_dev/status_sampler process must be restarted for changes to take effect.
 
-Creates or deletes PSUConf document.
+SYNOPSIS
+psu_conf.py [{ -m MODEL | -d }] [-v]
 
-document example:
-{"model": "PrototypeV1"}
+EXAMPLES
+./psu_conf.py -m OsloV1
 
-command line example:
-./psu_conf.py -m OsloV -v
+DOCUMENT EXAMPLE
+{"model": "OsloV1"}
+
+FILES
+~/SCS/conf/psu_conf.json
+
+SEE ALSO
+scs_dev/psu
+scs_dev/status_sampler
 """
 
 import sys

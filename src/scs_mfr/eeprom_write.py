@@ -5,25 +5,40 @@ Created on 26 Sep 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Raspberry Pi:
-https://github.com/raspberrypi/hats/tree/master/eepromutils
+DESCRIPTION
+The eeprom_read utility write the contents of the given file to the South Coast Science digital front-end (DFE) board's
+EEPROM.
 
-https://www.raspberrypi.org/documentation/configuration/device-tree.md
+The EEPROM contains information on vendor, product ID and a universally unique ID (UUID) code, as specified by either
+the Raspberry Pi HAT or BeagleBone cape standards.
 
+A jumper link must be fitted to the DFE board in order to enable the write operation.
 
-BeagleBone:
-http://azkeller.com/blog/?p=62
+SYNOPSIS
+eeprom_write.py [-v] FILENAME
 
-https://github.com/jbdatko/eeprom_tutorial/blob/master/eeprom.md
+EXAMPLES
+./eeprom_write.py ~/SCS/hat.eep
+
+SEE ALSO
+scs_mfr/dfe_id
+scs_mfr/eeprom_read
+
+BUGS
+Not currently functional on BeagleBone systems.
+
+RESOURCES
+https://github.com/raspberrypi/hats
 https://github.com/picoflamingo/BBCape_EEPROM
 
+
+https://github.com/raspberrypi/hats/tree/master/eepromutils
+https://www.raspberrypi.org/documentation/configuration/device-tree.md
+
+https://github.com/jbdatko/eeprom_tutorial
+http://azkeller.com/blog/?p=62
 http://papermint-designs.com/community/node/331
-
 https://learn.adafruit.com/introduction-to-the-beaglebone-black-device-tree/compiling-an-overlay
-
-
-command line example:
-./eeprom_write.py -v /home/pi/SCS/hat.eep
 """
 
 from os import path

@@ -5,21 +5,34 @@ Created on 12 Aug 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Part 2 of 3: Calibration:
+DESCRIPTION
+The timezone utility is used to specify the timezone in which a sensing device is operating. The timezone set here is
+reported by the scs_dev/status_sampler utility.
 
-(   1: ./rtc.py -i -s -v )
-    2: ./afe_calib -s AFE_SERIAL_NUMBER
-    3: ./pt1000_calib.py -s -v
-    4: ./afe_baseline.py -v -1 SN1_OFFSET -2 SN2_OFFSET -3 SN3_OFFSET -4 SN3_OFFSET
-  > 5: ./timezone.py -v -s ZONE
+Typically, the operating system of the device is set to UTC. Environmental sensing documents always include an ISO 8601
+localised date / time, and this localised date / time is set to the timezone of the operating system.
 
-Creates TimezoneConf document.
+All time zones specified by the Internet Assigned Numbers Authority (IANA) are available.
 
-document example:
-{"set-on": "2017-08-12T11:20:28.740+00:00", "name": "Europe/London"}
+Note that the scs_dev sampler processes must be restarted for changes to take effect.
 
-command line example:
+SYNOPSIS
+timezone.py [{ -z | -s ZONE | - l}] [-v]
+
+EXAMPLES
 ./timezone.py -s Europe/London -v
+
+DOCUMENT EXAMPLE
+{"set-on": "2017-08-14T14:25:29.794+00:00", "name": "Europe/London"}
+
+FILES
+~/SCS/conf/timezone.conf
+
+SEE ALSO
+scs_dev/status_sampler
+
+RESOURCES
+https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 """
 
 import sys
@@ -87,4 +100,3 @@ if __name__ == '__main__':
 
     if cmd.verbose:
         print(JSONify.dumps(conf.timezone()), file=sys.stderr)
-

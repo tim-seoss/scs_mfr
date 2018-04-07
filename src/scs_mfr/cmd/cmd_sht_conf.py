@@ -32,10 +32,10 @@ class CmdSHTConf(object):
 
         # optional...
         self.__parser.add_option("--int-addr", "-i", type="int", nargs=1, action="store", dest="int_addr", default=None,
-                                 help="set I2C address of SHT in A4 package (required if conf has not yet been set)")
+                                 help="set I2C address of SHT in A4 package")
 
         self.__parser.add_option("--ext-addr", "-e", type="int", nargs=1, action="store", dest="ext_addr", default=None,
-                                 help="set I2C address of SHT exposed to air (required if conf has not yet been set)")
+                                 help="set I2C address of SHT exposed to air")
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete",
                                  help="delete the SHT configuration")

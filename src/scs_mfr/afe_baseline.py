@@ -5,24 +5,31 @@ Created on 1 Mar 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Part 2 of 3: Calibration:
+DESCRIPTION
+The afe_baseline utility is used to adjust the zero offset for electrochemical sensors. The offset can be positive or
+negative, and represents a parts-per-billion value. Sensors are identified by their position on the Alphasense analogue
+front-end (AFE) board: SN1 to SN4 (the PID station is referred to as SN4). The date / time of any change is recorded.
 
-(   1: ./rtc.py -i -s -v )
-    2: ./afe_calib -s AFE_SERIAL_NUMBER
-    3: ./pt1000_calib.py -s -v
-  > 4: ./afe_baseline.py -v -1 SN1_OFFSET -2 SN2_OFFSET -3 SN3_OFFSET -4 SN3_OFFSET
-    5: ./timezone.py -v -s ZONE
+Note that the scs_dev/gasses_sampler process must be restarted for changes to take effect.
 
-Creates AFEBaseline document.
+SYNOPSIS
+afe_baseline.py [-1 SN1_OFFSET] [-2 SN2_OFFSET] [-3 SN3_OFFSET] [-4 SN3_OFFSET] [-v]
 
-document example:
-{"sn1": {"calibrated_on": "2017-06-20T00:00:00.000+01:00", "offset": 0},
-"sn2": {"calibrated_on": "2017-06-20T00:00:00.000+01:00", "offset": 0},
-"sn3": {"calibrated_on": "2017-06-20T00:00:00.000+01:00", "offset": 0},
-"sn4": {"calibrated_on": "2017-06-20T00:00:00.000+01:00", "offset": 30}}
+EXAMPLES
+./afe_baseline.py -1 15
 
-command line example:
-./afe_baseline.py -v -4 30
+DOCUMENT EXAMPLE
+{"sn1": {"calibrated-on": "2017-10-04T17:18:31.832+01:00", "offset": 0},
+"sn2": {"calibrated-on": "2017-06-20T00:00:00.000+01:00", "offset": 0},
+"sn3": {"calibrated-on": "2017-06-20T00:00:00.000+01:00", "offset": 0},
+"sn4": {"calibrated-on": "2017-06-20T00:00:00.000+01:00", "offset": 0}}
+
+FILES
+~/SCS/conf/afe_baseline.json
+
+SEE ALSO
+scs_dev/gases_sampler
+scs_mfr/afe_calib
 """
 
 import sys

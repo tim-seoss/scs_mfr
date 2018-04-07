@@ -20,8 +20,8 @@ class CmdSchedule(object):
         self.__parser.add_option("--set", "-s", type="string", nargs=3, action="store", dest="set",
                                  help="set schedule NAME, INTERVAL (float) and TALLY (int)")
 
-        self.__parser.add_option("--clear", "-c", type="string", nargs=1, action="store", dest="clear",
-                                 help="remove named schedule")
+        self.__parser.add_option("--delete", "-d", type="string", nargs=1, action="store", dest="delete",
+                                 help="delete the named schedule")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
@@ -52,7 +52,7 @@ class CmdSchedule(object):
         return self.__opts.set is not None
 
 
-    def clear(self):
+    def delete(self):
         return self.__opts.clear is not None
 
 

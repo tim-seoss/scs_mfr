@@ -41,7 +41,7 @@ setup(
         'src/scs_mfr/osio_api_auth.py',
         'src/scs_mfr/osio_client_auth.py',
         'src/scs_mfr/osio_host_organisation.py',
-        'src/scs_mfr/osio_host_project.py',
+        'src/scs_mfr/osio_project.py',
         'src/scs_mfr/psu_conf.py',
         'src/scs_mfr/pt1000_calib.py',
         'src/scs_mfr/dfe_conf.py',

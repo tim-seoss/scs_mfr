@@ -5,27 +5,37 @@ Created on 13 Dec 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-SHT
-    Internal I2C addr or None
-    External I2C addr or None
+DESCRIPTION
+The sht_conf utility is used to specify the I2C address(es) of Sensirion SHT temperature and relative humidity sensors
+deployed in South Coast Science equipment.
 
-Part 1 of 3: Configuration:
+Two different Sensirion SHT sensor configurations are generally used:
 
-    1: ./dfe_conf.py -v -s -p PT1000_ADDR
-  > 2: ./sht_conf.py -v -i INT_ADDR -e EXT_ADDR
-    3: ./ndir_conf.py -v -m MODEL -t AVERAGING_TALLY
-    4: ./opc_conf.py -v -m MODEL -s SAMPLE_PERIOD -p { 0 | 1 }
-    5: ./psu_conf.py -v -m MODEL
-    6: ./gps_conf.py -v -m MODEL
-    7: ./schedule.py -v [{-s NAME INTERVAL COUNT | -c NAME }]
+* SHT in A4 pot (internal) - I2C address: 0x44 - the sensor is enclosed in a package that mimics the electrochemical
+sensor environment. This sensor is used to perform temperature and humidity compensations in data interpretation.
 
-Creates or deletes SHTConf document.
+* Free-to-air SHT (external) - I2C address: 0x45 - the sensor is directly exposed to the air. This arrangement provides
+a more responsive and accurate measurement of the ambient conditions.
 
-document example:
+For devices with only one sensor type present, the internal and external address should be set to the same value.
+
+Note that the scs_dev sampler processes must be restarted for changes to take effect.
+
+SYNOPSIS
+sht_conf.py [{ [-i INT_ADDR] [-e EXT_ADDR] | -d }] [-v]
+
+EXAMPLES
+./sht_conf.py -v -i 0x44 -e 0x45
+
+DOCUMENT EXAMPLE
 {"int": "0x44", "ext": "0x45"}
 
-command line example:
-./sht_conf.py -v -i 0x44 -e 0x45
+FILES
+~/SCS/conf/sht_conf.json
+
+SEE ALSO
+scs_dev/climate_sampler
+scs_dev/gases_sampler
 """
 
 import sys

@@ -47,7 +47,7 @@ class Pt1000Test(Test):
                 print(self.datum, file=sys.stderr)
 
             # test criterion...
-            return 0.4 < self.datum.v < 0.6
+            return 0.3 < self.datum.v < 0.4
 
         finally:
             I2C.close()

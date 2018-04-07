@@ -5,24 +5,35 @@ Created on 27 Feb 2018
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
+DESCRIPTION
+The dfe_conf utility is used to specify whether a South Coast Science digital front-end (DFE) board is present on the
+host system, and whether the attachAlphasense analogue front-end board has a Pt1000 sensor.
 
-Part 1 of 3: Configuration:
+Pt1000 analogue-digital converter (ADC) I2C addresses:
 
-  > 1: ./dfe_conf.py -v -s -p PT1000_ADDR
-    2: ./sht_conf.py -v -i INT_ADDR -e EXT_ADDR
-    3: ./ndir_conf.py -v -m MODEL -t AVERAGING_TALLY
-    4: ./opc_conf.py -v -m MODEL -s SAMPLE_PERIOD -p { 0 | 1 }
-    5: ./psu_conf.py -v -m MODEL
-    6: ./gps_conf.py -v -m MODEL
-    7: ./schedule.py -v [{-s NAME INTERVAL COUNT | -c NAME }]
+* Raspberry Pi DFE: 0x68
+* BeagleBone DFE: 0x69
 
-Creates or deletes DFEConf document.
+Note: many device enclosure designs cause the Pt1000 reading to be unreliable. In these cases, it is appropriate
+to specify that the Pt1000 is absent.
 
-document example:
-{"pt1000-addr": "0x69"}
+The scs_dev sampler processes must be restarted for changes to take effect.
 
-command line example:
-./dfe_conf.py -v -p 0x69
+SYNOPSIS
+dfe_conf.py [{ -s [-p ADDR] | -d }] [-v]
+
+EXAMPLES
+./dfe_conf.py -s
+
+DOCUMENT EXAMPLE
+{"pt1000-addr": 0x68}
+
+FILES
+~/SCS/conf/dfe_conf.json
+
+SEE ALSO
+scs_dev/gases_sampler
+scs_mfr/pt1000_calib
 """
 
 import sys

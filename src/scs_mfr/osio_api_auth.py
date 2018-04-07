@@ -5,21 +5,28 @@ Created on 18 Feb 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Part 3 of 3: Communication:
+DESCRIPTION
+The osio_api_auth utility is used to store or read the API key required by the OpenSensors.io Community Edition
+historic data retrieval system.
 
-    1: ./shared_secret.py -g
-    2: ./system_id.py -d VENDOR_ID -m MODEL_ID -n MODEL_NAME -c CONFIG -s SYSTEM_SERIAL_NUMBER -v
-  > 3: ./osio_api_auth.py -s ORG_ID API_KEY
-    4: ./osio_client_auth.py -u USER_ID -l LAT LNG POSTCODE
-    5: ./osio_host_project.py -v -s GROUP LOCATION_ID
+Note that the scs_mfr/osio_mqtt_client process must be restarted for changes to take effect.
 
-Creates APIAuth document.
+SYNOPSIS
+osio_api_auth.py [-s ORG_ID API_KEY] [-v]
 
-document example:
-{"org-id": "south-coast-science-test-user", "api-key": "9fdfb841-3433-45b8-b223-3f5a283ceb8e"}
+EXAMPLES
+./osio_api_auth.py -v -s south-coast-science-demo 099add97-6e89-4801-8d12-dd617797cd3b
 
-command line example:
-./osio_api_auth.py -v -s south-coast-science-test 9fdfb841-3433-45b8-b223-3f5a283ceb8e
+FILES
+~/SCS/osio/osio_api_auth.json
+
+DOCUMENT EXAMPLE
+{"org-id": "south-coast-science-demo", "api-key": "099add97-6e89-4801-8d12-dd617797cd3b"}
+
+SEE ALSO
+scs_dev/osio_mqtt_client
+scs_mfr/osio_client_auth
+scs_mfr/osio_project
 """
 
 import sys
