@@ -5,24 +5,38 @@ Created on 17 Feb 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Warning: changing system ID components can cause host client access to fail.
+DESCRIPTION
+The system_id utility is used to specify the identity of a sensing device, as it appears on either the South Coast
+Science / AWS or OpenSensors.io Community Edition messaging infrastructures.
 
-Part 3 of 3: Communication:
+The identity is also used to tag all environmental sensing records. It is therefore important that a device retains
+a fixed identity throughout its lifetime.
 
-    1: ./shared_secret.py -g
-  > 2: ./system_id.py -d VENDOR_ID -m MODEL_ID -n MODEL_NAME -c CONFIG -s SYSTEM_SERIAL_NUMBER -v
-    3: ./osio_api_auth.py -s ORG_ID API_KEY
-    4: ./osio_client_auth.py -u USER_ID -l LAT LNG POSTCODE
-    5: ./osio_host_project.py -v -s GROUP LOCATION_ID
+When the "verbose" "-v" flag is used, the system_id utility reports all of the identity formats derived from
+its specification.
 
-Creates SystemID document.
+SYNOPSIS
+system_id.py [-d VENDOR_ID] [-m MODEL_ID] [-n MODEL_NAME] [-c CONFIG] [-s SYSTEM_SERIAL_NUMBER] [-v]
 
-document example:
-{"vendor-id": "scs", "model-id": "ap1", "model": "Alpha Pi Eng", "config": "V1", "system-sn": 6}
+EXAMPLES
+./system_id.py -v -d SCS -m BGX -n Praxis -c BGX -s 401
+
+DOCUMENT EXAMPLE
 {"vendor-id": "SCS", "model-id": "BGX", "model": "Praxis", "config": "BGX", "system-sn": 401}
 
-command line example:
-./system_id.py -v -d SCS -m BGX -n Praxis -c BGX -s 111
+FILES
+~/SCS/conf/system_id.json
+
+SEE ALSO
+scs_dev/aws_topic_publisher
+scs_dev/aws_topic_subscriber
+scs_dev/osio_topic_publisher
+scs_dev/osio_topic_subscriber
+scs_dev/climate_sampler
+scs_dev/gases_sampler
+scs_dev/particulates_sampler
+scs_dev/status_sampler
+scs_dev/control_receiver
 """
 
 import sys

@@ -17,7 +17,7 @@ class CmdTimezone(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self):
-        self.__parser = optparse.OptionParser(usage="%prog [{ -z | -s ZONE | -l}] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ -z | -s ZONE | - l}] [-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--zones", "-z", action="store_true", dest="list", default=False,

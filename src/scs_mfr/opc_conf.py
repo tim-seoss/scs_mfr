@@ -5,28 +5,38 @@ Created on 13 Jul 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-OPC
-    Model or None
-    Sample period
-    Power saving
+DESCRIPTION
+The opc_conf utility is used to specify whether an Alphasense optical particle counter (OPC) is present and if so,
+which model is provided.
 
-Part 1 of 3: Configuration:
+The specification also includes the number of seconds between readings by the OPC monitor sub-process. The maximum
+time between readings is 10 seconds, the minimum five. A 10 second period provides the highest precision, but sampling
+at this rate is subject to clipping in extremely polluted environments.
 
-    1: ./dfe_conf.py -v -s -p PT1000_ADDR
-    2: ./sht_conf.py -v -i INT_ADDR -e EXT_ADDR
-    3: ./ndir_conf.py -v -m MODEL -t AVERAGING_TALLY
-  > 4: ./opc_conf.py -v -m MODEL -s SAMPLE_PERIOD -p { 0 | 1 }
-    5: ./psu_conf.py -v -m MODEL
-    6: ./gps_conf.py -v -m MODEL
-    7: ./schedule.py -v [{-s NAME INTERVAL COUNT | -c NAME }]
+In addition, the specification allows for a power saving mode, which enables the OPC to shut down between readings. This
+is not currently implemented.
 
-Creates or deletes OPCConf document.
+Sampling is performed by the scs_dev/particulates_sampler utility. If an opc_conf.json document is not present, the
+scs_dev/particulates_sampler utility terminates.
 
-document example:
+Note that the scs_analysis/particulates_sampler process must be restarted for changes to take effect.
+
+Note: currently, only the OPC-N2 model is supported. OPC-N3 and OPC-R1 types will be supported shortly.
+
+SYNOPSIS
+opc_conf.py [{ [-m MODEL] [-s SAMPLE_PERIOD] [-p { 0 | 1 }] | -d }] [-v]
+
+EXAMPLES
+./opc_conf.py -m N2 -s 10 -p 0
+
+DOCUMENT EXAMPLE
 {"model": "N2", "sample-period": 10, "power-saving": false}
 
-command line example:
-./opc_conf.py -m N2 -s 10 -p 0 -v
+FILES
+~/SCS/conf/opc_conf.json
+
+SEE ALSO
+scs_dev/particulates_sampler
 """
 
 import sys

@@ -6,10 +6,29 @@ Created on 29 Jan 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-A standard load should be connected to the DFE's AFE port before this test is run.
+DESCRIPTION
+The dfe_test utility is used to perform a quality control test on South Coast Science digital front-end (DFE) boards.
+The test exercises all of the ADCs and connectors.
 
-command line example:
-./dfe_test.py 123 -g -v
+The output of the test is a JSON document, summarising the result of each of a series of tests.
+
+Ideally, a standard resistor load should be attached to the AFE connector of the DFE before the test is run.
+
+SYNOPSIS
+dfe_test.py [-e] [-g] [-r] [-v] DFE_SERIAL_NUMBER
+
+EXAMPLES
+./dfe_test.py -g -r -v 123
+
+DOCUMENT EXAMPLE - OUTPUT
+{"tag": "scs-ap1-6", "rec": "2018-04-06T16:08:45.037+00:00",
+"val": {"host-sn": "0000000040d4d158", "dfe-sn": "123", "result": "FAIL",
+"subjects": {"RTC": "-", "BoardTemp": "OK", "OPC": "FAIL", "GPS": "-", "Int SHT": "OK", "Ext SHT": "OK",
+"Pt1000": "OK", "AFE": "FAIL", "EEPROM": "OK"}, "afe": {"pt1": {"v": 0.323286, "tmp": 22.8},
+"sns": {"CO": {"weV": 0.339005, "aeV": 0.257254, "weC": 0.042188, "cnc": 155.1},
+"SO2": {"weV": 0.267942, "aeV": 0.275942, "weC": -0.009696, "cnc": -26.4},
+"H2S": {"weV": 0.296192, "aeV": 0.285754, "weC": 0.026254, "cnc": 19.4},
+"VOC": {"weV": 0.102627, "weC": 0.102037, "cnc": 1300.9}}}}}
 """
 
 import sys
@@ -37,8 +56,6 @@ from scs_mfr.test.pt1000_test import Pt1000Test
 from scs_mfr.test.rtc_test import RTCTest
 from scs_mfr.test.sht_test import SHTTest
 
-
-# TODO: add UUID read
 
 # --------------------------------------------------------------------------------------------------------------------
 

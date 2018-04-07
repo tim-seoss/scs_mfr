@@ -22,13 +22,13 @@ class CmdOPCConf(object):
 
         # optional...
         self.__parser.add_option("--model", "-m", type="string", nargs=1, action="store", dest="model",
-                                 help="set MODEL (required if conf has not yet been set)")
+                                 help="set MODEL")
 
         self.__parser.add_option("--sample-period", "-s", type="int", nargs=1, action="store", dest="sample_period",
-                                 help="set SAMPLE_PERIOD (required if conf has not yet been set)")
+                                 help="set SAMPLE_PERIOD")
 
         self.__parser.add_option("--power-saving", "-p", type="int", nargs=1, action="store", dest="power_saving",
-                                 help="set power saving mode (required if conf has not yet been set)")
+                                 help="set power saving mode")
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete",
                                  help="delete the OPC configuration")

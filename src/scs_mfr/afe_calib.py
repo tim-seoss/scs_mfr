@@ -5,18 +5,50 @@ Created on 27 Feb 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Part 2 of 3: Calibration:
+DESCRIPTION
+The afe_calib utility is used to retrieve or install the calibration sheet for the Alphasense analogue front-end (AFE)
+board installed on the host system.
 
-(   1: ./rtc.py -i -s -v )
-  > 2: ./afe_calib -s AFE_SERIAL_NUMBER
-    3: ./pt1000_calib.py -s -v
-    4: ./afe_baseline.py -v -1 SN1_OFFSET -2 SN2_OFFSET -3 SN3_OFFSET -4 SN3_OFFSET
-    5: ./timezone.py -v -s ZONE
+Alphasense electrochemical sensors are calibrated in the factory when fitted to their AFE board. The calibration
+values are provided in a structured document, either on paper or - for AFE boards provided by South Coast Science -
+in electronic form. The afe_calib utility is used to retrieve this JSON document via a web API.
 
-Creates AFECalib document.
+The afe_calib utility may also be used to set a "test" calibration sheet, for use in a manufacturing environment.
 
-command line example:
-./afe_calib.py -v -s 15-000064
+Note that the scs_dev/gasses_sampler process must be restarted for changes to take effect.
+
+SYNOPSIS
+afe_calib.py [{-s AFE_SERIAL_NUMBER | -t}] [-v]
+
+EXAMPLES
+./afe_calib -s 24-000004
+
+DOCUMENT EXAMPLE
+{"serial_number": "24-000004", "type": "810-0020-04", "calibrated_on": "2016-11-01", "dispatched_on": null,
+"pt1000_v20": 1.0,
+"sn1": {"serial_number": "132910128", "sensor_type": "CO A4", "we_electronic_zero_mv": 280, "we_sensor_zero_mv": 71,
+"we_total_zero_mv": 351, "ae_electronic_zero_mv": 273, "ae_sensor_zero_mv": -8, "ae_total_zero_mv": 265,
+ "we_sensitivity_na_ppb": 0.34, "we_cross_sensitivity_no2_na_ppb": "n/a", "pcb_gain": 0.8,
+ "we_sensitivity_mv_ppb": 0.272, "we_cross_sensitivity_no2_mv_ppb": "n/a"},
+ "sn2": {"serial_number": "134060008", "sensor_type": "SO2A4", "we_electronic_zero_mv": 271, "we_sensor_zero_mv": -2,
+ "we_total_zero_mv": 269, "ae_electronic_zero_mv": 272, "ae_sensor_zero_mv": 2, "ae_total_zero_mv": 274,
+ "we_sensitivity_na_ppb": 0.459, "we_cross_sensitivity_no2_na_ppb": "n/a", "pcb_gain": 0.8,
+ "we_sensitivity_mv_ppb": 0.367, "we_cross_sensitivity_no2_mv_ppb": "n/a"},
+ "sn3": {"serial_number": "133910025", "sensor_type": "H2SA4", "we_electronic_zero_mv": 277, "we_sensor_zero_mv": 13,
+ "we_total_zero_mv": 290, "ae_electronic_zero_mv": 280, "ae_sensor_zero_mv": -10, "ae_total_zero_mv": 270,
+ "we_sensitivity_na_ppb": 1.694, "we_cross_sensitivity_no2_na_ppb": "n/a", "pcb_gain": 0.8,
+ "we_sensitivity_mv_ppb": 1.355, "we_cross_sensitivity_no2_mv_ppb": "n/a"},
+ "sn4": {"serial_number": "143950150", "sensor_type": "PIDNH", "pid_zero_mv": null, "pid_sensitivity_mv_ppm": null}}
+
+FILES
+~/SCS/conf/afe_calib.json
+
+SEE ALSO
+scs_dev/gases_sampler
+scs_mfr/afe_baseline
+
+RESOURCES
+https://www.alphasense-technology.co.uk/
 """
 
 import json

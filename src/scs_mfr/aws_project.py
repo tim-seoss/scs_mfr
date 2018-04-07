@@ -6,24 +6,47 @@ Created on 3 Apr 2018
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-xxx
+The aws_project utility is used to specify the topic path names for devices using the South Coast Science / AWS IoT
+messaging infrastructure. For each device, topics are divided into two groups:
+
+Location path, e.g.:
+
+* south-coast-science-dev/development/loc/1/climate
+* south-coast-science-dev/development/loc/1/gases
+* south-coast-science-dev/development/loc/1/particulates
+
+Device path, e.g.:
+
+* south-coast-science-dev/development/device/alpha-pi-eng-000006/control
+* south-coast-science-dev/development/device/alpha-pi-eng-000006/status
+
+Typically, the device paths should remain fixed throughout the lifetime of the device. In contrast, a given set of
+location paths are used by the device only when it is installed at a given location.
+
+The location ID may be an integer or a string.
+
+When the "verbose" "-v" flag is used, the osio_project utility reports all of the topic paths derived from
+its specification.
+
+Note that the scs_mfr/aws_mqtt_client process must be restarted for changes to take effect.
+
+SYNOPSIS
+aws_project.py [-s ORG GROUP LOCATION] [-d] [-v]
 
 EXAMPLES
-./aws_client_auth.py -e asrft7e5j5ecz.iot.us-west-2.amazonaws.com -c bruno -i 9f08402232
-
-FILES
-~/SCS/aws/aws_client_auth.json
-
-~/SCS/aws/certs/XXX-certificate.pem.crt
-~/SCS/aws/certs/XXX-private.pem.key
-~/SCS/aws/certs/XXX-public.pem.key
-~/SCS/aws/certs/root-CA.crt
+./aws_project.py -s south-coast-science-dev development 1
 
 DOCUMENT EXAMPLE
-{"endpoint": "asrft7e5j5ecz.iot.us-west-2.amazonaws.com", "client-id": "bruno", "cert-id": "9f08402232"}
+{"location-path": "south-coast-science-dev/development/loc/1",
+"device-path": "south-coast-science-dev/development/device"}
+
+FILES
+~/SCS/aws/aws_project.json
 
 SEE ALSO
 scs_dev/aws_mqtt_client
+scs_mfr/aws_api_auth
+scs_mfr/aws_client_auth
 """
 
 import sys
