@@ -36,7 +36,7 @@ SYNOPSIS
 osio_project.py [-s GROUP LOCATION_ID] [-v]
 
 EXAMPLES
-./osio_project.py -s south-coast-science-dev development 1
+./osio_client_auth.py -u south-coast-science-test-user -l 50.823204, -0.123005 "BN2 0DF" -v
 
 DOCUMENT EXAMPLE
 {"location-path": "/orgs/south-coast-science-dev/development/loc/3",
