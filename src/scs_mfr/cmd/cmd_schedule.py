@@ -53,7 +53,7 @@ class CmdSchedule(object):
 
 
     def delete(self):
-        return self.__opts.clear is not None
+        return self.__opts.delete is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
