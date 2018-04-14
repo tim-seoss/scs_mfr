@@ -18,10 +18,10 @@ OpenSensors system.
 Note that the scs_mfr/osio_mqtt_client process must be restarted for changes to take effect.
 
 SYNOPSIS
-osio_client_auth.py [-u USER_ID] [-d DESCRIPTION] [-v]
+osio_client_auth.py [-u USER_ID] [-l LAT LNG POSTCODE] [-d DESCRIPTION] [-d DESCRIPTION] [-v]
 
 EXAMPLES
-./osio_client_auth.py -u south-coast-science-test-user -v
+./osio_client_auth.py -u south-coast-science-test-user -l 50.823204, -0.123005 "BN2 0DF" -v
 
 FILES
 ~/SCS/osio/osio_client_auth.json
