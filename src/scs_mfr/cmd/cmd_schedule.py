@@ -32,7 +32,7 @@ class CmdSchedule(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        if self.set() and self.clear():
+        if self.set() and self.delete():
             return False
 
         if self.set():
@@ -63,8 +63,8 @@ class CmdSchedule(object):
         if self.__opts.set is not None:
             return self.__opts.set[0]
 
-        if self.__opts.clear is not None:
-            return self.__opts.clear
+        if self.__opts.delete is not None:
+            return self.__opts.delete
 
         return None
 
