@@ -37,6 +37,8 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_gps_conf import CmdGPSConf
 
 
+# TODO: add stationery / mobile mode (averaging count)
+
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
