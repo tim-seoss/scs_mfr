@@ -75,6 +75,7 @@ if __name__ == '__main__':
 
     if cmd.set():
         if system_id is None and not cmd.is_complete():
+            print("csv_logger_conf: No ID is present. You must therefore set all fields:", file=sys.stderr)
             cmd.print_help(sys.stderr)
             exit(1)
 
@@ -87,9 +88,10 @@ if __name__ == '__main__':
         system_id = SystemID(vendor_id, model_id, model_name, configuration, serial_number)
         system_id.save(Host)
 
-    print(JSONify.dumps(system_id))
+    if system_id:
+        print(JSONify.dumps(system_id))
 
-    if cmd.verbose and system_id is not None:
+    if cmd.verbose:
         print("-", file=sys.stderr)
         print("box:   %s" % system_id.box_label(), file=sys.stderr)
         print("topic: %s" % system_id.topic_label(), file=sys.stderr)
