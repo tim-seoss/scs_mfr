@@ -78,8 +78,6 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_osio_project import CmdOSIOProject
 
 
-# TODO: handle the cases where individual confs are not present
-
 # --------------------------------------------------------------------------------------------------------------------
 
 class HostProject(object):
@@ -240,7 +238,7 @@ if __name__ == '__main__':
             if found is not None:
                 print("particulates_topic: %s" % found.path, file=sys.stderr)
 
-            found = manager.find(project.status_topic_path(system_id))
+        found = manager.find(project.status_topic_path(system_id))
 
         if found is not None:
             print("      status_topic: %s" % found.path, file=sys.stderr)

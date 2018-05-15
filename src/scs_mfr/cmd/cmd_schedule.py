@@ -13,7 +13,7 @@ class CmdSchedule(object):
     """unix command line handler"""
 
     def __init__(self):
-        self.__parser = optparse.OptionParser(usage="%prog [{-s NAME INTERVAL TALLY | -c NAME }] [-v]",
+        self.__parser = optparse.OptionParser(usage="%prog [{-s NAME INTERVAL TALLY | -d NAME }] [-v]",
                                               version="%prog 1.0")
 
         # optional...
