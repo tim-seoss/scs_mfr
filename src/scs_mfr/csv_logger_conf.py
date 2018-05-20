@@ -40,6 +40,8 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_csv_logger_conf import CmdCSVLoggerConf
 
 
+# TODO: enable deletion of this conf
+
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
