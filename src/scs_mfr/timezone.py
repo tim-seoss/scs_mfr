@@ -17,7 +17,7 @@ All time zones specified by the Internet Assigned Numbers Authority (IANA) are a
 Note that the scs_dev sampler processes must be restarted for changes to take effect.
 
 SYNOPSIS
-timezone.py [{ -z | -s ZONE | - l}] [-v]
+timezone.py [{ -z | -s ZONE | - l }] [-v]
 
 EXAMPLES
 ./timezone.py -s Europe/London -v
