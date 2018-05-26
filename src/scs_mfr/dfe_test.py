@@ -66,6 +66,10 @@ if __name__ == '__main__':
 
     cmd = CmdDFETest()
 
+    if cmd.verbose:
+        print("dfe_test: %s" % cmd, file=sys.stderr)
+        sys.stderr.flush()
+
     if not cmd.is_valid():
         cmd.print_help(sys.stderr)
         exit(2)

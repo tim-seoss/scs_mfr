@@ -59,7 +59,7 @@ if __name__ == '__main__':
     cmd = CmdSHTConf()
 
     if cmd.verbose:
-        print(cmd, file=sys.stderr)
+        print("sht_conf: %s" % cmd, file=sys.stderr)
         sys.stderr.flush()
 
 

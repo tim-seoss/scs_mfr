@@ -67,7 +67,7 @@ if __name__ == '__main__':
     cmd = CmdSchedule()
 
     if cmd.verbose:
-        print(cmd, file=sys.stderr)
+        print("schedule: %s" % cmd, file=sys.stderr)
         sys.stderr.flush()
 
     if not cmd.is_valid():

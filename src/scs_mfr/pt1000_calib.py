@@ -63,7 +63,7 @@ if __name__ == '__main__':
         cmd = CmdPt1000Calib()
 
         if cmd.verbose:
-            print(cmd, file=sys.stderr)
+            print("pt1000_calib: %s" % cmd, file=sys.stderr)
             sys.stderr.flush()
 
 

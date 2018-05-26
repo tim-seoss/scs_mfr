@@ -72,7 +72,7 @@ if __name__ == '__main__':
     cmd = CmdAWSProject()
 
     if cmd.verbose:
-        print(cmd, file=sys.stderr)
+        print("aws_project: %s" % cmd, file=sys.stderr)
         sys.stderr.flush()
 
 
@@ -87,7 +87,7 @@ if __name__ == '__main__':
             print("aws_project: SystemID not available.", file=sys.stderr)
             exit(1)
 
-        print(system_id, file=sys.stderr)
+        print("aws_project: %s" % system_id, file=sys.stderr)
     else:
         system_id = None
 

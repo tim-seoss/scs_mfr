@@ -54,7 +54,7 @@ if __name__ == '__main__':
     cmd = CmdMQTTConf()
 
     if cmd.verbose:
-        print(cmd, file=sys.stderr)
+        print("mqtt_conf: %s" % cmd, file=sys.stderr)
         sys.stderr.flush()
 
 

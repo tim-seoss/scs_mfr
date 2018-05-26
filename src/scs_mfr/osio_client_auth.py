@@ -67,7 +67,7 @@ if __name__ == '__main__':
     cmd = CmdOSIOClientAuth()
 
     if cmd.verbose:
-        print(cmd, file=sys.stderr)
+        print("osio_client_auth: %s" % cmd, file=sys.stderr)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -77,7 +77,7 @@ if __name__ == '__main__':
     opc_conf = OPCConf.load(Host)
 
     if cmd.verbose:
-        print(opc_conf, file=sys.stderr)
+        print("osio_client_auth: %s" % opc_conf, file=sys.stderr)
 
     # APIAuth...
     api_auth = APIAuth.load(Host)
@@ -87,7 +87,7 @@ if __name__ == '__main__':
         exit(1)
 
     if cmd.verbose:
-        print(api_auth, file=sys.stderr)
+        print("osio_client_auth: %s" % api_auth, file=sys.stderr)
 
     # SystemID...
     system_id = SystemID.load(Host)
@@ -97,7 +97,7 @@ if __name__ == '__main__':
         exit(1)
 
     if cmd.verbose:
-        print(system_id, file=sys.stderr)
+        print("osio_client_auth: %s" % system_id, file=sys.stderr)
 
     # AFECalib...
     afe_calib = AFECalib.load(Host)
@@ -107,7 +107,7 @@ if __name__ == '__main__':
         exit(1)
 
     if cmd.verbose:
-        print(afe_calib, file=sys.stderr)
+        print("osio_client_auth: %s" % afe_calib, file=sys.stderr)
         sys.stderr.flush()
 
     # User manager...
