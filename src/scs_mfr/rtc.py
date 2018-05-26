@@ -50,7 +50,7 @@ if __name__ == '__main__':
     cmd = CmdRTC()
 
     if cmd.verbose:
-        print(cmd, file=sys.stderr)
+        print("rtc: %s" % cmd, file=sys.stderr)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -59,7 +59,7 @@ if __name__ == '__main__':
     now = LocalizedDatetime.now()
 
     if cmd.verbose:
-        print("system time: %s" % now, file=sys.stderr)
+        print("rtc: system time: %s" % now, file=sys.stderr)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -80,7 +80,7 @@ if __name__ == '__main__':
         localized_datetime = rtc_datetime.as_localized_datetime(tzlocal.get_localzone())
 
         if cmd.verbose:
-            print("rtc datetime: %s" % localized_datetime, file=sys.stderr)
+            print("rtc: datetime: %s" % localized_datetime, file=sys.stderr)
             sys.stderr.flush()
 
         print(JSONify.dumps(localized_datetime))

@@ -77,7 +77,7 @@ if __name__ == '__main__':
     cmd = CmdAFECalib()
 
     if cmd.verbose:
-        print(cmd, file=sys.stderr)
+        print("afe_calib: %s" % cmd, file=sys.stderr)
         sys.stderr.flush()
 
 

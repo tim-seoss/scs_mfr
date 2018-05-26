@@ -55,7 +55,7 @@ if __name__ == '__main__':
     cmd = CmdAFEBaseline()
 
     if cmd.verbose:
-        print(cmd, file=sys.stderr)
+        print("afe_baseline: %s" % cmd, file=sys.stderr)
         sys.stderr.flush()
 
 

@@ -56,7 +56,7 @@ if __name__ == '__main__':
     cmd = CmdGPSConf()
 
     if cmd.verbose:
-        print(cmd, file=sys.stderr)
+        print("gps_conf: %s" % cmd, file=sys.stderr)
         sys.stderr.flush()
 
 

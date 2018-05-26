@@ -59,7 +59,7 @@ if __name__ == '__main__':
     cmd = CmdSystemID()
 
     if cmd.verbose:
-        print(cmd, file=sys.stderr)
+        print("system_id: %s" % cmd, file=sys.stderr)
         sys.stderr.flush()
 
 
@@ -75,7 +75,7 @@ if __name__ == '__main__':
 
     if cmd.set():
         if system_id is None and not cmd.is_complete():
-            print("csv_logger_conf: No ID is present. You must therefore set all fields:", file=sys.stderr)
+            print("system_id: No ID is present. You must therefore set all fields:", file=sys.stderr)
             cmd.print_help(sys.stderr)
             exit(1)
 

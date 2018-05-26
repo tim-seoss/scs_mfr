@@ -51,7 +51,7 @@ if __name__ == '__main__':
         exit(2)
 
     if cmd.verbose:
-        print(cmd, file=sys.stderr)
+        print("shared_secret: %s" % cmd, file=sys.stderr)
         sys.stderr.flush()
 
 
