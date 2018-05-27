@@ -14,7 +14,7 @@ flushes, in order to extend the life of SD cards.
 Note that the logging process(es) must be restarted for changes to take effect.
 
 SYNOPSIS
-csv_logger_conf.py [-r ROOT_PATH] [-o DELETE_OLDEST] [-i WRITE_INTERVAL] [-v]
+csv_logger_conf.py { [-r ROOT_PATH] [-o DELETE_OLDEST] [-i WRITE_INTERVAL] | -d } [-v]
 
 EXAMPLES
 ./csv_logger_conf.py -r /srv/removable_data_storage -o 1 -i 0
@@ -39,8 +39,6 @@ from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_csv_logger_conf import CmdCSVLoggerConf
 
-
-# TODO: enable deletion of this conf
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -88,6 +86,10 @@ if __name__ == '__main__':
 
         conf = CSVLoggerConf(root_path, delete_oldest, write_interval)
         conf.save(Host)
+
+    elif cmd.delete:
+        conf.delete(Host)
+        conf = None
 
     if conf:
         print(JSONify.dumps(conf))

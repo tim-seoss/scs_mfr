@@ -48,10 +48,10 @@ class CmdDFEConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        if self.set is not None and self.delete is not None:
+        if self.set() is not None and self.delete is not None:
             return False
 
-        if self.set is None and self.pt1000_addr is not None:
+        if self.set() is None and self.pt1000_addr is not None:
             return False
 
         return True
@@ -91,4 +91,4 @@ class CmdDFEConf(object):
 
     def __str__(self, *args, **kwargs):
         return "CmdDFEConf:{set:%s, pt1000:%s, delete:%s, verbose:%s, args:%s}" % \
-               (self.set, CmdDFEConf.__addr_str(self.pt1000_addr), self.delete, self.verbose, self.args)
+               (self.set(), CmdDFEConf.__addr_str(self.pt1000_addr), self.delete, self.verbose, self.args)
