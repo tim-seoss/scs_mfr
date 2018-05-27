@@ -38,7 +38,6 @@ class CmdCSVLoggerConf(object):
         self.__opts, self.__args = self.__parser.parse_args()
 
 
-
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
