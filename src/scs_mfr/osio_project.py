@@ -161,7 +161,7 @@ if __name__ == '__main__':
         exit(1)
 
     if cmd.verbose:
-        print("xx: %s" % system_id, file=sys.stderr)
+        print("osio_project: %s" % system_id, file=sys.stderr)
 
     # AFECalib...
     afe_calib = AFECalib.load(Host)
