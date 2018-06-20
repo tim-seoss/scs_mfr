@@ -89,7 +89,6 @@ if __name__ == '__main__':
             calib = MPL115A2Calib(None, c25)
             calib.save(Host)
 
-        # calibrated...
             calib = MPL115A2Calib.load(Host)
 
         print(JSONify.dumps(calib))
