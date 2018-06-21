@@ -63,8 +63,7 @@ if __name__ == '__main__':
         sht = sht_conf.int_sht()
 
         # MPL115A2...
-        calib = MPL115A2Calib(None, MPL115A2Calib.DEFAULT_C25)
-        barometer = MPL115A2(calib)
+        barometer = MPL115A2(MPL115A2Calib.DEFAULT_C25)
 
 
         # ------------------------------------------------------------------------------------------------------------
@@ -93,7 +92,7 @@ if __name__ == '__main__':
         print(JSONify.dumps(calib))
 
         if cmd.verbose:
-            barometer = MPL115A2(calib)
+            barometer = MPL115A2.construct(calib)
             barometer.init()
 
             datum = barometer.sample()
