@@ -9,7 +9,7 @@ DESCRIPTION
 text
 
 SYNOPSIS
-pt1000_calib [-s] [-v]
+mpl115a2_calib [-s] [-v]
 
 EXAMPLES
 ./mpl115a2_calib.py -s
@@ -28,10 +28,9 @@ import sys
 
 from scs_core.data.json import JSONify
 
-from scs_core.pressure.mpl115a2_calib import MPL115A2Calib
-
+from scs_dfe.climate.mpl115a2 import MPL115A2
+from scs_core.climate.mpl115a2_calib import MPL115A2Calib
 from scs_dfe.climate.sht_conf import SHTConf
-from scs_dfe.pressure.mpl115a2 import MPL115A2
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
