@@ -1,48 +1,41 @@
 #!/usr/bin/env python3
 
 """
-Created on 1 Oct 2016
+Created on 20 Jun 2018
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The pt1000_calib utility is used to determine and save the voltage offset for each Pt1000 sensor.
-
-The utility operates by measuring the temperature using a Sensirion SHT sensor, measuring the voltage output of the
-Pt1000 sensor, and back-calculating the voltage offset.
-
-Note that the scs_analysis/gases_sampler process must be restarted for changes to take effect.
+text
 
 SYNOPSIS
-pt1000_calib.py [-s] [-v]
+mpl115a2_calib [-s] [-v]
 
 EXAMPLES
-./pt1000_calib.py -s
+./mpl115a2_calib.py -s
 
 DOCUMENT EXAMPLE
-{"calibrated-on": "2017-07-19T13:56:48.289+00:00", "v20": 0.002891}
+{"calibrated-on": "2018-06-20T10:25:39.045+00:00", "c25": 511}
 
 FILES
-~/SCS/conf/pt1000_calib.json
+~/SCS/conf/mpl115a2_calib.json
 
 SEE ALSO
-scs_dev/gases_sampler
-scs_mfr/dfe_conf
+scs_mfr/mpl115a2_conf
 """
 
 import sys
 
 from scs_core.data.json import JSONify
 
-from scs_core.gas.pt1000_calib import Pt1000Calib
-
-from scs_dfe.board.dfe_conf import DFEConf
+from scs_dfe.climate.mpl115a2 import MPL115A2
+from scs_core.climate.mpl115a2_calib import MPL115A2Calib
 from scs_dfe.climate.sht_conf import SHTConf
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
-from scs_mfr.cmd.cmd_pt1000_calib import CmdPt1000Calib
+from scs_mfr.cmd.cmd_mpl115a2_calib import CmdMPL115A2Calib
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -55,10 +48,10 @@ if __name__ == '__main__':
         # ----------------------------------------------------------------------------------------------------------------
         # cmd...
 
-        cmd = CmdPt1000Calib()
+        cmd = CmdMPL115A2Calib()
 
         if cmd.verbose:
-            print("pt1000_calib: %s" % cmd, file=sys.stderr)
+            print("mpl115a2_calib: %s" % cmd, file=sys.stderr)
             sys.stderr.flush()
 
 
@@ -69,13 +62,15 @@ if __name__ == '__main__':
         sht_conf = SHTConf.load(Host)
         sht = sht_conf.int_sht()
 
-        # AFE...
-        dfe_conf = DFEConf.load(Host)
-        afe = dfe_conf.afe(Host)
+        # MPL115A2...
+        calib = MPL115A2Calib(None, MPL115A2Calib.DEFAULT_C25)
+        barometer = MPL115A2(calib)
 
 
         # ------------------------------------------------------------------------------------------------------------
         # run...
+
+        barometer.init()
 
         # SHT...
         sht_datum = sht.sample()
@@ -83,26 +78,27 @@ if __name__ == '__main__':
         if cmd.verbose:
             print(sht_datum, file=sys.stderr)
 
-        # Pt1000 initial...
-        pt1000_datum = afe.sample_pt1000()
+        # MPL115A2 initial...
+        datum = barometer.sample()
 
         if cmd.set:
-            # Pt1000 correction...
-            v20 = pt1000_datum.v20(sht_datum.temp)
+            # MPL115A2 correction...
+            c25 = datum.c25(sht_datum.temp)
 
-            pt1000_calib = Pt1000Calib(None, v20)
-            pt1000_calib.save(Host)
+            calib = MPL115A2Calib(None, c25)
+            calib.save(Host)
 
-        # calibrated...
-        pt1000_calib = Pt1000Calib.load(Host)
+            calib = MPL115A2Calib.load(Host)
 
-        print(JSONify.dumps(pt1000_calib))
+        print(JSONify.dumps(calib))
 
         if cmd.verbose:
-            afe = dfe_conf.afe(Host)
-            pt1000_datum = afe.sample_pt1000()
+            barometer = MPL115A2(calib)
+            barometer.init()
 
-            print(pt1000_datum, file=sys.stderr)
+            datum = barometer.sample()
+
+            print(datum, file=sys.stderr)
 
 
     # ----------------------------------------------------------------------------------------------------------------

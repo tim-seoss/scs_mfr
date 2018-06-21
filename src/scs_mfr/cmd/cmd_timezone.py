@@ -23,7 +23,7 @@ class CmdTimezone(object):
         self.__parser.add_option("--zones", "-z", action="store_true", dest="list", default=False,
                                  help="list available timezones to stderr")
 
-        self.__parser.add_option("--set", "-s", type="string", nargs=1, action="store", dest="zone", default=None,
+        self.__parser.add_option("--set", "-s", type="string", nargs=1, action="store", dest="zone",
                                  help="override system timezone with ZONE")
 
         self.__parser.add_option("--link", "-l", action="store_true", dest="link", default=False,

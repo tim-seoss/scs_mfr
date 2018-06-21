@@ -1,5 +1,5 @@
 """
-Created on 27 Feb 2018
+Created on 21 Jun 2018
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
@@ -9,35 +9,25 @@ import optparse
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class CmdDFEConf(object):
+class CmdMPL115A2Conf(object):
     """
     unix command line handler
     """
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    @classmethod
-    def __addr_str(cls, addr):
-        if addr is None:
-            return None
-
-        return "0x%02x" % addr
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
     def __init__(self):
-        self.__parser = optparse.OptionParser(usage="%prog [{ -s [-p ADDR] | -d }] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ -s [-a ALTITUDE] | -d }] [-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--set", "-s", action="store_true", dest="set", default=False,
-                                 help="create or update a DFE configuration")
+                                 help="create or update an MPL115A2 configuration")
 
-        self.__parser.add_option("--pt1000", "-p", type="int", nargs=1, action="store", dest="pt1000",
-                                 help="set I2C address of the Pt1000 ADC (if present)")
+        self.__parser.add_option("--altitude", "-a", type="string", nargs=1, action="store", dest="altitude",
+                                 help="metres or 'auto' for GPS altitude")
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
-                                 help="delete the DFE configuration")
+                                 help="delete the MPL115A2 configuration")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
@@ -51,7 +41,15 @@ class CmdDFEConf(object):
         if self.set() and self.delete:
             return False
 
-        if not self.set() and self.pt1000_addr is not None:
+        if not self.set() and self.altitude is not None:
+            return False
+
+        if self.altitude is None or self.altitude == 'auto':
+            return True
+
+        try:
+            int(self.altitude)
+        except ValueError:
             return False
 
         return True
@@ -64,8 +62,11 @@ class CmdDFEConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
-    def pt1000_addr(self):
-        return self.__opts.pt1000
+    def altitude(self):
+        try:
+            return int(self.__opts.altitude)
+        except (TypeError, ValueError):
+            return self.__opts.altitude
 
 
     @property
@@ -90,5 +91,5 @@ class CmdDFEConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdDFEConf:{set:%s, pt1000:%s, delete:%s, verbose:%s, args:%s}" % \
-               (self.set(), CmdDFEConf.__addr_str(self.pt1000_addr), self.delete, self.verbose, self.args)
+        return "CmdMPL115A2Conf:{set:%s, altitude:%s, delete:%s, verbose:%s, args:%s}" % \
+               (self.set(), self.altitude, self.delete, self.verbose, self.args)
