@@ -21,7 +21,7 @@ FILES
 ~/SCS/conf/mpl115a2_calib.json
 
 SEE ALSO
-scs_dev/gases_sampler
+scs_mfr/mpl115a2_conf
 """
 
 import sys
