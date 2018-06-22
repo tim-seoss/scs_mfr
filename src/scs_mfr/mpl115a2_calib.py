@@ -62,8 +62,13 @@ if __name__ == '__main__':
         sht_conf = SHTConf.load(Host)
         sht = sht_conf.int_sht()
 
+        # MPL115A2Calib...
+        calib = MPL115A2Calib.load(Host)
+
+        c25 = MPL115A2Calib.DEFAULT_C25 if calib is None else calib.c25
+
         # MPL115A2...
-        barometer = MPL115A2(MPL115A2Calib.DEFAULT_C25)
+        barometer = MPL115A2(c25)
 
 
         # ------------------------------------------------------------------------------------------------------------
@@ -71,23 +76,24 @@ if __name__ == '__main__':
 
         barometer.init()
 
-        # SHT...
-        sht_datum = sht.sample()
-
-        if cmd.verbose:
-            print(sht_datum, file=sys.stderr)
-
-        # MPL115A2 initial...
-        datum = barometer.sample()
-
         if cmd.set:
+            # SHT...
+            sht_datum = sht.sample()
+
+            if cmd.verbose:
+                print(sht_datum, file=sys.stderr)
+
+            # MPL115A2 initial...
+            datum = barometer.sample()
+
             # MPL115A2 correction...
             c25 = datum.c25(sht_datum.temp)
 
             calib = MPL115A2Calib(None, c25)
             calib.save(Host)
 
-            calib = MPL115A2Calib.load(Host)
+        # calibrated...
+        calib = MPL115A2Calib.load(Host)
 
         print(JSONify.dumps(calib))
 

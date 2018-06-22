@@ -77,16 +77,16 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # run...
 
-        # SHT...
-        sht_datum = sht.sample()
-
-        if cmd.verbose:
-            print(sht_datum, file=sys.stderr)
-
-        # Pt1000 initial...
-        pt1000_datum = afe.sample_pt1000()
-
         if cmd.set:
+            # SHT...
+            sht_datum = sht.sample()
+
+            if cmd.verbose:
+                print(sht_datum, file=sys.stderr)
+
+            # Pt1000 initial...
+            pt1000_datum = afe.sample_pt1000()
+
             # Pt1000 correction...
             v20 = pt1000_datum.v20(sht_datum.temp)
 
