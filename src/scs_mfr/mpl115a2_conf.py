@@ -29,10 +29,11 @@ DOCUMENT EXAMPLE
 {"altitude": "auto"}
 
 FILES
-~/SCS/conf/dfe_conf.json
+~/SCS/conf/mpl115a2_conf.json
 
 SEE ALSO
 scs_dev/gases_sampler
+scs_dev/pressure_sampler
 scs_mfr/mpl115a2_calib
 """
 
