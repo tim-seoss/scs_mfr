@@ -9,7 +9,7 @@ DESCRIPTION
 text
 
 SYNOPSIS
-mpl115a2_calib [-s] [-v]
+mpl115a2_calib.py [-s] [-v]
 
 EXAMPLES
 ./mpl115a2_calib.py -s
