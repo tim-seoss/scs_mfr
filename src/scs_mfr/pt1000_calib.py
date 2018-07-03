@@ -11,6 +11,8 @@ The pt1000_calib utility is used to determine and save the voltage offset for ea
 The utility operates by measuring the temperature using a Sensirion SHT sensor, measuring the voltage output of the
 Pt1000 sensor, and back-calculating the voltage offset.
 
+For the utility to operate, the I2C address of the Pt1000 ADC must be set. This is done using the dfe_conf utility.
+
 Note that the scs_analysis/gases_sampler process must be restarted for changes to take effect.
 
 SYNOPSIS
@@ -71,6 +73,12 @@ if __name__ == '__main__':
 
         # AFE...
         dfe_conf = DFEConf.load(Host)
+
+        # validate...
+        if dfe_conf.pt1000_addr is None:
+            print("pt1000_calib: a Pt1000 ADC has not been configured for this system.", file=sys.stderr)
+            exit(1)
+
         afe = dfe_conf.afe(Host)
 
 
