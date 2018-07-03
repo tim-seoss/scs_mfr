@@ -9,7 +9,7 @@ DESCRIPTION
 text
 
 SYNOPSIS
-mpl115a2_calib [-s] [-v]
+mpl115a2_calib.py [-s] [-v]
 
 EXAMPLES
 ./mpl115a2_calib.py -s
@@ -21,6 +21,8 @@ FILES
 ~/SCS/conf/mpl115a2_calib.json
 
 SEE ALSO
+scs_dev/gases_sampler
+scs_dev/pressure_sampler
 scs_mfr/mpl115a2_conf
 """
 
@@ -62,9 +64,13 @@ if __name__ == '__main__':
         sht_conf = SHTConf.load(Host)
         sht = sht_conf.int_sht()
 
+        # MPL115A2Calib...
+        calib = MPL115A2Calib.load(Host)
+
+        c25 = MPL115A2Calib.DEFAULT_C25 if calib is None else calib.c25
+
         # MPL115A2...
-        calib = MPL115A2Calib(None, MPL115A2Calib.DEFAULT_C25)
-        barometer = MPL115A2(calib)
+        barometer = MPL115A2(c25)
 
 
         # ------------------------------------------------------------------------------------------------------------
@@ -72,28 +78,29 @@ if __name__ == '__main__':
 
         barometer.init()
 
-        # SHT...
-        sht_datum = sht.sample()
-
-        if cmd.verbose:
-            print(sht_datum, file=sys.stderr)
-
-        # MPL115A2 initial...
-        datum = barometer.sample()
-
         if cmd.set:
+            # SHT...
+            sht_datum = sht.sample()
+
+            if cmd.verbose:
+                print(sht_datum, file=sys.stderr)
+
+            # MPL115A2 initial...
+            datum = barometer.sample()
+
             # MPL115A2 correction...
             c25 = datum.c25(sht_datum.temp)
 
             calib = MPL115A2Calib(None, c25)
             calib.save(Host)
 
-            calib = MPL115A2Calib.load(Host)
+        # calibrated...
+        calib = MPL115A2Calib.load(Host)
 
         print(JSONify.dumps(calib))
 
         if cmd.verbose:
-            barometer = MPL115A2(calib)
+            barometer = MPL115A2.construct(calib)
             barometer.init()
 
             datum = barometer.sample()
