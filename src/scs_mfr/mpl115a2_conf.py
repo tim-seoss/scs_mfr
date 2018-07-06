@@ -6,33 +6,31 @@ Created on 21 Jun 2018
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The dfe_conf utility is used to specify whether a South Coast Science digital front-end (DFE) board is present on the
-host system, and whether the attachAlphasense analogue front-end board has a Pt1000 sensor.
+The mpl115a2_conf utility is used to specify the altitude of the device hosting the MPL115A2 digital barometer. This
+information is used to determine the pressure at sea level ("p0"). If the altitude is not specified, then
+no p0 value is returned by the pressure_sampler utility.
 
-Pt1000 analogue-digital converter (ADC) I2C addresses:
+Note that determination of p0 requires the temperature sensor in the MPL115A2 digital barometer to be calibrated. This
+is done using the mpl115a2_calib utility.
 
-* Raspberry Pi DFE: 0x68
-* BeagleBone DFE: 0x69
+Forthcoming versions of the mpl115a2_conf utility will support an "auto" mode, in which altitude is found from a GPS
+receiver.
 
-Note: many device enclosure designs cause the Pt1000 reading to be unreliable. In these cases, it is appropriate
-to specify that the Pt1000 is absent.
-
-The scs_dev sampler processes must be restarted for changes to take effect.
+The pressure_sampler sampler processes must be restarted for changes to take effect.
 
 SYNOPSIS
-mpl115a2_conf.py [{ -s [-a ALTITUDE] | -d }] [-v]
+mpl115a2_conf.py [{ -a ALTITUDE | -d }] [-v]
 
 EXAMPLES
-./mpl115a2_conf.py -s
-
-DOCUMENT EXAMPLE
-{"altitude": "auto"}
+./mpl115a2_conf.py -a 100
 
 FILES
 ~/SCS/conf/mpl115a2_conf.json
 
+DOCUMENT EXAMPLE
+{"altitude": 100}
+
 SEE ALSO
-scs_dev/gases_sampler
 scs_dev/pressure_sampler
 scs_mfr/mpl115a2_calib
 """
@@ -80,7 +78,7 @@ if __name__ == '__main__':
         conf = MPL115A2Conf(cmd.altitude)
         conf.save(Host)
 
-    elif cmd.delete:
+    elif cmd.delete and conf is not None:
         conf.delete(Host)
         conf = None
 

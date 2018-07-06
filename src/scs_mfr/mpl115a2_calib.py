@@ -6,7 +6,15 @@ Created on 20 Jun 2018
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-text
+The mpl115a2_calib utility is used to calibrate the temperature sensor in the MPL115A2 digital barometer. The utility
+operates by measuring the temperature using a Sensirion SHT sensor, measuring the temperature ADC count of the MPL115A2
+sensor, and back-calculating the offset.
+
+If calibration has been performed, the pressure_sampler utility reports temperature in addition to actual pressure
+("pA"). If the host device altitude has also been set, the pressure_sampler additionally reports equivalent pressure
+at sea level ("p0").
+
+The pressure_sampler sampler processes must be restarted for changes to take effect.
 
 SYNOPSIS
 mpl115a2_calib.py [-s] [-v]
@@ -14,14 +22,13 @@ mpl115a2_calib.py [-s] [-v]
 EXAMPLES
 ./mpl115a2_calib.py -s
 
-DOCUMENT EXAMPLE
-{"calibrated-on": "2018-06-20T10:25:39.045+00:00", "c25": 511}
-
 FILES
 ~/SCS/conf/mpl115a2_calib.json
 
+DOCUMENT EXAMPLE
+{"calibrated-on": "2018-06-20T10:25:39.045+00:00", "c25": 511}
+
 SEE ALSO
-scs_dev/gases_sampler
 scs_dev/pressure_sampler
 scs_mfr/mpl115a2_conf
 """
