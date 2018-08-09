@@ -103,7 +103,7 @@ if __name__ == '__main__':
         project = Project.construct(cmd.organisation, cmd.group, cmd.location)
         project.save(Host)
 
-    if cmd.delete:
+    if cmd.delete and project is not None:
         project.delete(Host)
         project = None
 

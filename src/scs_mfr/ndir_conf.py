@@ -85,7 +85,7 @@ if __name__ == '__main__':
         conf = NDIRConf(model, tally)
         conf.save(Host)
 
-    elif cmd.delete:
+    elif cmd.delete and conf is not None:
         conf.delete(Host)
         conf = None
 
