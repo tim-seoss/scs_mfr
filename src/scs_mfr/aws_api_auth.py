@@ -78,7 +78,7 @@ if __name__ == '__main__':
         auth = APIAuth(endpoint, api_key)
         auth.save(Host)
 
-    if cmd.delete:
+    if cmd.delete and auth is not None:
         auth.delete(Host)
         auth = None
 

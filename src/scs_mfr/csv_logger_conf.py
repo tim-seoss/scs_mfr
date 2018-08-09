@@ -87,7 +87,7 @@ if __name__ == '__main__':
         conf = CSVLoggerConf(root_path, delete_oldest, write_interval)
         conf.save(Host)
 
-    elif cmd.delete:
+    elif cmd.delete and conf is not None:
         conf.delete(Host)
         conf = None
 

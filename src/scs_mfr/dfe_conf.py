@@ -79,7 +79,7 @@ if __name__ == '__main__':
         conf = DFEConf(cmd.pt1000_addr)
         conf.save(Host)
 
-    elif cmd.delete:
+    elif cmd.delete and conf is not None:
         conf.delete(Host)
         conf = None
 

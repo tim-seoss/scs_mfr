@@ -67,7 +67,7 @@ if __name__ == '__main__':
         conf = GPSConf(cmd.model)
         conf.save(Host)
 
-    elif cmd.delete:
+    elif cmd.delete and conf is not None:
         conf.delete(Host)
         conf = None
 
