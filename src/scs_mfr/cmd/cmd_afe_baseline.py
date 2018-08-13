@@ -12,25 +12,40 @@ import optparse
 class CmdAFEBaseline(object):
     """unix command line handler"""
 
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    @staticmethod
+    def __is_integer(value):
+        try:
+            int(value)
+        except ValueError:
+            return False
+
+        return True
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
     def __init__(self):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-1 SN1_OFFSET] [-2 SN2_OFFSET] [-3 SN3_OFFSET] "
-                                                    "[-4 SN3_OFFSET] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog { { -s | -u | -d } GAS VALUE | -z } [-v]",
+                                              version="%prog 1.0")
 
         # optional...
-        self.__parser.add_option("--sn1", "-1", type="int", nargs=1, action="store", dest="sn1_offset",
-                                 help="SN1 baseline offset")
+        self.__parser.add_option("--set", "-s", type="string", nargs=2, action="store", dest="set",
+                                 help="set offset for GAS to integer VALUE")
 
-        self.__parser.add_option("--sn2", "-2", type="int", nargs=1, action="store", dest="sn2_offset",
-                                 help="SN2 baseline offset")
+        self.__parser.add_option("--up", "-u", type="string", nargs=2, action="store", dest="up",
+                                 help="move offset up for GAS, by integer VALUE")
 
-        self.__parser.add_option("--sn3", "-3", type="int", nargs=1, action="store", dest="sn3_offset",
-                                 help="SN3 baseline offset")
+        self.__parser.add_option("--down", "-d", type="string", nargs=2, action="store", dest="down",
+                                 help="move offset down for GAS, by integer VALUE")
 
-        self.__parser.add_option("--sn4", "-4", type="int", nargs=1, action="store", dest="sn4_offset",
-                                 help="SN4 baseline offset")
+        self.__parser.add_option("--zero", "-z", action="store_true", dest="zero",
+                                 help="zero all baseline offsets")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
@@ -40,38 +55,84 @@ class CmdAFEBaseline(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    def is_valid(self):
+        param_count = 0
+
+        if self.set is not None:
+            param_count += 1
+
+        if self.up is not None:
+            param_count += 1
+
+        if self.down is not None:
+            param_count += 1
+
+        if self.zero is not None:
+            param_count += 1
+
+        if param_count > 1:
+            return False
+
+        if self.set is not None and not self.__is_integer(self.set[1]):
+            return False
+
+        if self.up is not None and not self.__is_integer(self.up[1]):
+            return False
+
+        if self.down is not None and not self.__is_integer(self.down[1]):
+            return False
+
+        return True
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def gas_name(self):
+        if self.set:
+            return self.set[0]
+
+        if self.up:
+            return self.up[0]
+
+        if self.down:
+            return self.down[0]
+
+        return None
+
+
+    def offset_value(self):
+        if self.set:
+            return int(self.set[1])
+
+        if self.up:
+            return int(self.up[1])
+
+        if self.down:
+            return int(self.down[1])
+
+        return None
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    @property
     def set(self):
-        return self.__opts.sn1_offset is not None or self.__opts.sn2_offset is not None or \
-               self.__opts.sn3_offset is not None or self.__opts.sn4_offset is not None
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    @property
-    def offsets(self):
-        return {0: self.sn1_offset, 1: self.sn2_offset, 2: self.sn3_offset, 3: self.sn4_offset}
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    @property
-    def sn1_offset(self):
-        return self.__opts.sn1_offset
+        return self.__opts.set
 
 
     @property
-    def sn2_offset(self):
-        return self.__opts.sn2_offset
+    def up(self):
+        return self.__opts.up
 
 
     @property
-    def sn3_offset(self):
-        return self.__opts.sn3_offset
+    def down(self):
+        return self.__opts.down
 
 
     @property
-    def sn4_offset(self):
-        return self.__opts.sn4_offset
+    def zero(self):
+        return self.__opts.zero
 
 
     @property
@@ -86,6 +147,10 @@ class CmdAFEBaseline(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    def print_help(self, file):
+        self.__parser.print_help(file)
+
+
     def __str__(self, *args, **kwargs):
-        return "CmdAFEBaseline:{sn1_offset:%s, sn2_offset:%s, sn3_offset:%s, sn4_offset:%s, verbose:%s, args:%s}" % \
-               (self.sn1_offset, self.sn2_offset, self.sn3_offset, self.sn4_offset, self.verbose, self.args)
+        return "CmdAFEBaseline:{set:%s, up:%s, down:%s, zero:%s, verbose:%s, args:%s}" % \
+               (self.set, self.up, self.down, self.zero, self.verbose, self.args)
