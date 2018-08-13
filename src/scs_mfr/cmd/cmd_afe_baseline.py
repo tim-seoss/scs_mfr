@@ -45,7 +45,7 @@ class CmdAFEBaseline(object):
                                  help="move offset down for GAS, by integer VALUE")
 
         self.__parser.add_option("--zero", "-z", action="store_true", dest="zero",
-                                 help="zero all baseline offsets")
+                                 help="zero all offsets")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
