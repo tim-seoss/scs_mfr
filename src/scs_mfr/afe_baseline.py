@@ -16,7 +16,7 @@ an ozone sensor is identified as Ox.
 Note that the scs_dev/gasses_sampler process must be restarted for changes to take effect.
 
 SYNOPSIS
-afe_baseline.py { { -s | -u | -d } GAS VALUE | -z } [-v]
+afe_baseline.py [{ { -s | -u | -d } GAS VALUE | -z }] [-v]
 
 EXAMPLES
 ./afe_baseline.py -s CO -24
