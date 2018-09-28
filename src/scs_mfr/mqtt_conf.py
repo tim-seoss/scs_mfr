@@ -18,13 +18,13 @@ Warning: if inhibit publishing is set to true, the MQTT client will still subscr
 receipts or responses.
 
 SYNOPSIS
-mqtt_conf.py [-p INHIBIT_PUBLISHING] [-v]
+mqtt_conf.py [-p INHIBIT_PUBLISHING] [-q QUEUE_SIZE] [-v]
 
 EXAMPLES
-./mqtt_conf.py -p1
+./mqtt_conf.py -p0 -q21000
 
 DOCUMENT EXAMPLE
-{"inhibit-publishing": false}
+{"inhibit-publishing": false, "queue-size": 22000}
 
 FILES
 ~/SCS/conf/mqtt_conf.json
@@ -70,8 +70,12 @@ if __name__ == '__main__':
 
     if cmd.set():
         inhibit_publishing = cmd.inhibit_publishing if cmd.inhibit_publishing is not None else conf.inhibit_publishing
+        queue_size = cmd.queue_size if cmd.queue_size is not None else conf.queue_size
 
-        conf = MQTTConf(inhibit_publishing)
+        if queue_size is None:
+            queue_size = MQTTConf.DEFAULT_QUEUE_SIZE
+
+        conf = MQTTConf(inhibit_publishing, queue_size)
         conf.save(Host)
 
     if conf:
