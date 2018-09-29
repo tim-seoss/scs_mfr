@@ -6,11 +6,15 @@ Created on 17 May 2018
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The mqtt_conf utility is used to control the behaviour of MQTT client scripts. Currently, the only option is to inhibit
-publishing - when set to true, the MQTT client will continue to accept messages and echo these to stdout if required,
-but will not publish.
+The mqtt_conf utility is used to control the behaviour of MQTT client scripts.
 
-The setting is useful when the device is used in an offline mode - in this case data is typically written to a CSV file.
+The INHIBIT_PUBLISHING field determines whether the MQTT client will publish messages. If inhibit is set to true,
+then the client will continue to accept messages and echo these to stdout if required, but will not publish. This
+setting is useful when the device is used in an offline mode - in this case data is typically written to a CSV file.
+
+The QUEUE_SIZE field determines how many messages can be buffered before publication. Where a device is being used in
+an environment with unreliable communications, this could potentially be a large number of messages - the
+default queue size is 21000, equivalent to just over 24 hours of data under a normal sampling regime.
 
 The MQTT client must be restarted for changes to take effect.
 
@@ -24,7 +28,7 @@ EXAMPLES
 ./mqtt_conf.py -p0 -q21000
 
 DOCUMENT EXAMPLE
-{"inhibit-publishing": false, "queue-size": 22000}
+{"inhibit-publishing": false, "queue-size": 21000}
 
 FILES
 ~/SCS/conf/mqtt_conf.json
