@@ -26,6 +26,7 @@ RESOURCES
 https://github.com/raspberrypi/hats
 https://github.com/picoflamingo/BBCape_EEPROM
 
+https://lb.raspberrypi.org/forums/viewtopic.php?t=108134
 
 https://github.com/raspberrypi/hats/tree/master/eepromutils
 https://www.raspberrypi.org/documentation/configuration/device-tree.md

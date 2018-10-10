@@ -6,7 +6,7 @@ Created on 26 Sep 2016
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The eeprom_read utility write the contents of the given file to the South Coast Science digital front-end (DFE) board's
+The eeprom_read utility write the contents of the given file to a South Coast Science digital front-end (DFE) board's
 EEPROM.
 
 The EEPROM contains information on vendor, product ID and a universally unique ID (UUID) code, as specified by either
@@ -31,6 +31,7 @@ RESOURCES
 https://github.com/raspberrypi/hats
 https://github.com/picoflamingo/BBCape_EEPROM
 
+https://lb.raspberrypi.org/forums/viewtopic.php?t=108134
 
 https://github.com/raspberrypi/hats/tree/master/eepromutils
 https://www.raspberrypi.org/documentation/configuration/device-tree.md
