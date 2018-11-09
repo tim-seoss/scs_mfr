@@ -20,5 +20,5 @@ class DFETestDatum(Sample):
         """
         Constructor
         """
-        super().__init__(tag, rec, ('host-sn', host_serial_number), ('dfe-sn', dfe_serial_number), ('result', result),
-                         ('subjects', subjects), ('afe', afe))
+        super().__init__(tag, None, rec, ('host-sn', host_serial_number), ('dfe-sn', dfe_serial_number),
+                         ('result', result), ('subjects', subjects), ('afe', afe))
