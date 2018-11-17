@@ -6,6 +6,9 @@ Created on 13 Jul 2016
 
 import optparse
 
+from scs_dfe.particulate.opc_n2.opc_n2 import OPCN2
+from scs_dfe.particulate.opc_n3.opc_n3 import OPCN3
+
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -22,7 +25,7 @@ class CmdOPCConf(object):
 
         # optional...
         self.__parser.add_option("--model", "-m", type="string", nargs=1, action="store", dest="model",
-                                 help="set MODEL")
+                                 help="set MODEL (N2 or N3)")
 
         self.__parser.add_option("--sample-period", "-s", type="int", nargs=1, action="store", dest="sample_period",
                                  help="set SAMPLE_PERIOD")
@@ -43,6 +46,9 @@ class CmdOPCConf(object):
 
     def is_valid(self):
         if self.set() and self.delete:
+            return False
+
+        if self.model and self.model != OPCN2.SOURCE and self.model != OPCN3.SOURCE:
             return False
 
         if self.__opts.power_saving is None or self.__opts.power_saving == 0 or self.__opts.power_saving == 1:
