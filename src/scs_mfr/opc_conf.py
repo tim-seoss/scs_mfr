@@ -21,7 +21,7 @@ scs_dev/particulates_sampler utility terminates.
 
 Note that the scs_analysis/particulates_sampler process must be restarted for changes to take effect.
 
-Note: currently, only the OPC-N2 model is supported. OPC-N3 and OPC-R1 types will be supported shortly.
+Note: currently, only the OPC-N2 and OPC-N3 models are supported. The OPC-R1 type will be supported later.
 
 SYNOPSIS
 opc_conf.py [{ [-m MODEL] [-s SAMPLE_PERIOD] [-p { 0 | 1 }] | -d }] [-v]
