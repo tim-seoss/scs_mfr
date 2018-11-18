@@ -38,6 +38,11 @@ class Pt1000Test(Test):
 
             # AFE...
             dfe_conf = DFEConf.load(Host)
+
+            if dfe_conf.pt1000_addr is None:
+                print("No Pt1000 I2C address set - skipping.", file=sys.stderr)
+                return False
+
             afe = dfe_conf.afe(Host)
 
             # test...
