@@ -6,7 +6,7 @@ Created on 18 May 2017
 
 import sys
 
-from scs_dfe.particulate.opc_n2.opc_n2 import OPCN2
+from scs_dfe.particulate.opc_conf import OPCConf
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -39,7 +39,13 @@ class OPCTest(Test):
             I2C.open(Host.I2C_SENSORS)
 
             # resources...
-            opc = OPCN2(Host.opc_spi_bus(), Host.opc_spi_device())
+            opc_conf = OPCConf.load(Host)
+
+            if opc_conf is None:
+                print("OPCConf not available - skipping.", file=sys.stderr)
+                return False
+
+            opc = opc_conf.opc(Host)
 
             opc.power_on()
             opc.operations_on()
