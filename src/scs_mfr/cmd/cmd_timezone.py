@@ -21,7 +21,7 @@ class CmdTimezone(object):
 
         # optional...
         self.__parser.add_option("--zones", "-z", action="store_true", dest="list", default=False,
-                                 help="list available timezones to stderr")
+                                 help="list the available timezone names to stderr")
 
         self.__parser.add_option("--set", "-s", type="string", nargs=1, action="store", dest="zone",
                                  help="override system timezone with ZONE")
