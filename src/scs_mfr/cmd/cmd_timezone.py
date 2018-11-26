@@ -17,11 +17,11 @@ class CmdTimezone(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self):
-        self.__parser = optparse.OptionParser(usage="%prog [{ -z | -s ZONE | - l}] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ -z | -s TIMEZONE_NAME | - l}] [-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--zones", "-z", action="store_true", dest="list", default=False,
-                                 help="list available timezones to stderr")
+                                 help="list the available timezone names to stderr")
 
         self.__parser.add_option("--set", "-s", type="string", nargs=1, action="store", dest="zone",
                                  help="override system timezone with ZONE")
