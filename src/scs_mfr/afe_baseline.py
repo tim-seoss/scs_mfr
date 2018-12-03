@@ -89,7 +89,7 @@ if __name__ == '__main__':
         index = calib.sensor_index(gas_name)
 
         if index is None:
-            print("afe_baseline: the gas type is not supported by this AFE calibration document.", file=sys.stderr)
+            print("afe_baseline: the gas type is not included in the AFE calibration document.", file=sys.stderr)
             exit(1)
 
         if cmd.set:
