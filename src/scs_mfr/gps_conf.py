@@ -64,7 +64,7 @@ if __name__ == '__main__':
     # run...
 
     if cmd.set():
-        conf = GPSConf(cmd.model)
+        conf = GPSConf(cmd.model, GPSConf.DEFAULT_SAMPLE_INTERVAL, GPSConf.DEFAULT_TALLY)
         conf.save(Host)
 
     elif cmd.delete and conf is not None:
