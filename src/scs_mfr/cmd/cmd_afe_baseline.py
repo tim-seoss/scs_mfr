@@ -140,11 +140,6 @@ class CmdAFEBaseline(object):
         return self.__opts.verbose
 
 
-    @property
-    def args(self):
-        return self.__args
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     def print_help(self, file):
@@ -152,5 +147,5 @@ class CmdAFEBaseline(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdAFEBaseline:{set:%s, up:%s, down:%s, zero:%s, verbose:%s, args:%s}" % \
-               (self.set, self.up, self.down, self.zero, self.verbose, self.args)
+        return "CmdAFEBaseline:{set:%s, up:%s, down:%s, zero:%s, verbose:%s}" % \
+               (self.set, self.up, self.down, self.zero, self.verbose)

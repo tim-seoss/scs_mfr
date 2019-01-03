@@ -65,11 +65,6 @@ class CmdPSUConf(object):
         return self.__opts.verbose
 
 
-    @property
-    def args(self):
-        return self.__args
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     def print_help(self, file):
@@ -77,5 +72,4 @@ class CmdPSUConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdPSUConf:{model:%s, delete:%s, verbose:%s, args:%s}" % \
-               (self.model, self.delete, self.verbose, self.args)
+        return "CmdPSUConf:{model:%s, delete:%s, verbose:%s}" % (self.model, self.delete, self.verbose)

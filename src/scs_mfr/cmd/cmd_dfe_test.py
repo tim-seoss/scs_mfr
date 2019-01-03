@@ -71,11 +71,6 @@ class CmdDFETest(object):
         return self.__opts.verbose
 
 
-    @property
-    def args(self):
-        return self.__args
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     def print_help(self, file):
@@ -83,7 +78,5 @@ class CmdDFETest(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdDFETest:{dfe_serial_number:%s, ignore_eeprom:%s, ignore_gps:%s, ignore_rtc:%s, " \
-               "verbose:%s, args:%s}" % \
-                    (self.dfe_serial_number, self.ignore_eeprom, self.ignore_gps, self.ignore_rtc,
-                     self.verbose, self.args)
+        return "CmdDFETest:{dfe_serial_number:%s, ignore_eeprom:%s, ignore_gps:%s, ignore_rtc:%s, verbose:%s}" % \
+                    (self.dfe_serial_number, self.ignore_eeprom, self.ignore_gps, self.ignore_rtc, self.verbose)

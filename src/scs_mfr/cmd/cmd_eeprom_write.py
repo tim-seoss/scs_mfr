@@ -46,11 +46,6 @@ class CmdEEPROMWrite(object):
         return self.__opts.verbose
 
 
-    @property
-    def args(self):
-        return self.__args
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     def print_help(self, file):
@@ -58,5 +53,4 @@ class CmdEEPROMWrite(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdEEPROMWrite:{filename:%s, verbose:%s, args:%s}" % \
-                    (self.filename, self.verbose, self.args)
+        return "CmdEEPROMWrite:{filename:%s, verbose:%s}" % (self.filename, self.verbose)

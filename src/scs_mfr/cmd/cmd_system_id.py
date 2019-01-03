@@ -92,11 +92,6 @@ class CmdSystemID(object):
         return self.__opts.verbose
 
 
-    @property
-    def args(self):
-        return self.__args
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     def print_help(self, file):
@@ -105,6 +100,6 @@ class CmdSystemID(object):
 
     def __str__(self, *args, **kwargs):
         return "CmdSystemID:{vendor_id:%s, model_id:%s, model_name:%s, " \
-               "configuration:%s, serial_number:%s, verbose:%s, args:%s}" % \
+               "configuration:%s, serial_number:%s, verbose:%s}" % \
                (self.vendor_id, self.model_id, self.model_name,
-                self.configuration, self.serial_number, self.verbose, self.args)
+                self.configuration, self.serial_number, self.verbose)

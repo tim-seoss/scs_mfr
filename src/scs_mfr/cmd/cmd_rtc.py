@@ -47,11 +47,6 @@ class CmdRTC(object):
         return self.__opts.verbose
 
 
-    @property
-    def args(self):
-        return self.__args
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     def print_help(self, file):
@@ -59,5 +54,4 @@ class CmdRTC(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdRTC:{initialise:%s, set:%s, verbose:%s, args:%s}" % \
-               (self.initialise, self.set, self.verbose, self.args)
+        return "CmdRTC:{initialise:%s, set:%s, verbose:%s}" % (self.initialise, self.set, self.verbose)

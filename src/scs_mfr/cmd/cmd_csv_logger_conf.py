@@ -91,11 +91,6 @@ class CmdCSVLoggerConf(object):
         return self.__opts.verbose
 
 
-    @property
-    def args(self):
-        return self.__args
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     def print_help(self, file):
@@ -103,7 +98,5 @@ class CmdCSVLoggerConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdCSVLoggerConf:{root_path:%s, delete_oldest:%s, write_interval:%s, delete:%s, " \
-               "verbose:%s, args:%s}" % \
-               (self.root_path, self.delete_oldest, self.write_interval, self.delete,
-                self.verbose, self.args)
+        return "CmdCSVLoggerConf:{root_path:%s, delete_oldest:%s, write_interval:%s, delete:%s, verbose:%s}" % \
+               (self.root_path, self.delete_oldest, self.write_interval, self.delete, self.verbose)
