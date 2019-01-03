@@ -60,11 +60,6 @@ class CmdSharedSecret(object):
         return self.__opts.verbose
 
 
-    @property
-    def args(self):
-        return self.__args
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     def print_help(self, file):
@@ -72,5 +67,5 @@ class CmdSharedSecret(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdSharedSecret:{generate:%s, delete:%s, verbose:%s, args:%s}" % \
-               (self.generate, self.delete, self.verbose, self.args)
+        return "CmdSharedSecret:{generate:%s, delete:%s, verbose:%s}" % \
+               (self.generate, self.delete, self.verbose)

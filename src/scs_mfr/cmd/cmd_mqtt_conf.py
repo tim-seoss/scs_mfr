@@ -58,11 +58,6 @@ class CmdMQTTConf(object):
         return self.__opts.verbose
 
 
-    @property
-    def args(self):
-        return self.__args
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     def print_help(self, file):
@@ -70,5 +65,5 @@ class CmdMQTTConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdMQTTConf:{inhibit_publishing:%s, queue_size:%s, verbose:%s, args:%s}" % \
-               (self.inhibit_publishing, self.queue_size, self.verbose, self.args)
+        return "CmdMQTTConf:{inhibit_publishing:%s, queue_size:%s, verbose:%s}" % \
+               (self.inhibit_publishing, self.queue_size, self.verbose)

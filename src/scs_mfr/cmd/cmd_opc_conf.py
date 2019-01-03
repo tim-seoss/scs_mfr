@@ -95,11 +95,6 @@ class CmdOPCConf(object):
         return self.__opts.verbose
 
 
-    @property
-    def args(self):
-        return self.__args
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     def print_help(self, file):
@@ -107,5 +102,5 @@ class CmdOPCConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdOPCConf:{model:%s, sample_period:%s, ext_addr:%s, delete:%s, verbose:%s, args:%s}" % \
-               (self.model, self.sample_period, self.power_saving, self.delete, self.verbose, self.args)
+        return "CmdOPCConf:{model:%s, sample_period:%s, ext_addr:%s, delete:%s, verbose:%s}" % \
+               (self.model, self.sample_period, self.power_saving, self.delete, self.verbose)

@@ -64,11 +64,6 @@ class CmdOSIOProject(object):
         return self.__opts.verbose
 
 
-    @property
-    def args(self):
-        return self.__args
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     def print_help(self, file):
@@ -76,5 +71,5 @@ class CmdOSIOProject(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdOSIOProject:{group:%s, location_id:%s, verbose:%s, args:%s}" % \
-               (self.group, self.location_id, self.verbose, self.args)
+        return "CmdOSIOProject:{group:%s, location_id:%s, verbose:%s}" % \
+               (self.group, self.location_id, self.verbose)

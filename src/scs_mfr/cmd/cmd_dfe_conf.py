@@ -78,11 +78,6 @@ class CmdDFEConf(object):
         return self.__opts.verbose
 
 
-    @property
-    def args(self):
-        return self.__args
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     def print_help(self, file):
@@ -90,5 +85,5 @@ class CmdDFEConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdDFEConf:{set:%s, pt1000:%s, delete:%s, verbose:%s, args:%s}" % \
-               (self.set(), CmdDFEConf.__addr_str(self.pt1000_addr), self.delete, self.verbose, self.args)
+        return "CmdDFEConf:{set:%s, pt1000:%s, delete:%s, verbose:%s}" % \
+               (self.set(), CmdDFEConf.__addr_str(self.pt1000_addr), self.delete, self.verbose)

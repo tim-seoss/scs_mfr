@@ -63,11 +63,6 @@ class CmdAFECalib(object):
         return self.__opts.verbose
 
 
-    @property
-    def args(self):
-        return self.__args
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     def print_help(self, file):
@@ -75,5 +70,4 @@ class CmdAFECalib(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdAFECalib:{serial_number:%s, test:%s, verbose:%s, args:%s}" % \
-               (self.serial_number, self.test, self.verbose, self.args)
+        return "CmdAFECalib:{serial_number:%s, test:%s, verbose:%s}" % (self.serial_number, self.test, self.verbose)

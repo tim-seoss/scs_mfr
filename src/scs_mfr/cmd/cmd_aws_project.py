@@ -65,11 +65,6 @@ class CmdAWSProject(object):
         return self.__opts.verbose
 
 
-    @property
-    def args(self):
-        return self.__args
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     def print_help(self, file):
@@ -77,5 +72,5 @@ class CmdAWSProject(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdAWSProject:{organisation:%s, group:%s, location:%s, delete:%s, verbose:%s, args:%s}" % \
-               (self.organisation, self.group, self.location, self.delete, self.verbose, self.args)
+        return "CmdAWSProject:{organisation:%s, group:%s, location:%s, delete:%s, verbose:%s}" % \
+               (self.organisation, self.group, self.location, self.delete, self.verbose)

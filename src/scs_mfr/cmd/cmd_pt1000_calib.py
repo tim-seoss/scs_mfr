@@ -40,12 +40,7 @@ class CmdPt1000Calib(object):
         return self.__opts.verbose
 
 
-    @property
-    def args(self):
-        return self.__args
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "CmdPt1000Calib:{set:%s, verbose:%s, args:%s}" % (self.set, self.verbose, self.args)
+        return "CmdPt1000Calib:{set:%s, verbose:%s}" % (self.set, self.verbose)

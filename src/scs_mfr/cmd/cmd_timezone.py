@@ -70,11 +70,6 @@ class CmdTimezone(object):
         return self.__opts.verbose
 
 
-    @property
-    def args(self):
-        return self.__args
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     def print_help(self, file):
@@ -82,5 +77,4 @@ class CmdTimezone(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdTimezone:{list:%s, zone:%s, link:%s, verbose:%s, args:%s}" % \
-               (self.list, self.zone, self.link, self.verbose, self.args)
+        return "CmdTimezone:{list:%s, zone:%s, link:%s, verbose:%s}" % (self.list, self.zone, self.link, self.verbose)

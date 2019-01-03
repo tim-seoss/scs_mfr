@@ -88,11 +88,6 @@ class CmdSHTConf(object):
         return self.__opts.verbose
 
 
-    @property
-    def args(self):
-        return self.__args
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     def print_help(self, file):
@@ -100,6 +95,6 @@ class CmdSHTConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdSHTConf:{int_addr:%s, ext_addr:%s, delete:%s, verbose:%s, args:%s}" % \
+        return "CmdSHTConf:{int_addr:%s, ext_addr:%s, delete:%s, verbose:%s}" % \
                (CmdSHTConf.__addr_str(self.int_addr), CmdSHTConf.__addr_str(self.ext_addr),
-                self.delete, self.verbose, self.args)
+                self.delete, self.verbose)

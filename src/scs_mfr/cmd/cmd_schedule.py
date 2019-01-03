@@ -84,11 +84,6 @@ class CmdSchedule(object):
         return self.__opts.verbose
 
 
-    @property
-    def args(self):
-        return self.__args
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     def print_help(self, file):
@@ -96,5 +91,5 @@ class CmdSchedule(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdSchedule:{name:%s, interval:%s, count:%s, verbose:%s, args:%s}" % \
-                    (self.name, self.interval, self.count, self.verbose, self.args)
+        return "CmdSchedule:{name:%s, interval:%s, count:%s, verbose:%s}" % \
+                    (self.name, self.interval, self.count, self.verbose)
