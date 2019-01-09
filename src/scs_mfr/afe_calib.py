@@ -60,6 +60,8 @@ from scs_core.data.json import JSONify
 
 from scs_core.gas.afe_calib import AFECalib
 
+from scs_core.sys.http_exception import HTTPException
+
 from scs_host.client.http_client import HTTPClient
 
 from scs_host.sys.host import Host
@@ -70,6 +72,8 @@ from scs_mfr.cmd.cmd_afe_calib import CmdAFECalib
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
+
+    jstr = None
 
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
@@ -95,6 +99,10 @@ if __name__ == '__main__':
             try:
                 path = AFECalib.PATH + cmd.serial_number
                 jstr = client.get(path, None, AFECalib.HEADER)
+
+            except HTTPException as ex:
+                print("afe_calib: %s" % ex, file=sys.stderr)
+                exit(1)
 
             finally:
                 client.close()
