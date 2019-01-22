@@ -6,9 +6,9 @@ Created on 21 Jun 2018
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The mpl115a2_conf utility is used to specify the altitude of the device hosting the MPL115A2 digital barometer. This
-information is used to determine the pressure at sea level ("p0"). If the altitude is not specified, then
-no p0 value is returned by the pressure_sampler utility.
+The mpl115a2_conf utility is used to specify whether or not an MPL115A2 digital barometer is present and, optionally,
+the altitude of the device. This information is used to determine the pressure at sea level ("p0"). If the altitude is
+not specified, then no p0 value is returned by the pressure_sampler and climate_sampler utilities.
 
 Note that determination of p0 requires the temperature sensor in the MPL115A2 digital barometer to be calibrated. This
 is done using the mpl115a2_calib utility.
