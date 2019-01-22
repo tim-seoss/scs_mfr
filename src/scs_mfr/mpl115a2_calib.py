@@ -17,7 +17,7 @@ at sea level ("p0").
 The pressure_sampler sampler processes must be restarted for changes to take effect.
 
 SYNOPSIS
-mpl115a2_calib.py [-s] [-v]
+mpl115a2_calib.py [{ -s | -d }] [-v]
 
 EXAMPLES
 ./mpl115a2_calib.py -s
@@ -58,6 +58,10 @@ if __name__ == '__main__':
         # cmd...
 
         cmd = CmdMPL115A2Calib()
+
+        if not cmd.is_valid():
+            cmd.print_help(sys.stderr)
+            exit(2)
 
         if cmd.verbose:
             print("mpl115a2_calib: %s" % cmd, file=sys.stderr)
@@ -101,10 +105,15 @@ if __name__ == '__main__':
             calib = MPL115A2Calib(None, c25)
             calib.save(Host)
 
-        # calibrated...
-        calib = MPL115A2Calib.load(Host)
+            # calibrated...
+            calib = MPL115A2Calib.load(Host)
 
-        print(JSONify.dumps(calib))
+        elif cmd.delete and calib is not None:
+            calib.delete(Host)
+            calib = None
+
+        if calib:
+            print(JSONify.dumps(calib))
 
         if cmd.verbose:
             barometer = MPL115A2.construct(calib)

@@ -17,11 +17,14 @@ class CmdMPL115A2Conf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self):
-        self.__parser = optparse.OptionParser(usage="%prog [{ -a ALTITUDE | -d }] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ -s [-a ALTITUDE] | -d }] [-v]", version="%prog 1.0")
 
         # optional...
+        self.__parser.add_option("--set", "-s", action="store_true", dest="set", default=False,
+                                 help="create or update an MPL115A2 configuration")
+
         self.__parser.add_option("--altitude", "-a", type="string", nargs=1, action="store", dest="altitude",
-                                 help="altitude in metres or 'auto' for GPS altitude")
+                                 help="altitude in metres or 'GPS' for GPS altitude")
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="delete the MPL115A2 configuration")
@@ -38,7 +41,10 @@ class CmdMPL115A2Conf(object):
         if self.set() and self.delete:
             return False
 
-        if self.altitude is None or self.altitude == 'auto':
+        if not self.set() and self.altitude is not None:
+            return False
+
+        if self.altitude is None or self.altitude == 'GPS':
             return True
 
         try:
@@ -50,7 +56,7 @@ class CmdMPL115A2Conf(object):
 
 
     def set(self):
-        return self.__opts.altitude is not None
+        return self.__opts.set
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -80,4 +86,5 @@ class CmdMPL115A2Conf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdMPL115A2Conf:{altitude:%s, delete:%s, verbose:%s}" % (self.altitude, self.delete, self.verbose)
+        return "CmdMPL115A2Conf:{set:%s, altitude:%s, delete:%s, verbose:%s}" % \
+               (self.set(), self.altitude, self.delete, self.verbose)

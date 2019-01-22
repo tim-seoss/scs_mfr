@@ -16,16 +16,28 @@ class CmdMPL115A2Calib(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-s] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ -s | -d }] [-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--set", "-s", action="store_true", dest="set", default=False,
-                                 help="set MPL115A2 calib from internal SHT")
+                                 help="set MPL115A2 calibration from internal SHT")
+
+        self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
+                                 help="delete the MPL115A2 calibration")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
 
         self.__opts, self.__args = self.__parser.parse_args()
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def is_valid(self):
+        if self.set and self.delete:
+            return False
+
+        return True
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -36,11 +48,20 @@ class CmdMPL115A2Calib(object):
 
 
     @property
+    def delete(self):
+        return self.__opts.delete
+
+
+    @property
     def verbose(self):
         return self.__opts.verbose
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    def print_help(self, file):
+        self.__parser.print_help(file)
+
+
     def __str__(self, *args, **kwargs):
-        return "CmdMPL115A2Calib:{set:%s, verbose:%s}" % (self.set, self.verbose)
+        return "CmdMPL115A2Calib:{set:%s, delete:%s, verbose:%s}" % (self.set, self.delete, self.verbose)
