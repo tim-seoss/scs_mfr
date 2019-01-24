@@ -7,19 +7,19 @@ Created on 13 Jul 2016
 
 DESCRIPTION
 The opc_conf utility is used to specify whether an Alphasense optical particle counter (OPC) is present and if so,
-which model is provided.
+which model is attached.
 
 The specification also includes the number of seconds between readings by the OPC monitor sub-process. The maximum
 time between readings is 10 seconds, the minimum five. A 10 second period provides the highest precision, but sampling
-at this rate is subject to clipping in extremely polluted environments.
+at this rate may be subject to clipping in extremely polluted environments.
 
-In addition, the specification allows for a power saving mode, which enables the OPC to shut down between readings. This
-is not currently implemented.
+In addition, the specification allows for a power saving mode, which enables the OPC to shut down between readings.
+(This is not currently implemented.)
 
 Sampling is performed by the scs_dev/particulates_sampler utility. If an opc_conf.json document is not present, the
 scs_dev/particulates_sampler utility terminates.
 
-Note that the scs_analysis/particulates_sampler process must be restarted for changes to take effect.
+Note that the scs_dev/particulates_sampler process must be restarted for changes to take effect.
 
 The OPC-N2, OPC-N3 and OPC-R1 models are supported.
 
