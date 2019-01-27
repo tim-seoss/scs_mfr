@@ -46,7 +46,7 @@ class EEPROMTest(Test):
 
         try:
             # resources...
-            Host.enable_eeprom_access()
+            # Host.enable_eeprom_access()               # TODO: test whether EEPROM access is required
 
             I2C.open(Host.I2C_EEPROM)
 
