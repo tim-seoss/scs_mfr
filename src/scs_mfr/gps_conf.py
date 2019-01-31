@@ -13,16 +13,16 @@ The PAM7Q module provides a report every two seconds, but a sample interval of 1
 averaging tally depends on the mode of use of the device: for a fixed device, 10 minutes (60 samples) is effective in
 rejecting "quality 0" readings, whereas a mobile device requires a tally of 1.
 
-Note that, currently, only the u-blox PAM7Q GPS module is supported.
+The u-blox PAM-7Q and SAM-M8Q GPS modules are supported.
 
 SYNOPSIS
 gps_conf.py [{ [-m MODEL] [-i INTERVAL] [-t TALLY] | -d }] [-v]
 
 EXAMPLES
-./gps_conf.py -m PAM7Q -i 10 -t 60
+./gps_conf.py -m SAM7Q -i 10 -t 60
 
 DOCUMENT EXAMPLE
-{"model": "PAM7Q", "sample-interval": 10, "tally": 60}
+{"model": "SAM7Q", "sample-interval": 10, "tally": 60}
 
 FILES
 ~/SCS/conf/gps_conf.json
