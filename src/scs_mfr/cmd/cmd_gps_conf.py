@@ -6,7 +6,7 @@ Created on 13 Jul 2016
 
 import optparse
 
-from scs_dfe.gps.pam7q import PAM7Q
+from scs_dfe.gps.gps_conf import GPSConf
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -24,7 +24,7 @@ class CmdGPSConf(object):
 
         # optional...
         self.__parser.add_option("--model", "-m", type="string", nargs=1, action="store", dest="model",
-                                 help="set the model (must be PAM7Q)")
+                                 help="set the model (PAM7Q or SAM8Q)")
 
         self.__parser.add_option("--sample-interval", "-i", type="int", nargs=1, action="store", dest="sample_interval",
                                  help="set sampling interval")
@@ -47,7 +47,7 @@ class CmdGPSConf(object):
         if self.set() and self.delete:
             return False
 
-        if self.model and self.model != PAM7Q.SOURCE:
+        if self.model and not GPSConf.is_valid_model(self.model):
             return False
 
         return True
