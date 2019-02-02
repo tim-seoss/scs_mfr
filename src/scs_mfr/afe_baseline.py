@@ -48,8 +48,8 @@ from scs_core.gas.afe_baseline import AFEBaseline
 from scs_core.gas.afe_calib import AFECalib
 from scs_core.gas.sensor_baseline import SensorBaseline, BaselineEnvironment
 
-from scs_dfe.climate.mpl115a2_conf import MPL115A2Conf
 from scs_dfe.climate.mpl115a2 import MPL115A2
+from scs_dfe.climate.mpl115a2_conf import MPL115A2Conf
 from scs_dfe.climate.sht_conf import SHTConf
 
 from scs_host.bus.i2c import I2C
