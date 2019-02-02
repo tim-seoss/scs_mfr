@@ -31,18 +31,28 @@ class CmdAFEBaseline(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog { { -s | -u | -d } GAS VALUE | -z } [-v]",
+        self.__parser = optparse.OptionParser(usage="%prog [{ { -s | -o } GAS VALUE "
+                                                    "{ -e | -r HUMID -t TEMP [-p PRESS] } | -z }] [-v]",
                                               version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--set", "-s", type="string", nargs=2, action="store", dest="set",
                                  help="set offset for GAS to integer VALUE")
 
-        self.__parser.add_option("--up", "-u", type="string", nargs=2, action="store", dest="up",
-                                 help="move offset up for GAS, by integer VALUE")
+        self.__parser.add_option("--offset", "-o", type="string", nargs=2, action="store", dest="offset",
+                                 help="change offset for GAS, by integer VALUE")
 
-        self.__parser.add_option("--down", "-d", type="string", nargs=2, action="store", dest="down",
-                                 help="move offset down for GAS, by integer VALUE")
+        self.__parser.add_option("--env", "-e", action="store_true", dest="env",
+                                 help="record current environmental reading")
+
+        self.__parser.add_option("--humid", "-r", type="float", nargs=1, action="store", dest="humid",
+                                 help="record relative humidity value (%)")
+
+        self.__parser.add_option("--temp", "-t", type="float", nargs=1, action="store", dest="temp",
+                                 help="record temperature value (°C)")
+
+        self.__parser.add_option("--press", "-p", type="float", nargs=1, action="store", dest="press",
+                                 help="record barometric pressure value (kPa)")
 
         self.__parser.add_option("--zero", "-z", action="store_true", dest="zero",
                                  help="zero all offsets")
@@ -58,13 +68,11 @@ class CmdAFEBaseline(object):
     def is_valid(self):
         param_count = 0
 
+        # setters...
         if self.set is not None:
             param_count += 1
 
-        if self.up is not None:
-            param_count += 1
-
-        if self.down is not None:
+        if self.offset is not None:
             param_count += 1
 
         if self.zero is not None:
@@ -73,13 +81,21 @@ class CmdAFEBaseline(object):
         if param_count > 1:
             return False
 
+        if bool(self.set is not None or self.offset is not None) != bool(self.env or self.temp is not None):
+            return False
+
+        # validate VALUE...
         if self.set is not None and not self.__is_integer(self.set[1]):
             return False
 
-        if self.up is not None and not self.__is_integer(self.up[1]):
+        if self.offset is not None and not self.__is_integer(self.offset[1]):
             return False
 
-        if self.down is not None and not self.__is_integer(self.down[1]):
+        # environment...
+        if self.env and (self.humid is not None or self.temp is not None or self.press is not None):
+            return False
+
+        if self.humid is not None and self.temp is None:
             return False
 
         return True
@@ -91,11 +107,8 @@ class CmdAFEBaseline(object):
         if self.set:
             return self.set[0]
 
-        if self.up:
-            return self.up[0]
-
-        if self.down:
-            return self.down[0]
+        if self.offset:
+            return self.offset[0]
 
         return None
 
@@ -104,11 +117,8 @@ class CmdAFEBaseline(object):
         if self.set:
             return int(self.set[1])
 
-        if self.up:
-            return int(self.up[1])
-
-        if self.down:
-            return int(self.down[1])
+        if self.offset:
+            return int(self.offset[1])
 
         return None
 
@@ -121,13 +131,28 @@ class CmdAFEBaseline(object):
 
 
     @property
-    def up(self):
-        return self.__opts.up
+    def offset(self):
+        return self.__opts.offset
 
 
     @property
-    def down(self):
-        return self.__opts.down
+    def env(self):
+        return self.__opts.env
+
+
+    @property
+    def humid(self):
+        return self.__opts.humid
+
+
+    @property
+    def temp(self):
+        return self.__opts.temp
+
+
+    @property
+    def press(self):
+        return self.__opts.press
 
 
     @property
@@ -147,5 +172,5 @@ class CmdAFEBaseline(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdAFEBaseline:{set:%s, up:%s, down:%s, zero:%s, verbose:%s}" % \
-               (self.set, self.up, self.down, self.zero, self.verbose)
+        return "CmdAFEBaseline:{set:%s, offset:%s, env:%s, humid:%s, temp:%s, press:%s, zero:%s, verbose:%s}" % \
+               (self.set, self.offset, self.env, self.humid, self.temp, self.press, self.zero, self.verbose)
