@@ -48,6 +48,7 @@ from scs_core.gas.afe_baseline import AFEBaseline
 from scs_core.gas.afe_calib import AFECalib
 from scs_core.gas.sensor_baseline import SensorBaseline, BaselineEnvironment
 
+from scs_dfe.climate.mpl115a2_conf import MPL115A2Conf
 from scs_dfe.climate.mpl115a2 import MPL115A2
 from scs_dfe.climate.sht_conf import SHTConf
 
@@ -60,6 +61,12 @@ from scs_mfr.cmd.cmd_afe_baseline import CmdAFEBaseline
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
+
+    sht = None
+    mpl = None
+
+    now = LocalizedDatetime.now()
+
 
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
@@ -97,18 +104,22 @@ if __name__ == '__main__':
             # SHT...
             sht = sht_conf.int_sht()
 
-            # MPL115A2...
-            mpl = MPL115A2(None)
+            # MPL115A2Conf...
+            mpl_conf = MPL115A2Conf.load(Host)
 
-            mpl.init()
+            if mpl_conf is not None:
+                if cmd.verbose:
+                    print("afe_baseline: %s" % mpl_conf, file=sys.stderr)
 
-        else:
-            sht = None
-            mpl = None
+                # MPL115A2...
+                mpl = MPL115A2.construct(None)
 
 
         # ----------------------------------------------------------------------------------------------------------------
         # run...
+
+        if mpl is not None:
+            mpl.init()
 
         # update...
         if cmd.set or cmd.offset:
@@ -133,24 +144,26 @@ if __name__ == '__main__':
                 old_offset = afe_baseline.sensor_baseline(index).offset
                 new_offset = old_offset + cmd.offset_value()
 
-            now = LocalizedDatetime.now()
-
             if cmd.env:
                 sht_datum = sht.sample()
-                mpl_datum = mpl.sample()
+                mpl_datum = None if mpl is None else mpl.sample()
 
-                env = BaselineEnvironment(sht_datum.humid, sht_datum.temp, mpl_datum.actual_press)
+                humid = sht_datum.humid
+                temp = sht_datum.temp
+                press = None if mpl_datum is None else mpl_datum.actual_press
 
             else:
-                env = BaselineEnvironment(cmd.humid, cmd.temp, cmd.press)
+                humid = cmd.humid
+                temp = cmd.temp
+                press = cmd.press
+
+            env = BaselineEnvironment(humid, temp, press)
 
             afe_baseline.set_sensor_baseline(index, SensorBaseline(now, new_offset, env))
             afe_baseline.save(Host)
 
         # zero...
         elif cmd.zero:
-            now = LocalizedDatetime.now()
-
             for index in range(len(afe_baseline)):
                 afe_baseline.set_sensor_baseline(index, SensorBaseline(now, 0, None))
 
