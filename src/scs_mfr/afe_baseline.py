@@ -67,7 +67,6 @@ if __name__ == '__main__':
 
     now = LocalizedDatetime.now()
 
-
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
@@ -80,7 +79,6 @@ if __name__ == '__main__':
     if cmd.verbose:
         print("afe_baseline: %s" % cmd, file=sys.stderr)
         sys.stderr.flush()
-
 
     try:
         I2C.open(Host.I2C_SENSORS)
