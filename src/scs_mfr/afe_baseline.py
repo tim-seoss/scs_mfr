@@ -48,8 +48,8 @@ from scs_core.gas.afe_baseline import AFEBaseline
 from scs_core.gas.afe_calib import AFECalib
 from scs_core.gas.sensor_baseline import SensorBaseline, BaselineEnvironment
 
-from scs_dfe.climate.mpl115a2_conf import MPL115A2Conf
 from scs_dfe.climate.mpl115a2 import MPL115A2
+from scs_dfe.climate.mpl115a2_conf import MPL115A2Conf
 from scs_dfe.climate.sht_conf import SHTConf
 
 from scs_host.bus.i2c import I2C
@@ -67,7 +67,6 @@ if __name__ == '__main__':
 
     now = LocalizedDatetime.now()
 
-
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
@@ -81,11 +80,10 @@ if __name__ == '__main__':
         print("afe_baseline: %s" % cmd, file=sys.stderr)
         sys.stderr.flush()
 
-
     try:
         I2C.open(Host.I2C_SENSORS)
 
-        # ----------------------------------------------------------------------------------------------------------------
+        # ------------------------------------------------------------------------------------------------------------
         # resources...
 
         afe_baseline = AFEBaseline.load(Host)
@@ -115,7 +113,7 @@ if __name__ == '__main__':
                 mpl = MPL115A2.construct(None)
 
 
-        # ----------------------------------------------------------------------------------------------------------------
+        # ------------------------------------------------------------------------------------------------------------
         # run...
 
         if mpl is not None:
