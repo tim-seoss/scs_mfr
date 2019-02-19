@@ -149,7 +149,7 @@ if __name__ == '__main__':
                 exit(1)
 
         # tags...
-        include_particulates = False if opc_conf is None else opc_conf.has_monitor()
+        include_particulates = bool(opc_conf is not None)
         tags = ProjectSource.tags(afe_calib, include_particulates)
 
         if device:

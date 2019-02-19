@@ -186,7 +186,7 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # run...
 
-    include_particulates = False if opc_conf is None else opc_conf.has_monitor()
+    include_particulates = bool(opc_conf is not None)
 
     # set...
     if cmd.set():

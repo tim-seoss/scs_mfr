@@ -7,14 +7,12 @@ Created on 13 Jul 2016
 
 DESCRIPTION
 The opc_conf utility is used to specify whether an Alphasense optical particle counter (OPC) is present and if so,
-which model is attached.
+which model is attached. An option is also available to override the host's default SPI bus and SPI chip select
+lines for the OPC.
 
 The specification also includes the number of seconds between readings by the OPC monitor sub-process. The maximum
 time between readings is 10 seconds, the minimum five. A 10 second period provides the highest precision, but sampling
 at this rate may be subject to clipping in extremely polluted environments.
-
-In addition, the specification allows for a power saving mode, which enables the OPC to shut down between readings.
-(This is not currently implemented.)
 
 Sampling is performed by the scs_dev/particulates_sampler utility. If an opc_conf.json document is not present, the
 scs_dev/particulates_sampler utility terminates.
@@ -24,19 +22,23 @@ Note that the scs_dev/particulates_sampler process must be restarted for changes
 The OPC-N2, OPC-N3 and OPC-R1 models are supported.
 
 SYNOPSIS
-opc_conf.py [{ [-m MODEL] [-s SAMPLE_PERIOD] [-p { 0 | 1 }] | -d }] [-v]
+opc_conf.py [{ [-m MODEL] [-s SAMPLE_PERIOD] [-p { 0 | 1 }] [-b SPI_BUS] [-c SPI_DEVICE] | -d }] [-v]
 
 EXAMPLES
-./opc_conf.py -m R1 -s 10 -p 0
+./opc_conf.py -b 0 -c 0 -m R1
 
 DOCUMENT EXAMPLE
-{"model": "R1", "sample-period": 10, "power-saving": false}
+{"model": "R1", "sample-period": 10, "power-saving": false, "spi-bus": null, "spi-device": null}
 
 FILES
 ~/SCS/conf/opc_conf.json
 
 SEE ALSO
 scs_dev/particulates_sampler
+
+BUGS
+The specification allows for a power saving mode - which enables the OPC to shut down between readings - but
+this is not currently implemented.
 """
 
 import sys
@@ -80,7 +82,8 @@ if __name__ == '__main__':
 
     if cmd.set():
         if conf is None and not cmd.is_complete():
-            print("opc_conf: No configuration is stored. You must therefore set all fields.", file=sys.stderr)
+            print("opc_conf: No configuration is stored. You must therefore set model, period and power fields.",
+                  file=sys.stderr)
             cmd.print_help(sys.stderr)
             exit(1)
 
@@ -88,7 +91,10 @@ if __name__ == '__main__':
         sample_period = cmd.sample_period if cmd.sample_period else conf.sample_period
         power_saving = cmd.power_saving if cmd.power_saving is not None else conf.power_saving
 
-        conf = OPCConf(model, sample_period, power_saving)
+        spi_bus = conf.spi_bus if cmd.spi_bus is None else cmd.spi_bus
+        spi_device = conf.spi_device if cmd.spi_device is None else cmd.spi_device
+
+        conf = OPCConf(model, sample_period, power_saving, spi_bus, spi_device)
         conf.save(Host)
 
     elif cmd.delete:
