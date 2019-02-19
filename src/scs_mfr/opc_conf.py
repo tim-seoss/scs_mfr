@@ -80,7 +80,8 @@ if __name__ == '__main__':
 
     if cmd.set():
         if conf is None and not cmd.is_complete():
-            print("opc_conf: No configuration is stored. You must therefore set all fields.", file=sys.stderr)
+            print("opc_conf: No configuration is stored. You must therefore set model, period and power fields.",
+                  file=sys.stderr)
             cmd.print_help(sys.stderr)
             exit(1)
 
@@ -88,7 +89,10 @@ if __name__ == '__main__':
         sample_period = cmd.sample_period if cmd.sample_period else conf.sample_period
         power_saving = cmd.power_saving if cmd.power_saving is not None else conf.power_saving
 
-        conf = OPCConf(model, sample_period, power_saving)
+        spi_bus = conf.spi_bus if cmd.spi_bus is None else cmd.spi_bus
+        spi_device = conf.spi_device if cmd.spi_device is None else cmd.spi_device
+
+        conf = OPCConf(model, sample_period, power_saving, spi_bus, spi_device)
         conf.save(Host)
 
     elif cmd.delete:

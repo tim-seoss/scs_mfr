@@ -19,8 +19,8 @@ class CmdOPCConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self):
-        self.__parser = optparse.OptionParser(usage="%prog [{ [-m MODEL] [-s SAMPLE_PERIOD] [-p { 0 | 1 }] | -d }] "
-                                                    "[-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ [-m MODEL] [-s SAMPLE_PERIOD] [-p { 0 | 1 }] "
+                                                    "[-b SPI_BUS] [-c SPI_DEVICE] | -d }] [-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--model", "-m", type="string", nargs=1, action="store", dest="model",
@@ -31,6 +31,13 @@ class CmdOPCConf(object):
 
         self.__parser.add_option("--power-saving", "-p", type="int", nargs=1, action="store", dest="power_saving",
                                  help="set power saving mode")
+
+        self.__parser.add_option("--spi-bus", "-b", type="int", nargs=1, action="store", dest="spi_bus",
+                                 help="override host SPI bus")
+
+        self.__parser.add_option("--spi-device", "-c", type="int", nargs=1, action="store", dest="spi_device",
+                                 help="override host SPI chip select")
+
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete",
                                  help="delete the OPC configuration")
@@ -64,7 +71,8 @@ class CmdOPCConf(object):
 
 
     def set(self):
-        return self.model is not None or self.sample_period is not None or self.power_saving is not None
+        return self.model is not None or self.sample_period is not None or self.power_saving is not None \
+               or self.spi_bus is not None or self.spi_device is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -90,6 +98,16 @@ class CmdOPCConf(object):
 
 
     @property
+    def spi_bus(self):
+        return self.__opts.spi_bus
+
+
+    @property
+    def spi_device(self):
+        return self.__opts.spi_device
+
+
+    @property
     def verbose(self):
         return self.__opts.verbose
 
@@ -101,5 +119,7 @@ class CmdOPCConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdOPCConf:{model:%s, sample_period:%s, ext_addr:%s, delete:%s, verbose:%s}" % \
-               (self.model, self.sample_period, self.power_saving, self.delete, self.verbose)
+        return "CmdOPCConf:{model:%s, sample_period:%s, ext_addr:%s, spi_bus:%s, spi_device:%s, " \
+               "delete:%s, verbose:%s}" % \
+               (self.model, self.sample_period, self.power_saving, self.spi_bus, self.spi_device,
+                self.delete, self.verbose)
