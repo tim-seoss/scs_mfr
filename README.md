@@ -1,6 +1,5 @@
 # scs_mfr
-_High-level scripts and command-line applications for South Coast Science sensor device manufacturing, test and 
-calibration_
+_High-level scripts and command-line utilities for South Coast Science device manufacturing, configuration, test and calibration_
 
 
 Detailed information at the [scs_mfr wiki](https://github.com/south-coast-science/scs_mfr/wiki).
