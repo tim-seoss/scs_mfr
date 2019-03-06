@@ -54,8 +54,6 @@ https://www.alphasense-technology.co.uk/
 import json
 import sys
 
-from collections import OrderedDict
-
 from scs_core.data.json import JSONify
 
 from scs_core.gas.afe_calib import AFECalib
@@ -107,7 +105,7 @@ if __name__ == '__main__':
             finally:
                 client.close()
 
-        jdict = json.loads(jstr, object_pairs_hook=OrderedDict)
+        jdict = json.loads(jstr)
 
         calib = AFECalib.construct_from_jdict(jdict)
 
