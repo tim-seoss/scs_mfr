@@ -16,8 +16,8 @@ class CmdAirNowSiteConf(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog { -c | -p | [-s COUNTRY LOCATION IS_MOBILE] "
-                                                    "[-o PARAM POC] [-d PARAM_CODE] } [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog { -c | -p | [-s COUNTRY LOC IS_MOBILE] "
+                                                    "[-o PARAM POC] [-d PARAM] } [-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--countries", "-c", action="store_true", dest="countries", default=False,
@@ -27,7 +27,7 @@ class CmdAirNowSiteConf(object):
                                  help="list the available parameters to stdout")
 
         self.__parser.add_option("--site", "-s", type="int", nargs=3, action="store", dest="site",
-                                 help="set site country code, location code and mobile status")
+                                 help="set site country code, 9 digit location code and mobile status (1 or 0)")
 
         self.__parser.add_option("--poc", "-o", type="int", nargs=2, action="store", dest="poc",
                                  help="add or update a parameter occurrence code")

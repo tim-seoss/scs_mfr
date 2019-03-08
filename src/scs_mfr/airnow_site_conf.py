@@ -1,27 +1,35 @@
 #!/usr/bin/env python3
 
 """
-Created on 2 Apr 2018
+Created on 8 Mar 2019
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The airnow_site_conf utility is used to
+The airnow_site_conf utility is used to set the site code and any parameter occurrence codes associated with the
+AirNow-I project. If present, this information is reported by the scs_dev/status_sampler.
 
+The utility can be used to list the available countries and available AQCSV parameter codes.
 
-Note that the scs_mfr/aws_mqtt_client process must be restarted for changes to take effect.
+Note that the scs_dev/status_sampler process must be restarted for changes to take effect.
 
 SYNOPSIS
-airnow_site_conf.py { -c | -p | [-s COUNTRY LOCATION IS_MOBILE] [-o PARAM_CODE POC_CODE] [-d PARAM_CODE] } [-v]
+airnow_site_conf.py { -c | -p | [-s COUNTRY LOCATION IS_MOBILE] [-o PARAM POC] [-d PARAM] } [-v]
 
 EXAMPLES
-./airnow_site_conf.py -e aws.southcoastscience.com -a de92c5ff-b47a-4cc4-a04c-62d684d64a1f
+./airnow_site_conf.py -s 850 123456789 1 -v
 
 FILES
 ~/SCS/aws/airnow_site_conf.json
 
 DOCUMENT EXAMPLE
-{"site": "850MM123456789", "pocs": {"88101": 2}}
+{"site": "850MM123456789", "pocs": {"88102": 2}}
+
+SEE ALSO
+scs_dev/status_sampler
+
+RESOURCES
+https://www.airnow.gov/
 """
 
 import sys
@@ -92,7 +100,8 @@ if __name__ == '__main__':
     # set site...
     if cmd.is_set_site():
         if cmd.site_country_code not in CountryNumeric.keys():
-            print("airnow_site_conf: country code '%s' is not recognised." % cmd.site_country_code, file=sys.stderr)
+            print("airnow_site_conf: country code '%s' is not recognised." % cmd.site_country_code,
+                  file=sys.stderr)
             exit(2)
 
         length = AQCSVSite.LOCATION_CODE_LENGTH
