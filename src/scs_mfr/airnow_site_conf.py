@@ -10,7 +10,7 @@ The airnow_site_conf utility is used to set the site code and any parameter occu
 AirNow-I project. For remote access to this information the airnow_site_conf utility should be made accessible
 via the scs_dev/control_receiver.
 
-The utility can be used to list the available countries and available AQCSV parameter codes.
+The utility can be used to list the available countries and AQCSV parameter codes.
 
 SYNOPSIS
 airnow_site_conf.py { -c | -p | [-s COUNTRY LOCATION IS_MOBILE] [-o PARAM POC] [-d PARAM] } [-v]
