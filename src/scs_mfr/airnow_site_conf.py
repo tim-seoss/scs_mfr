@@ -12,8 +12,6 @@ via the scs_dev/control_receiver.
 
 The utility can be used to list the available countries and available AQCSV parameter codes.
 
-Note that the scs_dev/status_sampler process must be restarted for changes to take effect.
-
 SYNOPSIS
 airnow_site_conf.py { -c | -p | [-s COUNTRY LOCATION IS_MOBILE] [-o PARAM POC] [-d PARAM] } [-v]
 
