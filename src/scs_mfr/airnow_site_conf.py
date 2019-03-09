@@ -7,8 +7,10 @@ Created on 8 Mar 2019
 
 DESCRIPTION
 The airnow_site_conf utility is used to set the site code and any parameter occurrence codes associated with the
-AirNow-I project. For remote access to this information the airnow_site_conf utility should be made accessible
-via the scs_dev/control_receiver.
+AirNow-I project. If available, the configuration is published by the scs_dev/status_sampler utility.
+
+For remote configuration, the airnow_site_conf utility should be made accessible via the
+scs_dev/control_receiver.
 
 The utility can be used to list the available countries and AQCSV parameter codes.
 
@@ -27,6 +29,7 @@ DOCUMENT EXAMPLE
 SEE ALSO
 scs_analysis/aws_mqtt_control
 scs_dev/control_receiver
+scs_dev/status_sampler
 
 RESOURCES
 https://www.airnow.gov/
