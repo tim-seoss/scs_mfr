@@ -114,4 +114,5 @@ if __name__ == '__main__':
 
     calib = AFECalib.load(Host)
 
-    print(JSONify.dumps(calib))
+    if calib:
+        print(JSONify.dumps(calib))
