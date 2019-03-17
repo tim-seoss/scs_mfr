@@ -67,6 +67,8 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_afe_calib import CmdAFECalib
 
 
+# TODO: add delete mode
+
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
@@ -114,4 +116,5 @@ if __name__ == '__main__':
 
     calib = AFECalib.load(Host)
 
-    print(JSONify.dumps(calib))
+    if calib:
+        print(JSONify.dumps(calib))

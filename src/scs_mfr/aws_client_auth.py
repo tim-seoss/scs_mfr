@@ -28,7 +28,7 @@ FILES
 ~/SCS/aws/certs/root-CA.crt
 
 DOCUMENT EXAMPLE
-{"endpoint": "asrft7e5j5ecz.iot.us-west-2.amazonaws.com", "client-id": "bruno", "cert-id": "9f08402232"}
+{"endpoint": "asrfh6e5j5ecz.iot.us-west-2.amazonaws.com", "client-id": "bruno", "cert-id": "9f08402232"}
 
 SEE ALSO
 scs_dev/aws_mqtt_client
