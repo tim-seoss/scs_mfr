@@ -48,7 +48,6 @@ from scs_mfr.report.dfe_test_datum import DFETestDatum
 from scs_mfr.report.dfe_test_reporter import DFETestReporter
 
 from scs_mfr.test.afe_test import AFETest
-from scs_mfr.test.board_temp_test import BoardTempTest
 from scs_mfr.test.eeprom_test import EEPROMTest
 from scs_mfr.test.gps_test import GPSTest
 from scs_mfr.test.opc_test import OPCTest
@@ -117,19 +116,6 @@ if __name__ == '__main__':
 
         except Exception as ex:
             reporter.report_exception("RTC", ex)
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-    # Board temp...
-
-    try:
-        test = BoardTempTest(cmd.verbose)
-
-        test_ok = test.conduct()
-        reporter.report_test("BoardTemp", test_ok)
-
-    except Exception as ex:
-        reporter.report_exception("BoardTemp", ex)
 
 
     # ----------------------------------------------------------------------------------------------------------------
