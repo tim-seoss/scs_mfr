@@ -41,15 +41,15 @@ class AFETest(Test):
             afe = dfe_conf.afe(Host)
 
             # test...
-            self.datum = afe.sample()
+            self._datum = afe.sample()
 
             if self.verbose:
-                print(self.datum, file=sys.stderr)
+                print(self._datum, file=sys.stderr)
 
             ok = True
 
             # test criterion...
-            for gas, sensor in self.datum.sns.items():
+            for gas, sensor in self._datum.sns.items():
                 sensor_ok = 0.9 < sensor.we_v < 1.1 and 0.9 < sensor.ae_v < 1.1
 
                 if not sensor_ok:

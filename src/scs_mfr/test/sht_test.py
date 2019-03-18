@@ -40,13 +40,13 @@ class SHTTest(Test):
             # test...
             self.__sht.reset()
 
-            self.datum = self.__sht.sample()
+            self._datum = self.__sht.sample()
 
             if self.verbose:
-                print(self.datum, file=sys.stderr)
+                print(self._datum, file=sys.stderr)
 
             # criterion...
-            return 10 < self.datum.humid < 90 and 10 < self.datum.temp < 50
+            return 10 < self._datum.humid < 90 and 10 < self._datum.temp < 50
 
         finally:
             I2C.close()

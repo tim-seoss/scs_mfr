@@ -47,13 +47,13 @@ class GPSTest(Test):
             gps.open()
 
             # test...
-            self.datum = gps.report(GPRMC)
+            self._datum = gps.report(GPRMC)
 
             if self.verbose:
-                print(self.datum, file=sys.stderr)
+                print(self._datum, file=sys.stderr)
 
             # criterion...
-            return self.datum is not None
+            return self._datum is not None
 
         finally:
             if gps:
