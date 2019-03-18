@@ -19,7 +19,7 @@ class Test(object):
     def __init__(self, verbose):
         self.__verbose = verbose
 
-        self.__datum = None
+        self._datum = None
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -33,12 +33,7 @@ class Test(object):
 
     @property
     def datum(self):
-        return self.__datum
-
-
-    @datum.setter
-    def datum(self, value):
-        self.__datum = value
+        return self._datum
 
 
     @property
