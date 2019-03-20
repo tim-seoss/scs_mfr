@@ -4,12 +4,12 @@ Created on 18 May 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class Test(object):
+class Test(ABC):
     """
     classdocs
     """
