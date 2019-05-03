@@ -24,7 +24,7 @@ class CmdOPCConf(object):
 
         # optional...
         self.__parser.add_option("--model", "-m", type="string", nargs=1, action="store", dest="model",
-                                 help="set MODEL (N2, N3 or R1)")
+                                 help="set MODEL (N2, N3, R1 or S30)")
 
         self.__parser.add_option("--sample-period", "-s", type="int", nargs=1, action="store", dest="sample_period",
                                  help="set SAMPLE_PERIOD")

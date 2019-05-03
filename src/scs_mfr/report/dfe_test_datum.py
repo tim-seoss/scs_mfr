@@ -4,6 +4,8 @@ Created on 29 Jan 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
+from collections import OrderedDict
+
 from scs_core.sample.sample import Sample
 
 
@@ -20,5 +22,12 @@ class DFETestDatum(Sample):
         """
         Constructor
         """
-        super().__init__(tag, None, rec, ('host-sn', host_serial_number), ('dfe-sn', dfe_serial_number),
-                         ('result', result), ('subjects', subjects), ('afe', afe))
+        jdict = OrderedDict()
+
+        jdict['host-sn'] = host_serial_number
+        jdict['dfe-sn'] = dfe_serial_number
+        jdict['result'] = result
+        jdict['subjects'] = subjects
+        jdict['afe'] = afe
+
+        super().__init__(tag, None, rec, jdict)
