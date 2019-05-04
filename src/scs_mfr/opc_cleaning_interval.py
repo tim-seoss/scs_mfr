@@ -6,7 +6,7 @@ Created on 3 May 2019
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The opc_cleaning_interval utility is used to
+The opc_cleaning_interval utility is used to ...
 
 SYNOPSIS
 opc_cleaning_interval.py [-s INTERVAL] [-v]
