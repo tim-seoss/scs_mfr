@@ -35,6 +35,7 @@ FILES
 
 SEE ALSO
 scs_dev/particulates_sampler
+scs_mfr/opc_cleaning_interval
 
 BUGS
 The specification allows for a power saving mode - which enables the OPC to shut down between readings - but
