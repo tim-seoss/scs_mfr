@@ -53,6 +53,8 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_opc_conf import CmdOPCConf
 
 
+# TODO: check sample period against Schedule
+
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
