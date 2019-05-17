@@ -53,6 +53,8 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_opc_conf import CmdOPCConf
 
 
+# TODO: check sample period against Schedule
+
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
@@ -92,10 +94,13 @@ if __name__ == '__main__':
         sample_period = cmd.sample_period if cmd.sample_period else conf.sample_period
         power_saving = cmd.power_saving if cmd.power_saving is not None else conf.power_saving
 
-        spi_bus = conf.spi_bus if cmd.spi_bus is None else cmd.spi_bus
-        spi_device = conf.spi_device if cmd.spi_device is None else cmd.spi_device
+        if conf is None:
+            conf = OPCConf(None, 10, False, None, None)         # permit None for bus and address settings
 
-        conf = OPCConf(model, sample_period, power_saving, spi_bus, spi_device)
+        bus = conf.bus if cmd.bus is None else cmd.bus
+        address = conf.address if cmd.address is None else cmd.address
+
+        conf = OPCConf(model, sample_period, power_saving, bus, address)
         conf.save(Host)
 
     elif cmd.delete:

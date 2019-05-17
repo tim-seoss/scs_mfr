@@ -55,6 +55,8 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_schedule import CmdSchedule
 
 
+# TODO: check sampling interval against OPCConf
+
 # TODO: implement tally / averaging functionality on sampling processes
 
 # --------------------------------------------------------------------------------------------------------------------
