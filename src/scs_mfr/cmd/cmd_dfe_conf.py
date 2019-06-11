@@ -6,6 +6,8 @@ Created on 27 Feb 2018
 
 import optparse
 
+from scs_dfe.board.dfe_conf import DFEConf
+
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -27,14 +29,14 @@ class CmdDFEConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self):
-        self.__parser = optparse.OptionParser(usage="%prog [{ -s [-p ADDR] | -d }] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ -s SOURCE [-p ADDR] | -d }] [-v]", version="%prog 1.0")
 
         # optional...
-        self.__parser.add_option("--set", "-s", action="store_true", dest="set", default=False,
-                                 help="create or update a DFE configuration")
+        self.__parser.add_option("--source", "-s", type="string", nargs=1, action="store", dest="source",
+                                 help="sensor equipment (AFE or IEI)")
 
         self.__parser.add_option("--pt1000", "-p", type="int", nargs=1, action="store", dest="pt1000",
-                                 help="set I2C address of the Pt1000 ADC (if present)")
+                                 help="set I2C address of the Pt1000 ADC (if present, AFE only)")
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="delete the DFE configuration")
@@ -51,6 +53,12 @@ class CmdDFEConf(object):
         if self.set() and self.delete:
             return False
 
+        if self.set() and self.source not in DFEConf.sources():
+            return False
+
+        if self.source != 'AFE' and self.pt1000_addr is not None:
+            return False
+
         if not self.set() and self.pt1000_addr is not None:
             return False
 
@@ -58,10 +66,15 @@ class CmdDFEConf(object):
 
 
     def set(self):
-        return self.__opts.set
+        return self.__opts.source is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    @property
+    def source(self):
+        return self.__opts.source
+
 
     @property
     def pt1000_addr(self):
@@ -85,5 +98,5 @@ class CmdDFEConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdDFEConf:{set:%s, pt1000:%s, delete:%s, verbose:%s}" % \
-               (self.set(), CmdDFEConf.__addr_str(self.pt1000_addr), self.delete, self.verbose)
+        return "CmdDFEConf:{source:%s, pt1000:%s, delete:%s, verbose:%s}" % \
+               (self.source, CmdDFEConf.__addr_str(self.pt1000_addr), self.delete, self.verbose)

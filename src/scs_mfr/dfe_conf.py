@@ -7,7 +7,12 @@ Created on 27 Feb 2018
 
 DESCRIPTION
 The dfe_conf utility is used to specify whether a South Coast Science digital front-end (DFE) board is present on the
-host system, and whether the attachAlphasense analogue front-end board has a Pt1000 sensor.
+host system, which type it is, and whether a Pt1000 sensor is attached.
+
+Types are:
+
+* AFE - uses the Alphasense analogue front-end board
+* IEI - uses the South Coast Science integrated electrochem interface
 
 Pt1000 analogue-digital converter (ADC) I2C addresses:
 
@@ -20,13 +25,13 @@ to specify that the Pt1000 is absent.
 The scs_dev sampler processes must be restarted for changes to take effect.
 
 SYNOPSIS
-dfe_conf.py [{ -s [-p ADDR] | -d }] [-v]
+dfe_conf.py [{ -s SOURCE [-p ADDR] | -d }] [-v]
 
 EXAMPLES
-./dfe_conf.py -s
+./dfe_conf.py -s AFE
 
 DOCUMENT EXAMPLE
-{"pt1000-addr": 0x68}
+{"src": "AFE", "pt1000-addr": null}
 
 FILES
 ~/SCS/conf/dfe_conf.json
@@ -76,7 +81,7 @@ if __name__ == '__main__':
     # run...
 
     if cmd.set():
-        conf = DFEConf(cmd.pt1000_addr)
+        conf = DFEConf(cmd.source, cmd.pt1000_addr)
         conf.save(Host)
 
     elif cmd.delete and conf is not None:
