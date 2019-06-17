@@ -29,11 +29,12 @@ class CmdDFEConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self):
-        self.__parser = optparse.OptionParser(usage="%prog [{ -s SOURCE [-p ADDR] | -d }] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ -s SOURCE ACTIVE_HIGH [-p ADDR] | -d }] [-v]",
+                                              version="%prog 1.0")
 
         # optional...
-        self.__parser.add_option("--source", "-s", type="string", nargs=1, action="store", dest="source",
-                                 help="sensor equipment (AFE or IEI)")
+        self.__parser.add_option("--source", "-s", type="string", nargs=2, action="store", dest="source",
+                                 help="sensor equipment (AFE or ZHB), load switch active high (1 or 0)")
 
         self.__parser.add_option("--pt1000", "-p", type="int", nargs=1, action="store", dest="pt1000",
                                  help="set I2C address of the Pt1000 ADC (if present, AFE only)")
@@ -53,10 +54,13 @@ class CmdDFEConf(object):
         if self.set() and self.delete:
             return False
 
-        if self.set() and self.source not in DFEConf.sources():
+        if self.set() and self.source_equipment not in DFEConf.sources():
             return False
 
-        if self.source != 'AFE' and self.pt1000_addr is not None:
+        if self.set() and self.__opts.source[1] not in ('0', '1'):
+            return False
+
+        if self.source_equipment != 'AFE' and self.pt1000_addr is not None:
             return False
 
         if not self.set() and self.pt1000_addr is not None:
@@ -72,8 +76,13 @@ class CmdDFEConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
-    def source(self):
-        return self.__opts.source
+    def source_equipment(self):
+        return None if self.__opts.source is None else self.__opts.source[0]
+
+
+    @property
+    def source_active_high(self):
+        return None if self.__opts.source is None else self.__opts.source[1] == '1'
 
 
     @property
@@ -99,4 +108,4 @@ class CmdDFEConf(object):
 
     def __str__(self, *args, **kwargs):
         return "CmdDFEConf:{source:%s, pt1000:%s, delete:%s, verbose:%s}" % \
-               (self.source, CmdDFEConf.__addr_str(self.pt1000_addr), self.delete, self.verbose)
+               (self.__opts.source, CmdDFEConf.__addr_str(self.pt1000_addr), self.delete, self.verbose)

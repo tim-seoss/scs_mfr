@@ -45,7 +45,7 @@ class OPCTest(Test):
                 print("OPCConf not available - skipping.", file=sys.stderr)
                 return False
 
-            opc = opc_conf.opc(Host)
+            opc = opc_conf.opc(Host, False)
 
             opc.power_on()
             opc.operations_on()

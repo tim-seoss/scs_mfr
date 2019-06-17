@@ -81,7 +81,7 @@ if __name__ == '__main__':
     # run...
 
     if cmd.set():
-        conf = DFEConf(cmd.source, cmd.pt1000_addr)
+        conf = DFEConf(cmd.source_equipment, cmd.source_active_high, cmd.pt1000_addr)
         conf.save(Host)
 
     elif cmd.delete and conf is not None:
