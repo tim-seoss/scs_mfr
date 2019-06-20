@@ -38,7 +38,7 @@ from scs_core.data.json import JSONify
 
 from scs_core.gas.pt1000_calib import Pt1000Calib
 
-from scs_dfe.board.dfe_conf import DFEConf
+from scs_dfe.interface.interface_conf import InterfaceConf
 from scs_dfe.climate.sht_conf import SHTConf
 
 from scs_host.bus.i2c import I2C
@@ -67,19 +67,32 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # resources...
 
+        # Interface...
+        interface_conf = InterfaceConf.load(Host)
+
+        if interface_conf is None:
+            print("pt1000_calib: InterfaceConf not available.", file=sys.stderr)
+            exit(1)
+
+        interface = interface_conf.interface()
+
+        if interface is None:
+            print("pt1000_calib: Interface not available.", file=sys.stderr)
+            exit(1)
+
+        if cmd.verbose and interface:
+            print("pt1000_calib: %s" % interface, file=sys.stderr)
+
         # SHT...
         sht_conf = SHTConf.load(Host)
         sht = sht_conf.int_sht()
 
-        # AFE...
-        dfe_conf = DFEConf.load(Host)
-
         # validate...
-        if dfe_conf.pt1000_addr is None:
+        if interface.pt1000 is None:
             print("pt1000_calib: a Pt1000 ADC has not been configured for this system.", file=sys.stderr)
             exit(1)
 
-        afe = dfe_conf.afe(Host)
+        afe = interface.gas_sensors(Host)
 
 
         # ------------------------------------------------------------------------------------------------------------
@@ -107,7 +120,7 @@ if __name__ == '__main__':
         print(JSONify.dumps(pt1000_calib))
 
         if cmd.verbose:
-            afe = dfe_conf.afe(Host)
+            afe = interface.gas_sensors(Host)
             pt1000_datum = afe.sample_pt1000()
 
             print(pt1000_datum, file=sys.stderr)

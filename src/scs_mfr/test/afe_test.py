@@ -6,7 +6,7 @@ Created on 18 May 2017
 
 import sys
 
-from scs_dfe.board.dfe_conf import DFEConf
+from scs_dfe.interface.interface_conf import InterfaceConf
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -37,8 +37,10 @@ class AFETest(Test):
             I2C.open(Host.I2C_SENSORS)
 
             # AFE...
-            dfe_conf = DFEConf.load(Host)
-            afe = dfe_conf.afe(Host)
+            interface_conf = InterfaceConf.load(Host)
+            interface = interface_conf.interface()
+
+            afe = interface.gas_sensors(Host)
 
             # test...
             self._datum = afe.sample()
