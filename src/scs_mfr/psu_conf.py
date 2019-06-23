@@ -9,8 +9,9 @@ DESCRIPTION
 The psu_conf utility is used to specify whether a South Coast Science power supply (PSU) board is present
 and if so, which model is provided. Two models are currently available:
 
-* PrototypeV1
+* MobileV1
 * OsloV1
+* PrototypeV1
 
 Note that the scs_dev/status_sampler process must be restarted for changes to take effect.
 

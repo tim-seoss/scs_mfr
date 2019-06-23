@@ -6,37 +6,26 @@ Created on 27 Feb 2018
 
 import optparse
 
-from scs_dfe.board.dfe_conf import DFEConf
+from scs_dfe.interface.interface_conf import InterfaceConf
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class CmdDFEConf(object):
+class CmdInterfaceConf(object):
     """
     unix command line handler
     """
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    @classmethod
-    def __addr_str(cls, addr):
-        if addr is None:
-            return None
-
-        return "0x%02x" % addr
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
     def __init__(self):
-        self.__parser = optparse.OptionParser(usage="%prog [{ -s SOURCE [-p ADDR] | -d }] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ -m MODEL | -d }] [-v]", version="%prog 1.0")
+
+        models = ' | '.join(InterfaceConf.models())
 
         # optional...
-        self.__parser.add_option("--source", "-s", type="string", nargs=1, action="store", dest="source",
-                                 help="sensor equipment (AFE or IEI)")
-
-        self.__parser.add_option("--pt1000", "-p", type="int", nargs=1, action="store", dest="pt1000",
-                                 help="set I2C address of the Pt1000 ADC (if present, AFE only)")
+        self.__parser.add_option("--model", "-m", type="string", nargs=1, action="store", dest="model",
+                                 help="interface model { %s }" % models)
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="delete the DFE configuration")
@@ -53,32 +42,21 @@ class CmdDFEConf(object):
         if self.set() and self.delete:
             return False
 
-        if self.set() and self.source not in DFEConf.sources():
-            return False
-
-        if self.source != 'AFE' and self.pt1000_addr is not None:
-            return False
-
-        if not self.set() and self.pt1000_addr is not None:
+        if self.set() and self.model not in InterfaceConf.models():
             return False
 
         return True
 
 
     def set(self):
-        return self.__opts.source is not None
+        return self.__opts.model is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
-    def source(self):
-        return self.__opts.source
-
-
-    @property
-    def pt1000_addr(self):
-        return self.__opts.pt1000
+    def model(self):
+        return self.__opts.model
 
 
     @property
@@ -98,5 +76,5 @@ class CmdDFEConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdDFEConf:{source:%s, pt1000:%s, delete:%s, verbose:%s}" % \
-               (self.source, CmdDFEConf.__addr_str(self.pt1000_addr), self.delete, self.verbose)
+        return "CmdInterfaceConf:{source:%s, delete:%s, verbose:%s}" % \
+               (self.__opts.source, self.delete, self.verbose)

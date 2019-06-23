@@ -6,35 +6,27 @@ Created on 27 Feb 2018
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The dfe_conf utility is used to specify whether a South Coast Science digital front-end (DFE) board is present on the
-host system, which type it is, and whether a Pt1000 sensor is attached.
+The interface_conf utility is used to specify whether a South Coast Science sensor interface board is present on the
+host system and, if so, which type it is.
 
 Types are:
 
-* AFE - uses the Alphasense analogue front-end board
+* DFE - uses the Alphasense analogue front-end board
 * IEI - uses the South Coast Science integrated electrochem interface
-
-Pt1000 analogue-digital converter (ADC) I2C addresses:
-
-* Raspberry Pi DFE: 0x68
-* BeagleBone DFE: 0x69
-
-Note: many device enclosure designs cause the Pt1000 reading to be unreliable. In these cases, it is appropriate
-to specify that the Pt1000 is absent.
 
 The scs_dev sampler processes must be restarted for changes to take effect.
 
 SYNOPSIS
-dfe_conf.py [{ -s SOURCE [-p ADDR] | -d }] [-v]
+interface_conf.py [{ -s SOURCE | -d }] [-v]
 
 EXAMPLES
-./dfe_conf.py -s AFE
+./interface_conf.py -s DFE
 
 DOCUMENT EXAMPLE
-{"src": "AFE", "pt1000-addr": null}
+{"model": "DFE"}
 
 FILES
-~/SCS/conf/dfe_conf.json
+~/SCS/conf/interface_conf.json
 
 SEE ALSO
 scs_dev/gases_sampler
@@ -45,11 +37,11 @@ import sys
 
 from scs_core.data.json import JSONify
 
-from scs_dfe.board.dfe_conf import DFEConf
+from scs_dfe.interface.interface_conf import InterfaceConf
 
 from scs_host.sys.host import Host
 
-from scs_mfr.cmd.cmd_dfe_conf import CmdDFEConf
+from scs_mfr.cmd.cmd_interface_conf import CmdInterfaceConf
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -59,14 +51,14 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
-    cmd = CmdDFEConf()
+    cmd = CmdInterfaceConf()
 
     if not cmd.is_valid():
         cmd.print_help(sys.stderr)
         exit(2)
 
     if cmd.verbose:
-        print("dfe_conf: %s" % cmd, file=sys.stderr)
+        print("interface_conf: %s" % cmd, file=sys.stderr)
         sys.stderr.flush()
 
 
@@ -74,14 +66,14 @@ if __name__ == '__main__':
     # resources...
 
     # DFEConf...
-    conf = DFEConf.load(Host)
+    conf = InterfaceConf.load(Host)
 
 
     # ----------------------------------------------------------------------------------------------------------------
     # run...
 
     if cmd.set():
-        conf = DFEConf(cmd.source, cmd.pt1000_addr)
+        conf = InterfaceConf(cmd.model)
         conf.save(Host)
 
     elif cmd.delete and conf is not None:

@@ -6,6 +6,8 @@ Created on 21 Jun 2017
 
 import optparse
 
+from scs_psu.psu.psu_conf import PSUConf
+
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -21,9 +23,9 @@ class CmdPSUConf(object):
 
         # optional...
         self.__parser.add_option("--model", "-m", type="string", nargs=1, action="store", dest="model",
-                                 help="set PSU model (may be PrototypeV1 or OsloV1)")
+                                 help="set PSU model (may be MobileV1, PrototypeV1 or OsloV1)")
 
-        self.__parser.add_option("--delete", "-d", action="store_true", dest="delete",
+        self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="delete the PSU configuration")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
@@ -38,7 +40,7 @@ class CmdPSUConf(object):
         if self.model is not None and self.delete:
             return False
 
-        if self.__opts.model is not None and self.__opts.model != 'PrototypeV1' and self.__opts.model != 'OsloV1':
+        if self.__opts.model is not None and self.__opts.model not in PSUConf.models():
             return False
 
         return True
