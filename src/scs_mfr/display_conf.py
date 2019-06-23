@@ -21,7 +21,7 @@ FILES
 ~/SCS/conf/display_conf.json
 
 SEE ALSO
-scs_dev/gases_sampler
+scs_dev/display
 """
 
 import sys
