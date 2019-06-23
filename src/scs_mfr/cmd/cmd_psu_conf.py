@@ -25,7 +25,7 @@ class CmdPSUConf(object):
         self.__parser.add_option("--model", "-m", type="string", nargs=1, action="store", dest="model",
                                  help="set PSU model (may be MobileV1, PrototypeV1 or OsloV1)")
 
-        self.__parser.add_option("--delete", "-d", action="store_true", dest="delete",
+        self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="delete the PSU configuration")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,

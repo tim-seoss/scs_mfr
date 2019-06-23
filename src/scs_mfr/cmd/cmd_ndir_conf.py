@@ -26,7 +26,7 @@ class CmdNDIRConf(object):
         self.__parser.add_option("--tally", "-t", type="int", nargs=1, action="store", dest="tally",
                                  help="set the averaging tally")
 
-        self.__parser.add_option("--delete", "-d", action="store_true", dest="delete",
+        self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="delete the NDIR configuration")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
