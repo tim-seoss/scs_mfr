@@ -37,7 +37,7 @@ class CmdSHTConf(object):
         self.__parser.add_option("--ext-addr", "-e", type="int", nargs=1, action="store", dest="ext_addr",
                                  help="set I2C address of SHT exposed to air")
 
-        self.__parser.add_option("--delete", "-d", action="store_true", dest="delete",
+        self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="delete the SHT configuration")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,

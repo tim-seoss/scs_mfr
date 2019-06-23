@@ -48,6 +48,8 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_timezone import CmdTimezone
 
 
+# TODO: deal with the case where the conf file is missing
+
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':

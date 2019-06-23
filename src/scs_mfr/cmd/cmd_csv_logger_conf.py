@@ -29,7 +29,7 @@ class CmdCSVLoggerConf(object):
         self.__parser.add_option("--write-int", "-i", type="int", nargs=1, action="store", dest="write_interval",
                                  help="write interval in seconds (0 for immediate writes)")
 
-        self.__parser.add_option("--delete", "-d", action="store_true", dest="delete",
+        self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="delete the logger configuration")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
