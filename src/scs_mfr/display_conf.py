@@ -6,16 +6,19 @@ Created on 22 Jun 2019
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The display_conf utility is used to
+The display_conf utility is used to specify the content of a visual display, such as the Pimoroni Inky pHAT eInk
+module. In particular, it specifies some of the initial screen content.
+
+The configuration managed by this utility is used by the scs_dev/display utility.
 
 SYNOPSIS
 display_conf.py [{ [-m MODE] [-n NAME] [-u STARTUP] [-s SHUTDOWN] | -d }] [-v]
 
 EXAMPLES
-./display_conf.py -m SYS -n "SCS Praxis/Handheld v1.0" -u STARTING -s STANDBY
+./display_conf.py -m SYS -n "SCS Praxis/Handheld v1.0" -u RUNNING -s STANDBY
 
 DOCUMENT EXAMPLE
-{"mode": "SYS", "device-name": "SCS Praxis/Handheld v1.0", "startup-message": "STARTING", "shutdown-message": "STANDBY"}
+{"mode": "SYS", "device-name": "SCS Praxis/Handheld v1.0", "startup-message": "RUNNING", "shutdown-message": "STANDBY"}
 
 FILES
 ~/SCS/conf/display_conf.json
