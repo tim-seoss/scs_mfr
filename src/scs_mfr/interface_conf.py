@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-Created on 27 Feb 2018
+Created on 20 Jun 2019
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
@@ -11,16 +11,23 @@ host system and, if so, which type it is.
 
 Types are:
 
-* DFE - uses the Alphasense analogue front-end board
+* DFE - uses the Alphasense analogue front-end board (default)
 * IEI - uses the South Coast Science integrated electrochem interface
+
+If a DFE is selected, the use of the analogue-digital converter for the Pt1000 temperature sensor should be specified.
+Options are:
+
+* DFE - Pt1000 not used
+* DFE/0x68 - Pt1000 used, ADC I2C address is 0x68
+* DFE/0x69 - Pt1000 used, ADC I2C address is 0x69
 
 The scs_dev sampler processes must be restarted for changes to take effect.
 
 SYNOPSIS
-interface_conf.py [{ -s SOURCE | -d }] [-v]
+interface_conf.py [{ -m MODEL | -d }] [-v]
 
 EXAMPLES
-./interface_conf.py -s DFE
+./interface_conf.py -m DFE
 
 DOCUMENT EXAMPLE
 {"model": "DFE"}

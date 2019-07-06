@@ -28,7 +28,7 @@ class CmdInterfaceConf(object):
                                  help="interface model { %s }" % models)
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
-                                 help="delete the DFE configuration")
+                                 help="delete the interface configuration")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
