@@ -53,19 +53,17 @@ from scs_mfr.cmd.cmd_csv_reader import CmdCSVReader
 
 if __name__ == '__main__':
 
-    cmd = None
     reader = None
 
+    # ----------------------------------------------------------------------------------------------------------------
+    # cmd...
+
+    cmd = CmdCSVReader()
+
+    if cmd.verbose:
+        print("csv_reader: %s" % cmd, file=sys.stderr)
+
     try:
-        # ------------------------------------------------------------------------------------------------------------
-        # cmd...
-
-        cmd = CmdCSVReader()
-
-        if cmd.verbose:
-            print("csv_reader: %s" % cmd, file=sys.stderr)
-
-
         # ------------------------------------------------------------------------------------------------------------
         # resources...
 
