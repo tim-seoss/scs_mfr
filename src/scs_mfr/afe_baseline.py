@@ -12,7 +12,7 @@ is recorded.
 
 The environmental temperature, relative humidity and, optionally, absolute barometric pressure are stored alongside
 the offset. These environmental parameters may be sourced either from sensors at the moment at which the offset is
-recorded, or supplied on the command line.
+recorded (the default), or supplied on the command line.
 
 Each sensor is identified by the gas that it detects. For example, a nitrogen dioxide sensor is identified as NO2, and
 an ozone sensor is identified as Ox.
@@ -20,10 +20,10 @@ an ozone sensor is identified as Ox.
 Note that the scs_dev/gasses_sampler process must be restarted for changes to take effect.
 
 SYNOPSIS
-afe_baseline.py [{ { -s | -o } GAS VALUE { -e | -r HUMID -t TEMP [-p PRESS] } | -z }] [-v]
+./afe_baseline.py [{ { -s | -o } GAS VALUE [-r HUMID -t TEMP [-p PRESS]] | -z }] [-v]
 
 EXAMPLES
-./afe_baseline.py -s CO -24 -e
+./afe_baseline.py -s CO -24
 
 DOCUMENT EXAMPLE
 {"sn1": {"calibrated-on": "2019-02-02T12:00:48Z", "offset": 123, "env": {"hmd": 44.0, "tmp": 22.6, "pA": 100.3}},
@@ -88,7 +88,7 @@ if __name__ == '__main__':
 
         afe_baseline = AFEBaseline.load(Host)
 
-        if cmd.env:
+        if not cmd.env_is_specified():
             # SHTConf...
             sht_conf = SHTConf.load(Host)
 
@@ -142,18 +142,18 @@ if __name__ == '__main__':
                 old_offset = afe_baseline.sensor_baseline(index).offset
                 new_offset = old_offset + cmd.offset_value()
 
-            if cmd.env:
+            if cmd.env_is_specified():
+                humid = cmd.humid
+                temp = cmd.temp
+                press = cmd.press
+
+            else:
                 sht_datum = sht.sample()
                 mpl_datum = None if mpl is None else mpl.sample()
 
                 humid = sht_datum.humid
                 temp = sht_datum.temp
                 press = None if mpl_datum is None else mpl_datum.actual_press
-
-            else:
-                humid = cmd.humid
-                temp = cmd.temp
-                press = cmd.press
 
             env = BaselineEnvironment(humid, temp, press)
 
