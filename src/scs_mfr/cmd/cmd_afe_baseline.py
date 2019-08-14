@@ -31,9 +31,8 @@ class CmdAFEBaseline(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [{ { -s | -o } GAS VALUE "
-                                                    "{ -e | -r HUMID -t TEMP [-p PRESS] } | -z }] [-v]",
-                                              version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ { -s | -o } GAS VALUE [-r HUMID -t TEMP [-p PRESS]] | "
+                                                    "-z }] [-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--set", "-s", type="string", nargs=2, action="store", dest="set",
@@ -41,9 +40,6 @@ class CmdAFEBaseline(object):
 
         self.__parser.add_option("--offset", "-o", type="string", nargs=2, action="store", dest="offset",
                                  help="change offset for GAS, by integer VALUE")
-
-        self.__parser.add_option("--env", "-e", action="store_true", dest="env",
-                                 help="record current environmental reading")
 
         self.__parser.add_option("--humid", "-r", type="float", nargs=1, action="store", dest="humid",
                                  help="record relative humidity value (%)")
@@ -81,9 +77,6 @@ class CmdAFEBaseline(object):
         if param_count > 1:
             return False
 
-        if bool(self.set is not None or self.offset is not None) != bool(self.env or self.temp is not None):
-            return False
-
         # validate VALUE...
         if self.set is not None and not self.__is_integer(self.set[1]):
             return False
@@ -92,13 +85,14 @@ class CmdAFEBaseline(object):
             return False
 
         # environment...
-        if self.env and (self.humid is not None or self.temp is not None or self.press is not None):
-            return False
-
-        if self.humid is not None and self.temp is None:
+        if bool(self.humid is None) != bool(self.temp is None):
             return False
 
         return True
+
+
+    def env_is_specified(self):
+        return self.humid is not None and self.temp is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -136,11 +130,6 @@ class CmdAFEBaseline(object):
 
 
     @property
-    def env(self):
-        return self.__opts.env
-
-
-    @property
     def humid(self):
         return self.__opts.humid
 
@@ -172,5 +161,5 @@ class CmdAFEBaseline(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdAFEBaseline:{set:%s, offset:%s, env:%s, humid:%s, temp:%s, press:%s, zero:%s, verbose:%s}" % \
-               (self.set, self.offset, self.env, self.humid, self.temp, self.press, self.zero, self.verbose)
+        return "CmdAFEBaseline:{set:%s, offset:%s, humid:%s, temp:%s, press:%s, zero:%s, verbose:%s}" % \
+               (self.set, self.offset, self.humid, self.temp, self.press, self.zero, self.verbose)
