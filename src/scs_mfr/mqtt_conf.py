@@ -16,19 +16,21 @@ The QUEUE_SIZE field determines how many messages can be buffered before publica
 an environment with unreliable communications, this could potentially be a large number of messages - the
 default queue size is 21000, equivalent to just over 24 hours of data under a normal sampling regime.
 
+The REPORT_FILE parameter, if set, indicates where the latest queue length value should be stored.
+
 The MQTT client must be restarted for changes to take effect.
 
 Warning: if inhibit publishing is set to true, the MQTT client will still subscribe as required, but will not publish
 receipts or responses.
 
 SYNOPSIS
-mqtt_conf.py [-p INHIBIT_PUBLISHING] [-q QUEUE_SIZE] [-v]
+mqtt_conf.py { [-p INHIBIT_PUBLISHING] [-q QUEUE_SIZE] [-f REPORT_FILE]  | -d } [-v]
 
 EXAMPLES
-./mqtt_conf.py -p0 -q21000
+./mqtt_conf.py -p 0 -q 21000 -f /tmp/southcoastscience/mqtt_queue_length.json
 
 DOCUMENT EXAMPLE
-{"inhibit-publishing": false, "queue-size": 21000}
+{"inhibit-publishing": false, "queue-size": 21000, "report-file": "/tmp/southcoastscience/mqtt_queue_length.json"}
 
 FILES
 ~/SCS/conf/mqtt_conf.json
@@ -75,12 +77,18 @@ if __name__ == '__main__':
     if cmd.set():
         inhibit_publishing = cmd.inhibit_publishing if cmd.inhibit_publishing is not None else conf.inhibit_publishing
         queue_size = cmd.queue_size if cmd.queue_size is not None else conf.queue_size
+        report_file = cmd.report_file if cmd.report_file is not None else conf.report_file
 
         if queue_size is None:
             queue_size = MQTTConf.DEFAULT_QUEUE_SIZE
 
-        conf = MQTTConf(inhibit_publishing, queue_size)
+        conf = MQTTConf(inhibit_publishing, queue_size, report_file)
         conf.save(Host)
+
+    elif cmd.delete and conf is not None:
+        conf.delete(Host)
+        conf = None
+
 
     if conf:
         print(JSONify.dumps(conf))
