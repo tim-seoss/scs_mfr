@@ -72,8 +72,12 @@ if __name__ == '__main__':
     # run...
 
     if cmd.set():
-        conf = PSUConf(cmd.model)
-        conf.save(Host)
+        try:
+            conf = PSUConf(cmd.model)
+            conf.save(Host)
+
+        except ValueError as ex:
+            print("psu_conf: %s" % ex, file=sys.stderr)
 
     elif cmd.delete and conf is not None:
         conf.delete(Host)
