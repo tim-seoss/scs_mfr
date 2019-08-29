@@ -9,9 +9,9 @@ DESCRIPTION
 The psu_conf utility is used to specify whether a South Coast Science power supply (PSU) board is present
 and if so, which model is provided. Two models are currently available:
 
-* MobileV1
-* OsloV1
-* PrototypeV1
+* MobileV1 via PZHBt1 or PZHBt2 interface
+* PrototypeV1 via serial port
+* OsloV1 via serial port
 
 Note that the scs_dev/status_sampler process must be restarted for changes to take effect.
 
@@ -72,8 +72,12 @@ if __name__ == '__main__':
     # run...
 
     if cmd.set():
-        conf = PSUConf(cmd.model)
-        conf.save(Host)
+        try:
+            conf = PSUConf(cmd.model)
+            conf.save(Host)
+
+        except ValueError as ex:
+            print("psu_conf: %s" % ex, file=sys.stderr)
 
     elif cmd.delete and conf is not None:
         conf.delete(Host)

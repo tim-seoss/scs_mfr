@@ -20,6 +20,8 @@ Options are:
 * DFE - Pt1000 not used
 * DFE/0x68 - Pt1000 used, ADC I2C address is 0x68
 * DFE/0x69 - Pt1000 used, ADC I2C address is 0x69
+* PZHBt1 - Pi Zero header breakout (type 1)
+* PZHBt2 - Pi Zero header breakout (type 2)
 
 The scs_dev sampler processes must be restarted for changes to take effect.
 

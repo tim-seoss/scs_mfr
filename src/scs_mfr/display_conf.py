@@ -18,7 +18,7 @@ EXAMPLES
 ./display_conf.py -m SYS -n "SCS Praxis/Handheld v1.0" -u RUNNING -s STANDBY
 
 DOCUMENT EXAMPLE
-{"mode": "SYS", "device-name": "SCS Praxis/Handheld v1.0", "startup-message": "RUNNING", "shutdown-message": "STANDBY"}
+{"mode": "SYS", "device-name": "SCS Praxis/Handheld v1.0", "startup-message": "ON", "shutdown-message": "STANDBY"}
 
 FILES
 ~/SCS/conf/display_conf.json
