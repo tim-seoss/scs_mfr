@@ -18,12 +18,14 @@ class CmdPSUConf(object):
         """
         Constructor
         """
+        models = ' | '.join(PSUConf.models())
+
         self.__parser = optparse.OptionParser(usage="%prog [{ -m MODEL | -d }] [-v]",
                                               version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--model", "-m", type="string", nargs=1, action="store", dest="model",
-                                 help="set PSU model (may be MobileV1, PrototypeV1 or OsloV1)")
+                                 help="set PSU model { %s }" % models)
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="delete the PSU configuration")
@@ -40,7 +42,7 @@ class CmdPSUConf(object):
         if self.model is not None and self.delete:
             return False
 
-        if self.__opts.model is not None and self.__opts.model not in PSUConf.models():
+        if self.set() and self.model not in PSUConf.models():
             return False
 
         return True
