@@ -25,8 +25,8 @@ class GPSTest(Test):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, verbose):
-        Test.__init__(self, verbose)
+    def __init__(self, interface, verbose):
+        Test.__init__(self, interface, verbose)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -41,7 +41,7 @@ class GPSTest(Test):
             I2C.open(Host.I2C_SENSORS)
 
             # GPS...
-            gps = PAM7Q(False, Host.gps_device())
+            gps = PAM7Q(self.interface, Host.gps_device())
 
             gps.power_on()
             gps.open()

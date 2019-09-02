@@ -21,8 +21,8 @@ class SHTTest(Test):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, name, sht, verbose):
-        Test.__init__(self, verbose)
+    def __init__(self, name, sht, interface, verbose):
+        Test.__init__(self, interface, verbose)
 
         self.__name = name
         self.__sht = sht
@@ -55,5 +55,5 @@ class SHTTest(Test):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "SHTTest:{name:%s, sht:%s, datum:%s, verbose:%s}" % \
-               (self.__name, self.__sht, self.datum, self.__verbose)
+        return "SHTTest:{name:%s, sht:%s, datum:%s, interface:%s, verbose:%s}" % \
+               (self.__name, self.__sht, self.datum, self.__interface, self.__verbose)
