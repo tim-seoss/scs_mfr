@@ -39,6 +39,7 @@ from scs_core.data.localized_datetime import LocalizedDatetime
 from scs_core.sys.system_id import SystemID
 
 from scs_dfe.climate.sht_conf import SHTConf
+from scs_dfe.interface.interface_conf import InterfaceConf
 
 from scs_host.sys.host import Host
 
@@ -86,6 +87,13 @@ if __name__ == '__main__':
 
     if cmd.verbose:
         print(system_id, file=sys.stderr)
+
+    # Interface...
+    conf = InterfaceConf.load(Host)
+    interface = conf.interface()
+
+    if cmd.verbose:
+        print(system_id, file=sys.stderr)
         sys.stderr.flush()
 
     reporter = DFETestReporter(cmd.verbose)
@@ -109,7 +117,7 @@ if __name__ == '__main__':
 
     else:
         try:
-            test = RTCTest(cmd.verbose)
+            test = RTCTest(interface, cmd.verbose)
 
             test_ok = test.conduct()
             reporter.report_test("RTC", test_ok)
@@ -122,7 +130,7 @@ if __name__ == '__main__':
     # OPC...
 
     try:
-        test = OPCTest(cmd.verbose)
+        test = OPCTest(interface, cmd.verbose)
 
         test_ok = test.conduct()
         reporter.report_test("OPC", test_ok)
@@ -139,7 +147,7 @@ if __name__ == '__main__':
 
     else:
         try:
-            test = GPSTest(cmd.verbose)
+            test = GPSTest(interface, cmd.verbose)
 
             test_ok = test.conduct()
             reporter.report_test("GPS", test_ok)
@@ -159,7 +167,7 @@ if __name__ == '__main__':
         sht_conf = SHTConf.load(Host)
         sht = sht_conf.int_sht()
 
-        test = SHTTest("Int SHT", sht, cmd.verbose)
+        test = SHTTest("Int SHT", sht, interface, cmd.verbose)
 
         test_ok = test.conduct()
         reporter.report_test("Int SHT", test_ok)
@@ -175,7 +183,7 @@ if __name__ == '__main__':
         sht_conf = SHTConf.load(Host)
         sht = sht_conf.ext_sht()
 
-        test = SHTTest("Ext SHT", sht, cmd.verbose)
+        test = SHTTest("Ext SHT", sht, interface, cmd.verbose)
 
         test_ok = test.conduct()
         reporter.report_test("Ext SHT", test_ok)
@@ -188,7 +196,7 @@ if __name__ == '__main__':
     # Pt1000...
 
     try:
-        test = Pt1000Test(cmd.verbose)
+        test = Pt1000Test(interface, cmd.verbose)
 
         test_ok = test.conduct()
         reporter.report_test("Pt1000", test_ok)
@@ -201,7 +209,7 @@ if __name__ == '__main__':
     # AFE...
 
     try:
-        test = AFETest(cmd.verbose)
+        test = AFETest(interface, cmd.verbose)
 
         test_ok = test.conduct()
         reporter.report_test("AFE", test_ok)
@@ -220,7 +228,7 @@ if __name__ == '__main__':
 
     else:
         try:
-            test = EEPROMTest(cmd.verbose)
+            test = EEPROMTest(interface, cmd.verbose)
 
             test_ok = test.conduct()
             reporter.report_test("EEPROM", test_ok)

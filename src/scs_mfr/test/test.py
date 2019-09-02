@@ -16,7 +16,8 @@ class Test(ABC):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, verbose):
+    def __init__(self, interface, verbose):
+        self.__interface = interface
         self.__verbose = verbose
 
         self._datum = None
@@ -37,6 +38,11 @@ class Test(ABC):
 
 
     @property
+    def interface(self):
+        return self.__interface
+
+
+    @property
     def verbose(self):
         return self.__verbose
 
@@ -44,4 +50,5 @@ class Test(ABC):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return self.__class__.__name__ + ":{datum:%s, verbose:%s}" % (self.datum, self.verbose)
+        return self.__class__.__name__ + ":{datum:%s, interface:%s, verbose:%s}" % \
+               (self.datum, self.__interface, self.verbose)
