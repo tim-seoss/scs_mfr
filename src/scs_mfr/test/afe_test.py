@@ -35,7 +35,7 @@ class AFETest(Test):
             I2C.open(Host.I2C_SENSORS)
 
             # AFE...
-            afe = self._interface.gas_sensors(Host)
+            afe = self.__interface.gas_sensors(Host)
 
             # test...
             self._datum = afe.sample()

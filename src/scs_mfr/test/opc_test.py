@@ -45,9 +45,9 @@ class OPCTest(Test):
                 print("OPCConf not available - skipping.", file=sys.stderr)
                 return False
 
-            opc = opc_conf.opc(Host, False)
+            opc = opc_conf.opc(self.interface, Host)
 
-            self._interface.power_opc(True)
+            self.__interface.power_opc(True)
             opc.operations_on()
 
             # test...
@@ -62,6 +62,6 @@ class OPCTest(Test):
         finally:
             if opc:
                 opc.operations_off()
-                self._interface.power_opc(False)
+                self.__interface.power_opc(False)
 
             I2C.close()

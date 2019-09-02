@@ -35,11 +35,11 @@ class Pt1000Test(Test):
             I2C.open(Host.I2C_SENSORS)
 
             # AFE...
-            if self._interface.pt1000() is None:
+            if self.__interface.pt1000() is None:
                 print("No Pt1000 I2C address set - skipping.", file=sys.stderr)
                 return False
 
-            afe = self._interface.gas_sensors(Host)
+            afe = self.__interface.gas_sensors(Host)
 
             # test...
             self._datum = afe.sample_pt1000()

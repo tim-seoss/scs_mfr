@@ -56,4 +56,4 @@ class SHTTest(Test):
 
     def __str__(self, *args, **kwargs):
         return "SHTTest:{name:%s, sht:%s, datum:%s, interface:%s, verbose:%s}" % \
-               (self.__name, self.__sht, self.datum, self._interface, self.__verbose)
+               (self.__name, self.__sht, self.datum, self.__interface, self.__verbose)
