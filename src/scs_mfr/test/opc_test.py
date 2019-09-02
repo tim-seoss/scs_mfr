@@ -23,8 +23,8 @@ class OPCTest(Test):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, verbose):
-        Test.__init__(self, verbose)
+    def __init__(self, interface, verbose):
+        Test.__init__(self, interface, verbose)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -47,7 +47,7 @@ class OPCTest(Test):
 
             opc = opc_conf.opc(Host, False)
 
-            opc.power_on()
+            self._interface.power_opc(True)
             opc.operations_on()
 
             # test...
@@ -62,6 +62,6 @@ class OPCTest(Test):
         finally:
             if opc:
                 opc.operations_off()
-                opc.power_off()
+                self._interface.power_opc(False)
 
             I2C.close()

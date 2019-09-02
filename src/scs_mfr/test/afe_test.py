@@ -6,8 +6,6 @@ Created on 18 May 2017
 
 import sys
 
-from scs_dfe.interface.interface_conf import InterfaceConf
-
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
@@ -23,8 +21,8 @@ class AFETest(Test):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, verbose):
-        Test.__init__(self, verbose)
+    def __init__(self, interface, verbose):
+        Test.__init__(self, interface, verbose)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -37,10 +35,7 @@ class AFETest(Test):
             I2C.open(Host.I2C_SENSORS)
 
             # AFE...
-            interface_conf = InterfaceConf.load(Host)
-            interface = interface_conf.interface()
-
-            afe = interface.gas_sensors(Host)
+            afe = self._interface.gas_sensors(Host)
 
             # test...
             self._datum = afe.sample()
