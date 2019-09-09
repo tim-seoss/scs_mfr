@@ -47,13 +47,6 @@ from scs_mfr.cmd.cmd_gps_conf import CmdGPSConf
 if __name__ == '__main__':
 
     # ----------------------------------------------------------------------------------------------------------------
-    # resources...
-
-    # GPSConf...
-    conf = GPSConf.load(Host)
-
-
-    # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
     cmd = CmdGPSConf()
@@ -68,6 +61,13 @@ if __name__ == '__main__':
 
 
     # ----------------------------------------------------------------------------------------------------------------
+    # resources...
+
+    # GPSConf...
+    conf = GPSConf.load(Host)
+
+
+    # ----------------------------------------------------------------------------------------------------------------
     # run...
 
     if cmd.set():
@@ -76,11 +76,14 @@ if __name__ == '__main__':
             cmd.print_help(sys.stderr)
             exit(1)
 
+        conf_report_file = None if conf is None else conf.report_file
+
         model = cmd.model if cmd.model else conf.model
         interval = cmd.sample_interval if cmd.sample_interval else conf.sample_interval
         tally = cmd.tally if cmd.tally is not None else conf.tally
+        report_file = cmd.report_file if cmd.report_file is not None else conf_report_file
 
-        conf = GPSConf(model, interval, tally)
+        conf = GPSConf(model, interval, tally, report_file)
         conf.save(Host)
 
     elif cmd.delete and conf is not None:
