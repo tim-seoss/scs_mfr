@@ -19,8 +19,8 @@ class CmdGPSConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self):
-        self.__parser = optparse.OptionParser(usage="%prog [{ [-m MODEL] [-i INTERVAL] [-t TALLY] | -d }] [-v]",
-                                              version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ [-m MODEL] [-i INTERVAL] [-t TALLY] [-f REPORT_FILE] | "
+                                                    "-d }] [-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--model", "-m", type="string", nargs=1, action="store", dest="model",
@@ -31,6 +31,9 @@ class CmdGPSConf(object):
 
         self.__parser.add_option("--tally", "-t", type="int", nargs=1, action="store", dest="tally",
                                  help="set the averaging tally")
+
+        self.__parser.add_option("--report-file", "-f", type="string", nargs=1, action="store", dest="report_file",
+                                 help="file to store latest GPS report")
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="delete the GPS configuration")
@@ -61,7 +64,8 @@ class CmdGPSConf(object):
 
 
     def set(self):
-        return self.model is not None or self.sample_interval is not None or self.tally is not None
+        return self.model is not None or self.sample_interval is not None or self.tally is not None or \
+               self.report_file is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -82,6 +86,11 @@ class CmdGPSConf(object):
 
 
     @property
+    def report_file(self):
+        return self.__opts.report_file
+
+
+    @property
     def delete(self):
         return self.__opts.delete
 
@@ -98,5 +107,5 @@ class CmdGPSConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdGPSConf:{model:%s, sample_interval:%s, tally:%s, delete:%s, verbose:%s}" % \
-               (self.model, self.sample_interval, self.tally, self.delete, self.verbose)
+        return "CmdGPSConf:{model:%s, sample_interval:%s, tally:%s, report_file:%s, delete:%s, verbose:%s}" % \
+               (self.model, self.sample_interval, self.tally, self.report_file, self.delete, self.verbose)

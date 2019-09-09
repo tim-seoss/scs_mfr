@@ -20,7 +20,7 @@ class CmdMQTTConf(object):
 
     def __init__(self):
         self.__parser = optparse.OptionParser(usage="%prog { [-p INHIBIT_PUBLISHING] [-q QUEUE_SIZE] [-f REPORT_FILE] "
-                                                    " | -d } [-v]", version="%prog 1.0")
+                                                    "| -d } [-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--pub", "-p", type="int", nargs=1, action="store", dest="inhibit_publishing",
