@@ -67,6 +67,8 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_afe_calib import CmdAFECalib
 
 
+# TODO: add support for DSI (single A4)
+
 # TODO: add delete mode
 
 # --------------------------------------------------------------------------------------------------------------------
