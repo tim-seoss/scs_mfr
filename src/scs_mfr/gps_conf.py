@@ -15,14 +15,18 @@ rejecting "quality 0" readings, whereas a mobile device requires a tally of 1.
 
 The u-blox PAM-7Q and SAM-M8Q GPS modules are supported.
 
+The REPORT_FILE parameter, if set, indicates where the latest queue length value should be stored.
+
+The status_sampler must be restarted for changes to take effect.
+
 SYNOPSIS
-gps_conf.py [{ [-m MODEL] [-i INTERVAL] [-t TALLY] | -d }] [-v]
+gps_conf.py [{ [-m MODEL] [-i INTERVAL] [-t TALLY] [-f REPORT_FILE] | -d }] [-v]
 
 EXAMPLES
-./gps_conf.py -m SAM7Q -i 10 -t 60
+./gps_conf.py -m SAM8Q -i 10 -t 60 -f /tmp/southcoastscience/gps_report.json
 
 DOCUMENT EXAMPLE
-{"model": "SAM7Q", "sample-interval": 10, "tally": 60}
+{"model": "SAM8Q", "sample-interval": 10, "tally": 60, "report-file": "/tmp/southcoastscience/gps_report.json"}
 
 FILES
 ~/SCS/conf/gps_conf.json
@@ -41,8 +45,6 @@ from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_gps_conf import CmdGPSConf
 
-
-# TODO: update documentation
 
 # --------------------------------------------------------------------------------------------------------------------
 
