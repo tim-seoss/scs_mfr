@@ -18,27 +18,17 @@ The afe_calib utility may also be used to set a "test" calibration sheet, for us
 Note that the scs_dev/gasses_sampler process must be restarted for changes to take effect.
 
 SYNOPSIS
-afe_calib.py [{-s AFE_SERIAL_NUMBER | -t}] [-v]
+afe_calib.py [{-a AFE_SERIAL_NUMBER | -s A4_SERIAL_NUMBER YYYY-MM-DD WE_SENS WE_X_SENS | -t}] [-v]
 
 EXAMPLES
-./afe_calib -s 24-000004
+./afe_calib.py -v -s 212810465 2019-08-22 0.324 0
 
 DOCUMENT EXAMPLE
-{"serial_number": "24-000004", "type": "810-0020-04", "calibrated_on": "2016-11-01", "dispatched_on": null,
-"pt1000_v20": 1.0,
-"sn1": {"serial_number": "132910128", "sensor_type": "CO A4", "we_electronic_zero_mv": 280, "we_sensor_zero_mv": 71,
-"we_total_zero_mv": 351, "ae_electronic_zero_mv": 273, "ae_sensor_zero_mv": -8, "ae_total_zero_mv": 265,
- "we_sensitivity_na_ppb": 0.34, "we_cross_sensitivity_no2_na_ppb": "n/a", "pcb_gain": 0.8,
- "we_sensitivity_mv_ppb": 0.272, "we_cross_sensitivity_no2_mv_ppb": "n/a"},
- "sn2": {"serial_number": "134060008", "sensor_type": "SO2A4", "we_electronic_zero_mv": 271, "we_sensor_zero_mv": -2,
- "we_total_zero_mv": 269, "ae_electronic_zero_mv": 272, "ae_sensor_zero_mv": 2, "ae_total_zero_mv": 274,
- "we_sensitivity_na_ppb": 0.459, "we_cross_sensitivity_no2_na_ppb": "n/a", "pcb_gain": 0.8,
- "we_sensitivity_mv_ppb": 0.367, "we_cross_sensitivity_no2_mv_ppb": "n/a"},
- "sn3": {"serial_number": "133910025", "sensor_type": "H2SA4", "we_electronic_zero_mv": 277, "we_sensor_zero_mv": 13,
- "we_total_zero_mv": 290, "ae_electronic_zero_mv": 280, "ae_sensor_zero_mv": -10, "ae_total_zero_mv": 270,
- "we_sensitivity_na_ppb": 1.694, "we_cross_sensitivity_no2_na_ppb": "n/a", "pcb_gain": 0.8,
- "we_sensitivity_mv_ppb": 1.355, "we_cross_sensitivity_no2_mv_ppb": "n/a"},
- "sn4": {"serial_number": "143950150", "sensor_type": "PIDNH", "pid_zero_mv": null, "pid_sensitivity_mv_ppm": null}}
+{"serial_number": "00-000000", "type": "000-0000-00", "calibrated_on": "2019-08-22", "dispatched_on": null,
+"pt1000_v20": 1.0, "sn1": {"serial_number": "212810465", "sensor_type": "NOGA4", "we_electronic_zero_mv": 300,
+"we_sensor_zero_mv": 6, "we_total_zero_mv": 300, "ae_electronic_zero_mv": 300, "ae_sensor_zero_mv": 1,
+"ae_total_zero_mv": 300, "we_sensitivity_na_ppb": null, "we_cross_sensitivity_no2_na_ppb": -0.3, "pcb_gain": -0.7,
+"we_sensitivity_mv_ppb": 0.324, "we_cross_sensitivity_no2_mv_ppb": "n/a"}}
 
 FILES
 ~/SCS/conf/afe_calib.json
@@ -57,25 +47,25 @@ import sys
 from scs_core.data.json import JSONify
 
 from scs_core.gas.afe_calib import AFECalib
+from scs_core.gas.sensor import Sensor
 
 from scs_core.sys.http_exception import HTTPException
 
 from scs_host.client.http_client import HTTPClient
-
 from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_afe_calib import CmdAFECalib
 
 
-# TODO: add support for DSI (single A4)
-
-# TODO: add delete mode
+# TODO: add delete mode, change name to gas_calib
 
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
 
-    jstr = None
+    calib = None
+    calibrated_on = None
+    we_sens_mv = None
 
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
@@ -92,15 +82,17 @@ if __name__ == '__main__':
 
     if cmd.set():
         if cmd.test:
-            jstr = AFECalib.TEST_JSON
+            jdict = json.loads(AFECalib.TEST_LOAD)
+            calib = AFECalib.construct_from_jdict(jdict)
 
-        else:
+        elif cmd.afe_serial_number:
             client = HTTPClient()
             client.connect(AFECalib.HOST)
 
             try:
-                path = AFECalib.PATH + cmd.serial_number
-                jstr = client.get(path, None, AFECalib.HEADER)
+                path = AFECalib.PATH + cmd.afe_serial_number
+                jdict = json.loads(client.get(path, None, AFECalib.HEADER))
+                calib = AFECalib.construct_from_jdict(jdict)
 
             except HTTPException as ex:
                 print("afe_calib: %s" % ex, file=sys.stderr)
@@ -109,9 +101,35 @@ if __name__ == '__main__':
             finally:
                 client.close()
 
-        jdict = json.loads(jstr)
+        else:
+            sensor = Sensor.find(cmd.dsi_serial_number)
 
-        calib = AFECalib.construct_from_jdict(jdict)
+            if sensor is None:
+                print("afe_calib: unrecognised serial number: %s" % cmd.dsi_serial_number, file=sys.stderr)
+                exit(2)
+
+            try:
+                calibrated_on = cmd.dsi_calibration_date
+            except (IndexError, ValueError):
+                print("afe_calib: invalid date: %s" % cmd.dsi_calibration_date_str, file=sys.stderr)
+                exit(2)
+
+            try:
+                we_sens_mv = float(cmd.dsi_we_sens_mv)
+            except ValueError:
+                print("afe_calib: invalid floating point value: %s" % cmd.dsi_we_sens_mv_str, file=sys.stderr)
+                exit(2)
+
+            jdict = json.loads(AFECalib.DSI_WRAPPER)
+            calib = AFECalib.construct_from_jdict(jdict)
+
+            calib.calibrated_on = calibrated_on
+
+            sensor_calib = calib.sensor_calib(0)
+            sensor_calib.serial_number = cmd.dsi_serial_number
+            sensor_calib.sensor_type = sensor.sensor_type
+            sensor_calib.we_sens_mv = we_sens_mv
+            sensor_calib.we_no2_x_sens_mv = cmd.dsi_we_no2_x_sens_mv
 
         if calib is not None:
             calib.save(Host)
