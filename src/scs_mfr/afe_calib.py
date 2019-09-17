@@ -56,6 +56,7 @@ from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_afe_calib import CmdAFECalib
 
+# TODO: use nA instead of mV
 
 # TODO: add delete mode, change name to gas_calib
 
