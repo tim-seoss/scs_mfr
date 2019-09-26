@@ -6,7 +6,7 @@ Created on 22 Jun 2019
 
 import optparse
 
-from scs_core.display.display_conf import DisplayConf
+from scs_display.display.display_conf import DisplayConf
 
 
 # --------------------------------------------------------------------------------------------------------------------
