@@ -31,7 +31,7 @@ import sys
 
 from scs_core.data.json import JSONify
 
-from scs_core.display.display_conf import DisplayConf
+from scs_display.display.display_conf import DisplayConf
 
 from scs_host.sys.host import Host
 
