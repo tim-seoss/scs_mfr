@@ -57,7 +57,7 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_afe_calib import CmdAFECalib
 
 
-# TODO: add delete mode, change name to gas_calib
+# TODO: change name to gas_calib
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -75,6 +75,12 @@ if __name__ == '__main__':
     if cmd.verbose:
         print("afe_calib: %s" % cmd, file=sys.stderr)
         sys.stderr.flush()
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+    # resources...
+
+    calib = AFECalib.load(Host)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -125,7 +131,9 @@ if __name__ == '__main__':
         if calib is not None:
             calib.save(Host)
 
-    calib = AFECalib.load(Host)
+    elif cmd.delete:
+        calib.delete(Host)
+        calib = None
 
     if calib:
         print(JSONify.dumps(calib))

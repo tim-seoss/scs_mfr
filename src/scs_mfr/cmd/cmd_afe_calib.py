@@ -18,8 +18,8 @@ class CmdAFECalib(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [{ -a SERIAL_NUMBER | -s SERIAL_NUMBER YYYY-MM-DD | -t }] "
-                                                    "[-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ -a SERIAL_NUMBER | -s SERIAL_NUMBER YYYY-MM-DD | -t  | "
+                                                    "-d }] [-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--afe", "-a", type="string", nargs=1, action="store", dest="afe_serial_number",
@@ -30,6 +30,9 @@ class CmdAFECalib(object):
 
         self.__parser.add_option("--test", "-t", action="store_true", dest="test", default=False,
                                  help="set AFE as test load")
+
+        self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
+                                 help="delete this calibration")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
@@ -49,6 +52,9 @@ class CmdAFECalib(object):
             count += 1
 
         if self.test:
+            count += 1
+
+        if self.delete:
             count += 1
 
         if count > 1:
@@ -100,6 +106,11 @@ class CmdAFECalib(object):
 
 
     @property
+    def delete(self):
+        return self.__opts.delete
+
+
+    @property
     def verbose(self):
         return self.__opts.verbose
 
@@ -111,5 +122,5 @@ class CmdAFECalib(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdAFECalib:{afe_serial_number:%s, sensor:%s, test:%s, verbose:%s}" % \
-               (self.afe_serial_number, self.sensor, self.test, self.verbose)
+        return "CmdAFECalib:{afe_serial_number:%s, sensor:%s, test:%s, delete:%s, verbose:%s}" % \
+               (self.afe_serial_number, self.sensor, self.test, self.delete, self.verbose)

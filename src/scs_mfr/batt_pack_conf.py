@@ -6,26 +6,24 @@ Created on 21 Jun 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The psu_conf utility is used to specify whether a South Coast Science power supply (PSU) board is present
-and if so, which model is provided. Three models are currently available:
+The batt_pack_conf utility is used to specify whether a South Coast Science power supply (PSU) board is present
+and if so, which model is provided. One model is currently available:
 
-* MobileV1 via PZHBt1 or PZHBt2 interface
-* PrototypeV1 via serial port
-* OsloV1 via serial port
+* V1
 
 Note that the scs_dev/status_sampler process must be restarted for changes to take effect.
 
 SYNOPSIS
-psu_conf.py [{ -m MODEL | -d }] [-v]
+batt_pack_conf.py [{ -m MODEL | -d }] [-v]
 
 EXAMPLES
-./psu_conf.py -m OsloV1
+./batt_pack_conf.py -m V1
 
 DOCUMENT EXAMPLE
-{"model": "OsloV1"}
+{"model": "V1"}
 
 FILES
-~/SCS/conf/psu_conf.json
+~/SCS/conf/batt_pack_conf.json
 
 SEE ALSO
 scs_dev/psu
@@ -38,9 +36,9 @@ from scs_core.data.json import JSONify
 
 from scs_host.sys.host import Host
 
-from scs_mfr.cmd.cmd_psu_conf import CmdPSUConf
+from scs_mfr.cmd.cmd_batt_pack_conf import CmdBattPackConf
 
-from scs_psu.psu.psu_conf import PSUConf
+from scs_psu.batt_pack.batt_pack_conf import BattPackConf
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -50,14 +48,14 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
-    cmd = CmdPSUConf()
+    cmd = CmdBattPackConf()
 
     if not cmd.is_valid():
         cmd.print_help(sys.stderr)
         exit(2)
 
     if cmd.verbose:
-        print("psu_conf: %s" % cmd, file=sys.stderr)
+        print("batt_pack_conf: %s" % cmd, file=sys.stderr)
         sys.stderr.flush()
 
 
@@ -65,7 +63,7 @@ if __name__ == '__main__':
     # resources...
 
     # PSUConf...
-    conf = PSUConf.load(Host)
+    conf = BattPackConf.load(Host)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -73,11 +71,11 @@ if __name__ == '__main__':
 
     if cmd.set():
         try:
-            conf = PSUConf(cmd.model)
+            conf = BattPackConf(cmd.model)
             conf.save(Host)
 
         except ValueError as ex:
-            print("psu_conf: %s" % ex, file=sys.stderr)
+            print("batt_pack_conf: %s" % ex, file=sys.stderr)
 
     elif cmd.delete and conf is not None:
         conf.delete(Host)
