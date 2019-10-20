@@ -36,7 +36,7 @@ import sys
 
 from scs_core.data.json import JSONify
 
-from scs_core.gas.pt1000_calib import Pt1000Calib
+from scs_core.gas.afe.pt1000_calib import Pt1000Calib
 
 from scs_dfe.interface.interface_conf import InterfaceConf
 from scs_dfe.climate.sht_conf import SHTConf
