@@ -24,7 +24,7 @@ EXAMPLES
 ./afe_calib.py -s 212810465 2019-08-22
 
 DOCUMENT EXAMPLE
-{"serial_number": null, "type": "IEI", "calibrated_on": "2019-09-09", "dispatched_on": null, "pt1000_v20": null,
+{"serial_number": null, "type": "ISI", "calibrated_on": "2019-09-09", "dispatched_on": null, "pt1000_v20": null,
 "sn1": {"serial_number": "212810464", "sensor_type": "NOGA4", "we_electronic_zero_mv": 300, "we_sensor_zero_mv": 0,
 "we_total_zero_mv": 300, "ae_electronic_zero_mv": 300, "ae_sensor_zero_mv": 0, "ae_total_zero_mv": 300,
 "we_sensitivity_na_ppb": -0.445, "we_cross_sensitivity_no2_na_ppb": "n/a", "pcb_gain": -0.7,

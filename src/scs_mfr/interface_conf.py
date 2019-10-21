@@ -12,7 +12,7 @@ host system and, if so, which type it is.
 Types are:
 
 * DFE - uses the Alphasense analogue front-end board (default)
-* IEI - uses the South Coast Science integrated electrochem interface
+* ISI - uses the South Coast Science integrated electrochem interface
 
 If a DFE is selected, the use of the analogue-digital converter for the Pt1000 temperature sensor should be specified.
 Options are:
