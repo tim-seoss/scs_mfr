@@ -16,7 +16,7 @@ class CmdNDIRConf(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [{ [-m MODEL] [-t AVERAGING_TALLY] | -d }] [-v]",
+        self.__parser = optparse.OptionParser(usage="%prog [{ [-m MODEL] [-t AVERAGING_TALLY] [-r RAW] | -d }] [-v]",
                                               version="%prog 1.0")
 
         # optional...
@@ -25,6 +25,9 @@ class CmdNDIRConf(object):
 
         self.__parser.add_option("--tally", "-t", type="int", nargs=1, action="store", dest="tally",
                                  help="set the averaging tally")
+
+        self.__parser.add_option("--raw", "-r", type="int", nargs=1, action="store", dest="raw",
+                                 help="report voltages (1) or gas concentrations (0)")
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="delete the NDIR configuration")
@@ -45,14 +48,14 @@ class CmdNDIRConf(object):
 
 
     def is_complete(self):
-        if self.model is None or self.tally is None:
+        if self.model is None or self.tally is None or self.raw is None:
             return False
 
         return True
 
 
     def set(self):
-        return self.__opts.model is not None or self.__opts.tally is not None
+        return self.__opts.model is not None or self.__opts.tally is not None or self.raw is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -73,6 +76,11 @@ class CmdNDIRConf(object):
 
 
     @property
+    def raw(self):
+        return None if self.__opts.raw is None else bool(self.__opts.raw)
+
+
+    @property
     def verbose(self):
         return self.__opts.verbose
 
@@ -84,5 +92,5 @@ class CmdNDIRConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdNDIRConf:{model:%s, tally:%s, delete:%s, verbose:%s}" % \
-                    (self.model, self.tally, self.delete, self.verbose)
+        return "CmdNDIRConf:{model:%s, tally:%s, raw:%s, delete:%s, verbose:%s}" % \
+                    (self.model, self.tally, self.raw, self.delete, self.verbose)
