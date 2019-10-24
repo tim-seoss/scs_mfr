@@ -81,8 +81,9 @@ if __name__ == '__main__':
 
         model = cmd.model if cmd.model else conf.model
         tally = cmd.tally if cmd.tally else conf.tally
+        raw = cmd.raw if cmd.raw is not None else conf.raw
 
-        conf = NDIRConf(model, tally)
+        conf = NDIRConf(model, tally, raw)
         conf.save(Host)
 
     elif cmd.delete and conf is not None:
