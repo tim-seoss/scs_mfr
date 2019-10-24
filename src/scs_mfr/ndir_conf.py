@@ -13,19 +13,21 @@ The specification also includes the number of number of NDIR readings to be aver
 maintains a rolling average with a base sampling rate of one second. Thus, setting the tally to 10 results in an
 independent reading every 10 seconds.
 
+The --raw setting enables switching between reporting voltages and gas concentrations.
+
 Sampling is performed by the scs_dev/gasses_sampler utility if an ndir_conf.json document is present. If the document
 is not present, the NDIR sensor board is ignored.
 
 Note that the scs_analysis/gasses_sampler process must be restarted for changes to take effect.
 
 SYNOPSIS
-ndir_conf.py [{ [-m MODEL] [-t AVERAGING_TALLY] | -d }] [-v]
+ndir_conf.py [{ [-m MODEL] [-t AVERAGING_TALLY] [-r RAW] | -d }] [-v]
 
 EXAMPLES
-./ndir_conf.py -m NDIRv1 -t 10
+./ndir_conf.py -m NDIRv1 -t 10 -r 0
 
 DOCUMENT EXAMPLE
-{"model": "NDIRv1", "tally": 10}
+{"model": "t1f1", "tally": 10, "raw": false}
 
 FILES
 ~/SCS/conf/ndir_conf.json
@@ -42,7 +44,7 @@ from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_ndir_conf import CmdNDIRConf
 
-from scs_ndir.gas.ndir_conf import NDIRConf
+from scs_ndir.gas.ndir.ndir_conf import NDIRConf
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -79,10 +81,11 @@ if __name__ == '__main__':
             cmd.print_help(sys.stderr)
             exit(1)
 
-        model = cmd.model if cmd.model else conf.model
-        tally = cmd.tally if cmd.tally else conf.tally
+        model = cmd.model if cmd.model is not None else conf.model
+        tally = cmd.tally if cmd.tally is not None else conf.tally
+        raw = cmd.raw if cmd.raw is not None else conf.raw
 
-        conf = NDIRConf(model, tally)
+        conf = NDIRConf(model, tally, raw)
         conf.save(Host)
 
     elif cmd.delete and conf is not None:
