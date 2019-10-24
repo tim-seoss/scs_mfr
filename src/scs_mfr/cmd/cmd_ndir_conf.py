@@ -27,7 +27,7 @@ class CmdNDIRConf(object):
                                  help="set the averaging tally")
 
         self.__parser.add_option("--raw", "-r", type="int", nargs=1, action="store", dest="raw",
-                                 help="report voltages (1) instead of concentrations (0)")
+                                 help="report voltages (1) or gas concentrations (0)")
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="delete the NDIR configuration")
