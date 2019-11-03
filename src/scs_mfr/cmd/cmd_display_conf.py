@@ -19,8 +19,8 @@ class CmdDisplayConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self):
-        self.__parser = optparse.OptionParser(usage="%prog [{ [-m MODE] [-n NAME] [-u STARTUP] [-s SHUTDOWN] | -d }] "
-                                                    "[-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ [-m MODE] [-n NAME] [-u STARTUP] [-s SHUTDOWN] "
+                                                    "[-t { 1 | 0 }] | -d }] [-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--mode", "-m", type="string", nargs=1, action="store", dest="mode",
@@ -34,6 +34,9 @@ class CmdDisplayConf(object):
 
         self.__parser.add_option("--shutdown", "-s", type="string", nargs=1, action="store", dest="shutdown",
                                  help="set shutdown message")
+
+        self.__parser.add_option("--show-time", "-t", type="int", nargs=1, action="store", dest="show_time",
+                                 help="show current time")
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="delete display configuration")
@@ -58,7 +61,7 @@ class CmdDisplayConf(object):
 
     def is_complete(self):
         if self.mode is None or self.device_name is None or \
-                self.startup_message is None or self.shutdown_message is None:
+                self.startup_message is None or self.shutdown_message is None or self.show_time is None:
             return False
 
         return True
@@ -66,7 +69,7 @@ class CmdDisplayConf(object):
 
     def set(self):
         return self.mode is not None or self.device_name is not None or \
-               self.startup_message is not None or self.shutdown_message is not None
+               self.startup_message is not None or self.shutdown_message is not None or self.show_time is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -92,6 +95,11 @@ class CmdDisplayConf(object):
 
 
     @property
+    def show_time(self):
+        return None if self.__opts.show_time is None else bool(self.__opts.show_time)
+
+
+    @property
     def delete(self):
         return self.__opts.delete
 
@@ -108,7 +116,7 @@ class CmdDisplayConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdDisplayConf:{mode:%s, device_name:%s, startup_message:%s, shutdown_message:%s, " \
+        return "CmdDisplayConf:{mode:%s, device_name:%s, startup_message:%s, shutdown_message:%s, show_time:%s, " \
                "delete:%s, verbose:%s}" % \
-               (self.mode, self.device_name, self.startup_message, self.shutdown_message,
+               (self.mode, self.device_name, self.startup_message, self.shutdown_message, self.show_time,
                 self.delete, self.verbose)

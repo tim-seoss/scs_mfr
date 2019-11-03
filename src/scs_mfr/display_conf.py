@@ -12,13 +12,14 @@ module. In particular, it specifies some of the initial screen content.
 The configuration managed by this utility is used by the scs_dev/display utility.
 
 SYNOPSIS
-display_conf.py [{ [-m MODE] [-n NAME] [-u STARTUP] [-s SHUTDOWN] | -d }] [-v]
+display_conf.py [{ [-m MODE] [-n NAME] [-u STARTUP] [-s SHUTDOWN] [-t { 1 | 0 }] | -d }] [-v]
 
 EXAMPLES
-./display_conf.py -m SYS -n "SCS Praxis/Handheld v1.0" -u RUNNING -s STANDBY
+./display_conf.py -m SYS -n "SCS Praxis/Handheld v1.0" -u RUNNING -s STANDBY -t 1
 
 DOCUMENT EXAMPLE
-{"mode": "SYS", "device-name": "SCS Praxis/Handheld v1.0", "startup-message": "ON", "shutdown-message": "STANDBY"}
+{"mode": "SYS", "device-name": "SCS Praxis/Handheld (dev)", "startup-message": "ON", "shutdown-message": "STANDBY",
+"show-time": true}
 
 FILES
 ~/SCS/conf/display_conf.json
@@ -82,7 +83,9 @@ if __name__ == '__main__':
         startup_message = cmd.startup_message if cmd.startup_message is not None else conf.startup_message
         shutdown_message = cmd.shutdown_message if cmd.shutdown_message is not None else conf.shutdown_message
 
-        conf = DisplayConf(mode, device_name, startup_message, shutdown_message)
+        show_time = cmd.show_time if cmd.show_time is not None else conf.show_time
+
+        conf = DisplayConf(mode, device_name, startup_message, shutdown_message, show_time)
         conf.save(Host)
 
     elif cmd.delete and conf is not None:
