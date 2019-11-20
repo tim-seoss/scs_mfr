@@ -8,7 +8,7 @@ import sys
 
 from scs_core.position.nmea.gprmc import GPRMC
 
-from scs_dfe.gps.pam7q import PAM7Q
+from scs_dfe.gps.pam_7q import PAM7Q
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
