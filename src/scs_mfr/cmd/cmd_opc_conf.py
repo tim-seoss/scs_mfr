@@ -6,6 +6,7 @@ Created on 13 Jul 2016
 
 import optparse
 
+from scs_core.particulate.exegesis.exegete import Exegete
 from scs_dfe.particulate.opc_conf import OPCConf
 
 
@@ -19,12 +20,15 @@ class CmdOPCConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self):
+        exegetes = ' | '.join(Exegete.models())
+
         self.__parser = optparse.OptionParser(usage="%prog [{ [-m MODEL] [-s SAMPLE_PERIOD] [-p { 0 | 1 }] "
-                                                    "[-b BUS] [-a ADDRESS] | -d }] [-v]", version="%prog 1.0")
+                                                    "[-b BUS] [-a ADDRESS] [-e EXEGETE] [-r EXEGETE] | -d }] [-v]",
+                                              version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--model", "-m", type="string", nargs=1, action="store", dest="model",
-                                 help="set MODEL (N2, N3, R1 or S30)")
+                                 help="set MODEL { N2 | N3 | R1 | S30 }")
 
         self.__parser.add_option("--sample-period", "-s", type="int", nargs=1, action="store", dest="sample_period",
                                  help="set SAMPLE_PERIOD")
@@ -37,6 +41,12 @@ class CmdOPCConf(object):
 
         self.__parser.add_option("--address", "-a", type="int", nargs=1, action="store", dest="address",
                                  help="override default host chip select or address")
+
+        self.__parser.add_option("--exegete", "-e", type="string", nargs=1, action="store", dest="use_exegete",
+                                 help="use EXEGETE { %s }" % exegetes)
+
+        self.__parser.add_option("--remove-exegete", "-r", type="string", nargs=1, action="store",
+                                 dest="remove_exegete", help="remove EXEGETE { %s }" % exegetes)
 
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
@@ -60,6 +70,12 @@ class CmdOPCConf(object):
         if self.__opts.power_saving is None or self.__opts.power_saving == 0 or self.__opts.power_saving == 1:
             return True
 
+        if self.use_exegete is not None and self.use_exegete not in Exegete.models():
+            return False
+
+        if self.remove_exegete is not None and self.remove_exegete not in Exegete.models():
+            return False
+
         return False
 
 
@@ -72,7 +88,8 @@ class CmdOPCConf(object):
 
     def set(self):
         return self.model is not None or self.sample_period is not None or self.power_saving is not None \
-               or self.bus is not None or self.address is not None
+               or self.bus is not None or self.address is not None \
+               or self.use_exegete is not None or self.remove_exegete is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -108,6 +125,16 @@ class CmdOPCConf(object):
 
 
     @property
+    def use_exegete(self):
+        return self.__opts.use_exegete
+
+
+    @property
+    def remove_exegete(self):
+        return self.__opts.remove_exegete
+
+
+    @property
     def verbose(self):
         return self.__opts.verbose
 
@@ -119,5 +146,7 @@ class CmdOPCConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdOPCConf:{model:%s, sample_period:%s, ext_addr:%s, bus:%s, address:%s, delete:%s, verbose:%s}" % \
-               (self.model, self.sample_period, self.power_saving, self.bus, self.address, self.delete, self.verbose)
+        return "CmdOPCConf:{model:%s, sample_period:%s, ext_addr:%s, bus:%s, address:%s, " \
+               "use_exegete:%s, remove_exegete:%s, delete:%s, verbose:%s}" % \
+               (self.model, self.sample_period, self.power_saving, self.bus, self.address,
+                self.use_exegete, self.remove_exegete, self.delete, self.verbose)
