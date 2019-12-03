@@ -14,21 +14,24 @@ The specification also includes the number of seconds between readings by the OP
 time between readings is 10 seconds, the minimum five. A 10 second period provides the highest precision, but sampling
 at this rate may be subject to clipping in extremely polluted environments.
 
+Flags are included to add or remove data interpretation exegetes, together with the source of T / rH readings.
+Use of these is under development.
+
 Sampling is performed by the scs_dev/particulates_sampler utility. If an opc_conf.json document is not present, the
 scs_dev/particulates_sampler utility terminates.
 
 Note that the scs_dev/particulates_sampler process must be restarted for changes to take effect.
 
-The OPC-N2, OPC-N3 and OPC-R1 models are supported.
+The OPC-N2, OPC-N3, OPC-R1 and Sensirion SPS30 models are supported.
 
 SYNOPSIS
-opc_conf.py [{ [-m MODEL] [-s SAMPLE_PERIOD] [-p { 0 | 1 }] [-b SPI_BUS] [-c SPI_DEVICE] | -d }] [-v]
+opc_conf.py [{ [-m MODEL] [-s SAMPLE_PERIOD] [-p { 0 | 1 }] [-b BUS] [-a ADDRESS] [-e EXEGETE] [-r EXEGETE] | -d }] [-v]
 
 EXAMPLES
-./opc_conf.py -b 0 -c 0 -m R1
+./opc_conf.py -m N2 -b 0 -a 1 -e iseceen2v1
 
 DOCUMENT EXAMPLE
-{"model": "R1", "sample-period": 10, "power-saving": false, "spi-bus": null, "spi-device": null}
+{"model": "N2", "sample-period": 10, "power-saving": false, "bus": 0, "address": 1, "exg": ["iseceen2v1"], "sht": "ext"}
 
 FILES
 ~/SCS/conf/opc_conf.json
@@ -95,12 +98,19 @@ if __name__ == '__main__':
         power_saving = cmd.power_saving if cmd.power_saving is not None else conf.power_saving
 
         if conf is None:
-            conf = OPCConf(None, 10, False, None, None)         # permit None for bus and address settings
+            conf = OPCConf(None, 10, False, None, None, [], None)           # permit None for bus and address settings
 
         bus = conf.bus if cmd.bus is None else cmd.bus
         address = conf.address if cmd.address is None else cmd.address
 
-        conf = OPCConf(model, sample_period, power_saving, bus, address)
+        conf = OPCConf(model, sample_period, power_saving, bus, address, conf.exegetes, conf.sht)
+
+        if cmd.use_exegete:
+            conf.add_exegete(cmd.use_exegete)
+
+        if cmd.remove_exegete:
+            conf.discard_exegete(cmd.remove_exegete)
+
         conf.save(Host)
 
     elif cmd.delete:
