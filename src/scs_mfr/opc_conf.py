@@ -24,6 +24,9 @@ Note that the scs_dev/particulates_sampler process must be restarted for changes
 
 The OPC-N2, OPC-N3, OPC-R1 and Sensirion SPS30 models are supported.
 
+Alternate exegetes (data interpretation models) can be added or removed - available interpretations can be listed with
+the --help flag.
+
 SYNOPSIS
 opc_conf.py [{ [-m MODEL] [-s SAMPLE_PERIOD] [-p { 0 | 1 }] [-b BUS] [-a ADDRESS] [-e EXEGETE] [-r EXEGETE] | -d }] [-v]
 
@@ -31,7 +34,7 @@ EXAMPLES
 ./opc_conf.py -m N2 -b 0 -a 1 -e iseceen2v1
 
 DOCUMENT EXAMPLE
-{"model": "N2", "sample-period": 10, "power-saving": false, "bus": 0, "address": 1, "exg": ["iseceen2v1"]}
+{"model": "N2", "sample-period": 10, "power-saving": false, "bus": 0, "address": 1, "exg": ["iseceen2v1", "isecsen2v2"]}
 
 FILES
 ~/SCS/conf/opc_conf.json
@@ -39,6 +42,9 @@ FILES
 SEE ALSO
 scs_dev/particulates_sampler
 scs_mfr/opc_cleaning_interval
+
+REFERENCES
+https://github.com/south-coast-science/scs_core/blob/develop/src/scs_core/particulate/exegesis/exegete_catalogue.py
 
 BUGS
 The specification allows for a power saving mode - which enables the OPC to shut down between readings - but
