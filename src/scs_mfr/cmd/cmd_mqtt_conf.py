@@ -20,7 +20,7 @@ class CmdMQTTConf(object):
 
     def __init__(self):
         self.__parser = optparse.OptionParser(usage="%prog { [-p INHIBIT_PUBLISHING] [-q QUEUE_SIZE] [-f REPORT_FILE] "
-                                                    "| -d } [-v]", version="%prog 1.0")
+                                                    " [-l { 0 | 1 }] | -d } [-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--pub", "-p", type="int", nargs=1, action="store", dest="inhibit_publishing",
@@ -31,6 +31,9 @@ class CmdMQTTConf(object):
 
         self.__parser.add_option("--report-file", "-f", type="string", nargs=1, action="store", dest="report_file",
                                  help="file to store latest queue length value")
+
+        self.__parser.add_option("--debug", "-l", type="int", nargs=1, action="store", dest="debug",
+                                 help="set debug logging (default is 0)")
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="revert to the default MQTT configuration")
@@ -47,11 +50,15 @@ class CmdMQTTConf(object):
         if self.set and self.delete:
             return False
 
+        if self.__opts.debug is not None and self.__opts.debug != 0 and self.__opts.debug != 1:
+            return False
+
         return True
 
 
     def set(self):
-        return self.inhibit_publishing is not None or self.queue_size is not None or self.report_file is not None
+        return self.inhibit_publishing is not None or self.queue_size is not None or self.report_file is not None or \
+               self.debug is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -77,6 +84,11 @@ class CmdMQTTConf(object):
 
 
     @property
+    def debug(self):
+        return None if self.__opts.debug is None else bool(self.__opts.debug)
+
+
+    @property
     def verbose(self):
         return self.__opts.verbose
 
@@ -88,5 +100,5 @@ class CmdMQTTConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdMQTTConf:{inhibit_publishing:%s, queue_size:%s, report_file:%s, delete:%s, verbose:%s}" % \
-               (self.inhibit_publishing, self.queue_size, self.report_file, self.delete, self.verbose)
+        return "CmdMQTTConf:{inhibit_publishing:%s, queue_size:%s, report_file:%s, debug:%s, delete:%s, verbose:%s}" % \
+               (self.inhibit_publishing, self.queue_size, self.report_file, self.debug, self.delete, self.verbose)

@@ -18,19 +18,22 @@ default queue size is 21000, equivalent to just over 24 hours of data under a no
 
 The REPORT_FILE parameter, if set, indicates where the latest queue length value should be stored.
 
+If DEBUG is set to 1 (true), then extra logging will be written to stderr by the MQTT client.
+
 The MQTT client must be restarted for changes to take effect.
 
-Warning: if inhibit publishing is set to true, the MQTT client will still subscribe as required, but will not publish
+WARNING: if inhibit publishing is set to true, the MQTT client will still subscribe as required, but will not publish
 receipts or responses.
 
 SYNOPSIS
-mqtt_conf.py { [-p INHIBIT_PUBLISHING] [-q QUEUE_SIZE] [-f REPORT_FILE]  | -d } [-v]
+mqtt_conf.py { [-p INHIBIT_PUBLISHING] [-q QUEUE_SIZE] [-f REPORT_FILE]  [-l { 0 | 1 }] | -d } [-v]
 
 EXAMPLES
-./mqtt_conf.py -p 0 -q 21000 -f /tmp/southcoastscience/mqtt_queue_length.json
+./mqtt_conf.py -p 0 -q 21000 -f /tmp/southcoastscience/mqtt_queue_length.json -l 1
 
 DOCUMENT EXAMPLE
-{"inhibit-publishing": false, "queue-size": 21000, "report-file": "/tmp/southcoastscience/mqtt_queue_length.json"}
+{"inhibit-publishing": false, "queue-size": 21000, "report-file": "/tmp/southcoastscience/mqtt_queue_length.json",
+"debug": true}
 
 FILES
 ~/SCS/conf/mqtt_conf.json
@@ -59,6 +62,10 @@ if __name__ == '__main__':
 
     cmd = CmdMQTTConf()
 
+    if not cmd.is_valid():
+        cmd.print_help(sys.stderr)
+        exit(2)
+
     if cmd.verbose:
         print("mqtt_conf: %s" % cmd, file=sys.stderr)
         sys.stderr.flush()
@@ -78,11 +85,12 @@ if __name__ == '__main__':
         inhibit_publishing = cmd.inhibit_publishing if cmd.inhibit_publishing is not None else conf.inhibit_publishing
         queue_size = cmd.queue_size if cmd.queue_size is not None else conf.queue_size
         report_file = cmd.report_file if cmd.report_file is not None else conf.report_file
+        debug = cmd.debug if cmd.debug is not None else conf.debug
 
         if queue_size is None:
             queue_size = MQTTConf.DEFAULT_QUEUE_SIZE
 
-        conf = MQTTConf(inhibit_publishing, queue_size, report_file)
+        conf = MQTTConf(inhibit_publishing, queue_size, report_file, debug)
         conf.save(Host)
 
     elif cmd.delete and conf is not None:
