@@ -31,7 +31,7 @@ EXAMPLES
 ./opc_conf.py -m N2 -b 0 -a 1 -e iseceen2v1
 
 DOCUMENT EXAMPLE
-{"model": "N2", "sample-period": 10, "power-saving": false, "bus": 0, "address": 1, "exg": ["iseceen2v1"], "sht": "ext"}
+{"model": "N2", "sample-period": 10, "power-saving": false, "bus": 0, "address": 1, "exg": ["iseceen2v1"]}
 
 FILES
 ~/SCS/conf/opc_conf.json
@@ -98,12 +98,12 @@ if __name__ == '__main__':
         power_saving = cmd.power_saving if cmd.power_saving is not None else conf.power_saving
 
         if conf is None:
-            conf = OPCConf(None, 10, False, None, None, [], None)           # permit None for bus and address settings
+            conf = OPCConf(None, 10, False, None, None, [])             # permit None for bus and address settings
 
         bus = conf.bus if cmd.bus is None else cmd.bus
         address = conf.address if cmd.address is None else cmd.address
 
-        conf = OPCConf(model, sample_period, power_saving, bus, address, conf.exegetes, conf.sht)
+        conf = OPCConf(model, sample_period, power_saving, bus, address, conf.exegete_names)
 
         if cmd.use_exegete:
             conf.add_exegete(cmd.use_exegete)
