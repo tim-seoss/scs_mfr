@@ -6,7 +6,7 @@ Created on 13 Jul 2016
 
 import optparse
 
-from scs_core.particulate.exegesis.exegete import Exegete
+from scs_core.particulate.exegesis.exegete_catalogue import ExegeteCatalogue
 from scs_dfe.particulate.opc_conf import OPCConf
 
 
@@ -20,7 +20,7 @@ class CmdOPCConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self):
-        exegetes = ' | '.join(Exegete.models())
+        exegetes = ' | '.join(ExegeteCatalogue.model_names())
 
         self.__parser = optparse.OptionParser(usage="%prog [{ [-m MODEL] [-s SAMPLE_PERIOD] [-p { 0 | 1 }] "
                                                     "[-b BUS] [-a ADDRESS] [-e EXEGETE] [-r EXEGETE] | -d }] [-v]",
@@ -70,10 +70,10 @@ class CmdOPCConf(object):
         if self.__opts.power_saving is None or self.__opts.power_saving == 0 or self.__opts.power_saving == 1:
             return True
 
-        if self.use_exegete is not None and self.use_exegete not in Exegete.models():
+        if self.use_exegete is not None and self.use_exegete not in ExegeteCatalogue.model_names():
             return False
 
-        if self.remove_exegete is not None and self.remove_exegete not in Exegete.models():
+        if self.remove_exegete is not None and self.remove_exegete not in ExegeteCatalogue.model_names():
             return False
 
         return False
