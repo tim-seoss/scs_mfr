@@ -31,8 +31,8 @@ class CmdAFEBaseline(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [{ { -s | -o } GAS VALUE [-r HUMID -t TEMP [-p PRESS]] | "
-                                                    "-z }] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ { { -s | -o } GAS VALUE | -c GAS CORRECT INCORRECT } "
+                                                    "[-r HUMID -t TEMP [-p PRESS]] | -z }] [-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--set", "-s", type="string", nargs=2, action="store", dest="set",
@@ -40,6 +40,9 @@ class CmdAFEBaseline(object):
 
         self.__parser.add_option("--offset", "-o", type="string", nargs=2, action="store", dest="offset",
                                  help="change offset for GAS, by integer VALUE")
+
+        self.__parser.add_option("--correct", "-c", type="string", nargs=3, action="store", dest="correct",
+                                 help="change offset for GAS, by the difference between CORRECT and INCORRECT values")
 
         self.__parser.add_option("--humid", "-r", type="float", nargs=1, action="store", dest="humid",
                                  help="record relative humidity value (%)")
@@ -71,6 +74,9 @@ class CmdAFEBaseline(object):
         if self.offset is not None:
             param_count += 1
 
+        if self.correct is not None:
+            param_count += 1
+
         if self.zero is not None:
             param_count += 1
 
@@ -82,6 +88,10 @@ class CmdAFEBaseline(object):
             return False
 
         if self.offset is not None and not self.__is_integer(self.offset[1]):
+            return False
+
+        if self.correct is not None and \
+                (not self.__is_integer(self.correct[1]) or not self.__is_integer(self.correct[2])):
             return False
 
         # environment...
@@ -99,22 +109,19 @@ class CmdAFEBaseline(object):
 
     def gas_name(self):
         if self.set:
-            return self.set[0]
+            return
 
         if self.offset:
             return self.offset[0]
 
-        return None
-
-
-    def offset_value(self):
-        if self.set:
-            return int(self.set[1])
-
-        if self.offset:
-            return int(self.offset[1])
+        if self.correct:
+            return self.correct[0]
 
         return None
+
+
+    def update(self):
+        return self.set or self.offset or self.correct
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -124,9 +131,30 @@ class CmdAFEBaseline(object):
         return self.__opts.set
 
 
+    def set_value(self):
+        return int(self.set[1]) if self.set else None
+
+
     @property
     def offset(self):
         return self.__opts.offset
+
+
+    def offset_value(self):
+        return int(self.offset[1]) if self.offset else None
+
+
+    @property
+    def correct(self):
+        return self.__opts.correct
+
+
+    def correct_value(self):
+        return int(self.correct[1]) if self.correct else None
+
+
+    def incorrect_value(self):
+        return int(self.correct[2]) if self.correct else None
 
 
     @property
@@ -161,5 +189,5 @@ class CmdAFEBaseline(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdAFEBaseline:{set:%s, offset:%s, humid:%s, temp:%s, press:%s, zero:%s, verbose:%s}" % \
-               (self.set, self.offset, self.humid, self.temp, self.press, self.zero, self.verbose)
+        return "CmdAFEBaseline:{set:%s, offset:%s, correct:%s, humid:%s, temp:%s, press:%s, zero:%s, verbose:%s}" % \
+               (self.set, self.offset, self.correct, self.humid, self.temp, self.press, self.zero, self.verbose)

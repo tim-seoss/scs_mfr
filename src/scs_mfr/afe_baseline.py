@@ -20,10 +20,10 @@ an ozone sensor is identified as Ox.
 Note that the scs_dev/gasses_sampler process must be restarted for changes to take effect.
 
 SYNOPSIS
-./afe_baseline.py [{ { -s | -o } GAS VALUE [-r HUMID -t TEMP [-p PRESS]] | -z }] [-v]
+afe_baseline.py [{ { { -s | -o } GAS VALUE | -c GAS CORRECT INCORRECT } [-r HUMID -t TEMP [-p PRESS]] | -z }] [-v]
 
 EXAMPLES
-./afe_baseline.py -s CO -24
+./afe_baseline.py -c NO2 10 23
 
 DOCUMENT EXAMPLE
 {"sn1": {"calibrated-on": "2019-02-02T12:00:48Z", "offset": 123, "env": {"hmd": 44.0, "tmp": 22.6, "pA": 100.3}},
@@ -121,7 +121,7 @@ if __name__ == '__main__':
             mpl.init()
 
         # update...
-        if cmd.set or cmd.offset:
+        if cmd.update():
             calib = AFECalib.load(Host)
 
             if calib is None:
@@ -137,11 +137,15 @@ if __name__ == '__main__':
                 exit(1)
 
             if cmd.set:
-                new_offset = cmd.offset_value()
+                new_offset = cmd.set_value()
+
+            elif cmd.offset:
+                old_offset = afe_baseline.sensor_baseline(index).offset
+                new_offset = old_offset + cmd.offset_value()
 
             else:
                 old_offset = afe_baseline.sensor_baseline(index).offset
-                new_offset = old_offset + cmd.offset_value()
+                new_offset = old_offset + (cmd.correct_value() - cmd.incorrect_value())
 
             if cmd.env_is_specified():
                 humid = cmd.humid
