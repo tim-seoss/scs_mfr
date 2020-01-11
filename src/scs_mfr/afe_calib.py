@@ -92,20 +92,12 @@ if __name__ == '__main__':
             calib = AFECalib.construct_from_jdict(jdict)
 
         elif cmd.afe_serial_number:
-            client = HTTPClient()
-            client.connect(AFECalib.ALPHASENSE_HOST)
-
             try:
-                path = AFECalib.ALPHASENSE_PATH + cmd.afe_serial_number
-                jdict = json.loads(client.get(path, None, AFECalib.ALPHASENSE_HEADER))
-                calib = AFECalib.construct_from_jdict(jdict)
+                calib = AFECalib.download(HTTPClient(), cmd.afe_serial_number)
 
             except HTTPException as ex:
                 print("afe_calib: %s" % ex, file=sys.stderr)
                 exit(1)
-
-            finally:
-                client.close()
 
         else:
             client = HTTPClient()
