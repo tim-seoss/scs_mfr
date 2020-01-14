@@ -41,7 +41,7 @@ class CmdCSVLoggerConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        if self.set() and self.delete is not None:
+        if self.set() and self.delete:
             return False
 
         if self.write_interval is not None and self.write_interval < 0:
