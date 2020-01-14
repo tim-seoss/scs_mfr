@@ -99,7 +99,7 @@ if __name__ == '__main__':
 
         else:
             try:
-                calib = DSICalib.download(HTTPClient(), cmd.afe_serial_number)
+                calib = DSICalib.download(HTTPClient(), cmd.sensor_serial_number)
                 calib.calibrated_on = cmd.sensor_calibration_date
 
             except HTTPException as ex:
