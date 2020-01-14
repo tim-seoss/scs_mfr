@@ -47,7 +47,7 @@ import sys
 from scs_core.data.json import JSONify
 
 from scs_core.gas.afe_calib import AFECalib
-from scs_core.gas.sensor_calib import SensorCalib
+from scs_core.gas.dsi_calib import DSICalib
 
 from scs_core.sys.http_exception import HTTPException
 
@@ -56,8 +56,6 @@ from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_afe_calib import CmdAFECalib
 
-
-# TODO: change name to gas_calib
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -92,41 +90,21 @@ if __name__ == '__main__':
             calib = AFECalib.construct_from_jdict(jdict)
 
         elif cmd.afe_serial_number:
-            client = HTTPClient()
-            client.connect(AFECalib.ALPHASENSE_HOST)
-
             try:
-                path = AFECalib.ALPHASENSE_PATH + cmd.afe_serial_number
-                jdict = json.loads(client.get(path, None, AFECalib.ALPHASENSE_HEADER))
-                calib = AFECalib.construct_from_jdict(jdict)
+                calib = AFECalib.download(HTTPClient(), cmd.afe_serial_number)
 
             except HTTPException as ex:
                 print("afe_calib: %s" % ex, file=sys.stderr)
                 exit(1)
-
-            finally:
-                client.close()
 
         else:
-            client = HTTPClient()
-            client.connect(SensorCalib.ALPHASENSE_HOST)
-
             try:
-                path = SensorCalib.ALPHASENSE_PATH + cmd.sensor_serial_number
-                jstr = client.get(path, None, SensorCalib.ALPHASENSE_HEADER)
-
-                sensor_calib = SensorCalib.construct_from_jdict(json.loads(jstr))
-                sensor_calib.set_defaults()
-                sensor_calib.set_sens_mv_from_sens_na()
-
-                calib = AFECalib.construct_for_sensor(cmd.sensor_calibration_date, sensor_calib)
+                calib = DSICalib.download(HTTPClient(), cmd.afe_serial_number)
+                calib.calibrated_on = cmd.sensor_calibration_date
 
             except HTTPException as ex:
                 print("afe_calib: %s" % ex, file=sys.stderr)
                 exit(1)
-
-            finally:
-                client.close()
 
         if calib is not None:
             calib.save(Host)
