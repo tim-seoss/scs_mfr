@@ -25,7 +25,6 @@ DOCUMENT EXAMPLE
 
 SEE ALSO
 scs_mfr/aws_client_auth
-scs_mfr/aws_project
 """
 
 import sys
