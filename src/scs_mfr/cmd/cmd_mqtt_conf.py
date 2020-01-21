@@ -24,7 +24,7 @@ class CmdMQTTConf(object):
 
         # optional...
         self.__parser.add_option("--pub", "-p", type="int", nargs=1, action="store", dest="inhibit_publishing",
-                                 help="inhibit publishing (1) or enable (0)")
+                                 default=None, help="inhibit publishing (1) or enable (0)")
 
         self.__parser.add_option("--queue_size", "-q", type="int", nargs=1, action="store", dest="queue_size",
                                  help="queue size (default is %s)" % MQTTConf.DEFAULT_QUEUE_SIZE)
