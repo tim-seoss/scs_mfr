@@ -22,7 +22,7 @@ WARNING: if inhibit publishing is set to true, the MQTT client will still subscr
 receipts or responses.
 
 SYNOPSIS
-mqtt_conf.py { [-p INHIBIT_PUBLISHING] [-f REPORT_FILE]  [-l { 0 | 1 }] | -d } [-v]
+mqtt_conf.py { [-i { 0 | 1 }] [-f REPORT_FILE]  [-l { 0 | 1 }] | -d } [-v]
 
 EXAMPLES
 ./mqtt_conf.py -p 0 -f /tmp/southcoastscience/mqtt_queue_length.json -l 1
