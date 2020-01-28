@@ -6,10 +6,6 @@ Created on 17 May 2018
 
 import optparse
 
-from scs_core.comms.mqtt_conf import MQTTConf
-
-
-# TODO: remove QUEUE_SIZE
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -21,15 +17,12 @@ class CmdMQTTConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self):
-        self.__parser = optparse.OptionParser(usage="%prog { [-p INHIBIT_PUBLISHING] [-q QUEUE_SIZE] [-f REPORT_FILE] "
-                                                    " [-l { 0 | 1 }] | -d } [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog { [-i { 0 | 1 }] [-f REPORT_FILE] [-l { 0 | 1 }] | "
+                                                    "-d } [-v]", version="%prog 1.0")
 
         # optional...
-        self.__parser.add_option("--pub", "-p", type="int", nargs=1, action="store", dest="inhibit_publishing",
+        self.__parser.add_option("--inhibit-pub", "-i", type="int", nargs=1, action="store", dest="inhibit_publishing",
                                  default=None, help="inhibit publishing (1) or enable (0)")
-
-        self.__parser.add_option("--queue_size", "-q", type="int", nargs=1, action="store", dest="queue_size",
-                                 help="queue size (default is %s)" % MQTTConf.DEFAULT_QUEUE_SIZE)
 
         self.__parser.add_option("--report-file", "-f", type="string", nargs=1, action="store", dest="report_file",
                                  help="file to store latest queue length value")
@@ -55,12 +48,15 @@ class CmdMQTTConf(object):
         if self.__opts.debug is not None and self.__opts.debug != 0 and self.__opts.debug != 1:
             return False
 
+        if self.__opts.inhibit_publishing is not None and \
+                self.__opts.inhibit_publishing != 0 and self.__opts.inhibit_publishing != 1:
+            return False
+
         return True
 
 
     def set(self):
-        return self.inhibit_publishing is not None or self.queue_size is not None or self.report_file is not None or \
-               self.__opts.debug is not None
+        return self.inhibit_publishing is not None or self.report_file is not None or self.__opts.debug is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -68,11 +64,6 @@ class CmdMQTTConf(object):
     @property
     def inhibit_publishing(self):
         return self.__opts.inhibit_publishing
-
-
-    @property
-    def queue_size(self):
-        return self.__opts.queue_size
 
 
     @property
@@ -102,5 +93,5 @@ class CmdMQTTConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdMQTTConf:{inhibit_publishing:%s, queue_size:%s, report_file:%s, debug:%s, delete:%s, verbose:%s}" % \
-               (self.inhibit_publishing, self.queue_size, self.report_file, self.debug, self.delete, self.verbose)
+        return "CmdMQTTConf:{inhibit_publishing:%s, report_file:%s, debug:%s, delete:%s, verbose:%s}" % \
+               (self.inhibit_publishing, self.report_file, self.debug, self.delete, self.verbose)
