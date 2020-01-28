@@ -9,6 +9,8 @@ import optparse
 from scs_core.comms.mqtt_conf import MQTTConf
 
 
+# TODO: remove QUEUE_SIZE
+
 # --------------------------------------------------------------------------------------------------------------------
 
 class CmdMQTTConf(object):
@@ -58,7 +60,7 @@ class CmdMQTTConf(object):
 
     def set(self):
         return self.inhibit_publishing is not None or self.queue_size is not None or self.report_file is not None or \
-               self.debug is not None
+               self.__opts.debug is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------

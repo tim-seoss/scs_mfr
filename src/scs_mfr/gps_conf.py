@@ -20,13 +20,14 @@ The REPORT_FILE parameter, if set, indicates where the latest queue length value
 The status_sampler must be restarted for changes to take effect.
 
 SYNOPSIS
-gps_conf.py [{ [-m MODEL] [-i INTERVAL] [-t TALLY] [-f REPORT_FILE] | -d }] [-v]
+gps_conf.py [{ [-m MODEL] [-i INTERVAL] [-t TALLY] [-f REPORT_FILE] [-l { 0 | 1 }] | -d }] [-v]
 
 EXAMPLES
-./gps_conf.py -m SAM8Q -i 10 -t 60 -f /tmp/southcoastscience/gps_report.json
+./gps_conf.py -m SAM8Q -i 10 -t 60 -f /tmp/southcoastscience/gps_report.json -l 1
 
 DOCUMENT EXAMPLE
-{"model": "SAM8Q", "sample-interval": 10, "tally": 60, "report-file": "/tmp/southcoastscience/gps_report.json"}
+{"model": "PAM7Q", "sample-interval": 10, "tally": 1, "report-file": "/tmp/southcoastscience/gps_report.json",
+"debug": true}
 
 FILES
 ~/SCS/conf/gps_conf.json
@@ -86,8 +87,9 @@ if __name__ == '__main__':
         interval = cmd.sample_interval if cmd.sample_interval else conf.sample_interval
         tally = cmd.tally if cmd.tally is not None else conf.tally
         report_file = cmd.report_file if cmd.report_file is not None else conf_report_file
+        debug = cmd.debug if cmd.debug is not None else conf.debug
 
-        conf = GPSConf(model, interval, tally, report_file)
+        conf = GPSConf(model, interval, tally, report_file, debug)
         conf.save(Host)
 
     elif cmd.delete and conf is not None:
