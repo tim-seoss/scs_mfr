@@ -26,7 +26,8 @@ EXAMPLES
 ./gps_conf.py -m SAM8Q -i 10 -t 60 -f /tmp/southcoastscience/gps_report.json -l 1
 
 DOCUMENT EXAMPLE
-{"model": "SAM8Q", "sample-interval": 10, "tally": 60, "report-file": "/tmp/southcoastscience/gps_report.json"}
+{"model": "PAM7Q", "sample-interval": 10, "tally": 1, "report-file": "/tmp/southcoastscience/gps_report.json",
+"debug": true}
 
 FILES
 ~/SCS/conf/gps_conf.json
