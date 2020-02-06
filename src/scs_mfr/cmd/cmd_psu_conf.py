@@ -20,15 +20,18 @@ class CmdPSUConf(object):
         """
         models = ' | '.join(PSUConf.models())
 
-        self.__parser = optparse.OptionParser(usage="%prog [{ -m MODEL [-f REPORT_FILE] | -d }] [-v]",
-                                              version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog { [-m MODEL] [-i REPORTING_INTERVAL] [-f REPORT_FILE] | -d }"
+                                                    " [-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--model", "-m", type="string", nargs=1, action="store", dest="model",
                                  help="set PSU model { %s }" % models)
 
+        self.__parser.add_option("--reporting-interval", "-i", type="int", nargs=1, action="store",
+                                 dest="reporting_interval", help="PSU monitor reporting interval")
+
         self.__parser.add_option("--report-file", "-f", type="string", nargs=1, action="store", dest="report_file",
-                                 help="file to store latest queue length value")
+                                 help="PSU monitor status report file")
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="delete the PSU configuration")
@@ -42,7 +45,8 @@ class CmdPSUConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        if self.delete and (self.model is not None or self.report_file is not None):
+        if self.delete and \
+                (self.model is not None or self.reporting_interval is not None or self.report_file is not None):
             return False
 
         if self.model is not None and self.model not in PSUConf.models():
@@ -52,7 +56,8 @@ class CmdPSUConf(object):
 
 
     def set(self):
-        return self.__opts.model is not None or self.__opts.report_file is not None
+        return self.__opts.model is not None or self.__opts.reporting_interval is not None or \
+               self.__opts.report_file is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -60,6 +65,11 @@ class CmdPSUConf(object):
     @property
     def model(self):
         return self.__opts.model
+
+
+    @property
+    def reporting_interval(self):
+        return self.__opts.reporting_interval
 
 
     @property
@@ -84,5 +94,5 @@ class CmdPSUConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdPSUConf:{model:%s, report_file:%s, delete:%s, verbose:%s}" % \
-               (self.model, self.report_file, self.delete, self.verbose)
+        return "CmdPSUConf:{model:%s, reporting_interval:%s, report_file:%s, delete:%s, verbose:%s}" % \
+               (self.model, self.reporting_interval, self.report_file, self.delete, self.verbose)

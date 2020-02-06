@@ -16,13 +16,13 @@ and if so, which model is provided. Three models are currently available:
 Note that the scs_dev/psu_monitor process must be restarted for changes to take effect.
 
 SYNOPSIS
-psu_conf.py [{ -m MODEL [-f REPORT_FILE] | -d }] [-v]
+psu_conf.py { [-m MODEL] [-i REPORTING_INTERVAL] [-f REPORT_FILE] | -d } [-v]
 
 EXAMPLES
-./psu_conf.py -m OsloV1 -f /tmp/southcoastscience/psu_report.json
+./psu_conf.py -m OsloV1 -i 10 -f /tmp/southcoastscience/psu_report.json
 
 DOCUMENT EXAMPLE
-{"model": "OsloV1", "report-file": "/tmp/southcoastscience/psu_status_report.json"}
+{"model": "OsloV1", "reporting-interval": 10, "report-file": "/tmp/southcoastscience/psu_report.json"}
 
 FILES
 ~/SCS/conf/psu_conf.json
@@ -73,10 +73,11 @@ if __name__ == '__main__':
 
     if cmd.set():
         model = cmd.model if cmd.model is not None else conf.model
+        reporting_interval = cmd.reporting_interval if cmd.reporting_interval is not None else conf.reporting_interval
         report_file = cmd.report_file if cmd.report_file is not None else conf.report_file
 
         try:
-            conf = PSUConf(model, report_file)
+            conf = PSUConf(model, reporting_interval, report_file)
             conf.save(Host)
 
         except ValueError as ex:
