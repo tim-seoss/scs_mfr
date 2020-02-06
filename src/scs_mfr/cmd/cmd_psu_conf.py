@@ -20,12 +20,15 @@ class CmdPSUConf(object):
         """
         models = ' | '.join(PSUConf.models())
 
-        self.__parser = optparse.OptionParser(usage="%prog [{ -m MODEL | -d }] [-v]",
+        self.__parser = optparse.OptionParser(usage="%prog [{ -m MODEL [-f REPORT_FILE] | -d }] [-v]",
                                               version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--model", "-m", type="string", nargs=1, action="store", dest="model",
                                  help="set PSU model { %s }" % models)
+
+        self.__parser.add_option("--report-file", "-f", type="string", nargs=1, action="store", dest="report_file",
+                                 help="file to store latest queue length value")
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="delete the PSU configuration")
@@ -39,17 +42,17 @@ class CmdPSUConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        if self.model is not None and self.delete:
+        if self.delete and (self.model is not None or self.report_file is not None):
             return False
 
-        if self.set() and self.model not in PSUConf.models():
+        if self.model is not None and self.model not in PSUConf.models():
             return False
 
         return True
 
 
     def set(self):
-        return self.__opts.model
+        return self.__opts.model is not None or self.__opts.report_file is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -57,6 +60,11 @@ class CmdPSUConf(object):
     @property
     def model(self):
         return self.__opts.model
+
+
+    @property
+    def report_file(self):
+        return self.__opts.report_file
 
 
     @property
@@ -76,4 +84,5 @@ class CmdPSUConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdPSUConf:{model:%s, delete:%s, verbose:%s}" % (self.model, self.delete, self.verbose)
+        return "CmdPSUConf:{model:%s, report_file:%s, delete:%s, verbose:%s}" % \
+               (self.model, self.report_file, self.delete, self.verbose)
