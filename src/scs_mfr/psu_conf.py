@@ -19,10 +19,10 @@ SYNOPSIS
 psu_conf.py [{ -m MODEL [-f REPORT_FILE] | -d }] [-v]
 
 EXAMPLES
-./psu_conf.py -f /tmp/southcoastscience/psu_report.json
+./psu_conf.py -m OsloV1 -f /tmp/southcoastscience/psu_report.json
 
 DOCUMENT EXAMPLE
-{"model": "OsloV1", "report-file": "/tmp/southcoastscience/psu_report.json"}
+{"model": "OsloV1", "report-file": "/tmp/southcoastscience/psu_status_report.json"}
 
 FILES
 ~/SCS/conf/psu_conf.json
