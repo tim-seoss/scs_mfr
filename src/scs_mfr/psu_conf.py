@@ -13,23 +13,23 @@ and if so, which model is provided. Three models are currently available:
 * PrototypeV1 via serial port
 * OsloV1 via serial port
 
-Note that the scs_dev/status_sampler process must be restarted for changes to take effect.
+Note that the scs_dev/psu_monitor process must be restarted for changes to take effect.
 
 SYNOPSIS
-psu_conf.py [{ -m MODEL | -d }] [-v]
+psu_conf.py [{ -m MODEL [-f REPORT_FILE] | -d }] [-v]
 
 EXAMPLES
-./psu_conf.py -m OsloV1
+./psu_conf.py -f /tmp/southcoastscience/psu_report.json
 
 DOCUMENT EXAMPLE
-{"model": "OsloV1"}
+{"model": "OsloV1", "report-file": "/tmp/southcoastscience/psu_report.json"}
 
 FILES
 ~/SCS/conf/psu_conf.json
 
 SEE ALSO
 scs_dev/psu
-scs_dev/status_sampler
+scs_dev/psu_monitor
 """
 
 import sys
@@ -72,8 +72,11 @@ if __name__ == '__main__':
     # run...
 
     if cmd.set():
+        model = cmd.model if cmd.model is not None else conf.model
+        report_file = cmd.report_file if cmd.report_file is not None else conf.report_file
+
         try:
-            conf = PSUConf(cmd.model)
+            conf = PSUConf(model, report_file)
             conf.save(Host)
 
         except ValueError as ex:
