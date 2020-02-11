@@ -37,8 +37,8 @@ https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
 import sys
 
+from scs_core.data.datetime import LocalizedDatetime
 from scs_core.data.json import JSONify
-from scs_core.data.localized_datetime import LocalizedDatetime
 
 from scs_core.location.timezone import Timezone
 from scs_core.location.timezone_conf import TimezoneConf
