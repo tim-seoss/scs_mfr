@@ -35,21 +35,22 @@ scs_mfr/opc_conf
 scs_mfr/opc_version
 
 BUGS
-Currently, the utility only supports the Alphasense OPC-N3. Additionally, the array fields 'bin-boundaries',
-'bin-boundaries-diameter', and 'bin-weightings' cannot currently be updated.
+Currently, the array fields 'bin-boundaries', 'bin-boundaries-diameter', and 'bin-weightings' cannot be updated.
 """
 
+import json
 import sys
+
+from collections import OrderedDict
 
 from scs_core.data.json import JSONify
 
 from scs_dfe.interface.interface_conf import InterfaceConf
 
 from scs_dfe.particulate.opc_conf import OPCConf
-from scs_dfe.particulate.opc_n3.opc_firmware_conf import OPCFirmwareConf
 
-from scs_host.sys.host import Host
 from scs_host.bus.i2c import I2C
+from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_opc_firmware_conf import CmdOPCFirmwareConf
 
@@ -59,6 +60,8 @@ from scs_mfr.cmd.cmd_opc_firmware_conf import CmdOPCFirmwareConf
 if __name__ == '__main__':
 
     opc = None
+    firmware_conf = None
+    jdict = None
 
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
@@ -107,8 +110,6 @@ if __name__ == '__main__':
         # OPC...
         opc = opc_conf.opc(interface, Host)
 
-        # TODO: check it is N3
-
         if cmd.verbose:
             print("opc_firmware_conf: %s" % opc, file=sys.stderr)
 
@@ -118,15 +119,19 @@ if __name__ == '__main__':
 
         opc.power_on()
 
-        # get...
-        firmware_conf = opc.get_firmware_conf()
+        try:
+            # get...
+            firmware_conf = opc.get_firmware_conf()
+        except NotImplementedError:
+            print("opc_firmware_conf: OPC does not support firmware configuration.", file=sys.stderr)
+            exit(1)
 
         if not firmware_conf:
             print("opc_firmware_conf: OPC not available", file=sys.stderr)
             exit(1)
 
-        # set...
         if cmd.set_field:
+            # set...
             jdict = firmware_conf.as_json()
 
             if cmd.set_field not in jdict:
@@ -135,18 +140,38 @@ if __name__ == '__main__':
 
             jdict[cmd.set_field] = cmd.set_value
 
-            # set...
-            opc.set_firmware_conf(OPCFirmwareConf.construct_from_jdict(jdict))
+            try:
+                # write...
+                opc.set_firmware_conf(jdict)
+            except NotImplementedError:
+                print("opc_firmware_conf: OPC does not support firmware updates.", file=sys.stderr)
+                exit(1)
 
             # re-read...
             firmware_conf = opc.get_firmware_conf()
 
-        # commit...
-        if cmd.commit:
-            opc.save_firmware_conf()
+        elif cmd.file:
+            jstr = '{"bin-boundaries": [0, 27, 57, 95, 140, 205, 296, 473, 682, 920, 1184, 1473, 1786, 2123, 2481, ' \
+                   '2861, 4095], "bin-boundaries-diameter": [0.35, 0.7, 1.1, 1.5, 1.9, 2.4, 3.0, 4.0, 5.0, 6.0, ' \
+                   '7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 12.4], "bin-weightings": [1.65, 1.65, 1.65, 1.65, 1.65, 1.65, ' \
+                   '1.65, 1.65, 1.65, 1.65, 1.65, 1.65, 1.65, 1.65, 1.65, 1.65], "gain-scaling-coefficient": 1.0, ' \
+                   '"sample-flow-rate": 3.7, "tof-to-sfr-factor": 87, "pm-concentration-a": 1.0, ' \
+                   '"pm-concentration-b": 2.5, "pm-concentration-c": 10.0, "pvp": 48, "power-status": 0, ' \
+                   '"max-tof": 4095, "laser-dac": 150, "bin-weighting-index": 2}'
 
-        # report...
+            jdict = json.loads(jstr, object_pairs_hook=OrderedDict)
+
+            opc.set_firmware_conf(jdict)
+
+            # re-read...
+            firmware_conf = opc.get_firmware_conf()
+
+        if cmd.commit:
+            # commit...
+            opc.commit_firmware_conf()
+
         if firmware_conf:
+            # report...
             print(JSONify.dumps(firmware_conf.as_json()))
 
 
@@ -157,7 +182,7 @@ if __name__ == '__main__':
         pass
 
     finally:
-        if opc:
-            opc.power_off()
+        # if opc:
+        #     opc.power_off()
 
         I2C.close()

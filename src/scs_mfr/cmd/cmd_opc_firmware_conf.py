@@ -17,11 +17,15 @@ class CmdOPCFirmwareConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self):
-        self.__parser = optparse.OptionParser(usage="%prog [-s FIELD VALUE] [-c] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ -s FIELD VALUE | -f CONF_FILE }] [-c] [-v]",
+                                              version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--set", "-s", type="string", nargs=2, action="store", dest="set",
-                                 help="set FIELD to integer VALUE")
+                                 help="set FIELD to numeric VALUE")
+
+        self.__parser.add_option("--file", "-f", type="string", nargs=1, action="store", dest="file",
+                                 help="load the named CONF_FILE")
 
         self.__parser.add_option("--commit", "-c", action="store_true", dest="commit", default=False,
                                  help="commit the configuration to non-volatile memory")
@@ -35,9 +39,12 @@ class CmdOPCFirmwareConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
+        if self.__opts.set is not None and self.file is not None:
+            return False
+
         if self.__opts.set is not None:
             try:
-                int(self.__opts.set[1])
+                float(self.__opts.set[1])
             except ValueError:
                 return False
 
@@ -53,7 +60,12 @@ class CmdOPCFirmwareConf(object):
 
     @property
     def set_value(self):
-        return None if self.__opts.set is None else int(self.__opts.set[1])
+        return None if self.__opts.set is None else float(self.__opts.set[1])
+
+
+    @property
+    def file(self):
+        return self.__opts.file
 
 
     @property
@@ -73,4 +85,5 @@ class CmdOPCFirmwareConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdOPCConf:{set:%s, commit:%s, verbose:%s}" % (self.__opts.set, self.__opts.commit, self.verbose)
+        return "CmdOPCConf:{set:%s, file:%s, commit:%s, verbose:%s}" % \
+               (self.__opts.set, self.__opts.file, self.__opts.commit, self.verbose)
