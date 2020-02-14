@@ -182,7 +182,7 @@ if __name__ == '__main__':
         pass
 
     finally:
-        # if opc:
-        #     opc.power_off()
+        if opc:
+            opc.power_off()
 
         I2C.close()
