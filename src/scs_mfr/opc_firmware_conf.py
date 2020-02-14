@@ -29,8 +29,10 @@ DOCUMENT EXAMPLE
 
 SEE ALSO
 scs_dev/particulates_sampler
+
 scs_mfr/opc_cleaning_interval
 scs_mfr/opc_conf
+scs_mfr/opc_version
 
 BUGS
 Currently, the utility only supports the Alphasense OPC-N3. Additionally, the array fields 'bin-boundaries',
