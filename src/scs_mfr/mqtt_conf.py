@@ -18,14 +18,14 @@ If DEBUG is set to 1 (true), then extra logging will be written to stderr by the
 
 The MQTT client must be restarted for changes to take effect.
 
-WARNING: if inhibit publishing is set to true, the MQTT client will still subscribe as required, but will not publish
+WARNING: if inhibit publishing is set to true, the MQTT client will still subscribe as specified, but will not publish
 receipts or responses.
 
 SYNOPSIS
 mqtt_conf.py { [-i { 0 | 1 }] [-f REPORT_FILE]  [-l { 0 | 1 }] | -d } [-v]
 
 EXAMPLES
-./mqtt_conf.py -p 0 -f /tmp/southcoastscience/mqtt_queue_length.json -l 1
+./mqtt_conf.py -i 0 -f /tmp/southcoastscience/mqtt_queue_length.json -l 1
 
 DOCUMENT EXAMPLE
 {"inhibit-publishing": false, "report-file": "/tmp/southcoastscience/mqtt_queue_report.json", "debug": true}

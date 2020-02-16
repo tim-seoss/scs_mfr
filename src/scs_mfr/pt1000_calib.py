@@ -16,7 +16,7 @@ For the utility to operate, the I2C address of the Pt1000 ADC must be set. This 
 Note that the scs_analysis/gases_sampler process must be restarted for changes to take effect.
 
 SYNOPSIS
-pt1000_calib.py [-s] [-v]
+pt1000_calib.py [{ -s | -d }] [-v]
 
 EXAMPLES
 ./pt1000_calib.py -s
@@ -58,6 +58,10 @@ if __name__ == '__main__':
         # cmd...
 
         cmd = CmdPt1000Calib()
+
+        if not cmd.is_valid():
+            cmd.print_help(sys.stderr)
+            exit(2)
 
         if cmd.verbose:
             print("pt1000_calib: %s" % cmd, file=sys.stderr)
@@ -114,10 +118,16 @@ if __name__ == '__main__':
             pt1000_calib = Pt1000Calib(None, v20)
             pt1000_calib.save(Host)
 
-        # calibrated...
-        pt1000_calib = Pt1000Calib.load(Host)
+        elif cmd.delete:
+            Pt1000Calib.delete(Host)
+            pt1000_calib = None
 
-        print(JSONify.dumps(pt1000_calib))
+        else:
+            # calibrated...
+            pt1000_calib = Pt1000Calib.load(Host)
+
+        if pt1000_calib:
+            print(JSONify.dumps(pt1000_calib))
 
         if cmd.verbose:
             afe = interface.gas_sensors(Host)
