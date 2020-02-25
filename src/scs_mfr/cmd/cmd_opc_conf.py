@@ -6,8 +6,12 @@ Created on 13 Jul 2016
 
 import optparse
 
-from scs_core.particulate.exegesis.exegete_catalogue import ExegeteCatalogue
 from scs_dfe.particulate.opc_conf import OPCConf
+
+try:
+    from scs_exegesis.particulate.exegete_catalogue import ExegeteCatalogue
+except ImportError:
+    from scs_core.exegesis.particulate.exegete_catalogue import ExegeteCatalogue
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -20,7 +24,8 @@ class CmdOPCConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self):
-        exegetes = ' | '.join(ExegeteCatalogue.model_names())
+        exegete_names = ExegeteCatalogue.model_names()
+        exegetes = ' | '.join(exegete_names) if exegete_names else "none available"
 
         self.__parser = optparse.OptionParser(usage="%prog [{ [-m MODEL] [-s SAMPLE_PERIOD] [-p { 0 | 1 }] "
                                                     "[-b BUS] [-a ADDRESS] [-e EXEGETE] [-r EXEGETE] | -d }] [-v]",
@@ -46,7 +51,7 @@ class CmdOPCConf(object):
                                  help="use EXEGETE { %s }" % exegetes)
 
         self.__parser.add_option("--remove-exegete", "-r", type="string", nargs=1, action="store",
-                                 dest="remove_exegete", help="remove EXEGETE { %s }" % exegetes)
+                                 dest="remove_exegete", help="remove named EXEGETE")
 
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
@@ -71,9 +76,6 @@ class CmdOPCConf(object):
             return True
 
         if self.use_exegete is not None and self.use_exegete not in ExegeteCatalogue.model_names():
-            return False
-
-        if self.remove_exegete is not None and self.remove_exegete not in ExegeteCatalogue.model_names():
             return False
 
         return False

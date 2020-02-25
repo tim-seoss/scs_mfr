@@ -29,7 +29,7 @@ FILES
 
 SEE ALSO
 scs_dev/gases_sampler
-scs_mfr/dfe_conf
+scs_mfr/interface_conf
 """
 
 import sys
@@ -123,9 +123,10 @@ if __name__ == '__main__':
             pt1000_calib = None
 
         else:
-            # calibrated...
+            # load...
             pt1000_calib = Pt1000Calib.load(Host)
 
+        # report...
         if pt1000_calib:
             print(JSONify.dumps(pt1000_calib))
 

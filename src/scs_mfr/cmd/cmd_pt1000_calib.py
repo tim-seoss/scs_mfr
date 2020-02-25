@@ -23,7 +23,7 @@ class CmdPt1000Calib(object):
                                  help="set Pt1000 calib from internal SHT")
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
-                                 help="delete Pt1000 calib")
+                                 help="delete the Pt1000 calib")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
