@@ -30,3 +30,4 @@ echo '-'
 #git -C ${GIT_PATH} pull
 #echo '-'
 
+date +%y-%m-%d > ~/SCS/latest_update.txt
