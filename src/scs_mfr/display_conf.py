@@ -70,7 +70,7 @@ if __name__ == '__main__':
         conf = DisplayConf.load(Host)
 
     except NotImplementedError:
-        print("display: DisplayConf not available.", file=sys.stderr)
+        print("display_conf: not available.", file=sys.stderr)
         exit(1)
 
 
