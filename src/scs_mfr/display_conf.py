@@ -32,7 +32,10 @@ import sys
 
 from scs_core.data.json import JSONify
 
-from scs_display.display.display_conf import DisplayConf
+try:
+    from scs_display.display.display_conf import DisplayConf
+except ImportError:
+    from scs_core.display.display_conf import DisplayConf
 
 from scs_host.sys.host import Host
 
@@ -42,6 +45,8 @@ from scs_mfr.cmd.cmd_display_conf import CmdDisplayConf
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
+
+    conf = None
 
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
@@ -61,7 +66,12 @@ if __name__ == '__main__':
     # resources...
 
     # DisplayConf...
-    conf = DisplayConf.load(Host)
+    try:
+        conf = DisplayConf.load(Host)
+
+    except NotImplementedError:
+        print("display_conf: not available.", file=sys.stderr)
+        exit(1)
 
 
     # ----------------------------------------------------------------------------------------------------------------
