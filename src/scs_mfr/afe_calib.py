@@ -80,6 +80,8 @@ if __name__ == '__main__':
 
     calib = AFECalib.load(Host)
 
+    http_client = HTTPClient(False)
+
 
     # ----------------------------------------------------------------------------------------------------------------
     # run...
@@ -91,7 +93,7 @@ if __name__ == '__main__':
 
         elif cmd.afe_serial_number:
             try:
-                calib = AFECalib.download(HTTPClient(), cmd.afe_serial_number)
+                calib = AFECalib.download(http_client, cmd.afe_serial_number)
 
             except HTTPException as ex:
                 print("afe_calib: %s" % ex, file=sys.stderr)
@@ -99,7 +101,7 @@ if __name__ == '__main__':
 
         else:
             try:
-                calib = DSICalib.download(HTTPClient(), cmd.sensor_serial_number)
+                calib = DSICalib.download(http_client, cmd.sensor_serial_number)
                 calib.calibrated_on = cmd.sensor_calibration_date
 
             except HTTPException as ex:
