@@ -74,46 +74,53 @@ if __name__ == '__main__':
         print("afe_calib: %s" % cmd, file=sys.stderr)
         sys.stderr.flush()
 
+    try:
+        # ------------------------------------------------------------------------------------------------------------
+        # resources...
+
+        calib = AFECalib.load(Host)
+
+        http_client = HTTPClient(False)
+
+
+        # ------------------------------------------------------------------------------------------------------------
+        # run...
+
+        if cmd.set():
+            if cmd.test:
+                jdict = json.loads(AFECalib.TEST_LOAD)
+                calib = AFECalib.construct_from_jdict(jdict)
+
+            elif cmd.afe_serial_number:
+                try:
+                    calib = AFECalib.download(http_client, cmd.afe_serial_number)
+
+                except HTTPException as ex:
+                    print("afe_calib: %s" % ex, file=sys.stderr)
+                    exit(1)
+
+            else:
+                try:
+                    calib = DSICalib.download(http_client, cmd.sensor_serial_number)
+                    calib.calibrated_on = cmd.sensor_calibration_date
+
+                except HTTPException as ex:
+                    print("afe_calib: %s" % ex, file=sys.stderr)
+                    exit(1)
+
+            if calib is not None:
+                calib.save(Host)
+
+        elif cmd.delete:
+            calib.delete(Host)
+            calib = None
+
+        if calib:
+            print(JSONify.dumps(calib))
+
 
     # ----------------------------------------------------------------------------------------------------------------
-    # resources...
+    # end...
 
-    calib = AFECalib.load(Host)
-
-    http_client = HTTPClient(False)
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-    # run...
-
-    if cmd.set():
-        if cmd.test:
-            jdict = json.loads(AFECalib.TEST_LOAD)
-            calib = AFECalib.construct_from_jdict(jdict)
-
-        elif cmd.afe_serial_number:
-            try:
-                calib = AFECalib.download(http_client, cmd.afe_serial_number)
-
-            except HTTPException as ex:
-                print("afe_calib: %s" % ex, file=sys.stderr)
-                exit(1)
-
-        else:
-            try:
-                calib = DSICalib.download(http_client, cmd.sensor_serial_number)
-                calib.calibrated_on = cmd.sensor_calibration_date
-
-            except HTTPException as ex:
-                print("afe_calib: %s" % ex, file=sys.stderr)
-                exit(1)
-
-        if calib is not None:
-            calib.save(Host)
-
-    elif cmd.delete:
-        calib.delete(Host)
-        calib = None
-
-    if calib:
-        print(JSONify.dumps(calib))
+    except (ConnectionError, HTTPException) as ex:
+        print("afe_calib: %s: %s" % (ex.__class__.__name__, ex), file=sys.stderr)
