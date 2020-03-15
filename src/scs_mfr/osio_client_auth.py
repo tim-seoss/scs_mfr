@@ -37,6 +37,8 @@ scs_mfr/osio_project
 
 import sys
 
+from scs_core.client.http_client import HTTPClient
+
 from scs_core.data.json import JSONify
 
 from scs_core.gas.afe_calib import AFECalib
@@ -51,7 +53,6 @@ from scs_core.sys.system_id import SystemID
 
 from scs_dfe.particulate.opc_conf import OPCConf
 
-from scs_host.client.http_client import HTTPClient
 from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_osio_client_auth import CmdOSIOClientAuth
