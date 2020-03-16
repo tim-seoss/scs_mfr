@@ -66,7 +66,7 @@ if __name__ == '__main__':
     sht = None
     mpl = None
 
-    now = LocalizedDatetime.now()
+    now = LocalizedDatetime.now().utc()
 
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...

@@ -249,7 +249,7 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # report...
 
-    recorded = LocalizedDatetime.now()
+    recorded = LocalizedDatetime.now().utc()
     datum = DFETestDatum(system_id.message_tag(), recorded, Host.serial_number(), cmd.dfe_serial_number,
                          reporter.subjects, afe_datum, reporter.result)
 
