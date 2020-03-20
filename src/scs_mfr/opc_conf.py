@@ -117,6 +117,14 @@ if __name__ == '__main__':
         if cmd.remove_exegete:
             conf.discard_exegete(cmd.remove_exegete)
 
+        # compatibility check...
+        incompatibles = conf.incompatible_exegetes()
+
+        if incompatibles:
+            print("opc_conf: The following exegetes are not compatible with %s: %s." % (conf.model, incompatibles),
+                  file=sys.stderr)
+            exit(1)
+
         conf.save(Host)
 
     elif cmd.delete:
