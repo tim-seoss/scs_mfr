@@ -68,6 +68,8 @@ from scs_mfr.cmd.cmd_opc_conf import CmdOPCConf
 
 if __name__ == '__main__':
 
+    incompatibles = []
+
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
@@ -118,10 +120,16 @@ if __name__ == '__main__':
             conf.discard_exegete(cmd.remove_exegete)
 
         # compatibility check...
-        incompatibles = conf.incompatible_exegetes()
+        try:
+            incompatibles = conf.incompatible_exegetes()
+
+        except KeyError as ex:
+            print("opc_conf: The following exegete is not valid: %s." % ex, file=sys.stderr)
+            exit(1)
 
         if incompatibles:
-            print("opc_conf: The following exegetes are not compatible with %s: %s." % (conf.model, incompatibles),
+            print("opc_conf: The following exegetes are not compatible with %s: %s." %
+                  (conf.model, ', '.join(incompatibles)),
                   file=sys.stderr)
             exit(1)
 
