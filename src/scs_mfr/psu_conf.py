@@ -13,16 +13,20 @@ and if so, which model is provided. Three models are currently available:
 * PrototypeV1 via serial port
 * OsloV1 via serial port
 
+A battery pack may also be specified. A warning is given if a battery is specified for a PSU that does not use one,
+or if a battery is not specified for one that does.
+
 Note that the scs_dev/psu_monitor process must be restarted for changes to take effect.
 
 SYNOPSIS
-psu_conf.py { [-m MODEL] [-i REPORTING_INTERVAL] [-f REPORT_FILE] | -d } [-v]
+psu_conf.py { [-p PSU_MODEL] [-b BATT_MODEL] [-i REPORTING_INTERVAL] [-f REPORT_FILE] | -d } [-v]
 
 EXAMPLES
 ./psu_conf.py -m OsloV1 -i 10 -f /tmp/southcoastscience/psu_status_report.json
 
 DOCUMENT EXAMPLE
-{"model": "OsloV1", "reporting-interval": 10, "report-file": "/tmp/southcoastscience/psu_status_report.json"}
+{"model": "MobileV2", "batt-model": "PackV1", "reporting-interval": 10,
+"report-file": "/tmp/southcoastscience/psu_status_report.json"}
 
 FILES
 ~/SCS/conf/psu_conf.json
@@ -72,16 +76,27 @@ if __name__ == '__main__':
     # run...
 
     if cmd.set():
-        model = cmd.model if cmd.model is not None else conf.model
+        psu_model = cmd.psu_model if cmd.psu_model is not None else conf.psu_model
+        batt_model = cmd.batt_model if cmd.batt_model is not None else conf.batt_model
         reporting_interval = cmd.reporting_interval if cmd.reporting_interval is not None else conf.reporting_interval
         report_file = cmd.report_file if cmd.report_file is not None else conf.report_file
 
         try:
-            conf = PSUConf(model, reporting_interval, report_file)
-            conf.save(Host)
-
+            conf = PSUConf(psu_model, batt_model, reporting_interval, report_file)
         except ValueError as ex:
             print("psu_conf: %s" % ex, file=sys.stderr)
+
+        psu_class = conf.psu_class()
+        psu_uses_batt_pack = psu_class.uses_batt_pack()
+
+        if batt_model is None and psu_uses_batt_pack:
+            print("psu_conf: WARNING: %s uses a battery pack but none was specified" % psu_model, file=sys.stderr)
+
+        if batt_model is not None and not psu_uses_batt_pack:
+            print("psu_conf: WARNING: %s does not use a battery pack but %s was specified" % (psu_model, batt_model),
+                  file=sys.stderr)
+
+        conf.save(Host)
 
     elif cmd.delete and conf is not None:
         conf.delete(Host)
