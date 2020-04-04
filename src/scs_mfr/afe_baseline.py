@@ -20,7 +20,7 @@ an ozone sensor is identified as Ox.
 Note that the scs_dev/gasses_sampler process must be restarted for changes to take effect.
 
 SYNOPSIS
-afe_baseline.py [{ { { -s | -o } GAS VALUE | -c GAS CORRECT INCORRECT } [-r HUMID -t TEMP [-p PRESS]] | -z }] [-v]
+afe_baseline.py [{ { { -s | -o } GAS VALUE | -c GAS CORRECT REPORTED } [-r HUMID -t TEMP [-p PRESS]] | -z }] [-v]
 
 EXAMPLES
 ./afe_baseline.py -c NO2 10 23
@@ -145,7 +145,7 @@ if __name__ == '__main__':
 
             else:
                 old_offset = afe_baseline.sensor_baseline(index).offset
-                new_offset = old_offset + (cmd.correct_value() - cmd.incorrect_value())
+                new_offset = old_offset + (cmd.correct_value() - cmd.reported_value())
 
             if cmd.env_is_specified():
                 humid = cmd.humid

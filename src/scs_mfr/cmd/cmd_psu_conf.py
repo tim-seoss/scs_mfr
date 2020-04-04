@@ -18,14 +18,18 @@ class CmdPSUConf(object):
         """
         Constructor
         """
-        models = ' | '.join(PSUConf.models())
+        psu_models = ' | '.join(PSUConf.psu_models())
+        batt_models = ' | '.join(PSUConf.batt_models())
 
-        self.__parser = optparse.OptionParser(usage="%prog { [-m MODEL] [-i REPORTING_INTERVAL] [-f REPORT_FILE] | -d }"
-                                                    " [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog { [-p PSU_MODEL] [-b BATT_MODEL] [-i REPORTING_INTERVAL] "
+                                                    "[-f REPORT_FILE] | -d } [-v]", version="%prog 1.0")
 
         # optional...
-        self.__parser.add_option("--model", "-m", type="string", nargs=1, action="store", dest="model",
-                                 help="set PSU model { %s }" % models)
+        self.__parser.add_option("--psu-model", "-p", type="string", nargs=1, action="store", dest="psu_model",
+                                 help="set PSU model { %s }" % psu_models)
+
+        self.__parser.add_option("--batt-model", "-b", type="string", nargs=1, action="store", dest="batt_model",
+                                 help="set battery model { %s }" % batt_models)
 
         self.__parser.add_option("--reporting-interval", "-i", type="int", nargs=1, action="store",
                                  dest="reporting_interval", help="PSU monitor reporting interval")
@@ -46,25 +50,34 @@ class CmdPSUConf(object):
 
     def is_valid(self):
         if self.delete and \
-                (self.model is not None or self.reporting_interval is not None or self.report_file is not None):
+                (self.psu_model is not None or self.batt_model is not None or self.reporting_interval is not None or
+                 self.report_file is not None):
             return False
 
-        if self.model is not None and self.model not in PSUConf.models():
+        if self.psu_model is not None and self.psu_model not in PSUConf.psu_models():
+            return False
+
+        if self.batt_model is not None and self.batt_model not in PSUConf.batt_models():
             return False
 
         return True
 
 
     def set(self):
-        return self.__opts.model is not None or self.__opts.reporting_interval is not None or \
-               self.__opts.report_file is not None
+        return self.__opts.psu_model is not None or self.__opts.batt_model is not None or \
+               self.__opts.reporting_interval is not None or self.__opts.report_file is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
-    def model(self):
-        return self.__opts.model
+    def psu_model(self):
+        return self.__opts.psu_model
+
+
+    @property
+    def batt_model(self):
+        return self.__opts.batt_model
 
 
     @property
@@ -94,5 +107,7 @@ class CmdPSUConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdPSUConf:{model:%s, reporting_interval:%s, report_file:%s, delete:%s, verbose:%s}" % \
-               (self.model, self.reporting_interval, self.report_file, self.delete, self.verbose)
+        return "CmdPSUConf:{psu_model:%s, batt_model:%s, reporting_interval:%s, report_file:%s, delete:%s, " \
+               "verbose:%s}" % \
+               (self.psu_model, self.batt_model, self.reporting_interval, self.report_file, self.delete,
+                self.verbose)
