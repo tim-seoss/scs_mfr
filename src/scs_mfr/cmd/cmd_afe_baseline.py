@@ -31,7 +31,7 @@ class CmdAFEBaseline(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [{ { { -s | -o } GAS VALUE | -c GAS CORRECT INCORRECT } "
+        self.__parser = optparse.OptionParser(usage="%prog [{ { { -s | -o } GAS VALUE | -c GAS CORRECT REPORTED } "
                                                     "[-r HUMID -t TEMP [-p PRESS]] | -z }] [-v]", version="%prog 1.0")
 
         # optional...
@@ -42,7 +42,7 @@ class CmdAFEBaseline(object):
                                  help="change offset for GAS, by integer VALUE")
 
         self.__parser.add_option("--correct", "-c", type="string", nargs=3, action="store", dest="correct",
-                                 help="change offset for GAS, by the difference between CORRECT and INCORRECT values")
+                                 help="change offset for GAS, by the difference between CORRECT and REPORTED values")
 
         self.__parser.add_option("--humid", "-r", type="float", nargs=1, action="store", dest="humid",
                                  help="record relative humidity value (%)")
@@ -153,7 +153,7 @@ class CmdAFEBaseline(object):
         return int(self.correct[1]) if self.correct else None
 
 
-    def incorrect_value(self):
+    def reported_value(self):
         return int(self.correct[2]) if self.correct else None
 
 
