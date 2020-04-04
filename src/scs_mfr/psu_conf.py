@@ -32,6 +32,7 @@ FILES
 ~/SCS/conf/psu_conf.json
 
 SEE ALSO
+scs_mfr/fuel_gauge_calib
 scs_dev/psu
 scs_dev/psu_monitor
 """
