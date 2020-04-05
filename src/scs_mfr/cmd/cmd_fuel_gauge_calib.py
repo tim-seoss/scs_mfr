@@ -16,11 +16,11 @@ class CmdFuelGaugeCalib(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog { -i | -d | -c | -l | -s } [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog { -i | -d | -c | -f  | -p } [-v]", version="%prog 1.0")
 
         # compulsory...
         self.__parser.add_option("--initialise", "-i", action="store_true", dest="initialise", default=False,
-                                 help="initialise the fuel gauge and load default parameters")
+                                 help="initialise the fuel gauge with the default parameters")
 
         self.__parser.add_option("--default", "-d", action="store_true", dest="default", default=False,
                                  help="report the default fuel gauge parameters")
@@ -28,11 +28,11 @@ class CmdFuelGaugeCalib(object):
         self.__parser.add_option("--current", "-c", action="store_true", dest="current", default=False,
                                  help="report the current fuel gauge parameters")
 
-        self.__parser.add_option("--load", "-l", action="store_true", dest="load", default=False,
-                                 help="load fuel gauge with the default parameters")
-
-        self.__parser.add_option("--sample", "-s", action="store_true", dest="sample", default=False,
+        self.__parser.add_option("--fuel", "-f", action="store_true", dest="fuel", default=False,
                                  help="sample the fuel gauge")
+
+        self.__parser.add_option("--power", "-p", action="store_true", dest="power", default=False,
+                                 help="sample the PSU")
 
         # optional...
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
@@ -55,10 +55,10 @@ class CmdFuelGaugeCalib(object):
         if self.current:
             count += 1
 
-        if self.load:
+        if self.fuel:
             count += 1
 
-        if self.sample:
+        if self.power:
             count += 1
 
         return count == 1
@@ -82,13 +82,13 @@ class CmdFuelGaugeCalib(object):
 
 
     @property
-    def load(self):
-        return self.__opts.load
+    def fuel(self):
+        return self.__opts.fuel
 
 
     @property
-    def sample(self):
-        return self.__opts.sample
+    def power(self):
+        return self.__opts.power
 
 
     @property
@@ -103,5 +103,5 @@ class CmdFuelGaugeCalib(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdFuelGaugeCalib:{initialise:%s, default:%s, current:%s, load:%s, sample:%s, verbose:%s}" % \
-               (self.initialise, self.default, self.current, self.load, self.sample, self.verbose)
+        return "CmdFuelGaugeCalib:{initialise:%s, default:%s, current:%s, fuel:%s, power:%s, verbose:%s}" % \
+               (self.initialise, self.default, self.current, self.fuel, self.power, self.verbose)
