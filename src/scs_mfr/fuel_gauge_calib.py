@@ -15,7 +15,7 @@ When a new fuel gauge is put into use, it can be initialised with these values u
 --initialise flag - this sets both the parameters and the fuel gauge configuration.
 
 SYNOPSIS
-fuel_gauge_calib.py { -i | -d | -c | -f  | -p } [-v]
+fuel_gauge_calib.py { -i | -d | -c | -s | -l | -f | -p } [-v]
 
 EXAMPLES
 ./fuel_gauge_calib.py -cv
@@ -45,6 +45,7 @@ from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_fuel_gauge_calib import CmdFuelGaugeCalib
 
+from scs_psu.batt_pack.fuel_gauge.max17055.max17055_params import MAX17055Params
 from scs_psu.psu.psu_conf import PSUConf
 
 
@@ -102,6 +103,16 @@ if __name__ == '__main__':
 
         elif cmd.current:
             params = batt_pack.read_learned_params()
+            print(JSONify.dumps(params))
+
+        elif cmd.save:
+            params = batt_pack.read_learned_params()
+            params.save(Host)
+            print(JSONify.dumps(params))
+
+        elif cmd.load:
+            params = MAX17055Params.load(Host)
+            batt_pack.write_params(params)
             print(JSONify.dumps(params))
 
         elif cmd.fuel:

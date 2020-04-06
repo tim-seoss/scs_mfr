@@ -16,7 +16,8 @@ class CmdFuelGaugeCalib(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog { -i | -d | -c | -f  | -p } [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog { -i | -d | -c | -s | -l | -f | -p } [-v]",
+                                              version="%prog 1.0")
 
         # compulsory...
         self.__parser.add_option("--initialise", "-i", action="store_true", dest="initialise", default=False,
@@ -27,6 +28,12 @@ class CmdFuelGaugeCalib(object):
 
         self.__parser.add_option("--current", "-c", action="store_true", dest="current", default=False,
                                  help="report the current fuel gauge parameters")
+
+        self.__parser.add_option("--save", "-s", action="store_true", dest="save", default=False,
+                                 help="save the current fuel gauge parameters to disk")
+
+        self.__parser.add_option("--load", "-l", action="store_true", dest="load", default=False,
+                                 help="load the current fuel gauge parameters from disk")
 
         self.__parser.add_option("--fuel", "-f", action="store_true", dest="fuel", default=False,
                                  help="sample the fuel gauge")
@@ -53,6 +60,12 @@ class CmdFuelGaugeCalib(object):
             count += 1
 
         if self.current:
+            count += 1
+
+        if self.save:
+            count += 1
+
+        if self.load:
             count += 1
 
         if self.fuel:
@@ -82,6 +95,16 @@ class CmdFuelGaugeCalib(object):
 
 
     @property
+    def save(self):
+        return self.__opts.save
+
+
+    @property
+    def load(self):
+        return self.__opts.load
+
+
+    @property
     def fuel(self):
         return self.__opts.fuel
 
@@ -103,5 +126,7 @@ class CmdFuelGaugeCalib(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdFuelGaugeCalib:{initialise:%s, default:%s, current:%s, fuel:%s, power:%s, verbose:%s}" % \
-               (self.initialise, self.default, self.current, self.fuel, self.power, self.verbose)
+        return "CmdFuelGaugeCalib:{initialise:%s, default:%s, current:%s, save:%s, load:%s, " \
+               "fuel:%s, power:%s, verbose:%s}" % \
+               (self.initialise, self.default, self.current, self.save, self.load,
+                self.fuel, self.power, self.verbose)
