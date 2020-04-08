@@ -95,7 +95,8 @@ if __name__ == '__main__':
         # no auto-initialisation - we want to see the MAX17055 native values
 
         if cmd.initialise:
-            batt_pack.initialise(force_config=True)
+            params = batt_pack.initialise(Host, force_config=True)
+            print(JSONify.dumps(params))
 
         elif cmd.default:
             params = batt_pack.default_params()

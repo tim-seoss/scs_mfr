@@ -30,10 +30,10 @@ class CmdFuelGaugeCalib(object):
                                  help="report the current fuel gauge parameters")
 
         self.__parser.add_option("--save", "-s", action="store_true", dest="save", default=False,
-                                 help="save the current fuel gauge parameters to disk")
+                                 help="save the current fuel gauge parameters to filesystem")
 
         self.__parser.add_option("--load", "-l", action="store_true", dest="load", default=False,
-                                 help="load the current fuel gauge parameters from disk")
+                                 help="load fuel gauge parameters from filesystem")
 
         self.__parser.add_option("--fuel", "-f", action="store_true", dest="fuel", default=False,
                                  help="sample the fuel gauge")
