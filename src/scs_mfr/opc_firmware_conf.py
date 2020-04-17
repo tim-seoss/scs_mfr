@@ -159,7 +159,7 @@ if __name__ == '__main__':
                    '"pm-concentration-b": 2.5, "pm-concentration-c": 10.0, "pvp": 48, "power-status": 0, ' \
                    '"max-tof": 4095, "laser-dac": 150, "bin-weighting-index": 2}'
 
-            jdict = json.loads(jstr, object_pairs_hook=OrderedDict)
+            jdict = json.loads(jstr, object_hook=OrderedDict)
 
             opc.set_firmware_conf(jdict)
 

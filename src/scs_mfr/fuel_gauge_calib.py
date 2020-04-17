@@ -8,17 +8,24 @@ Created on 4 Apr 2020
 DESCRIPTION
 The fuel_gauge_calib utility is used to interrogate or update the fuel gauge parameters on an attached battery pack.
 
-Parameters are found automatically though a learning process run by the fuel gauge throughout its lifetime. The battery
-pack model incorporates a set of parameter values gained through this process, referred to as the default parameters.
+Parameters are found automatically though a learning process run by the fuel gauge throughout its lifetime. These
+values are saved to the file system by the PSU monitor every time the battery level changes by more than 20%. The
+battery pack model incorporates a set of parameter values gained through this process on test systems,
+referred to as the default parameters.
 
 When a new fuel gauge is put into use, it can be initialised with these values using the fuel_gauge_calib utility
---initialise flag - this sets both the parameters and the fuel gauge configuration.
+--initialise flag - this sets both the parameters and the fuel gauge configuration. If a max17055_params.json
+configuration file has been stored for this system, then it is used to initialise the parameters. Otherwise, the
+default parameters for the configured battery pack are used.
 
 SYNOPSIS
-fuel_gauge_calib.py { -i | -d | -c | -f  | -p } [-v]
+fuel_gauge_calib.py { -i | -d | -c | -s | -l | -f | -p } [-v]
 
 EXAMPLES
 ./fuel_gauge_calib.py -cv
+
+FILES
+~/SCS/conf/max17055_params.json
 
 DOCUMENT EXAMPLE - PARAMETERS
 {"r-comp-0": 171, "temp-co": 8766, "full-cap-rep": 16712, "full-cap-nom": 41298, "cycles": 966}
@@ -45,6 +52,7 @@ from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_fuel_gauge_calib import CmdFuelGaugeCalib
 
+from scs_psu.batt_pack.fuel_gauge.max17055.max17055_params import MAX17055Params
 from scs_psu.psu.psu_conf import PSUConf
 
 
@@ -94,7 +102,8 @@ if __name__ == '__main__':
         # no auto-initialisation - we want to see the MAX17055 native values
 
         if cmd.initialise:
-            batt_pack.initialise(force_config=True)
+            params = batt_pack.initialise(Host, force_config=True)
+            print(JSONify.dumps(params))
 
         elif cmd.default:
             params = batt_pack.default_params()
@@ -102,6 +111,16 @@ if __name__ == '__main__':
 
         elif cmd.current:
             params = batt_pack.read_learned_params()
+            print(JSONify.dumps(params))
+
+        elif cmd.save:
+            params = batt_pack.read_learned_params()
+            params.save(Host)
+            print(JSONify.dumps(params))
+
+        elif cmd.load:
+            params = MAX17055Params.load(Host)
+            batt_pack.write_params(params)
             print(JSONify.dumps(params))
 
         elif cmd.fuel:
