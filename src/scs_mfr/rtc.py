@@ -38,8 +38,6 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_rtc import CmdRTC
 
 
-# TODO: handle the case where the RTC is locked by the operating system
-
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
