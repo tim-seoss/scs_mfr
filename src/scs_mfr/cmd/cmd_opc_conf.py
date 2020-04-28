@@ -39,7 +39,7 @@ class CmdOPCConf(object):
                                  help="set SAMPLE_PERIOD")
 
         self.__parser.add_option("--power-saving", "-p", type="int", nargs=1, action="store", dest="power_saving",
-                                 help="set power saving mode")
+                                 default=0, help="set power saving mode (default 0)")
 
         self.__parser.add_option("--bus", "-b", type="int", nargs=1, action="store", dest="bus",
                                  help="override default host bus")
@@ -72,8 +72,8 @@ class CmdOPCConf(object):
         if self.model and not OPCConf.is_valid_model(self.model):
             return False
 
-        if self.__opts.power_saving is None or self.__opts.power_saving == 0 or self.__opts.power_saving == 1:
-            return True
+        if self.__opts.power_saving != 0 and self.__opts.power_saving != 1:
+            return False
 
         if self.use_exegete is not None and self.use_exegete not in ExegeteCatalogue.model_names():
             return False
@@ -82,7 +82,7 @@ class CmdOPCConf(object):
 
 
     def is_complete(self):
-        if self.model is None or self.sample_period is None or self.power_saving is None:
+        if self.model is None or self.sample_period is None:
             return False
 
         return True
@@ -108,7 +108,7 @@ class CmdOPCConf(object):
 
     @property
     def power_saving(self):
-        return None if self.__opts.power_saving is None else bool(self.__opts.power_saving)
+        return bool(self.__opts.power_saving)
 
 
     @property

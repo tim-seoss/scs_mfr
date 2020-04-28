@@ -22,7 +22,7 @@ scs_dev/particulates_sampler utility terminates.
 
 Note that the scs_dev/particulates_sampler process must be restarted for changes to take effect.
 
-The OPC-N2, OPC-N3, OPC-R1 and Sensirion SPS30 models are supported.
+The Alphasense OPC-N2, OPC-N3, OPC-R1, and Sensirion SPS30 models are supported.
 
 Alternate exegetes (data interpretation models) can be added or removed - available interpretations can be listed with
 the --help flag.
@@ -31,10 +31,11 @@ SYNOPSIS
 opc_conf.py [{ [-m MODEL] [-s SAMPLE_PERIOD] [-p { 0 | 1 }] [-b BUS] [-a ADDRESS] [-e EXEGETE] [-r EXEGETE] | -d }] [-v]
 
 EXAMPLES
-./opc_conf.py -m N2 -b 0 -a 1 -e iseceen2v1
+./opc_conf.py -m N2 -b 0 -a 1 -e ISLin/Urban/N2/v1
+./opc_conf.py -m S30 -b 1
 
 DOCUMENT EXAMPLE
-{"model": "N2", "sample-period": 10, "power-saving": false, "bus": 0, "address": 1, "exg": ["iseceen2v1", "isecsen2v2"]}
+{"model": "N2", "sample-period": 10, "power-saving": false, "bus": 0, "address": 1, "exg": ["ISLin/Urban/N2/v1"]}
 
 FILES
 ~/SCS/conf/opc_conf.json
@@ -61,8 +62,6 @@ from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_opc_conf import CmdOPCConf
 
-
-# TODO: check sample period against Schedule
 
 # --------------------------------------------------------------------------------------------------------------------
 
