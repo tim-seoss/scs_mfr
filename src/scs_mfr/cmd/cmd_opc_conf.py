@@ -72,13 +72,13 @@ class CmdOPCConf(object):
         if self.model and not OPCConf.is_valid_model(self.model):
             return False
 
-        if self.__opts.power_saving != 0 and self.__opts.power_saving != 1:
+        if not (self.__opts.power_saving == 0 or self.__opts.power_saving == 1):
             return False
 
         if self.use_exegete is not None and self.use_exegete not in ExegeteCatalogue.model_names():
             return False
 
-        return False
+        return True
 
 
     def is_complete(self):
@@ -89,7 +89,7 @@ class CmdOPCConf(object):
 
 
     def set(self):
-        return self.model is not None or self.sample_period is not None or self.power_saving is not None \
+        return self.model is not None or self.sample_period is not None \
                or self.bus is not None or self.address is not None \
                or self.use_exegete is not None or self.remove_exegete is not None
 
