@@ -95,7 +95,7 @@ if __name__ == '__main__':
 
     if cmd.set():
         if conf is None and not cmd.is_complete():
-            print("opc_conf: No configuration is stored. You must therefore set model, period and power fields.",
+            print("opc_conf: No configuration is stored. You must therefore set model and period fields.",
                   file=sys.stderr)
             cmd.print_help(sys.stderr)
             exit(1)
