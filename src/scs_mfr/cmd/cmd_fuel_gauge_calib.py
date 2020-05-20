@@ -16,24 +16,24 @@ class CmdFuelGaugeCalib(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog { -i | -d | -c | -s | -l | -f | -p } [-v]",
+        self.__parser = optparse.OptionParser(usage="%prog { -i | -c | -d | -l | -s | -f | -p } [-v]",
                                               version="%prog 1.0")
 
         # compulsory...
         self.__parser.add_option("--initialise", "-i", action="store_true", dest="initialise", default=False,
                                  help="initialise the fuel gauge")
 
-        self.__parser.add_option("--default", "-d", action="store_true", dest="default", default=False,
-                                 help="report the default fuel gauge parameters")
-
         self.__parser.add_option("--current", "-c", action="store_true", dest="current", default=False,
                                  help="report the current fuel gauge parameters")
 
-        self.__parser.add_option("--save", "-s", action="store_true", dest="save", default=False,
-                                 help="save the current fuel gauge parameters to filesystem")
+        self.__parser.add_option("--default", "-d", action="store_true", dest="default", default=False,
+                                 help="load default fuel gauge parameters")
 
         self.__parser.add_option("--load", "-l", action="store_true", dest="load", default=False,
                                  help="load fuel gauge parameters from filesystem")
+
+        self.__parser.add_option("--save", "-s", action="store_true", dest="save", default=False,
+                                 help="save the current fuel gauge parameters to filesystem")
 
         self.__parser.add_option("--fuel", "-f", action="store_true", dest="fuel", default=False,
                                  help="sample the fuel gauge")

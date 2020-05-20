@@ -19,7 +19,7 @@ configuration file has been stored for this system, then it is used to initialis
 default parameters for the configured battery pack are used.
 
 SYNOPSIS
-fuel_gauge_calib.py { -i | -d | -c | -s | -l | -f | -p } [-v]
+fuel_gauge_calib.py { -i | -c | -d | -l | -s | -f | -p } [-v]
 
 EXAMPLES
 ./fuel_gauge_calib.py -cv
@@ -105,22 +105,23 @@ if __name__ == '__main__':
             params = batt_pack.initialise(Host, force_config=True)
             print(JSONify.dumps(params))
 
-        elif cmd.default:
-            params = batt_pack.default_params()
-            print(JSONify.dumps(params))
-
         elif cmd.current:
             params = batt_pack.read_learned_params()
             print(JSONify.dumps(params))
 
-        elif cmd.save:
-            params = batt_pack.read_learned_params()
-            params.save(Host)
+        elif cmd.default:
+            params = batt_pack.default_params()
+            batt_pack.write_params(params)
             print(JSONify.dumps(params))
 
         elif cmd.load:
             params = MAX17055Params.load(Host)
             batt_pack.write_params(params)
+            print(JSONify.dumps(params))
+
+        elif cmd.save:
+            params = batt_pack.read_learned_params()
+            params.save(Host)
             print(JSONify.dumps(params))
 
         elif cmd.fuel:
