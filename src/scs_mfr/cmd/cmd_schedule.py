@@ -18,7 +18,7 @@ class CmdSchedule(object):
 
         # optional...
         self.__parser.add_option("--set", "-s", type="string", nargs=3, action="store", dest="set",
-                                 help="set schedule NAME, INTERVAL (float) and TALLY (int)")
+                                 help="set schedule NAME, INTERVAL (seconds) and TALLY (count)")
 
         self.__parser.add_option("--delete", "-d", type="string", nargs=1, action="store", dest="delete",
                                  help="delete the named schedule")
