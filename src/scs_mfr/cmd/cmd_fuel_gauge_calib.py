@@ -21,7 +21,7 @@ class CmdFuelGaugeCalib(object):
 
         # compulsory...
         self.__parser.add_option("--initialise", "-i", action="store_true", dest="initialise", default=False,
-                                 help="initialise the fuel gauge")
+                                 help="initialise the fuel gauge configuration")
 
         self.__parser.add_option("--current", "-c", action="store_true", dest="current", default=False,
                                  help="report the current fuel gauge parameters")
