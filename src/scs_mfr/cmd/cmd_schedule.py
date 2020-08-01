@@ -13,15 +13,15 @@ class CmdSchedule(object):
     """unix command line handler"""
 
     def __init__(self):
-        self.__parser = optparse.OptionParser(usage="%prog [{-s NAME INTERVAL TALLY | -d NAME }] [-v]",
+        self.__parser = optparse.OptionParser(usage="%prog [{-s NAME INTERVAL TALLY | -r NAME }] [-v]",
                                               version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--set", "-s", type="string", nargs=3, action="store", dest="set",
                                  help="set schedule NAME, INTERVAL (seconds) and TALLY (count)")
 
-        self.__parser.add_option("--delete", "-d", type="string", nargs=1, action="store", dest="delete",
-                                 help="delete the named schedule")
+        self.__parser.add_option("--remove", "-r", type="string", nargs=1, action="store", dest="remove",
+                                 help="remove the named schedule")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
@@ -32,7 +32,7 @@ class CmdSchedule(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        if self.set() and self.delete():
+        if self.set() and self.remove():
             return False
 
         if self.set():
@@ -52,8 +52,8 @@ class CmdSchedule(object):
         return self.__opts.set is not None
 
 
-    def delete(self):
-        return self.__opts.delete is not None
+    def remove(self):
+        return self.__opts.remove is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -63,8 +63,8 @@ class CmdSchedule(object):
         if self.__opts.set is not None:
             return self.__opts.set[0]
 
-        if self.__opts.delete is not None:
-            return self.__opts.delete
+        if self.__opts.remove is not None:
+            return self.__opts.remove
 
         return None
 
@@ -91,5 +91,5 @@ class CmdSchedule(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdSchedule:{name:%s, interval:%s, count:%s, verbose:%s}" % \
-                    (self.name, self.interval, self.count, self.verbose)
+        return "CmdSchedule:{set:%s, remove:%s, verbose:%s}" % \
+                    (self.__opts.set, self.__opts.remove, self.verbose)
