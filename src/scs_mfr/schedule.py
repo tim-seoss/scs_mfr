@@ -24,7 +24,7 @@ averaged data.
 Note that the ssc_dev_/scheduler process must be restarted for changes to take effect.
 
 SYNOPSIS
-schedule.py [{-s NAME INTERVAL TALLY | -d NAME }] [-v]
+schedule.py [{-s NAME INTERVAL TALLY | -r NAME }] [-v]
 
 EXAMPLES
 ./schedule.py -s scs-climate 10.0 1
@@ -55,7 +55,6 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_schedule import CmdSchedule
 
 
-# TODO: check sampling interval against OPCConf
 # TODO: implement tally / averaging functionality on sampling processes
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -95,7 +94,7 @@ if __name__ == '__main__':
         schedule.set(item)
         schedule.save(Host)
 
-    if cmd.delete():
+    if cmd.remove():
         schedule.clear(cmd.name)
         schedule.save(Host)
 
