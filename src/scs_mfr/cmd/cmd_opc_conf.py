@@ -28,7 +28,8 @@ class CmdOPCConf(object):
         exegetes = ' | '.join(exegete_names) if exegete_names else "none available"
 
         self.__parser = optparse.OptionParser(usage="%prog [{ [-m MODEL] [-s SAMPLE_PERIOD] [-p { 0 | 1 }] "
-                                                    "[-b BUS] [-a ADDRESS] [-e EXEGETE] [-r EXEGETE] | -d }] [-v]",
+                                                    "[-b BUS] [-a ADDRESS] [-i INFERENCE_UDS] "
+                                                    "[-e EXEGETE] [-r EXEGETE] | -d }] [-v]",
                                               version="%prog 1.0")
 
         # optional...
@@ -47,12 +48,14 @@ class CmdOPCConf(object):
         self.__parser.add_option("--address", "-a", type="int", nargs=1, action="store", dest="address",
                                  help="override default host chip select or address")
 
+        self.__parser.add_option("--inference", "-i", type="string", nargs=1, action="store", dest="inference",
+                                 help="set inference server UDS")
+
         self.__parser.add_option("--exegete", "-e", type="string", nargs=1, action="store", dest="use_exegete",
                                  help="use EXEGETE { %s }" % exegetes)
 
         self.__parser.add_option("--remove-exegete", "-r", type="string", nargs=1, action="store",
                                  dest="remove_exegete", help="remove named EXEGETE")
-
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="delete the OPC configuration")
@@ -90,7 +93,7 @@ class CmdOPCConf(object):
 
     def set(self):
         return self.model is not None or self.sample_period is not None \
-               or self.bus is not None or self.address is not None \
+               or self.bus is not None or self.inference is not None or self.address is not None \
                or self.use_exegete is not None or self.remove_exegete is not None
 
 
@@ -132,6 +135,11 @@ class CmdOPCConf(object):
 
 
     @property
+    def inference(self):
+        return self.__opts.inference
+
+
+    @property
     def remove_exegete(self):
         return self.__opts.remove_exegete
 
@@ -149,6 +157,6 @@ class CmdOPCConf(object):
 
     def __str__(self, *args, **kwargs):
         return "CmdOPCConf:{model:%s, sample_period:%s, ext_addr:%s, bus:%s, address:%s, " \
-               "use_exegete:%s, remove_exegete:%s, delete:%s, verbose:%s}" % \
+               "inference:%s, use_exegete:%s, remove_exegete:%s, delete:%s, verbose:%s}" % \
                (self.model, self.sample_period, self.power_saving, self.bus, self.address,
-                self.use_exegete, self.remove_exegete, self.delete, self.verbose)
+                self.inference, self.use_exegete, self.remove_exegete, self.delete, self.verbose)
