@@ -28,14 +28,16 @@ Alternate exegetes (data interpretation models) can be added or removed - availa
 the --help flag.
 
 SYNOPSIS
-opc_conf.py [{ [-m MODEL] [-s SAMPLE_PERIOD] [-p { 0 | 1 }] [-b BUS] [-a ADDRESS] [-e EXEGETE] [-r EXEGETE] | -d }] [-v]
+opc_conf.py [{ [-m MODEL] [-s SAMPLE_PERIOD] [-p { 0 | 1 }] [-b BUS] [-a ADDRESS] [-i INFERENCE_UDS]
+[-e EXEGETE] [-r EXEGETE] | -d }] [-v]
 
 EXAMPLES
 ./opc_conf.py -m N2 -b 0 -a 1 -e ISLin/Urban/N2/v1
 ./opc_conf.py -m S30 -b 1
 
 DOCUMENT EXAMPLE
-{"model": "N2", "sample-period": 10, "power-saving": false, "bus": 0, "address": 1, "exg": ["ISLin/Urban/N2/v1"]}
+{"model": "N2", "sample-period": 10, "power-saving": false, "bus": 0, "address": 1,
+"inf": "/home/scs/SCS/pipes/lambda-model-pmx-s1.uds", "exg": ["ISLin/Urban/N2/v1"]}
 
 FILES
 ~/SCS/conf/opc_conf.json
