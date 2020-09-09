@@ -6,18 +6,19 @@ Created on 8 Sep 2020
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The scd30_conf utility is used to
+The scd30_conf utility is used to specify whether or not a Sensirion SCD30 NDIR CO2 sensor is present, together with
+its basic operating parameters.
 
-Note that the scs_analysis/gasses_sampler process must be restarted for changes to take effect.
+Note that the scs_analysis/gases_sampler process must be restarted for changes to take effect.
 
 SYNOPSIS
 scd30_conf.py [{ [-i INTERVAL] [-t OFFSET] | -d }] [-v]
 
 EXAMPLES
-./scd30_conf.py -i 2 -t 0
+./scd30_conf.py -i 5 -t 0.0
 
 DOCUMENT EXAMPLE
-{"sample-interval": 2, "temp-offset": 0.0}
+{"sample-interval": 5, "temp-offset": 0.0}
 
 FILES
 ~/SCS/conf/scd30_conf.json
