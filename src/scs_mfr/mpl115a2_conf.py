@@ -19,10 +19,10 @@ receiver.
 The pressure_sampler sampler processes must be restarted for changes to take effect.
 
 SYNOPSIS
-mpl115a2_conf.py [{ -a ALTITUDE | -d }] [-v]
+mpl115a2_conf.py [{ -s [-a ALTITUDE] | -d }] [-v]
 
 EXAMPLES
-./mpl115a2_conf.py -a 100
+./mpl115a2_conf.py -s -a 100
 
 FILES
 ~/SCS/conf/mpl115a2_conf.json
