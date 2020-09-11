@@ -27,8 +27,8 @@ class CmdOPCConf(object):
         exegete_names = ExegeteCatalogue.model_names()
         exegetes = ' | '.join(exegete_names) if exegete_names else "none available"
 
-        self.__parser = optparse.OptionParser(usage="%prog [{ [-m MODEL] [-s SAMPLE_PERIOD] [-p { 0 | 1 }] "
-                                                    "[-b BUS] [-a ADDRESS] [-i INFERENCE_UDS] "
+        self.__parser = optparse.OptionParser(usage="%prog [{ [-m MODEL] [-s SAMPLE_PERIOD] [-z { 0 | 1 }] "
+                                                    "[-p { 0 | 1 }] [-b BUS] [-a ADDRESS] [-i INFERENCE_UDS] "
                                                     "[-e EXEGETE] [-r EXEGETE] | -d }] [-v]",
                                               version="%prog 1.0")
 
@@ -39,8 +39,11 @@ class CmdOPCConf(object):
         self.__parser.add_option("--sample-period", "-s", type="int", nargs=1, action="store", dest="sample_period",
                                  help="set SAMPLE_PERIOD")
 
+        self.__parser.add_option("--restart-on-zeroes", "-z", type="int", nargs=1, dest="restart_on_zeroes",
+                                 action="store", help="restart on zero readings (default 1)")
+
         self.__parser.add_option("--power-saving", "-p", type="int", nargs=1, action="store", dest="power_saving",
-                                 default=0, help="set power saving mode (default 0)")
+                                 help="enable power saving mode (default 0)")
 
         self.__parser.add_option("--bus", "-b", type="int", nargs=1, action="store", dest="bus",
                                  help="override default host bus")
@@ -75,7 +78,12 @@ class CmdOPCConf(object):
         if self.model and not OPCConf.is_valid_model(self.model):
             return False
 
-        if not (self.__opts.power_saving == 0 or self.__opts.power_saving == 1):
+        if self.__opts.restart_on_zeroes is not None and \
+                not (self.__opts.restart_on_zeroes == 0 or self.__opts.restart_on_zeroes == 1):
+            return False
+
+        if self.__opts.power_saving is not None and \
+                not (self.__opts.power_saving == 0 or self.__opts.power_saving == 1):
             return False
 
         if self.use_exegete is not None and self.use_exegete not in ExegeteCatalogue.model_names():
@@ -85,16 +93,18 @@ class CmdOPCConf(object):
 
 
     def is_complete(self):
-        if self.model is None or self.sample_period is None:
+        if self.model is None or self.sample_period is None or \
+                self.restart_on_zeroes is None or self.power_saving is None:
             return False
 
         return True
 
 
     def set(self):
-        return self.model is not None or self.sample_period is not None \
-               or self.bus is not None or self.inference is not None or self.address is not None \
-               or self.use_exegete is not None or self.remove_exegete is not None
+        return self.model is not None or self.sample_period is not None or \
+               self.restart_on_zeroes is not None or self.power_saving is not None \
+               or self.bus is not None or self.address is not None \
+               or self.inference is not None or self.use_exegete is not None or self.remove_exegete is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -110,13 +120,13 @@ class CmdOPCConf(object):
 
 
     @property
-    def power_saving(self):
-        return bool(self.__opts.power_saving)
+    def restart_on_zeroes(self):
+        return None if self.__opts.restart_on_zeroes is None else bool(self.__opts.restart_on_zeroes)
 
 
     @property
-    def delete(self):
-        return self.__opts.delete
+    def power_saving(self):
+        return None if self.__opts.power_saving is None else bool(self.__opts.power_saving)
 
 
     @property
@@ -145,6 +155,11 @@ class CmdOPCConf(object):
 
 
     @property
+    def delete(self):
+        return self.__opts.delete
+
+
+    @property
     def verbose(self):
         return self.__opts.verbose
 
@@ -156,7 +171,7 @@ class CmdOPCConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdOPCConf:{model:%s, sample_period:%s, ext_addr:%s, bus:%s, address:%s, " \
+        return "CmdOPCConf:{model:%s, sample_period:%s, restart_on_zeroes:%s, power_saving:%s, bus:%s, address:%s, " \
                "inference:%s, use_exegete:%s, remove_exegete:%s, delete:%s, verbose:%s}" % \
-               (self.model, self.sample_period, self.power_saving, self.bus, self.address,
+               (self.model, self.sample_period, self.restart_on_zeroes, self.power_saving, self.bus, self.address,
                 self.inference, self.use_exegete, self.remove_exegete, self.delete, self.verbose)
