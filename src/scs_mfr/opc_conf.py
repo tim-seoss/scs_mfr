@@ -97,23 +97,25 @@ if __name__ == '__main__':
 
     if cmd.set():
         if conf is None and not cmd.is_complete():
-            print("opc_conf: No configuration is stored. You must therefore set model and period fields.",
+            print("opc_conf: No configuration is stored. You must therefore set the required fields.",
                   file=sys.stderr)
             cmd.print_help(sys.stderr)
             exit(1)
 
         model = cmd.model if cmd.model else conf.model
         sample_period = cmd.sample_period if cmd.sample_period else conf.sample_period
+        restart_on_zeroes = cmd.restart_on_zeroes if cmd.restart_on_zeroes is not None else conf.restart_on_zeroes
         power_saving = cmd.power_saving if cmd.power_saving is not None else conf.power_saving
 
         if conf is None:
-            conf = OPCConf(None, 10, False, None, None, None, [])           # permit None for bus and address settings
+            conf = OPCConf(None, 10, True, False, None, None, None, [])     # permit None for bus and address settings
 
         bus = conf.bus if cmd.bus is None else cmd.bus
         address = conf.address if cmd.address is None else cmd.address
         inference = conf.inference if cmd.inference is None else cmd.inference
 
-        conf = OPCConf(model, sample_period, power_saving, bus, address, inference, conf.exegete_names)
+        conf = OPCConf(model, sample_period, restart_on_zeroes, power_saving,
+                       bus, address, inference, conf.exegete_names)
 
         if cmd.use_exegete:
             conf.add_exegete(cmd.use_exegete)
