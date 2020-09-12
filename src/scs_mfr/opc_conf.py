@@ -14,6 +14,9 @@ The specification also includes the number of seconds between readings by the OP
 time between readings is 10 seconds, the minimum five. A 10 second period provides the highest precision, but sampling
 at this rate may be subject to clipping in extremely polluted environments.
 
+The --restart-on-zeroes flag can be used to test the OPC in some situations, by overriding the default behaviour,
+which is to restart the OPC if repeated zero readings are presented.
+
 Flags are included to add or remove data interpretation exegetes, together with the source of T / rH readings.
 Use of these is under development.
 
@@ -28,16 +31,16 @@ Alternate exegetes (data interpretation models) can be added or removed - availa
 the --help flag.
 
 SYNOPSIS
-opc_conf.py [{ [-m MODEL] [-s SAMPLE_PERIOD] [-p { 0 | 1 }] [-b BUS] [-a ADDRESS] [-i INFERENCE_UDS]
-[-e EXEGETE] [-r EXEGETE] | -d }] [-v]
+opc_conf.py [{ [-m MODEL] [-s SAMPLE_PERIOD] [-z { 0 | 1 }] [-p { 0 | 1 }]
+[-b BUS] [-a ADDRESS] [-i INFERENCE_UDS] [-e EXEGETE] [-r EXEGETE] | -d }] [-v]
 
 EXAMPLES
 ./opc_conf.py -m N2 -b 0 -a 1 -e ISLin/Urban/N2/v1
 ./opc_conf.py -m S30 -b 1
 
 DOCUMENT EXAMPLE
-{"model": "N2", "sample-period": 10, "power-saving": false, "bus": 0, "address": 1,
-"inf": "/home/scs/SCS/pipes/lambda-model-pmx-s1.uds", "exg": ["ISLin/Urban/N2/v1"]}
+{"model": "N3", "sample-period": 10, "restart-on-zeroes": true, "power-saving": false,
+"inf": "/home/scs/SCS/pipes/lambda-model-pmx-s1.uds", "exg": []}
 
 FILES
 ~/SCS/conf/opc_conf.json
