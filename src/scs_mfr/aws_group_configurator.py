@@ -5,6 +5,8 @@ import boto3
 
 from scs_core.data.json import PersistentJSONable
 from scs_core.aws.config.project import Project
+from scs_core.sys.system_id import SystemID
+from scs_host.sys.host import Host
 from scs_mfr.aws_json_reader import AWSJsonReader
 from scs_core.data.path_dict import PathDict
 
@@ -67,8 +69,8 @@ class AWSGroupConfigurator(PersistentJSONable):
         self.__awsinfo.append("ResourceDefinitionARN", aws_json_reader.retrieve_node("ResourceDefinitionVersionArn"))
         self.__awsinfo.append("SubscriptionDefinitionARN", aws_json_reader.retrieve_node("SubscriptionDefinitionVersionArn"))
 
-        # self.__awsinfo.append("SystemID", SystemID.load(Host))  can only run on a setup device
-        self.__awsinfo.append("SystemID", "Test001")
+        self.__awsinfo.append("SystemID", SystemID.load(Host))  # can only run on a setup device
+        # self.__awsinfo.append("SystemID", "Test001") test str
 
         """
         Need to test on device
