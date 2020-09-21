@@ -25,6 +25,7 @@ from getpass import getpass
 import boto3
 from botocore.exceptions import ClientError
 
+from scs_core.aws.greengrass.gg_exceptions import ProjectMissingError
 from scs_core.data.json import JSONify
 from scs_host.sys.host import Host
 from scs_core.aws.greengrass.aws_group_configurator import AWSGroupConfigurator
@@ -100,17 +101,17 @@ if __name__ == '__main__':
             aws_configurator.save(Host)
         except ClientError as error:
             if error.response['Error']['Code'] == 'BadRequestException':
-                print("aws_json_reader: Invalid request.", file=sys.stderr)
+                print("aws_group_setup: Invalid request.", file=sys.stderr)
             if error.response['Error']['Code'] == 'InternalServerErrorException':
-                print("aws_json_reader: AWS server error.", file=sys.stderr)
-            else:
-                raise error
+                print("aws_group_setup: AWS server error.", file=sys.stderr)
+        except ProjectMissingError:
+                print("aws_group_setup: Project configuration not set.", file=sys.stderr)
 
     if cmd.show_current:
-        aws_json_reader = AWSGroup(aws_group, create_aws_client())
-        aws_json_reader.get_group_info_from_name()
-        aws_json_reader.get_group_arns()
-        aws_json_reader.output_current_info()
-        print(JSONify.dumps(aws_json_reader))
+        aws_group_info = AWSGroup(aws_group, create_aws_client())
+        aws_group_info.get_group_info_from_name()
+        aws_group_info.get_group_arns()
+        aws_group_info.output_current_info()
+        print(JSONify.dumps(aws_group_info))
 
     # ----------------------------------------------------------------------------------------------------------------
