@@ -1,3 +1,10 @@
+"""
+Created on 21 Sep 2020
+
+@author: Jade Page (jade.page@southcoastscience.com)
+Based on other cmd handlers by Bruno Beloff
+"""
+
 import optparse
 
 
@@ -10,13 +17,10 @@ class CmdAWSGroupSetup(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-c] [-ug] [-ag] [-ml] [-v]",
+        self.__parser = optparse.OptionParser(usage="%prog [-c] [-a] [-m] [-v]",
                                               version="%prog 1.0")
 
         # optional..."-"
-        self.__parser.add_option("--unixgroup", "-u", type="int", action="store", dest="unix_group", default=0,
-                                 help="the unix group number of this device")
-
         self.__parser.add_option("--machine-learning", "-m", action="store_true", dest="use_ml", default=False,
                                  help="enable machine learning resources for this group")
 
@@ -34,8 +38,6 @@ class CmdAWSGroupSetup(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        if self.set() and not self.unix_group:
-            return False
         if not self.aws_group_name:
             return False
 
@@ -45,11 +47,6 @@ class CmdAWSGroupSetup(object):
         return not self.show_current
 
     # ----------------------------------------------------------------------------------------------------------------
-
-    @property
-    def unix_group(self):
-        return self.__opts.unix_group
-
     @property
     def aws_group_name(self):
         return self.__opts.aws_group_name
@@ -72,5 +69,5 @@ class CmdAWSGroupSetup(object):
         self.__parser.print_help(file)
 
     def __str__(self, *args, **kwargs):
-        return "CmdAWSGroupSetup:{unix-group:%s, aws-group-name:%s, machine-learning:%s, current:%s, verbose:%s}" % \
-               (self.unix_group, self.aws_group_name, self.use_ml, self.show_current, self.verbose)
+        return "CmdAWSGroupSetup:{aws-group-name:%s, machine-learning:%s, current:%s, verbose:%s, }" % \
+               (self.aws_group_name, self.use_ml, self.show_current, self.verbose)

@@ -1,6 +1,15 @@
+"""
+Created on 21 Sep 2020
+
+@author: Jade Page (jade.page@southcoastscience.com)
+
+DESCRIPTION The aws_json_reader is a class used by aws_group_setup to collect information from the amazon greengrass
+api
+"""
+
+
 import json
 import sys
-import boto3
 import botocore
 from scs_core.data.path_dict import PathDict
 
@@ -23,17 +32,15 @@ def split_id_from_version_id(arn_type, combined):
         split1 = combined.split("/subscriptions/")
         res = split1[1].split("/versions/")
     return res
-
-
 # --------------------------------------------------------------------------------------------------------------------
 
 class AWSJsonReader:
     # ----------------------------------------------------------------------------------------------------------------
-    def __init__(self, group_name):
+    def __init__(self, group_name, client):
         """
         Constructor
         """
-        self.__client = boto3.client('greengrass')
+        self.__client = client
         self.__groupinfo = PathDict()
         self.__groupinfo.append("GroupName", [group_name])
     # ----------------------------------------------------------------------------------------------------------------
@@ -142,7 +149,6 @@ class AWSJsonReader:
         print(json.dumps(response, indent=2))
 
     # ----------------------------------------------------------------------------------------------------------------
-
     def get_resource_definition(self):
 
         if not self.__groupinfo.has_path("ResourceDefinitionVersionArn"):
@@ -156,9 +162,7 @@ class AWSJsonReader:
             ResourceDefinitionVersionId=arn[1]
         )
         print(json.dumps(response, indent=2))
-
     # ----------------------------------------------------------------------------------------------------------------
-
     def get_subscription_definition_version(self):
 
         if not self.__groupinfo.has_path("SubscriptionDefinitionVersionArn"):
