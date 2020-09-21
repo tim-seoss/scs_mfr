@@ -28,7 +28,7 @@ from botocore.exceptions import ClientError
 from scs_core.data.json import JSONify
 from scs_host.sys.host import Host
 from scs_core.aws.greengrass.aws_group_configurator import AWSGroupConfigurator
-from scs_core.aws.greengrass.aws_json_reader import AWSGroup
+from scs_core.aws.greengrass.aws_group import AWSGroup
 from scs_mfr.cmd.cmd_aws_group_setup import CmdAWSGroupSetup
 
 
@@ -108,9 +108,9 @@ if __name__ == '__main__':
 
     if cmd.show_current:
         aws_json_reader = AWSGroup(aws_group, create_aws_client())
-        aws_json_reader.__get_group_info_from_name()
-        aws_json_reader.__get_group_arns()
-        aws_json_reader.__output_current_info()
+        aws_json_reader.get_group_info_from_name()
+        aws_json_reader.get_group_arns()
+        aws_json_reader.output_current_info()
         print(JSONify.dumps(aws_json_reader))
 
     # ----------------------------------------------------------------------------------------------------------------
