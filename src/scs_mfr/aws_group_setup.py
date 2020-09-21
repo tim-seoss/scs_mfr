@@ -3,10 +3,11 @@ Created on 21 Sep 2020
 
 @author: Jade Page (jade.page@southcoastscience.com)
 
-DESCRIPTION
-The aws_group_setup utility is designed to automate the creation of AWS Greengrass groups using South Coast Science's configuration
+DESCRIPTION The aws_group_setup utility is designed to automate the creation of AWS Greengrass groups using South
+Coast Science's configuration
 
-The group must already exist and the ML lambdas must be associated with the greengrass account for which the IAM auth keys are given
+The group must already exist and the ML lambdas must be associated with the greengrass account for which the IAM auth
+keys are given
 
 SYNOPSIS
 aws_group_setup.py [{ [-a AWS_Group_Name] [-c] | -m }] [-v]
@@ -19,16 +20,15 @@ A conf file is placed in a default directory referencing the group name and when
 
 https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/greengrass.html
 """
-
-
 import sys
 from getpass import getpass
-
 import boto3
+from botocore.exceptions import ClientError
 
+from scs_core.data.json import JSONify
 from scs_host.sys.host import Host
-from scs_mfr.aws_group_configurator import AWSGroupConfigurator
-from scs_mfr.aws_json_reader import AWSJsonReader
+from scs_core.aws.greengrass.aws_group_configurator import AWSGroupConfigurator
+from scs_core.aws.greengrass.aws_json_reader import AWSGroup
 from scs_mfr.cmd.cmd_aws_group_setup import CmdAWSGroupSetup
 
 
@@ -60,6 +60,10 @@ if __name__ == '__main__':
 
     cmd = CmdAWSGroupSetup()
 
+    if cmd.verbose:
+        print("aws_group_setup: %s" % cmd, file=sys.stderr)
+        sys.stderr.flush()
+
     if not cmd.is_valid():
         cmd.print_help(sys.stderr)
         exit(2)
@@ -86,19 +90,27 @@ if __name__ == '__main__':
             if not user_choice.lower() == "yes":
                 print("Operation cancelled")
                 exit()
-
-        aws_configurator = AWSGroupConfigurator(aws_group, create_aws_client(), use_ml)
-        aws_configurator.collect_information()
-        aws_configurator.define_aws_group_resources()
-        aws_configurator.define_aws_group_functions()
-        aws_configurator.define_aws_group_subscriptions()
-        aws_configurator.create_aws_group_definition()
-        aws_configurator.save(Host)
+        try:
+            aws_configurator = AWSGroupConfigurator(aws_group, create_aws_client(), use_ml)
+            aws_configurator.collect_information(Host)
+            aws_configurator.define_aws_group_resources(Host)
+            aws_configurator.define_aws_group_functions()
+            aws_configurator.define_aws_group_subscriptions()
+            aws_configurator.create_aws_group_definition()
+            aws_configurator.save(Host)
+        except ClientError as error:
+            if error.response['Error']['Code'] == 'BadRequestException':
+                print("aws_json_reader: Invalid request.", file=sys.stderr)
+            if error.response['Error']['Code'] == 'InternalServerErrorException':
+                print("aws_json_reader: AWS server error.", file=sys.stderr)
+            else:
+                raise error
 
     if cmd.show_current:
-        aws_json_reader = AWSJsonReader(aws_group, create_aws_client())
-        aws_json_reader.get_group_info_from_name()
-        aws_json_reader.get_group_arns()
-        aws_json_reader.output_current_info()
+        aws_json_reader = AWSGroup(aws_group, create_aws_client())
+        aws_json_reader.__get_group_info_from_name()
+        aws_json_reader.__get_group_arns()
+        aws_json_reader.__output_current_info()
+        print(JSONify.dumps(aws_json_reader))
 
     # ----------------------------------------------------------------------------------------------------------------
