@@ -35,8 +35,8 @@ from scs_mfr.cmd.cmd_aws_group_setup import CmdAWSGroupSetup
 
 # --------------------------------------------------------------------------------------------------------------------
 
-
 def create_aws_client():
+
     access_key_secret = ""
     access_key_id = input("Enter AWS Access Key ID or leave blank to use environment variables: ")
     if access_key_id:
