@@ -52,7 +52,7 @@ def create_aws_client():
             region_name='us-west-2'
         )
     else:
-        client = boto3.client('greengrass')
+        client = boto3.client('greengrass', region_name=aws_region)
     return client
 
 
@@ -76,6 +76,7 @@ if __name__ == '__main__':
     # resources...
 
     # aws_group_name = my_group_name if cmd.aws_group_name is None else cmd.aws_group_name
+    aws_region = "us-west-2"
 
 
     # ----------------------------------------------------------------------------------------------------------------
