@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """
 Created on 21 Sep 2020
 
@@ -61,10 +63,6 @@ if __name__ == '__main__':
 
     cmd = CmdAWSGroupSetup()
 
-    if cmd.verbose:
-        print("aws_group_setup: %s" % cmd, file=sys.stderr)
-        sys.stderr.flush()
-
     if not cmd.is_valid():
         cmd.print_help(sys.stderr)
         exit(2)
@@ -72,19 +70,21 @@ if __name__ == '__main__':
     if cmd.verbose:
         print("aws_group_setup: %s" % cmd, file=sys.stderr)
         sys.stderr.flush()
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+    # resources...
+
+    # aws_group_name = my_group_name if cmd.aws_group_name is None else cmd.aws_group_name
+
+
     # ----------------------------------------------------------------------------------------------------------------
     # run...
-    if not cmd.is_valid():
-        print("aws_group_setup: Invalid options ", file=sys.stderr)
-        cmd.print_help(sys.stderr)
-        exit(1)
-    use_ml = True if cmd.use_ml else False
-    aws_group = cmd.aws_group_name
 
     # ClientAuth...
     awsGroupConf = AWSGroupConfigurator.load(Host)
 
-    if cmd.set():
+    if cmd.set:
         if awsGroupConf:
             user_choice = input("Group configuration already exists. Type Yes to update: ")
             print("")
@@ -92,7 +92,7 @@ if __name__ == '__main__':
                 print("Operation cancelled")
                 exit()
         try:
-            aws_configurator = AWSGroupConfigurator(aws_group, create_aws_client(), use_ml)
+            aws_configurator = AWSGroupConfigurator(cmd.aws_group_name, create_aws_client(), cmd.use_ml)
             aws_configurator.collect_information(Host)
             aws_configurator.define_aws_group_resources(Host)
             aws_configurator.define_aws_group_functions()
@@ -108,10 +108,9 @@ if __name__ == '__main__':
                 print("aws_group_setup: Project configuration not set.", file=sys.stderr)
 
     if cmd.show_current:
-        aws_group_info = AWSGroup(aws_group, create_aws_client())
+        aws_group_info = AWSGroup(cmd.aws_group_name, create_aws_client())
         aws_group_info.get_group_info_from_name()
         aws_group_info.get_group_arns()
         aws_group_info.output_current_info()
-        print(JSONify.dumps(aws_group_info))
 
-    # ----------------------------------------------------------------------------------------------------------------
+        print(JSONify.dumps(aws_group_info))
