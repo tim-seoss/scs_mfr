@@ -30,7 +30,7 @@ from botocore.exceptions import ClientError
 
 from scs_core.aws.greengrass.aws_group import AWSGroup
 from scs_core.aws.greengrass.aws_group_configurator import AWSGroupConfigurator
-from scs_core.aws.greengrass.gg_exceptions import ProjectMissingError
+from scs_core.aws.greengrass.gg_errors import ProjectMissingError
 
 from scs_core.data.json import JSONify
 
