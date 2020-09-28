@@ -44,8 +44,6 @@ https://www.alphasense-technology.co.uk/
 import json
 import sys
 
-from scs_core.client.http_client import HTTPClient
-
 from scs_core.data.json import JSONify
 
 from scs_core.gas.afe_calib import AFECalib
@@ -81,8 +79,6 @@ if __name__ == '__main__':
 
         calib = AFECalib.load(Host)
 
-        http_client = HTTPClient(False)
-
 
         # ------------------------------------------------------------------------------------------------------------
         # run...
@@ -94,7 +90,7 @@ if __name__ == '__main__':
 
             elif cmd.afe_serial_number:
                 try:
-                    calib = AFECalib.download(http_client, cmd.afe_serial_number)
+                    calib = AFECalib.download(cmd.afe_serial_number)
 
                 except HTTPException as ex:
                     print("afe_calib: %s" % ex, file=sys.stderr)
@@ -102,7 +98,7 @@ if __name__ == '__main__':
 
             else:
                 try:
-                    calib = DSICalib.download(http_client, cmd.sensor_serial_number)
+                    calib = DSICalib.download(cmd.sensor_serial_number)
                     calib.calibrated_on = cmd.sensor_calibration_date
 
                 except HTTPException as ex:

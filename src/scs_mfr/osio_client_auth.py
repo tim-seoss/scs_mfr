@@ -37,8 +37,6 @@ scs_mfr/osio_project
 
 import sys
 
-from scs_core.client.http_client import HTTPClient
-
 from scs_core.data.json import JSONify
 
 from scs_core.gas.afe_calib import AFECalib
@@ -111,14 +109,11 @@ if __name__ == '__main__':
         print("osio_client_auth: %s" % afe_calib, file=sys.stderr)
         sys.stderr.flush()
 
-    # HTTPClient...
-    http_client = HTTPClient(False)
-
     # User manager...
-    user_manager = UserManager(http_client, api_auth.api_key)
+    user_manager = UserManager(api_auth.api_key)
 
     # Device manager...
-    device_manager = DeviceManager(http_client, api_auth.api_key)
+    device_manager = DeviceManager(api_auth.api_key)
 
     # check for existing registration...
     device = device_manager.find_for_name(api_auth.org_id, system_id.box_label())
