@@ -31,6 +31,28 @@ DOCUMENT EXAMPLE
 SEE ALSO
 scs_dev/pressure_sampler
 scs_mfr/mpl115a2_conf
+
+  File "/home/scs/SCS/scs_host_bbe_southern/src/scs_host/bus/i2c.py", line 92, in read_cmd
+    iter(cmd)
+TypeError: 'int' object is not iterable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "./mpl115a2_calib.py", line 90, in <module>
+    barometer.init()
+  File "/home/scs/SCS/scs_dfe_eng/src/scs_dfe/climate/mpl115a2.py", line 86, in init
+    self.__a0 = self.__REG_A0.read()
+  File "/home/scs/SCS/scs_dfe_eng/src/scs_dfe/climate/mpl115a2_reg.py", line 58, in read
+    raw_value = self.__read_raw()
+  File "/home/scs/SCS/scs_dfe_eng/src/scs_dfe/climate/mpl115a2_reg.py", line 72, in __read_raw
+    values = I2C.read_cmd(self.__reg_addr, 2)
+  File "/home/scs/SCS/scs_host_bbe_southern/src/scs_host/bus/i2c.py", line 96, in read_cmd
+    cls.write(cmd)
+  File "/home/scs/SCS/scs_host_bbe_southern/src/scs_host/bus/i2c.py", line 121, in write
+    I2C.__FW.write(bytearray(values))
+OSError: [Errno 121] Remote I/O error
+
 """
 
 import sys

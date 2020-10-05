@@ -72,7 +72,7 @@ if __name__ == '__main__':
         if conf is None and not cmd.is_complete():
             print("csv_logger_conf: No configuration is present. You must therefore set all fields:", file=sys.stderr)
             cmd.print_help(sys.stderr)
-            exit(1)
+            exit(2)
 
         root_path = conf.root_path if cmd.root_path is None else cmd.root_path
         delete_oldest = conf.delete_oldest if cmd.delete_oldest is None else cmd.delete_oldest

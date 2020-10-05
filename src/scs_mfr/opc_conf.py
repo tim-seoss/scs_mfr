@@ -103,7 +103,7 @@ if __name__ == '__main__':
             print("opc_conf: No configuration is stored. You must therefore set the required fields.",
                   file=sys.stderr)
             cmd.print_help(sys.stderr)
-            exit(1)
+            exit(2)
 
         model = cmd.model if cmd.model else conf.model
         sample_period = cmd.sample_period if cmd.sample_period else conf.sample_period

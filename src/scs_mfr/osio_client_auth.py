@@ -129,7 +129,7 @@ if __name__ == '__main__':
             print("osio_client_auth: No device is registered. You must therefore set a user and location.",
                   file=sys.stderr)
             cmd.print_help(sys.stderr)
-            exit(1)
+            exit(2)
 
         if not cmd.set():
             exit(0)

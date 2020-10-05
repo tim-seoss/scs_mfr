@@ -77,7 +77,7 @@ if __name__ == '__main__':
         if system_id is None and not cmd.is_complete():
             print("system_id: No ID is present. You must therefore set all fields:", file=sys.stderr)
             cmd.print_help(sys.stderr)
-            exit(1)
+            exit(2)
 
         vendor_id = system_id.vendor_id if cmd.vendor_id is None else cmd.vendor_id
         model_id = system_id.model_id if cmd.model_id is None else cmd.model_id
