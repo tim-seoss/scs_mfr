@@ -31,36 +31,15 @@ DOCUMENT EXAMPLE
 SEE ALSO
 scs_dev/pressure_sampler
 scs_mfr/mpl115a2_conf
-
-  File "/home/scs/SCS/scs_host_bbe_southern/src/scs_host/bus/i2c.py", line 92, in read_cmd
-    iter(cmd)
-TypeError: 'int' object is not iterable
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./mpl115a2_calib.py", line 90, in <module>
-    barometer.init()
-  File "/home/scs/SCS/scs_dfe_eng/src/scs_dfe/climate/mpl115a2.py", line 86, in init
-    self.__a0 = self.__REG_A0.read()
-  File "/home/scs/SCS/scs_dfe_eng/src/scs_dfe/climate/mpl115a2_reg.py", line 58, in read
-    raw_value = self.__read_raw()
-  File "/home/scs/SCS/scs_dfe_eng/src/scs_dfe/climate/mpl115a2_reg.py", line 72, in __read_raw
-    values = I2C.read_cmd(self.__reg_addr, 2)
-  File "/home/scs/SCS/scs_host_bbe_southern/src/scs_host/bus/i2c.py", line 96, in read_cmd
-    cls.write(cmd)
-  File "/home/scs/SCS/scs_host_bbe_southern/src/scs_host/bus/i2c.py", line 121, in write
-    I2C.__FW.write(bytearray(values))
-OSError: [Errno 121] Remote I/O error
-
 """
 
 import sys
 
+from scs_core.climate.mpl115a2_calib import MPL115A2Calib
 from scs_core.data.json import JSONify
 
 from scs_dfe.climate.mpl115a2 import MPL115A2
-from scs_core.climate.mpl115a2_calib import MPL115A2Calib
+from scs_dfe.climate.mpl115a2_conf import MPL115A2Conf
 from scs_dfe.climate.sht_conf import SHTConf
 
 from scs_host.bus.i2c import I2C
@@ -92,6 +71,13 @@ if __name__ == '__main__':
 
         # ------------------------------------------------------------------------------------------------------------
         # resources...
+
+        # MPL115A2Conf...
+        conf = MPL115A2Conf.load(Host)
+
+        if conf is None:
+            print("mpl115a2_calib: MPL115A2Conf not available.", file=sys.stderr)
+            exit(1)
 
         # SHT...
         sht_conf = SHTConf.load(Host)
@@ -148,6 +134,9 @@ if __name__ == '__main__':
 
     # ----------------------------------------------------------------------------------------------------------------
     # end...
+
+    except OSError:
+        print("mpl115a2_calib: MPL115A2 not available", file=sys.stderr)
 
     finally:
         I2C.close()
