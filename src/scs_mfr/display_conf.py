@@ -78,7 +78,7 @@ if __name__ == '__main__':
     # validate...
 
     if conf is None and cmd.set() and not cmd.is_complete():
-        print("display_conf: No configuration is stored. You must therefore set all fields:", file=sys.stderr)
+        print("display_conf: No configuration is stored - you must therefore set all fields.", file=sys.stderr)
         cmd.print_help(sys.stderr)
         exit(2)
 
