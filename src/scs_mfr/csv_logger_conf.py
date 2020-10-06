@@ -70,7 +70,7 @@ if __name__ == '__main__':
 
     if cmd.set():
         if conf is None and not cmd.is_complete():
-            print("csv_logger_conf: No configuration is present. You must therefore set all fields:", file=sys.stderr)
+            print("csv_logger_conf: No configuration is present - you must therefore set all fields.", file=sys.stderr)
             cmd.print_help(sys.stderr)
             exit(2)
 
