@@ -68,9 +68,9 @@ if __name__ == '__main__':
 
     if cmd.set():
         if conf is None and not cmd.is_complete():
-            print("scd30_conf: No configuration is stored. You must therefore set both fields.", file=sys.stderr)
+            print("scd30_conf: No configuration is stored - you must therefore set both fields.", file=sys.stderr)
             cmd.print_help(sys.stderr)
-            exit(1)
+            exit(2)
 
         sample_interval = cmd.sample_interval if cmd.sample_interval is not None else conf.sample_interval
         temperature_offset = cmd.temperature_offset if cmd.temperature_offset is not None else conf.temperature_offset

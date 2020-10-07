@@ -35,10 +35,11 @@ scs_mfr/mpl115a2_conf
 
 import sys
 
+from scs_core.climate.mpl115a2_calib import MPL115A2Calib
 from scs_core.data.json import JSONify
 
 from scs_dfe.climate.mpl115a2 import MPL115A2
-from scs_core.climate.mpl115a2_calib import MPL115A2Calib
+from scs_dfe.climate.mpl115a2_conf import MPL115A2Conf
 from scs_dfe.climate.sht_conf import SHTConf
 
 from scs_host.bus.i2c import I2C
@@ -70,6 +71,13 @@ if __name__ == '__main__':
 
         # ------------------------------------------------------------------------------------------------------------
         # resources...
+
+        # MPL115A2Conf...
+        conf = MPL115A2Conf.load(Host)
+
+        if conf is None:
+            print("mpl115a2_calib: MPL115A2Conf not available.", file=sys.stderr)
+            exit(1)
 
         # SHT...
         sht_conf = SHTConf.load(Host)
@@ -126,6 +134,9 @@ if __name__ == '__main__':
 
     # ----------------------------------------------------------------------------------------------------------------
     # end...
+
+    except OSError:
+        print("mpl115a2_calib: MPL115A2 not available", file=sys.stderr)
 
     finally:
         I2C.close()
