@@ -25,7 +25,7 @@ class CmdAWSGroupSetup(object):
                                  help="view the current group configuration")
 
         self.__parser.add_option("--set", "-s", action="store_true", dest="set", default=False,
-                                 help="view the current group configuration")
+                                 help="set the group configuration")
 
         self.__parser.add_option("--machine-learning", "-m", action="store_true", dest="use_ml", default=False,
                                  help="enable machine learning resources for this group")
