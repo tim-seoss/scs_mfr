@@ -60,9 +60,11 @@ def create_aws_client():
 
     return client
 
+
 def return_group_name():
     host_name = socket.gethostname()
     return host_name + "-group"
+
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -81,13 +83,11 @@ if __name__ == '__main__':
         print("aws_group_setup: %s" % cmd, file=sys.stderr)
         sys.stderr.flush()
 
-
     # ----------------------------------------------------------------------------------------------------------------
     # resources...
 
     aws_group_name = cmd.aws_group_name if cmd.aws_group_name else return_group_name()
     aws_region = "us-west-2"
-
 
     # ----------------------------------------------------------------------------------------------------------------
     # run...

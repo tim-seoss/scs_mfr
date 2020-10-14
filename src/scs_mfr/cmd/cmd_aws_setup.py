@@ -16,7 +16,8 @@ class CmdAWSSetup(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-s] [-g GROUP_NAME] [-c CORE_NAME] [-v] ", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [-s] [-g GROUP_NAME] [-c CORE_NAME] [-v] ",
+                                              version="%prog 1.0")
         # optional...
         self.__parser.add_option("--setup", "-s", action="store_true", dest="setup", default=False,
                                  help="setup the device")
