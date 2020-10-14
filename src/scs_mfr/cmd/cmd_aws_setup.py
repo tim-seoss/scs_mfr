@@ -16,13 +16,16 @@ class CmdAWSSetup(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-g GROUP_NAME] [-c CORE_NAME] [-v] ", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [-s] [-g GROUP_NAME] [-c CORE_NAME] [-v] ", version="%prog 1.0")
         # optional...
+        self.__parser.add_option("--setup", "-s", action="store_true", dest="setup", default=False,
+                                 help="setup the device")
+
         self.__parser.add_option("--group-name", "-g", action="store", dest="group_name", default=False,
-                                 help="the name of the group to create")
+                                 help="(optional) overwrite the name of the group to create")
 
         self.__parser.add_option("--core-name", "-c", action="store", dest="core_name", default=False,
-                                 help="the name of the core to create")
+                                 help="(optional) overwrite the name of the core to create")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
@@ -32,11 +35,15 @@ class CmdAWSSetup(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        if not bool(self.group_name) or not bool(self.core_name):
+        if not bool(self.setup):
             return False
         return True
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    @property
+    def setup(self):
+        return self.__opts.setup
 
     @property
     def group_name(self):
@@ -56,5 +63,6 @@ class CmdAWSSetup(object):
         self.__parser.print_help(file)
 
     def __str__(self, *args, **kwargs):
-        return "CmdAWSSetup:{group-name:%s, core-name:%s, verbose:%s}" % (self.group_name, self.core_name, self.verbose)
+        return "CmdAWSSetup:{setup:%s, group-name:%s, core-name:%s, verbose:%s}" % (self.setup, self.group_name,
+                                                                                    self.core_name, self.verbose)
 

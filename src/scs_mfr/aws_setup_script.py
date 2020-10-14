@@ -4,6 +4,8 @@
 Created on 09 Oct 2020
 @author: Jade Page (jade.page@southcoastscience.com)
 """
+import os
+import socket
 
 import boto3
 import sys
@@ -12,6 +14,7 @@ from getpass import getpass
 
 from scs_mfr.cmd.cmd_aws_setup import CmdAWSSetup
 from scs_core.aws.greengrass.aws_setup_script import AWSSetup
+
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -36,9 +39,19 @@ def create_aws_clients():
             region_name='us-west-2'
         )
     else:
-        iot_client = boto3.client('iot', region_name='us-west-2')#
+        iot_client = boto3.client('iot', region_name='us-west-2')  #
         gg_client = boto3.client('greengrass', region_name='us-west-2')
     return iot_client, gg_client
+
+
+def return_group_name():
+    host_name = socket.gethostname()
+    return host_name + "-group"
+
+
+def return_core_name():
+    host_name = socket.gethostname()
+    return host_name + "-core"
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -57,10 +70,17 @@ if __name__ == '__main__':
     if cmd.verbose:
         print("aws_group_setup: %s" % cmd, file=sys.stderr)
         sys.stderr.flush()
+
+    # ----------------------------------------------------------------------------------------------------------------
+    # Check sudo
+    if os.geteuid() != 0:
+        exit("You need to have root privileges to run this script.\nPlease run with 'sudo'.")
+
     # ----------------------------------------------------------------------------------------------------------------
     # resources
-    group_name = cmd.group_name
-    core_name = cmd.core_name
+    group_name = cmd.group_name if cmd.group_name else return_group_name()
+    core_name = cmd.core_name if cmd.core_name else return_core_name()
+
     # ----------------------------------------------------------------------------------------------------------------
 
     # run...
@@ -68,3 +88,4 @@ if __name__ == '__main__':
     aws_setup = AWSSetup(iot_client, gg_client, core_name, group_name)
     aws_setup.setup_device()
 
+# --------------------------------------------------------------------------------------------------------------------
