@@ -31,7 +31,7 @@ class CmdAWSGroupSetup(object):
                                  help="enable machine learning resources for this group")
 
         self.__parser.add_option("--aws-group-name", "-a", type="string", action="store", dest="aws_group_name",
-                                 help="the name of the AWS group to configure ")
+                                 help="override the name of the AWS group to configure ")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")

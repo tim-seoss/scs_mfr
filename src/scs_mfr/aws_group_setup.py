@@ -23,15 +23,16 @@ A conf file is placed in a default directory referencing the group name and when
 https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/greengrass.html
 """
 import boto3
-from getpass import getpass
+import socket
 import sys
+
+from getpass import getpass
 
 from botocore.exceptions import ClientError
 
 from scs_core.aws.greengrass.aws_group import AWSGroup
 from scs_core.aws.greengrass.aws_group_configurator import AWSGroupConfigurator
 from scs_core.aws.greengrass.gg_errors import ProjectMissingError
-
 from scs_core.data.json import JSONify
 
 from scs_host.sys.host import Host
@@ -59,6 +60,9 @@ def create_aws_client():
 
     return client
 
+def return_group_name():
+    host_name = socket.gethostname()
+    return host_name + "-group"
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -81,7 +85,7 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # resources...
 
-    # aws_group_name = my_group_name if cmd.aws_group_name is None else cmd.aws_group_name
+    aws_group_name = cmd.aws_group_name if cmd.aws_group_name else return_group_name()
     aws_region = "us-west-2"
 
 
@@ -99,7 +103,7 @@ if __name__ == '__main__':
                 print("Operation cancelled")
                 exit()
         try:
-            aws_configurator = AWSGroupConfigurator(cmd.aws_group_name, create_aws_client(), cmd.use_ml)
+            aws_configurator = AWSGroupConfigurator(aws_group_name, create_aws_client(), cmd.use_ml)
 
             aws_configurator.collect_information(Host)
             aws_configurator.define_aws_group_resources(Host)
