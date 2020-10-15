@@ -35,8 +35,9 @@ class CmdAWSSetup(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    @staticmethod
-    def is_valid():
+    def is_valid(self):
+        if not self.setup and bool(self.group_name) or bool(self.core_name):
+            return False
         return True
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -65,4 +66,3 @@ class CmdAWSSetup(object):
     def __str__(self, *args, **kwargs):
         return "CmdAWSSetup:{setup:%s, group-name:%s, core-name:%s, verbose:%s}" % (self.setup, self.group_name,
                                                                                     self.core_name, self.verbose)
-

@@ -12,10 +12,10 @@ The group must already exist and the ML lambdas must be associated with the gree
 keys are given
 
 SYNOPSIS
-aws_group_setup.py [{ [-a AWS_Group_Name] [-c] | -m }] [-v]
+aws_group_setup.py [{  [-c] | [-s] [-m] [-a AWS_Group_Name]}] [-v]
 
 EXAMPLES
-./aws_group_setup.py -a scs-test-001-group -m
+./aws_group_setup.py -s -a scs-test-001-group -m
 
 FILES
 A conf file is placed in a default directory referencing the group name and when it was created

@@ -17,7 +17,7 @@ class CmdAWSGroupSetup(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog { -c | -s [-m] } [-a AWS_GROUP_NAME] [-v]",
+        self.__parser = optparse.OptionParser(usage="%prog { -c | -s } [-m] [-a AWS_GROUP_NAME] [-v]",
                                               version="%prog 1.0")
 
         # optional...
@@ -43,9 +43,7 @@ class CmdAWSGroupSetup(object):
     def is_valid(self):
         if bool(self.show_current) == bool(self.set):
             return False
-
         return True
-
 
     # ----------------------------------------------------------------------------------------------------------------
 
@@ -53,26 +51,21 @@ class CmdAWSGroupSetup(object):
     def show_current(self):
         return self.__opts.show_current
 
-
     @property
     def set(self):
         return self.__opts.set
-
 
     @property
     def use_ml(self):
         return self.__opts.use_ml
 
-
     @property
     def aws_group_name(self):
         return self.__opts.aws_group_name
 
-
     @property
     def verbose(self):
         return self.__opts.verbose
-
 
     # ----------------------------------------------------------------------------------------------------------------
 
