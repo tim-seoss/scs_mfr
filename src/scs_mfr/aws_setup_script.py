@@ -12,6 +12,8 @@ import sys
 
 from getpass import getpass
 
+from scs_host.sys.host import Host
+
 from scs_mfr.cmd.cmd_aws_setup import CmdAWSSetup
 from scs_core.aws.greengrass.aws_setup_script import AWSSetup
 
@@ -19,6 +21,7 @@ from scs_core.aws.greengrass.aws_setup_script import AWSSetup
 # --------------------------------------------------------------------------------------------------------------------
 
 
+# noinspection PyShadowingNames
 def create_aws_clients():
     access_key_secret = ""
     access_key_id = input("Enter AWS Access Key ID or leave blank to use environment variables: ")
@@ -84,8 +87,13 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
 
     # run...
-    iot_client, gg_client = create_aws_clients()
-    aws_setup = AWSSetup(iot_client, gg_client, core_name, group_name)
-    aws_setup.setup_device()
+    if cmd.setup:
+        iot_client, gg_client = create_aws_clients()
+        aws_setup = AWSSetup(iot_client, gg_client, core_name, group_name)
+        aws_setup.setup_device()
+        aws_setup.save(Host)
+    else:
+        aws_setup = AWSSetup.load(Host)
+        print(aws_setup.as_json())
 
 # --------------------------------------------------------------------------------------------------------------------
