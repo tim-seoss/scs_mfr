@@ -12,7 +12,7 @@ The group must already exist and the ML lambdas must be associated with the gree
 keys are given
 
 SYNOPSIS
-aws_group_setup.py [{  [-c] | [-s] [-m] [-a AWS_Group_Name]}] [-v]
+aws_group_setup.py [{  [-c] | [-s] } [-m] [-a AWS_Group_Name]] [-v]
 
 EXAMPLES
 ./aws_group_setup.py -s -a scs-test-001-group -m
