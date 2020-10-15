@@ -4,6 +4,7 @@
 Created on 09 Oct 2020
 @author: Jade Page (jade.page@southcoastscience.com)
 """
+import json
 import os
 import socket
 
@@ -16,7 +17,6 @@ from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_aws_setup import CmdAWSSetup
 from scs_core.aws.greengrass.aws_setup_script import AWSSetup
-
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -94,6 +94,10 @@ if __name__ == '__main__':
         aws_setup.save(Host)
     else:
         aws_setup = AWSSetup.load(Host)
-        print(aws_setup.as_json())
+        if aws_setup:
+            json_file = aws_setup.as_json()
+            print(json.dumps(json_file))
+        else:
+            print("No identity found")
 
 # --------------------------------------------------------------------------------------------------------------------
