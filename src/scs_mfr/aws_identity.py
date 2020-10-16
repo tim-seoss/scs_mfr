@@ -12,7 +12,7 @@ The script could also be used to setup a "blank" greengrass install, which does 
 does already have the greengrass software
 
 SYNOPSIS
-aws_greengrass_identity.py [{ [-s] [-g GROUP_NAME] [-c CORE_NAME] [-v] }]
+aws_identity.py [{ [-s] [-g GROUP_NAME] [-c CORE_NAME] [-v] }]
 If no group name is provided, the host name will be read from the device to generate it.
 If no core name is provided, the host name will be read from the device to generate it.
 If the set flag is not provided, the current identity will be read from the persistent file.
@@ -47,7 +47,7 @@ from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_aws_greengrass_identity import CmdAWSSetup
 
-from scs_core.aws.greengrass.aws_greengrass_identity import AWSSetup
+from scs_core.aws.greengrass.aws_identity import AWSSetup
 
 
 # --------------------------------------------------------------------------------------------------------------------
