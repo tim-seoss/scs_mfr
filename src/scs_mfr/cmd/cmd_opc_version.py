@@ -16,7 +16,7 @@ class CmdOPCVersion(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog { -w | -s } [-f FILE] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog { -w | -s } [-n NAME] [-v]", version="%prog 1.0")
 
         # compulsory...
         self.__parser.add_option("--firmware", "-w", action="store_true", dest="firmware", default=False,
@@ -26,8 +26,8 @@ class CmdOPCVersion(object):
                                  help="report serial number")
 
         # optional...
-        self.__parser.add_option("--file", "-f", type="string", nargs=1, action="store", dest="file",
-                                 help="override default conf file location")
+        self.__parser.add_option("--name", "-n", type="string", nargs=1, action="store", dest="name",
+                                 help="the name of the OPC configuration")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
@@ -57,8 +57,8 @@ class CmdOPCVersion(object):
 
 
     @property
-    def file(self):
-        return self.__opts.file
+    def name(self):
+        return self.__opts.name
 
 
     @property
@@ -73,5 +73,5 @@ class CmdOPCVersion(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdOPCVersion:{firmware:%s, serial:%s, file:%s, verbose:%s}" % \
-               (self.firmware, self.serial, self.file, self.verbose)
+        return "CmdOPCVersion:{firmware:%s, serial:%s, name:%s, verbose:%s}" % \
+               (self.firmware, self.serial, self.name, self.verbose)
