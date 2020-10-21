@@ -31,7 +31,7 @@ Alternate exegetes (data interpretation models) can be added or removed - availa
 the --help flag.
 
 SYNOPSIS
-opc_conf.py [{ [-m MODEL] [-s SAMPLE_PERIOD] [-z { 0 | 1 }] [-p { 0 | 1 }]
+opc_conf.py [-n NAME] [{ [-m MODEL] [-s SAMPLE_PERIOD] [-z { 0 | 1 }] [-p { 0 | 1 }]
 [-b BUS] [-a ADDRESS] [-i INFERENCE_UDS] [-e EXEGETE] [-r EXEGETE] | -d }] [-v]
 
 EXAMPLES
@@ -92,7 +92,7 @@ if __name__ == '__main__':
     # resources...
 
     # OPCConf...
-    conf = OPCConf.load(Host)
+    conf = OPCConf.load(Host, name=cmd.name)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -143,7 +143,7 @@ if __name__ == '__main__':
         conf.save(Host)
 
     elif cmd.delete:
-        conf.delete(Host)
+        conf.delete(Host, name=cmd.name)
         conf = None
 
     if conf:

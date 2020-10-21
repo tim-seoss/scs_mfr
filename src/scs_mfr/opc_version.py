@@ -13,7 +13,7 @@ The opc_version utility exits with 1 if no version string could be read, and exi
 command can therefore be used to test for the presence / operability of an OPC.
 
 SYNOPSIS
-opc_version.py { -w | -s } [-f FILE] [-v]
+opc_version.py { -w | -s } [-n NAME] [-v]
 
 EXAMPLES
 ./opc_version.py -w -v
@@ -65,7 +65,7 @@ if __name__ == '__main__':
         # resources...
 
         # OPCConf...
-        opc_conf = OPCConf.load_from_file(cmd.file) if cmd.file else OPCConf.load(Host)
+        opc_conf = OPCConf.load(Host, name=cmd.name)
 
         if opc_conf is None:
             print("opc_version: OPCConf not available.", file=sys.stderr)
