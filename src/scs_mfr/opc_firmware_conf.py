@@ -10,7 +10,7 @@ The opc_conf utility is used to inspect or update Alphasense OPC configuration v
 tested, then subsequently committed to the OPC's non-volatile memory.
 
 SYNOPSIS
-opc_firmware_conf.py [-s FIELD VALUE] [-c] [-v]
+opc_firmware_conf.py [-n NAME] [{ -s FIELD VALUE | -f CONF_FILE }] [-c] [-v]
 
 EXAMPLES
 ./opc_firmware_conf.py -v -s bin-weighting-index 2 -c
@@ -81,7 +81,7 @@ if __name__ == '__main__':
         # resources...
 
         # OPCConf...
-        opc_conf = OPCConf.load(Host)
+        opc_conf = OPCConf.load(Host, name=cmd.name)
 
         if opc_conf is None:
             print("opc_firmware_conf: OPCConf not available.", file=sys.stderr)
