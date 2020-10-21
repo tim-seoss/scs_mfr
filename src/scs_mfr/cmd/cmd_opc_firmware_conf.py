@@ -17,10 +17,13 @@ class CmdOPCFirmwareConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self):
-        self.__parser = optparse.OptionParser(usage="%prog [{ -s FIELD VALUE | -f CONF_FILE }] [-c] [-v]",
+        self.__parser = optparse.OptionParser(usage="%prog [-n NAME] [{ -s FIELD VALUE | -f CONF_FILE }] [-c] [-v]",
                                               version="%prog 1.0")
 
         # optional...
+        self.__parser.add_option("--name", "-n", type="string", nargs=1, action="store", dest="name",
+                                 help="the name of the OPC configuration")
+
         self.__parser.add_option("--set", "-s", type="string", nargs=2, action="store", dest="set",
                                  help="set FIELD to numeric VALUE")
 
@@ -54,6 +57,11 @@ class CmdOPCFirmwareConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
+    def name(self):
+        return self.__opts.name
+
+
+    @property
     def set_field(self):
         return None if self.__opts.set is None else self.__opts.set[0]
 
@@ -85,5 +93,5 @@ class CmdOPCFirmwareConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdOPCConf:{set:%s, file:%s, commit:%s, verbose:%s}" % \
-               (self.__opts.set, self.__opts.file, self.__opts.commit, self.verbose)
+        return "CmdOPCConf:{name:%s, set:%s, file:%s, commit:%s, verbose:%s}" % \
+               (self.name, self.__opts.set, self.__opts.file, self.__opts.commit, self.verbose)
