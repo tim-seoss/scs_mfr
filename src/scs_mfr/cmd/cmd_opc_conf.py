@@ -27,12 +27,15 @@ class CmdOPCConf(object):
         exegete_names = ExegeteCatalogue.model_names()
         exegetes = ' | '.join(exegete_names) if exegete_names else "none available"
 
-        self.__parser = optparse.OptionParser(usage="%prog [{ [-m MODEL] [-s SAMPLE_PERIOD] [-z { 0 | 1 }] "
+        self.__parser = optparse.OptionParser(usage="%prog [-n NAME] [{ [-m MODEL] [-s SAMPLE_PERIOD] [-z { 0 | 1 }] "
                                                     "[-p { 0 | 1 }] [-b BUS] [-a ADDRESS] [-i INFERENCE_UDS] "
                                                     "[-e EXEGETE] [-r EXEGETE] | -d }] [-v]",
                                               version="%prog 1.0")
 
         # optional...
+        self.__parser.add_option("--name", "-n", type="string", nargs=1, action="store", dest="name",
+                                 help="the name of the OPC configuration")
+
         self.__parser.add_option("--model", "-m", type="string", nargs=1, action="store", dest="model",
                                  help="set MODEL { N2 | N3 | R1 | S30 }")
 
@@ -110,6 +113,11 @@ class CmdOPCConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
+    def name(self):
+        return self.__opts.name
+
+
+    @property
     def model(self):
         return self.__opts.model
 
@@ -171,7 +179,9 @@ class CmdOPCConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdOPCConf:{model:%s, sample_period:%s, restart_on_zeroes:%s, power_saving:%s, bus:%s, address:%s, " \
-               "inference:%s, use_exegete:%s, remove_exegete:%s, delete:%s, verbose:%s}" % \
-               (self.model, self.sample_period, self.restart_on_zeroes, self.power_saving, self.bus, self.address,
-                self.inference, self.use_exegete, self.remove_exegete, self.delete, self.verbose)
+        return "CmdOPCConf:{name:%s, model:%s, sample_period:%s, restart_on_zeroes:%s, power_saving:%s, " \
+               "bus:%s, address:%s, inference:%s, use_exegete:%s, remove_exegete:%s, " \
+               "delete:%s, verbose:%s}" % \
+               (self.name, self.model, self.sample_period, self.restart_on_zeroes, self.power_saving,
+                self.bus, self.address, self.inference, self.use_exegete, self.remove_exegete,
+                self.delete, self.verbose)
