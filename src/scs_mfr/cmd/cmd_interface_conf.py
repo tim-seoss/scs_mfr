@@ -19,13 +19,17 @@ class CmdInterfaceConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self):
-        self.__parser = optparse.OptionParser(usage="%prog [{ -m MODEL | -d }] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ [-m MODEL] [-i INFERENCE_UDS] | -d }] [-v]",
+                                              version="%prog 1.0")
 
         models = ' | '.join(InterfaceConf.models())
 
         # optional...
         self.__parser.add_option("--model", "-m", type="string", nargs=1, action="store", dest="model",
                                  help="interface model { %s }" % models)
+
+        self.__parser.add_option("--inference", "-i", type="string", nargs=1, action="store", dest="inference",
+                                 help="set inference server UDS")
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="delete the interface configuration")
@@ -49,7 +53,7 @@ class CmdInterfaceConf(object):
 
 
     def set(self):
-        return self.__opts.model is not None
+        return self.model is not None or self.inference is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -57,6 +61,11 @@ class CmdInterfaceConf(object):
     @property
     def model(self):
         return self.__opts.model
+
+
+    @property
+    def inference(self):
+        return self.__opts.inference
 
 
     @property
@@ -76,5 +85,5 @@ class CmdInterfaceConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdInterfaceConf:{source:%s, delete:%s, verbose:%s}" % \
-               (self.__opts.source, self.delete, self.verbose)
+        return "CmdInterfaceConf:{source:%s, inference:%s, delete:%s, verbose:%s}" % \
+               (self.__opts.source, self.inference, self.delete, self.verbose)
