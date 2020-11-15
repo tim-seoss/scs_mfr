@@ -22,7 +22,7 @@ class AFETest(Test):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, interface, verbose):
-        Test.__init__(self, interface, verbose)
+        super().__init__(interface, verbose)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ class AFETest(Test):
             I2C.open(Host.I2C_SENSORS)
 
             # AFE...
-            afe = self.__interface.gas_sensors(Host)
+            afe = self.interface.gas_sensors(Host)
 
             # test...
             self._datum = afe.sample()
