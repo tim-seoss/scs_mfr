@@ -22,7 +22,7 @@ class SHTTest(Test):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, name, sht, interface, verbose):
-        Test.__init__(self, interface, verbose)
+        super().__init__(interface, verbose)
 
         self.__name = name
         self.__sht = sht

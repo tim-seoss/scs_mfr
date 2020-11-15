@@ -22,7 +22,7 @@ class Pt1000Test(Test):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, interface, verbose):
-        Test.__init__(self, interface, verbose)
+        super().__init__(interface, verbose)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -35,11 +35,11 @@ class Pt1000Test(Test):
             I2C.open(Host.I2C_SENSORS)
 
             # AFE...
-            if self.__interface.pt1000() is None:
+            if self.interface.pt1000(Host) is None:
                 print("No Pt1000 I2C address set - skipping.", file=sys.stderr)
                 return False
 
-            afe = self.__interface.gas_sensors(Host)
+            afe = self.interface.gas_sensors(Host)
 
             # test...
             self._datum = afe.sample_pt1000()
