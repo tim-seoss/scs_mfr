@@ -22,12 +22,68 @@ class DFETestDatum(Sample):
         """
         Constructor
         """
+        super().__init__(tag, rec)
+
+        self.__host_serial_number = host_serial_number                  # string
+        self.__dfe_serial_number = dfe_serial_number                    # string
+        self.__subjects = subjects                                      # dict of string: string
+        self.__afe = afe                                                # MCUDatum
+        self.__result = result                                          # string
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    @classmethod
+    def has_invalid_value(cls):
+        return False
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    @property
+    def values(self):
         jdict = OrderedDict()
 
-        jdict['host-sn'] = host_serial_number
-        jdict['dfe-sn'] = dfe_serial_number
-        jdict['result'] = result
-        jdict['subjects'] = subjects
-        jdict['afe'] = afe
+        jdict['host-sn'] = self.host_serial_number
+        jdict['dfe-sn'] = self.dfe_serial_number
+        jdict['result'] = self.result
+        jdict['subjects'] = self.subjects
+        jdict['afe'] = self.afe
 
-        super().__init__(tag, None, rec, jdict)
+        return jdict
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    @property
+    def host_serial_number(self):
+        return self.__host_serial_number
+
+
+    @property
+    def dfe_serial_number(self):
+        return self.__dfe_serial_number
+
+
+    @property
+    def subjects(self):
+        return self.__subjects
+
+
+    @property
+    def afe(self):
+        return self.__afe
+
+
+    @property
+    def result(self):
+        return self.__result
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def __str__(self, *args, **kwargs):
+        return "StatusSample:{tag:%s, rec:%s, src:%s, host_serial_number:%s, dfe_serial_number:%s, " \
+               "subjects:%s,  afe:%s, result:%s}" % \
+            (self.tag, self.rec, self.src, self.host_serial_number, self.dfe_serial_number,
+             self.subjects, self.afe, self.result)
