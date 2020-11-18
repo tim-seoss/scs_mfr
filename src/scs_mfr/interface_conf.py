@@ -26,13 +26,13 @@ Options are:
 The scs_dev sampler processes must be restarted for changes to take effect.
 
 SYNOPSIS
-interface_conf.py [{ -m MODEL | -d }] [-v]
+interface_conf.py [{ [-m MODEL] [-i INFERENCE_UDS] | -d }] [-v]
 
 EXAMPLES
-./interface_conf.py -m DFE
+./interface_conf.py -m DFE - i /home/scs/SCS/pipes/lambda-model-gas-s1.uds
 
 DOCUMENT EXAMPLE
-{"model": "DFE"}
+{"model": "DFE", "inf": "/home/scs/SCS/pipes/lambda-model-gas-s1.uds"}
 
 FILES
 ~/SCS/conf/interface_conf.json
@@ -84,7 +84,10 @@ if __name__ == '__main__':
     # run...
 
     if cmd.set():
-        conf = InterfaceConf(cmd.model)
+        model = cmd.model if cmd.model else conf.model
+        inference = cmd.inference if cmd.inference else conf.inference
+
+        conf = InterfaceConf(model, inference)
         conf.save(Host)
 
     elif cmd.delete and conf is not None:

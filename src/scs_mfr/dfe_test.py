@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-# noinspection PyUnboundLocalVariable
 """
 Created on 29 Jan 2017
 
@@ -93,7 +92,7 @@ if __name__ == '__main__':
     interface = conf.interface()
 
     if cmd.verbose:
-        print(system_id, file=sys.stderr)
+        print(interface, file=sys.stderr)
         sys.stderr.flush()
 
     reporter = DFETestReporter(cmd.verbose)
