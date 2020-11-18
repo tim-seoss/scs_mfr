@@ -46,7 +46,7 @@ class CmdInterfaceConf(object):
         if self.set() and self.delete:
             return False
 
-        if self.set() and self.model not in InterfaceConf.models():
+        if self.set() and self.model is not None and self.model not in InterfaceConf.models():
             return False
 
         return True
