@@ -36,8 +36,9 @@ class CmdAWSSetup(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        if not self.setup and bool(self.group_name) or bool(self.core_name):
+        if not self.setup and (bool(self.group_name) or bool(self.core_name)):
             return False
+
         return True
 
     # ----------------------------------------------------------------------------------------------------------------
