@@ -18,7 +18,7 @@ If no core name is provided, the host name will be read from the device to gener
 If the set flag is not provided, the current identity will be read from the persistent file.
 
 EXAMPLES
-./aws_setup_script.py -s -g scs-test-003-group -c scs-test-003-core -v
+./aws_identity.py -s -g scs-test-003-group -c scs-test-003-core -v
 
 FILES
 A persistent file is placed in the conf directory when the identity is set, so that it can be read again later.
