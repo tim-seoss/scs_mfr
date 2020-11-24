@@ -22,17 +22,19 @@ A conf file is placed in a default directory referencing the group name and when
 
 https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/greengrass.html
 """
+
 import boto3
 import socket
 import sys
+from botocore.exceptions import ClientError
 
 from getpass import getpass
 
-from botocore.exceptions import ClientError
 
 from scs_core.aws.greengrass.aws_group import AWSGroup
 from scs_core.aws.greengrass.aws_group_configurator import AWSGroupConfigurator
 from scs_core.aws.greengrass.gg_errors import ProjectMissingError
+
 from scs_core.data.json import JSONify
 
 from scs_host.sys.host import Host
