@@ -65,5 +65,5 @@ class CmdAWSSetup(object):
         self.__parser.print_help(file)
 
     def __str__(self, *args, **kwargs):
-        return "CmdAWSSetup:{setup:%s, group-name:%s, core-name:%s, verbose:%s}" % (self.setup, self.group_name,
-                                                                                    self.core_name, self.verbose)
+        return "CmdAWSSetup:{setup:%s, group-name:%s, core-name:%s, verbose:%s}" % \
+               (self.setup, self.group_name, self.core_name, self.verbose)
