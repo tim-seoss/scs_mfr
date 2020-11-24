@@ -35,19 +35,19 @@ amazon itself and may be subject to change e.g. via obsolescence - check here:
 https://docs.aws.amazon.com/iot/latest/developerguide/server-authentication.html
 """
 
+import boto3
 import json
 import os
 import socket
-import boto3
 import sys
 
 from getpass import getpass
 
+from scs_core.aws.greengrass.aws_identity import AWSSetup
+
 from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_aws_greengrass_identity import CmdAWSSetup
-
-from scs_core.aws.greengrass.aws_identity import AWSSetup
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -106,11 +106,13 @@ if __name__ == '__main__':
 
     # ----------------------------------------------------------------------------------------------------------------
     # Check sudo
+
     if os.geteuid() != 0:
-        exit("You need to have root privileges to run this script.\nPlease run with 'sudo'.")
+        exit("You need to have root privileges to run this script.")
 
     # ----------------------------------------------------------------------------------------------------------------
     # resources
+
     group_name = cmd.group_name if cmd.group_name else return_group_name()
     core_name = cmd.core_name if cmd.core_name else return_core_name()
 
@@ -129,5 +131,3 @@ if __name__ == '__main__':
             print(json.dumps(json_file))
         else:
             print("No identity found")
-
-# --------------------------------------------------------------------------------------------------------------------
