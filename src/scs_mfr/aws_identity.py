@@ -108,7 +108,7 @@ if __name__ == '__main__':
     # Check sudo
 
     if os.geteuid() != 0:
-        exit("You need to have root privileges to run this script.\nPlease run as root.")
+        exit("You need to have root privileges to run this script.")
 
     # ----------------------------------------------------------------------------------------------------------------
     # resources
