@@ -124,10 +124,16 @@ if __name__ == '__main__':
             print("aws_group_setup: Project configuration not set.", file=sys.stderr)
 
     if cmd.show_current:
-        aws_group_info = AWSGroup(cmd.aws_group_name, create_aws_client())
 
-        aws_group_info.get_group_info_from_name()
-        aws_group_info.get_group_arns()
-        aws_group_info.output_current_info()
+        try:
+            aws_group_info = AWSGroup(cmd.aws_group_name, create_aws_client())
 
-        print(JSONify.dumps(aws_group_info))
+            aws_group_info.get_group_info_from_name()
+            aws_group_info.get_group_arns()
+            aws_group_info.output_current_info()
+
+            print(JSONify.dumps(aws_group_info))
+        except KeyError:
+            print("Group may not of been configured", file=sys.stderr)
+
+
