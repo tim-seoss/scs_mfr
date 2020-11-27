@@ -22,17 +22,19 @@ A conf file is placed in a default directory referencing the group name and when
 
 https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/greengrass.html
 """
+
 import boto3
 import socket
 import sys
+from botocore.exceptions import ClientError
 
 from getpass import getpass
 
-from botocore.exceptions import ClientError
 
 from scs_core.aws.greengrass.aws_group import AWSGroup
 from scs_core.aws.greengrass.aws_group_configurator import AWSGroupConfigurator
 from scs_core.aws.greengrass.gg_errors import ProjectMissingError
+
 from scs_core.data.json import JSONify
 
 from scs_host.sys.host import Host
@@ -122,10 +124,16 @@ if __name__ == '__main__':
             print("aws_group_setup: Project configuration not set.", file=sys.stderr)
 
     if cmd.show_current:
-        aws_group_info = AWSGroup(cmd.aws_group_name, create_aws_client())
 
-        aws_group_info.get_group_info_from_name()
-        aws_group_info.get_group_arns()
-        aws_group_info.output_current_info()
+        try:
+            aws_group_info = AWSGroup(cmd.aws_group_name, create_aws_client())
 
-        print(JSONify.dumps(aws_group_info))
+            aws_group_info.get_group_info_from_name()
+            aws_group_info.get_group_arns()
+            aws_group_info.output_current_info()
+
+            print(JSONify.dumps(aws_group_info))
+        except KeyError:
+            print("Group may not of been configured", file=sys.stderr)
+
+
