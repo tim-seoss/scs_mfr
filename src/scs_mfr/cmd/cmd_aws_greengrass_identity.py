@@ -36,8 +36,9 @@ class CmdAWSSetup(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        if not self.setup and bool(self.group_name) or bool(self.core_name):
+        if not self.setup and (bool(self.group_name) or bool(self.core_name)):
             return False
+
         return True
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -64,5 +65,5 @@ class CmdAWSSetup(object):
         self.__parser.print_help(file)
 
     def __str__(self, *args, **kwargs):
-        return "CmdAWSSetup:{setup:%s, group-name:%s, core-name:%s, verbose:%s}" % (self.setup, self.group_name,
-                                                                                    self.core_name, self.verbose)
+        return "CmdAWSSetup:{setup:%s, group-name:%s, core-name:%s, verbose:%s}" % \
+               (self.setup, self.group_name, self.core_name, self.verbose)
