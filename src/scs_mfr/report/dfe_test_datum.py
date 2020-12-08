@@ -27,7 +27,7 @@ class DFETestDatum(Sample):
         self.__host_serial_number = host_serial_number                  # string
         self.__dfe_serial_number = dfe_serial_number                    # string
         self.__subjects = subjects                                      # dict of string: string
-        self.__afe = afe                                                # MCUDatum
+        self.__afe = afe                                                # HostStatus
         self.__result = result                                          # string
 
 
