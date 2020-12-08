@@ -126,13 +126,17 @@ if __name__ == '__main__':
     if cmd.show_current:
 
         try:
-            aws_group_info = AWSGroup(cmd.aws_group_name, create_aws_client())
+            aws_group_info = AWSGroup(aws_group_name, create_aws_client())
 
             aws_group_info.get_group_info_from_name()
             aws_group_info.get_group_arns()
             aws_group_info.output_current_info()
 
-            print(JSONify.dumps(aws_group_info))
+            if cmd.indent:
+                print(JSONify.dumps(aws_group_info, indent=cmd.indent))
+            else:
+                print(JSONify.dumps(aws_group_info))
+
         except KeyError:
             print("Group may not of been configured", file=sys.stderr)
 
