@@ -26,10 +26,10 @@ https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/green
 import boto3
 import socket
 import sys
+
 from botocore.exceptions import ClientError
 
 from getpass import getpass
-
 
 from scs_core.aws.greengrass.aws_group import AWSGroup
 from scs_core.aws.greengrass.aws_group_configurator import AWSGroupConfigurator
@@ -138,6 +138,6 @@ if __name__ == '__main__':
                 print(JSONify.dumps(aws_group_info))
 
         except KeyError:
-            print("Group may not of been configured", file=sys.stderr)
+            print("Group may not have been configured", file=sys.stderr)
 
 
