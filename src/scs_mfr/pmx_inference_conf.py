@@ -1,36 +1,36 @@
 #!/usr/bin/env python3
 
 """
-Created on 22 Dec 2020
+Created on 23 Dec 2020
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The gps_conf utility is used to
+The pmx_inference_conf utility is used to
 
 The gases_sampler must be restarted for changes to take effect.
 
 SYNOPSIS
-gas_inference_conf.py [{ [-u UDS_PATH] [-i INTERFACE] [-s SPECIES RESOURCE_NAME] | [-r SPECIES] | -d }] [-v]
+pmx_inference_conf.py [{ [-u UDS_PATH] [-i INTERFACE] [-s SPECIES RESOURCE_NAME] | [-r SPECIES] | -d }] [-v]
 
 EXAMPLES
-./gas_inference_conf.py -u pipes/lambda-model-gas-s1.uds -i s1 -g NO2 /trained-models/no2-s1-2020q13/xgboost-model -v
+./pmx_inference_conf.py -u pipes/lambda-model-gas-s1.uds -i s1 -g NO2 /trained-models/no2-s1-2020q13/xgboost-model -v
 
 DOCUMENT EXAMPLE
 {"uds-path": "pipes/lambda-model-gas-s1.uds", "model-interface": "s1",
 "model-filenames": {"NO2": "/trained-models/no2-s1-2020q13/xgboost-model"}}
 
 FILES
-~/SCS/conf/gas_model_conf.json
+~/SCS/conf/pmx_model_conf.json
 
 SEE ALSO
-scs_dev/gases_sampler
+scs_dev/particulates_sampler
 """
 
 import sys
 
 from scs_core.data.json import JSONify
-from scs_core.model.gas.gas_model_conf import GasModelConf
+from scs_core.model.particulates.pmx_model_conf import PMxModelConf
 
 from scs_host.sys.host import Host
 
@@ -44,22 +44,22 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
-    cmd = CmdInferenceConf(GasModelConf.interfaces())
+    cmd = CmdInferenceConf(PMxModelConf.interfaces())
 
     if not cmd.is_valid():
         cmd.print_help(sys.stderr)
         exit(2)
 
     if cmd.verbose:
-        print("gas_inference_conf: %s" % cmd, file=sys.stderr)
+        print("pmx_inference_conf: %s" % cmd, file=sys.stderr)
         sys.stderr.flush()
 
 
     # ----------------------------------------------------------------------------------------------------------------
     # resources...
 
-    # GasModelConf...
-    conf = GasModelConf.load(Host)
+    # PMxModelConf...
+    conf = PMxModelConf.load(Host)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -67,7 +67,7 @@ if __name__ == '__main__':
 
     if cmd.set():
         if conf is None and not cmd.is_complete():
-            print("gas_inference_conf: No configuration is stored - you must therefore set all fields.",
+            print("pmx_inference_conf: No configuration is stored - you must therefore set all fields.",
                   file=sys.stderr)
             cmd.print_help(sys.stderr)
             exit(2)
@@ -76,7 +76,7 @@ if __name__ == '__main__':
         model_interface = cmd.model_interface if cmd.model_interface else conf.model_interface
         resource_names = {} if conf is None else conf.resource_names
 
-        conf = GasModelConf(uds_path, model_interface, resource_names)
+        conf = PMxModelConf(uds_path, model_interface, resource_names)
         conf.save(Host)
 
     if cmd.set_species:
