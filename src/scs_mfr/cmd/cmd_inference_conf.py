@@ -20,7 +20,7 @@ class CmdInferenceConf(object):
         self.__interfaces = interfaces
         interface_names = ' | '.join(interfaces)
 
-        self.__parser = optparse.OptionParser(usage="%prog [{ [-u UDS_PATH] [-i INTERFACE] [-s SPECIES MODEL_FILENAME]"
+        self.__parser = optparse.OptionParser(usage="%prog [{ [-u UDS_PATH] [-i INTERFACE] [-s SPECIES RESOURCE_NAME]"
                                                     " | [-r SPECIES] | -d }] [-v]", version="%prog 1.0")
 
         # optional...
@@ -31,7 +31,7 @@ class CmdInferenceConf(object):
                                  help="set the interface code { %s }" % interface_names)
 
         self.__parser.add_option("--set", "-s", type="string", nargs=2, action="store", dest="set",
-                                 help="set SPECIES MODEL_FILENAME")
+                                 help="set SPECIES RESOURCE_NAME")
 
         self.__parser.add_option("--remove", "-r", type="string", nargs=1, action="store", dest="remove_species",
                                  help="remove SPECIES model")
