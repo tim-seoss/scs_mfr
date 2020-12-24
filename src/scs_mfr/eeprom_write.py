@@ -50,8 +50,7 @@ from scs_core.sys.eeprom_image import EEPROMImage
 
 from scs_dfe.interface.component.cat24c32 import CAT24C32
 
-from scs_host.bus.i2c import I2C
-from scs_host.sys.host import Host
+from scs_host.bus.i2c import EEPROMI2C
 
 from scs_mfr.cmd.cmd_eeprom_write import CmdEEPROMWrite
 
@@ -66,7 +65,7 @@ from scs_mfr.cmd.cmd_eeprom_write import CmdEEPROMWrite
 if __name__ == '__main__':
 
     try:
-        I2C.open(Host.I2C_EEPROM)
+        EEPROMI2C.open()
 
 
         # ------------------------------------------------------------------------------------------------------------
@@ -86,12 +85,10 @@ if __name__ == '__main__':
 
         if not cmd.is_valid():
             cmd.print_help(sys.stderr)
-            I2C.close()
             exit(2)
 
         if not path.isfile(cmd.filename):
             print("eeprom_write: file not found", file=sys.stderr)
-            I2C.close()
             exit(1)
 
         if cmd.verbose:
@@ -124,7 +121,6 @@ if __name__ == '__main__':
 
         if not verified:
             print("eeprom_write: verification failed", file=sys.stderr)
-            I2C.close()
             exit(1)
 
         if cmd.verbose:
@@ -135,4 +131,4 @@ if __name__ == '__main__':
     # end...
 
     finally:
-        I2C.close()
+        EEPROMI2C.close()

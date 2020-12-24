@@ -42,7 +42,7 @@ from scs_dfe.climate.mpl115a2 import MPL115A2
 from scs_dfe.climate.mpl115a2_conf import MPL115A2Conf
 from scs_dfe.climate.sht_conf import SHTConf
 
-from scs_host.bus.i2c import I2C
+from scs_host.bus.i2c import SensorI2C
 from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_mpl115a2_calib import CmdMPL115A2Calib
@@ -53,7 +53,7 @@ from scs_mfr.cmd.cmd_mpl115a2_calib import CmdMPL115A2Calib
 if __name__ == '__main__':
 
     try:
-        I2C.open(Host.I2C_SENSORS)
+        SensorI2C.open()
 
         # ------------------------------------------------------------------------------------------------------------
         # cmd...
@@ -139,4 +139,4 @@ if __name__ == '__main__':
         print("mpl115a2_calib: MPL115A2 not available", file=sys.stderr)
 
     finally:
-        I2C.close()
+        SensorI2C.close()

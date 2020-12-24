@@ -6,7 +6,7 @@ Created on 18 May 2017
 
 import sys
 
-from scs_host.bus.i2c import I2C
+from scs_host.bus.i2c import SensorI2C
 from scs_host.sys.host import Host
 
 from scs_mfr.test.test import Test
@@ -32,7 +32,7 @@ class AFETest(Test):
             print("AFE...", file=sys.stderr)
 
         try:
-            I2C.open(Host.I2C_SENSORS)
+            SensorI2C.open()
 
             # AFE...
             afe = self.interface.gas_sensors(Host)
@@ -55,4 +55,4 @@ class AFETest(Test):
             return ok
 
         finally:
-            I2C.close()
+            SensorI2C.close()

@@ -39,7 +39,7 @@ https://learn.adafruit.com/introduction-to-the-beaglebone-black-device-tree/comp
 
 from scs_dfe.interface.component.cat24c32 import CAT24C32
 
-from scs_host.bus.i2c import I2C
+from scs_host.bus.i2c import EEPROMI2C
 from scs_host.sys.host import Host
 
 
@@ -53,7 +53,7 @@ Host.enable_eeprom_access()
 if __name__ == '__main__':
 
     try:
-        I2C.open(Host.I2C_EEPROM)
+        EEPROMI2C.open()
 
 
         # ------------------------------------------------------------------------------------------------------------
@@ -72,4 +72,4 @@ if __name__ == '__main__':
     # end...
 
     finally:
-        I2C.close()
+        EEPROMI2C.close()

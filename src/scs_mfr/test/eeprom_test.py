@@ -14,7 +14,7 @@ from scs_core.sys.eeprom_image import EEPROMImage
 
 from scs_dfe.interface.component.cat24c32 import CAT24C32
 
-from scs_host.bus.i2c import I2C
+from scs_host.bus.i2c import EEPROMI2C
 from scs_host.sys.host import Host
 
 from scs_mfr.test.test import Test
@@ -48,7 +48,7 @@ class EEPROMTest(Test):
             # resources...
             # Host.enable_eeprom_access()               # TODO: test whether EEPROM access is required
 
-            I2C.open(Host.I2C_EEPROM)
+            EEPROMI2C.open()
 
             eeprom = CAT24C32()
 
@@ -60,4 +60,4 @@ class EEPROMTest(Test):
             return eeprom.image == file_image
 
         finally:
-            I2C.close()
+            EEPROMI2C.close()
