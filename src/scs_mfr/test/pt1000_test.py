@@ -6,7 +6,7 @@ Created on 18 May 2017
 
 import sys
 
-from scs_host.bus.i2c import SensorI2C
+from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
 from scs_mfr.test.test import Test
@@ -32,7 +32,7 @@ class Pt1000Test(Test):
             print("Pt1000...", file=sys.stderr)
 
         try:
-            SensorI2C.open()
+            I2C.Sensors.open()
 
             # AFE...
             if self.interface.pt1000(Host) is None:
@@ -51,4 +51,4 @@ class Pt1000Test(Test):
             return 0.3 < self._datum.v < 0.4
 
         finally:
-            SensorI2C.close()
+            I2C.Sensors.close()

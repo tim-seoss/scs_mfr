@@ -13,7 +13,7 @@ from scs_core.data.rtc_datetime import RTCDatetime
 
 from scs_dfe.time.ds1338 import DS1338
 
-from scs_host.bus.i2c import SensorI2C
+from scs_host.bus.i2c import I2C
 
 from scs_mfr.test.test import Test
 
@@ -38,7 +38,7 @@ class RTCTest(Test):
             print("RTC...", file=sys.stderr)
 
         try:
-            SensorI2C.open()
+            I2C.Sensors.open()
 
             # resources...
             now = LocalizedDatetime.now()
@@ -63,4 +63,4 @@ class RTCTest(Test):
             return 1 <= self._datum.seconds <= 2
 
         finally:
-            SensorI2C.close()
+            I2C.Sensors.close()

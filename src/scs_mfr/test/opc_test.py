@@ -8,7 +8,7 @@ import sys
 
 from scs_dfe.particulate.opc_conf import OPCConf
 
-from scs_host.bus.i2c import SensorI2C
+from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
 from scs_mfr.test.test import Test
@@ -36,7 +36,7 @@ class OPCTest(Test):
         opc = None
 
         try:
-            SensorI2C.open()
+            I2C.Sensors.open()
 
             # resources...
             opc_conf = OPCConf.load(Host)
@@ -64,4 +64,4 @@ class OPCTest(Test):
                 opc.operations_off()
                 self.interface.power_opc(False)
 
-            SensorI2C.close()
+            I2C.Sensors.close()

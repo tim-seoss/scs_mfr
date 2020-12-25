@@ -47,7 +47,7 @@ from scs_core.data.json import JSONify
 
 from scs_dfe.interface.interface_conf import InterfaceConf
 
-from scs_host.bus.i2c import SensorI2C
+from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_fuel_gauge_calib import CmdFuelGaugeCalib
@@ -74,7 +74,7 @@ if __name__ == '__main__':
         sys.stderr.flush()
 
     try:
-        SensorI2C.open()
+        I2C.Sensors.open()
 
         # ------------------------------------------------------------------------------------------------------------
         # resources...
@@ -137,4 +137,4 @@ if __name__ == '__main__':
     # end...
 
     finally:
-        SensorI2C.close()
+        I2C.Sensors.close()

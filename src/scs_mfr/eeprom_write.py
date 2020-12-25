@@ -50,7 +50,7 @@ from scs_core.sys.eeprom_image import EEPROMImage
 
 from scs_dfe.interface.component.cat24c32 import CAT24C32
 
-from scs_host.bus.i2c import EEPROMI2C
+from scs_host.bus.i2c import I2C
 
 from scs_mfr.cmd.cmd_eeprom_write import CmdEEPROMWrite
 
@@ -65,7 +65,7 @@ from scs_mfr.cmd.cmd_eeprom_write import CmdEEPROMWrite
 if __name__ == '__main__':
 
     try:
-        EEPROMI2C.open()
+        I2C.EEPROM.open()
 
 
         # ------------------------------------------------------------------------------------------------------------
@@ -131,4 +131,4 @@ if __name__ == '__main__':
     # end...
 
     finally:
-        EEPROMI2C.close()
+        I2C.EEPROM.close()

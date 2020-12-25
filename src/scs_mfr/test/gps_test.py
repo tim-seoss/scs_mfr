@@ -10,7 +10,7 @@ from scs_core.position.nmea.gprmc import GPRMC
 
 from scs_dfe.gps.pam_7q import PAM7Q
 
-from scs_host.bus.i2c import SensorI2C
+from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
 from scs_mfr.test.test import Test
@@ -38,7 +38,7 @@ class GPSTest(Test):
         gps = None
 
         try:
-            SensorI2C.open()
+            I2C.Sensors.open()
 
             # GPS...
             gps = PAM7Q(self.interface, Host.gps_device())
@@ -60,4 +60,4 @@ class GPSTest(Test):
                 gps.close()
                 gps.power_off()
 
-            SensorI2C.close()
+            I2C.Sensors.close()

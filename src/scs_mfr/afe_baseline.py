@@ -53,7 +53,7 @@ from scs_dfe.climate.mpl115a2 import MPL115A2
 from scs_dfe.climate.mpl115a2_conf import MPL115A2Conf
 from scs_dfe.climate.sht_conf import SHTConf
 
-from scs_host.bus.i2c import SensorI2C
+from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_afe_baseline import CmdAFEBaseline
@@ -82,7 +82,7 @@ if __name__ == '__main__':
         sys.stderr.flush()
 
     try:
-        SensorI2C.open()
+        I2C.Sensors.open()
 
         # ------------------------------------------------------------------------------------------------------------
         # resources...
@@ -184,4 +184,4 @@ if __name__ == '__main__':
             print("afe_baseline: KeyboardInterrupt", file=sys.stderr)
 
     finally:
-        SensorI2C.close()
+        I2C.Sensors.close()

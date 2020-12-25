@@ -32,7 +32,7 @@ from scs_core.data.rtc_datetime import RTCDatetime
 
 from scs_dfe.time.ds1338 import DS1338
 
-from scs_host.bus.i2c import SensorI2C
+from scs_host.bus.i2c import I2C
 
 from scs_mfr.cmd.cmd_rtc import CmdRTC
 
@@ -63,7 +63,7 @@ if __name__ == '__main__':
     # run...
 
     try:
-        SensorI2C.open()
+        I2C.Sensors.open()
 
         if cmd.initialise:
             DS1338.init()
@@ -83,4 +83,4 @@ if __name__ == '__main__':
         print(JSONify.dumps(localized_datetime))
 
     finally:
-        SensorI2C.close()
+        I2C.Sensors.close()
