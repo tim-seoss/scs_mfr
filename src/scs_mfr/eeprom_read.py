@@ -53,7 +53,7 @@ Host.enable_eeprom_access()
 if __name__ == '__main__':
 
     try:
-        I2C.open(Host.I2C_EEPROM)
+        I2C.EEPROM.open()
 
 
         # ------------------------------------------------------------------------------------------------------------
@@ -72,4 +72,4 @@ if __name__ == '__main__':
     # end...
 
     finally:
-        I2C.close()
+        I2C.EEPROM.close()

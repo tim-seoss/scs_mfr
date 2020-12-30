@@ -36,7 +36,7 @@ class OPCTest(Test):
         opc = None
 
         try:
-            I2C.open(Host.I2C_SENSORS)
+            I2C.Sensors.open()
 
             # resources...
             opc_conf = OPCConf.load(Host)
@@ -64,4 +64,4 @@ class OPCTest(Test):
                 opc.operations_off()
                 self.interface.power_opc(False)
 
-            I2C.close()
+            I2C.Sensors.close()

@@ -17,7 +17,7 @@ class CmdAWSGroupSetup(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog { -c | -s } [-m] [-a AWS_GROUP_NAME] [-v]",
+        self.__parser = optparse.OptionParser(usage="%prog { -c | -s } [-m] [-a AWS_GROUP_NAME] [-i INDENT] [-v]",
                                               version="%prog 1.0")
 
         # optional...
@@ -32,6 +32,9 @@ class CmdAWSGroupSetup(object):
 
         self.__parser.add_option("--aws-group-name", "-a", type="string", action="store", dest="aws_group_name",
                                  help="override the name of the AWS group to configure ")
+
+        self.__parser.add_option("--indent", "-i", action="store", dest="indent", type=int,
+                                 help="pretty-print the output with INDENT")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
@@ -64,6 +67,10 @@ class CmdAWSGroupSetup(object):
         return self.__opts.aws_group_name
 
     @property
+    def indent(self):
+        return self.__opts.indent
+
+    @property
     def verbose(self):
         return self.__opts.verbose
 
@@ -73,5 +80,5 @@ class CmdAWSGroupSetup(object):
         self.__parser.print_help(file)
 
     def __str__(self, *args, **kwargs):
-        return "CmdAWSGroupSetup:{current:%s, set:%s, machine-learning:%s, aws-group-name:%s, verbose:%s}" % \
-               (self.show_current, self.set, self.use_ml, self.aws_group_name, self.verbose)
+        return "CmdAWSGroupSetup:{current:%s, set:%s, machine-learning:%s, aws-group-name:%s, indent:%s verbose:%s}" % \
+               (self.show_current, self.set, self.use_ml, self.aws_group_name, self.indent, self.verbose)

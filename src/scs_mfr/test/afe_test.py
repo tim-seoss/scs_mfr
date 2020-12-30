@@ -32,7 +32,7 @@ class AFETest(Test):
             print("AFE...", file=sys.stderr)
 
         try:
-            I2C.open(Host.I2C_SENSORS)
+            I2C.Sensors.open()
 
             # AFE...
             afe = self.interface.gas_sensors(Host)
@@ -55,4 +55,4 @@ class AFETest(Test):
             return ok
 
         finally:
-            I2C.close()
+            I2C.Sensors.close()
