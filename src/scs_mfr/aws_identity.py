@@ -47,7 +47,7 @@ from scs_core.aws.greengrass.aws_identity import AWSSetup
 
 from scs_host.sys.host import Host
 
-from scs_mfr.cmd.cmd_aws_greengrass_identity import CmdAWSSetup
+from scs_mfr.cmd.cmd_aws_greengrass_identity import CmdAWSGreengrassIdentity
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -72,7 +72,7 @@ def create_aws_clients():
             region_name='us-west-2'
         )
     else:
-        boto_iot_client = boto3.client('iot', region_name='us-west-2')  #
+        boto_iot_client = boto3.client('iot', region_name='us-west-2')
         boto_gg_client = boto3.client('greengrass', region_name='us-west-2')
     return boto_iot_client, boto_gg_client
 
@@ -94,14 +94,14 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
-    cmd = CmdAWSSetup()
+    cmd = CmdAWSGreengrassIdentity()
 
     if not cmd.is_valid():
         cmd.print_help(sys.stderr)
         exit(2)
 
     if cmd.verbose:
-        print("aws_group_setup: %s" % cmd, file=sys.stderr)
+        print("aws_identity: %s" % cmd, file=sys.stderr)
         sys.stderr.flush()
 
     # ----------------------------------------------------------------------------------------------------------------
