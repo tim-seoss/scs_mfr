@@ -52,7 +52,7 @@ from scs_mfr.cmd.cmd_pt1000_calib import CmdPt1000Calib
 if __name__ == '__main__':
 
     try:
-        I2C.open(Host.I2C_SENSORS)
+        I2C.Sensors.open()
 
         # ------------------------------------------------------------------------------------------------------------
         # cmd...
@@ -141,4 +141,4 @@ if __name__ == '__main__':
     # end...
 
     finally:
-        I2C.close()
+        I2C.Sensors.close()
