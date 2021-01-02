@@ -19,7 +19,7 @@ configuration file has been stored for this system, then it is used to initialis
 default parameters for the configured battery pack are used.
 
 SYNOPSIS
-fuel_gauge_calib.py { -i | -c | -d | -l | -s | -f | -p } [-v]
+fuel_gauge_calib.py { { -n | -d | -l | -s } | { -c | -f | -p } [-i INTERVAL] } [-v]
 
 EXAMPLES
 ./fuel_gauge_calib.py -cv
@@ -28,7 +28,8 @@ FILES
 ~/SCS/conf/max17055_params.json
 
 DOCUMENT EXAMPLE - PARAMETERS
-{"r-comp-0": 171, "temp-co": 8766, "full-cap-rep": 16712, "full-cap-nom": 41298, "cycles": 966}
+{"calibrated-on": "2021-01-02T09:34:48Z",
+"r-comp-0": 201, "temp-co": 9278, "full-cap-rep": 1790, "full-cap-nom": 4896, "cycles": 210}
 
 DOCUMENT EXAMPLE - FUEL
 {"chrg": {"%": 94.4, "mah": 7889}, "tte": 71156, "ttf": null, "curr": -278, "g-tmp": 22.8, "cap": 10818, "cyc": 0.0}
@@ -44,6 +45,7 @@ scs_mfr/psu_conf
 import sys
 
 from scs_core.data.json import JSONify
+from scs_core.sync.interval_timer import IntervalTimer
 
 from scs_dfe.interface.interface_conf import InterfaceConf
 
@@ -59,6 +61,8 @@ from scs_psu.psu.psu_conf import PSUConf
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
+
+    params = None
 
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
@@ -103,38 +107,47 @@ if __name__ == '__main__':
 
         if cmd.initialise:
             params = batt_pack.initialise(Host, force_config=True)
-            print(JSONify.dumps(params))
-
-        elif cmd.current:
-            params = batt_pack.read_learned_params()
-            print(JSONify.dumps(params))
 
         elif cmd.default:
             params = batt_pack.default_params()
             batt_pack.write_params(params)
-            print(JSONify.dumps(params))
 
         elif cmd.load:
             params = MAX17055Params.load(Host)
             batt_pack.write_params(params)
-            print(JSONify.dumps(params))
 
         elif cmd.save:
             params = batt_pack.read_learned_params()
             params.save(Host)
+
+        if cmd.initialise or cmd.default or cmd.load or cmd.save:
             print(JSONify.dumps(params))
+            exit(0)
 
-        elif cmd.fuel:
-            datum = batt_pack.sample()
-            print(JSONify.dumps(datum))
+        timer = IntervalTimer(cmd.interval)
 
-        elif cmd.power:
-            datum = psu.status()
-            print(JSONify.dumps(datum))
+        while timer.true():
+            if cmd.current:
+                params = batt_pack.read_learned_params()
+                print(JSONify.dumps(params))
+
+            elif cmd.fuel:
+                datum = batt_pack.sample()
+                print(JSONify.dumps(datum))
+
+            elif cmd.power:
+                datum = psu.status()
+                print(JSONify.dumps(datum))
+
+            if not cmd.interval:
+                break
 
 
     # ----------------------------------------------------------------------------------------------------------------
     # end...
+
+    except KeyboardInterrupt:
+        print(file=sys.stderr)
 
     finally:
         I2C.Sensors.close()
