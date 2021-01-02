@@ -9,7 +9,7 @@ DESCRIPTION
 The fuel_gauge_calib utility is used to interrogate or update the fuel gauge parameters on an attached battery pack.
 
 Parameters are found automatically though a learning process run by the fuel gauge throughout its lifetime. These
-values are saved to the file system by the PSU monitor every time the battery level changes by more than 20%. The
+values are saved to the file system by the PSU monitor every time the parameters change. The
 battery pack model incorporates a set of parameter values gained through this process on test systems,
 referred to as the default parameters.
 
@@ -19,7 +19,7 @@ configuration file has been stored for this system, then it is used to initialis
 default parameters for the configured battery pack are used.
 
 SYNOPSIS
-fuel_gauge_calib.py { { -n | -d | -l | -s } | { -c | -f | -p } [-i INTERVAL] } [-v]
+fuel_gauge_calib.py { { -n | -l { D | F } | -s } | { -c | -f | -p } [-i INTERVAL] } [-v]
 
 EXAMPLES
 ./fuel_gauge_calib.py -cv
@@ -32,10 +32,12 @@ DOCUMENT EXAMPLE - PARAMETERS
 "r-comp-0": 201, "temp-co": 9278, "full-cap-rep": 1790, "full-cap-nom": 4896, "cycles": 210}
 
 DOCUMENT EXAMPLE - FUEL
-{"chrg": {"%": 94.4, "mah": 7889}, "tte": 71156, "ttf": null, "curr": -278, "g-tmp": 22.8, "cap": 10818, "cyc": 0.0}
+{"in": true, "chrg": {"%": 99.0, "mah": 1729}, "tte": null, "ttf": "00-02:55:24", "v": 4.1, "curr": 182,
+"g-tmp": 30.7, "cap": 1729, "cyc": 2.9}
 
 DOCUMENT EXAMPLE - PSU
-{"standby": false, "pwr-in": 3.9, "batt": {"chg": 3, "tte": null, "ttf": 11801}}
+{"src": "Cv1", "standby": false, "in": true, "pwr-in": 11.6, "chgr": "TFTF",
+"batt": {"chg": 99, "tte": null, "ttf": "00-02:54:56"}, "prot-batt": 4.1}
 
 SEE ALSO
 scs_dev/psu_monitor
@@ -105,14 +107,15 @@ if __name__ == '__main__':
 
         # no auto-initialisation - we want to see the MAX17055 native values
 
+        # single shot...
         if cmd.initialise:
             params = batt_pack.initialise(Host, force_config=True)
 
-        elif cmd.default:
+        elif cmd.load == 'D':
             params = batt_pack.default_params()
             batt_pack.write_params(params)
 
-        elif cmd.load:
+        elif cmd.load == 'F':
             params = MAX17055Params.load(Host)
             batt_pack.write_params(params)
 
@@ -120,10 +123,11 @@ if __name__ == '__main__':
             params = batt_pack.read_learned_params()
             params.save(Host)
 
-        if cmd.initialise or cmd.default or cmd.load or cmd.save:
+        if cmd.initialise or cmd.load or cmd.save:
             print(JSONify.dumps(params))
             exit(0)
 
+        # iterable...
         timer = IntervalTimer(cmd.interval)
 
         while timer.true():
