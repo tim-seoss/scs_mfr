@@ -16,18 +16,16 @@ class CmdFuelGaugeCalib(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog { { -n | -d | -l | -s } | { -c | -f | -p } [-i INTERVAL] } "
+        self.__parser = optparse.OptionParser(usage="%prog { { -n | -l { D | F } | -s } | "
+                                                    "{ -c | -f | -p } [-i INTERVAL] } "
                                                     "[-v]", version="%prog 1.0")
 
         # single shot...
         self.__parser.add_option("--initialise", "-n", action="store_true", dest="initialise", default=False,
                                  help="initialise the fuel gauge configuration")
 
-        self.__parser.add_option("--default", "-d", action="store_true", dest="default", default=False,
-                                 help="load default fuel gauge parameters")
-
-        self.__parser.add_option("--load", "-l", action="store_true", dest="load", default=False,
-                                 help="load fuel gauge parameters from filesystem")
+        self.__parser.add_option("--load", "-l", type="string", nargs=1, action="store", dest="load",
+                                 help="load fuel gauge parameters from Default or Filesystem")
 
         self.__parser.add_option("--save", "-s", action="store_true", dest="save", default=False,
                                  help="save the current fuel gauge parameters to filesystem")
@@ -60,16 +58,13 @@ class CmdFuelGaugeCalib(object):
         if self.initialise:
             count += 1
 
-        if self.default:
-            count += 1
-
-        if self.current:
+        if self.load:
             count += 1
 
         if self.save:
             count += 1
 
-        if self.load:
+        if self.current:
             count += 1
 
         if self.fuel:
@@ -81,7 +76,10 @@ class CmdFuelGaugeCalib(object):
         if count != 1:
             return False
 
-        if (self.initialise or self.default or self.load or self.save) and self.interval:
+        if self.load and self.load not in ('D', 'F'):
+            return False
+
+        if (self.initialise or self.load or self.save) and self.interval:
             return False
 
         return True
@@ -95,13 +93,8 @@ class CmdFuelGaugeCalib(object):
 
 
     @property
-    def default(self):
-        return self.__opts.default
-
-
-    @property
-    def current(self):
-        return self.__opts.current
+    def load(self):
+        return self.__opts.load
 
 
     @property
@@ -110,8 +103,8 @@ class CmdFuelGaugeCalib(object):
 
 
     @property
-    def load(self):
-        return self.__opts.load
+    def current(self):
+        return self.__opts.current
 
 
     @property
@@ -141,7 +134,7 @@ class CmdFuelGaugeCalib(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdFuelGaugeCalib:{initialise:%s, default:%s, current:%s, save:%s, load:%s, " \
-               "fuel:%s, power:%s, interval:%s, verbose:%s}" % \
-               (self.initialise, self.default, self.current, self.save, self.load,
-                self.fuel, self.power, self.interval, self.verbose)
+        return "CmdFuelGaugeCalib:{initialise:%s, load:%s, save:%s, " \
+               "current:%s, fuel:%s, power:%s, interval:%s, verbose:%s}" % \
+               (self.initialise, self.load, self.save,
+                self.current, self.fuel, self.power, self.interval, self.verbose)
