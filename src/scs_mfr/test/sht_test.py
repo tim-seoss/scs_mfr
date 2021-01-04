@@ -7,7 +7,6 @@ Created on 18 May 2017
 import sys
 
 from scs_host.bus.i2c import I2C
-from scs_host.sys.host import Host
 
 from scs_mfr.test.test import Test
 
@@ -35,7 +34,7 @@ class SHTTest(Test):
             print("%s (0x%02x)..." % (self.__name, self.__sht.addr), file=sys.stderr)
 
         try:
-            I2C.open(Host.I2C_SENSORS)
+            I2C.Sensors.open()
 
             # test...
             self.__sht.reset()
@@ -49,7 +48,7 @@ class SHTTest(Test):
             return 10 < self._datum.humid < 90 and 10 < self._datum.temp < 50
 
         finally:
-            I2C.close()
+            I2C.Sensors.close()
 
 
     # ----------------------------------------------------------------------------------------------------------------

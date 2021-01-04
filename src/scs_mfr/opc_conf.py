@@ -31,16 +31,13 @@ Alternate exegetes (data interpretation models) can be added or removed - availa
 the --help flag.
 
 SYNOPSIS
-opc_conf.py [-n NAME] [{ [-m MODEL] [-s SAMPLE_PERIOD] [-z { 0 | 1 }] [-p { 0 | 1 }]
-[-b BUS] [-a ADDRESS] [-i INFERENCE_UDS] [-e EXEGETE] [-r EXEGETE] | -d }] [-v]
+opc_conf.py [-n NAME] [{ [-m MODEL] [-s SAMPLE_PERIOD] [-z { 0 | 1 }] [-p { 0 | 1 }] [-b BUS] [-a ADDRESS] | -d }] [-v]
 
 EXAMPLES
-./opc_conf.py -m N2 -b 0 -a 1 -e ISLin/Urban/N2/v1
 ./opc_conf.py -m S30 -b 1
 
 DOCUMENT EXAMPLE
-{"model": "N3", "sample-period": 10, "restart-on-zeroes": true, "power-saving": false,
-"inf": "/home/scs/SCS/pipes/lambda-model-pmx-s1.uds", "exg": []}
+{"model": "N3", "sample-period": 10, "restart-on-zeroes": true, "power-saving": false}
 
 FILES
 ~/SCS/conf/opc_conf.json
@@ -111,34 +108,13 @@ if __name__ == '__main__':
         power_saving = cmd.power_saving if cmd.power_saving is not None else conf.power_saving
 
         if conf is None:
-            conf = OPCConf(None, 10, True, False, None, None, None, [])     # permit None for bus and address settings
+            conf = OPCConf(None, 10, True, False, None, None)       # permit None for bus and address settings
 
         bus = conf.bus if cmd.bus is None else cmd.bus
         address = conf.address if cmd.address is None else cmd.address
-        inference = conf.inference if cmd.inference is None else cmd.inference
 
         conf = OPCConf(model, sample_period, restart_on_zeroes, power_saving,
-                       bus, address, inference, conf.exegete_names)
-
-        if cmd.use_exegete:
-            conf.add_exegete(cmd.use_exegete)
-
-        if cmd.remove_exegete:
-            conf.discard_exegete(cmd.remove_exegete)
-
-        # compatibility check...
-        try:
-            incompatibles = conf.incompatible_exegetes()
-
-        except KeyError as ex:
-            print("opc_conf: The following exegete is not valid: %s." % ex, file=sys.stderr)
-            exit(1)
-
-        if incompatibles:
-            print("opc_conf: The following exegetes are not compatible with %s: %s." %
-                  (conf.model, ', '.join(incompatibles)),
-                  file=sys.stderr)
-            exit(1)
+                       bus, address)
 
         conf.save(Host)
 

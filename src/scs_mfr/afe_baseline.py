@@ -82,7 +82,7 @@ if __name__ == '__main__':
         sys.stderr.flush()
 
     try:
-        I2C.open(Host.I2C_SENSORS)
+        I2C.Sensors.open()
 
         # ------------------------------------------------------------------------------------------------------------
         # resources...
@@ -184,4 +184,4 @@ if __name__ == '__main__':
             print("afe_baseline: KeyboardInterrupt", file=sys.stderr)
 
     finally:
-        I2C.close()
+        I2C.Sensors.close()

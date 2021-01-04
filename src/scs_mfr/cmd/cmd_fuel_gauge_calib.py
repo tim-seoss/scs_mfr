@@ -16,24 +16,23 @@ class CmdFuelGaugeCalib(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog { -i | -c | -d | -l | -s | -f | -p } [-v]",
-                                              version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog { { -n | -l { D | F } | -s } | "
+                                                    "{ -c | -f | -p } [-i INTERVAL] } "
+                                                    "[-v]", version="%prog 1.0")
 
-        # compulsory...
-        self.__parser.add_option("--initialise", "-i", action="store_true", dest="initialise", default=False,
+        # single shot...
+        self.__parser.add_option("--initialise", "-n", action="store_true", dest="initialise", default=False,
                                  help="initialise the fuel gauge configuration")
 
-        self.__parser.add_option("--current", "-c", action="store_true", dest="current", default=False,
-                                 help="report the current fuel gauge parameters")
-
-        self.__parser.add_option("--default", "-d", action="store_true", dest="default", default=False,
-                                 help="load default fuel gauge parameters")
-
-        self.__parser.add_option("--load", "-l", action="store_true", dest="load", default=False,
-                                 help="load fuel gauge parameters from filesystem")
+        self.__parser.add_option("--load", "-l", type="string", nargs=1, action="store", dest="load",
+                                 help="load fuel gauge parameters from Default or Filesystem")
 
         self.__parser.add_option("--save", "-s", action="store_true", dest="save", default=False,
                                  help="save the current fuel gauge parameters to filesystem")
+
+        # iterable...
+        self.__parser.add_option("--current", "-c", action="store_true", dest="current", default=False,
+                                 help="report the current fuel gauge parameters")
 
         self.__parser.add_option("--fuel", "-f", action="store_true", dest="fuel", default=False,
                                  help="sample the fuel gauge")
@@ -42,6 +41,9 @@ class CmdFuelGaugeCalib(object):
                                  help="sample the PSU")
 
         # optional...
+        self.__parser.add_option("--interval", "-i", type="float", nargs=1, action="store", dest="interval",
+                                 help="sampling interval in seconds")
+
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
 
@@ -56,16 +58,13 @@ class CmdFuelGaugeCalib(object):
         if self.initialise:
             count += 1
 
-        if self.default:
-            count += 1
-
-        if self.current:
+        if self.load:
             count += 1
 
         if self.save:
             count += 1
 
-        if self.load:
+        if self.current:
             count += 1
 
         if self.fuel:
@@ -74,7 +73,16 @@ class CmdFuelGaugeCalib(object):
         if self.power:
             count += 1
 
-        return count == 1
+        if count != 1:
+            return False
+
+        if self.load and self.load not in ('D', 'F'):
+            return False
+
+        if (self.initialise or self.load or self.save) and self.interval:
+            return False
+
+        return True
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -85,13 +93,8 @@ class CmdFuelGaugeCalib(object):
 
 
     @property
-    def default(self):
-        return self.__opts.default
-
-
-    @property
-    def current(self):
-        return self.__opts.current
+    def load(self):
+        return self.__opts.load
 
 
     @property
@@ -100,8 +103,8 @@ class CmdFuelGaugeCalib(object):
 
 
     @property
-    def load(self):
-        return self.__opts.load
+    def current(self):
+        return self.__opts.current
 
 
     @property
@@ -112,6 +115,11 @@ class CmdFuelGaugeCalib(object):
     @property
     def power(self):
         return self.__opts.power
+
+
+    @property
+    def interval(self):
+        return 0 if self.__opts.interval is None else self.__opts.interval
 
 
     @property
@@ -126,7 +134,7 @@ class CmdFuelGaugeCalib(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdFuelGaugeCalib:{initialise:%s, default:%s, current:%s, save:%s, load:%s, " \
-               "fuel:%s, power:%s, verbose:%s}" % \
-               (self.initialise, self.default, self.current, self.save, self.load,
-                self.fuel, self.power, self.verbose)
+        return "CmdFuelGaugeCalib:{initialise:%s, load:%s, save:%s, " \
+               "current:%s, fuel:%s, power:%s, interval:%s, verbose:%s}" % \
+               (self.initialise, self.load, self.save,
+                self.current, self.fuel, self.power, self.interval, self.verbose)

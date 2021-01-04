@@ -48,7 +48,7 @@ class EEPROMTest(Test):
             # resources...
             # Host.enable_eeprom_access()               # TODO: test whether EEPROM access is required
 
-            I2C.open(Host.I2C_EEPROM)
+            I2C.EEPROM.open()
 
             eeprom = CAT24C32()
 
@@ -60,4 +60,4 @@ class EEPROMTest(Test):
             return eeprom.image == file_image
 
         finally:
-            I2C.close()
+            I2C.EEPROM.close()

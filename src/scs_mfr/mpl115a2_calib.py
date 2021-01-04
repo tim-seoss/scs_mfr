@@ -53,7 +53,7 @@ from scs_mfr.cmd.cmd_mpl115a2_calib import CmdMPL115A2Calib
 if __name__ == '__main__':
 
     try:
-        I2C.open(Host.I2C_SENSORS)
+        I2C.Sensors.open()
 
         # ------------------------------------------------------------------------------------------------------------
         # cmd...
@@ -139,4 +139,4 @@ if __name__ == '__main__':
         print("mpl115a2_calib: MPL115A2 not available", file=sys.stderr)
 
     finally:
-        I2C.close()
+        I2C.Sensors.close()

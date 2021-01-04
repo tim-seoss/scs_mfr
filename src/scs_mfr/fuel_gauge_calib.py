@@ -9,7 +9,7 @@ DESCRIPTION
 The fuel_gauge_calib utility is used to interrogate or update the fuel gauge parameters on an attached battery pack.
 
 Parameters are found automatically though a learning process run by the fuel gauge throughout its lifetime. These
-values are saved to the file system by the PSU monitor every time the battery level changes by more than 20%. The
+values are saved to the file system by the PSU monitor every time the parameters change. The
 battery pack model incorporates a set of parameter values gained through this process on test systems,
 referred to as the default parameters.
 
@@ -19,7 +19,7 @@ configuration file has been stored for this system, then it is used to initialis
 default parameters for the configured battery pack are used.
 
 SYNOPSIS
-fuel_gauge_calib.py { -i | -c | -d | -l | -s | -f | -p } [-v]
+fuel_gauge_calib.py { { -n | -l { D | F } | -s } | { -c | -f | -p } [-i INTERVAL] } [-v]
 
 EXAMPLES
 ./fuel_gauge_calib.py -cv
@@ -28,13 +28,16 @@ FILES
 ~/SCS/conf/max17055_params.json
 
 DOCUMENT EXAMPLE - PARAMETERS
-{"r-comp-0": 171, "temp-co": 8766, "full-cap-rep": 16712, "full-cap-nom": 41298, "cycles": 966}
+{"calibrated-on": "2021-01-02T09:34:48Z",
+"r-comp-0": 201, "temp-co": 9278, "full-cap-rep": 1790, "full-cap-nom": 4896, "cycles": 210}
 
 DOCUMENT EXAMPLE - FUEL
-{"chrg": {"%": 94.4, "mah": 7889}, "tte": 71156, "ttf": null, "curr": -278, "g-tmp": 22.8, "cap": 10818, "cyc": 0.0}
+{"in": true, "chrg": {"%": 99.0, "mah": 1729}, "tte": null, "ttf": "00-02:55:24", "v": 4.1, "curr": 182,
+"g-tmp": 30.7, "cap": 1729, "cyc": 2.9}
 
 DOCUMENT EXAMPLE - PSU
-{"standby": false, "pwr-in": 3.9, "batt": {"chg": 3, "tte": null, "ttf": 11801}}
+{"src": "Cv1", "standby": false, "in": true, "pwr-in": 11.6, "chgr": "TFTF",
+"batt": {"chg": 99, "tte": null, "ttf": "00-02:54:56"}, "prot-batt": 4.1}
 
 SEE ALSO
 scs_dev/psu_monitor
@@ -44,6 +47,7 @@ scs_mfr/psu_conf
 import sys
 
 from scs_core.data.json import JSONify
+from scs_core.sync.interval_timer import IntervalTimer
 
 from scs_dfe.interface.interface_conf import InterfaceConf
 
@@ -60,6 +64,8 @@ from scs_psu.psu.psu_conf import PSUConf
 
 if __name__ == '__main__':
 
+    params = None
+
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
@@ -74,7 +80,7 @@ if __name__ == '__main__':
         sys.stderr.flush()
 
     try:
-        I2C.open(Host.I2C_SENSORS)
+        I2C.Sensors.open()
 
         # ------------------------------------------------------------------------------------------------------------
         # resources...
@@ -101,40 +107,51 @@ if __name__ == '__main__':
 
         # no auto-initialisation - we want to see the MAX17055 native values
 
+        # single shot...
         if cmd.initialise:
             params = batt_pack.initialise(Host, force_config=True)
-            print(JSONify.dumps(params))
 
-        elif cmd.current:
-            params = batt_pack.read_learned_params()
-            print(JSONify.dumps(params))
-
-        elif cmd.default:
+        elif cmd.load == 'D':
             params = batt_pack.default_params()
             batt_pack.write_params(params)
-            print(JSONify.dumps(params))
 
-        elif cmd.load:
+        elif cmd.load == 'F':
             params = MAX17055Params.load(Host)
             batt_pack.write_params(params)
-            print(JSONify.dumps(params))
 
         elif cmd.save:
             params = batt_pack.read_learned_params()
             params.save(Host)
+
+        if cmd.initialise or cmd.load or cmd.save:
             print(JSONify.dumps(params))
+            exit(0)
 
-        elif cmd.fuel:
-            datum = batt_pack.sample()
-            print(JSONify.dumps(datum))
+        # iterable...
+        timer = IntervalTimer(cmd.interval)
 
-        elif cmd.power:
-            datum = psu.status()
-            print(JSONify.dumps(datum))
+        while timer.true():
+            if cmd.current:
+                params = batt_pack.read_learned_params()
+                print(JSONify.dumps(params))
+
+            elif cmd.fuel:
+                datum = batt_pack.sample()
+                print(JSONify.dumps(datum))
+
+            elif cmd.power:
+                datum = psu.status()
+                print(JSONify.dumps(datum))
+
+            if not cmd.interval:
+                break
 
 
     # ----------------------------------------------------------------------------------------------------------------
     # end...
 
+    except KeyboardInterrupt:
+        print(file=sys.stderr)
+
     finally:
-        I2C.close()
+        I2C.Sensors.close()

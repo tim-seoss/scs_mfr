@@ -32,7 +32,7 @@ class Pt1000Test(Test):
             print("Pt1000...", file=sys.stderr)
 
         try:
-            I2C.open(Host.I2C_SENSORS)
+            I2C.Sensors.open()
 
             # AFE...
             if self.interface.pt1000(Host) is None:
@@ -51,4 +51,4 @@ class Pt1000Test(Test):
             return 0.3 < self._datum.v < 0.4
 
         finally:
-            I2C.close()
+            I2C.Sensors.close()
