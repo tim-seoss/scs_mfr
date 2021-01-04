@@ -9,7 +9,7 @@ import optparse
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class CmdAWSGreengrassIdentity(object):
+class CmdAWSIdentity(object):
     """unix command line handler"""
 
     def __init__(self):
@@ -68,5 +68,5 @@ class CmdAWSGreengrassIdentity(object):
         self.__parser.print_help(file)
 
     def __str__(self, *args, **kwargs):
-        return "CmdAWSGreengrassIdentity:{setup:%s, group-name:%s, core-name:%s, verbose:%s}" % \
+        return "CmdAWSIdentity:{setup:%s, group-name:%s, core-name:%s, verbose:%s}" % \
                (self.setup, self.group_name, self.core_name, self.verbose)
