@@ -33,7 +33,7 @@ scs_dev/particulates_sampler
 import sys
 
 from scs_core.data.json import JSONify
-from scs_core.model.particulates.pmx_model_conf import PMxModelConf
+from scs_core.model.pmx.pmx_model_conf import PMxModelConf
 
 from scs_host.sys.host import Host
 
