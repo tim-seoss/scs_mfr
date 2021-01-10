@@ -6,9 +6,13 @@ Created on 22 Dec 2020
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The gps_conf utility is used to
+The gas_inference_conf utility is used to specify how Greengrass data interpretation models are to be accessed:
 
-The gases_sampler must be restarted for changes to take effect.
+* UDS_PATH - the Unix domain socket for communication between the gas sampler and the inference server
+* INTERFACE - the format of the request
+* SPECIES: RESOURCE_NAME - the model resource for each gas
+
+The gases_sampler and Greengrass container must be restarted for changes to take effect.
 
 SYNOPSIS
 gas_inference_conf.py [{ [-u UDS_PATH] [-i INTERFACE] [-s SPECIES RESOURCE_NAME] | [-r SPECIES] | -d }] [-v]
