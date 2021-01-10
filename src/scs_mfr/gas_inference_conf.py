@@ -14,11 +14,11 @@ SYNOPSIS
 gas_inference_conf.py [{ [-u UDS_PATH] [-i INTERFACE] [-s SPECIES RESOURCE_NAME] | [-r SPECIES] | -d }] [-v]
 
 EXAMPLES
-./gas_inference_conf.py -u pipes/lambda-model-gas-s1.uds -i s1 -g NO2 /trained-models/no2-s1-2020q13/xgboost-model -v
+./gas_inference_conf.py -u pipes/lambda-gas-model.uds -i vB -s NO2 /trained-models/no2-vB-2020q13/xgboost-model -v
 
 DOCUMENT EXAMPLE
-{"uds-path": "pipes/lambda-model-gas-s1.uds", "model-interface": "s1",
-"model-filenames": {"NO2": "/trained-models/no2-s1-2020q13/xgboost-model"}}
+{"uds-path": "pipes/lambda-gas-model.uds", "model-interface": "vB",
+"model-filenames": {"NO2": "/trained-models/no2-vB-2020q13/xgboost-model"}}
 
 FILES
 ~/SCS/conf/gas_model_conf.json

@@ -14,11 +14,11 @@ SYNOPSIS
 pmx_inference_conf.py [{ [-u UDS_PATH] [-i INTERFACE] [-s SPECIES RESOURCE_NAME] | [-r SPECIES] | -d }] [-v]
 
 EXAMPLES
-(scs-venv) scs@scs-bbe-003:~/SCS/scs_mfr/src/scs_mfr$ ./pmx_inference_conf.py -u pipes/lambda-model-pmx-s1.uds -i s1 \
+(scs-venv) scs@scs-bbe-003:~/SCS/scs_mfr/src/scs_mfr$ ./pmx_inference_conf.py -u pipes/lambda-pmx-model.uds -i s1 \
 -s pm1 /trained-models/pm1-s1-2020h1/xgboost-model -v
 
 DOCUMENT EXAMPLE
-{"uds-path": "pipes/lambda-model-pmx-s1.uds", "model-interface": "s1",
+{"uds-path": "pipes/lambda-pmx-model.uds", "model-interface": "s1",
 "resource-names": {"pm1": "/trained-models/pm1-s1-2020h1/xgboost-model",
 "pm2p5": "/trained-models/pm2p5-s1-2020h1/xgboost-model",
 "pm10": "/trained-models/pm10-s1-2020h1/xgboost-model"}}
@@ -33,7 +33,7 @@ scs_dev/particulates_sampler
 import sys
 
 from scs_core.data.json import JSONify
-from scs_core.model.particulates.pmx_model_conf import PMxModelConf
+from scs_core.model.pmx.pmx_model_conf import PMxModelConf
 
 from scs_host.sys.host import Host
 
