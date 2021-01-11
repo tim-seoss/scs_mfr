@@ -9,23 +9,19 @@ Usage:
 Run script
 """
 
-# --------------------------------------------------------------------------------------------------------------------
 import socket
 import sys
 
 from scs_core.aws.greengrass.aws_deployment import AWSGroupDeployer
 from scs_core.data.json import JSONify
-from scs_mfr.cmd.cmd_aws_group_deployment import CMDAWSDeployment
 
-
-def return_group_name():
-    host_name = socket.gethostname()
-    return host_name + "-group"
+from scs_mfr.cmd.cmd_aws_deployment import CMDAWSDeployment
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
+
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
@@ -33,14 +29,16 @@ if __name__ == '__main__':
 
     # ----------------------------------------------------------------------------------------------------------------
     # run...
-    group_name = return_group_name()
+
+    group_name = socket.gethostname() + "-group"
     deployer = AWSGroupDeployer(group_name)
     result = None
 
     try:
         result = deployer.deploy()
     except KeyError:
-        print("Group may not have been configured", file=sys.stderr)
+        print("aws_group_deployment: group may not have been configured.", file=sys.stderr)
+        exit(1)
 
     if cmd.verbose:
         if cmd.indent:
