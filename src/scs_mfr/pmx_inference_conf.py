@@ -6,19 +6,22 @@ Created on 23 Dec 2020
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The pmx_inference_conf utility is used to
+The pmx_inference_conf utility is used to specify how Greengrass data interpretation models are to be accessed:
 
-The gases_sampler must be restarted for changes to take effect.
+* UDS_PATH - the Unix domain socket for communication between the particulates sampler and the inference server
+* INTERFACE - the format of the request
+* SPECIES: RESOURCE_NAME - the model resource for each particle size
+
+The particulates_sampler and Greengrass container must be restarted for changes to take effect.
 
 SYNOPSIS
 pmx_inference_conf.py [{ [-u UDS_PATH] [-i INTERFACE] [-s SPECIES RESOURCE_NAME] | [-r SPECIES] | -d }] [-v]
 
 EXAMPLES
-(scs-venv) scs@scs-bbe-003:~/SCS/scs_mfr/src/scs_mfr$ ./pmx_inference_conf.py -u pipes/lambda-model-pmx-s1.uds -i s1 \
--s pm1 /trained-models/pm1-s1-2020h1/xgboost-model -v
+./pmx_inference_conf.py -u pipes/lambda-pmx-model.uds -i s1 -s pm1 /trained-models/pm1-s1-2020h1/xgboost-model -v
 
 DOCUMENT EXAMPLE
-{"uds-path": "pipes/lambda-model-pmx-s1.uds", "model-interface": "s1",
+{"uds-path": "pipes/lambda-pmx-model.uds", "model-interface": "s1",
 "resource-names": {"pm1": "/trained-models/pm1-s1-2020h1/xgboost-model",
 "pm2p5": "/trained-models/pm2p5-s1-2020h1/xgboost-model",
 "pm10": "/trained-models/pm10-s1-2020h1/xgboost-model"}}
@@ -33,7 +36,7 @@ scs_dev/particulates_sampler
 import sys
 
 from scs_core.data.json import JSONify
-from scs_core.model.particulates.pmx_model_conf import PMxModelConf
+from scs_core.model.pmx.pmx_model_conf import PMxModelConf
 
 from scs_host.sys.host import Host
 

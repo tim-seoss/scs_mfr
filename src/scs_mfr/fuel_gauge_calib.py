@@ -110,14 +110,17 @@ if __name__ == '__main__':
         # single shot...
         if cmd.initialise:
             params = batt_pack.initialise(Host, force_config=True)
+            params.save(Host)
 
         elif cmd.load == 'D':
             params = batt_pack.default_params()
             batt_pack.write_params(params)
+            params.save(Host)
 
         elif cmd.load == 'F':
             params = MAX17055Params.load(Host)
             batt_pack.write_params(params)
+            params.save(Host)
 
         elif cmd.save:
             params = batt_pack.read_learned_params()

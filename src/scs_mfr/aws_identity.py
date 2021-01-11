@@ -4,18 +4,20 @@
 Created on 09 Oct 2020
 @author: Jade Page (jade.page@southcoastscience.com)
 
-DESCRIPTION The aws_greengrass_identity script allows the user to change the identity of an already configured green-
-grass install, in our use case it is to change the greengrass identity of a device which was setup using a cloned
+DESCRIPTION
+The aws_identity script allows the user to change the identity of an already configured greengrass install,
+in our use case it is to change the greengrass identity of a device which was setup using a cloned
 base image without having to reinstall the greengrass software
 
 The script could also be used to setup a "blank" greengrass install, which does not already have an identity, but
 does already have the greengrass software
 
-SYNOPSIS
-aws_identity.py [{ [-s] [-g GROUP_NAME] [-c CORE_NAME] [-v] }]
 If no group name is provided, the host name will be read from the device to generate it.
 If no core name is provided, the host name will be read from the device to generate it.
 If the set flag is not provided, the current identity will be read from the persistent file.
+
+SYNOPSIS
+aws_identity.py [-s] [-g GROUP_NAME] [-c CORE_NAME] [-v]
 
 EXAMPLES
 ./aws_identity.py -s -g scs-test-003-group -c scs-test-003-core -v
@@ -30,7 +32,7 @@ https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/iot.h
 https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/greengrass.html
 
 NOTES
-ATS_ROOT_CA_RSA_2048_REMOTE_LOCATION in core.aws.greengrass aws_greengrass_identity is a certificate provided by
+ATS_ROOT_CA_RSA_2048_REMOTE_LOCATION in core.aws.greengrass aws_identity is a certificate provided by
 amazon itself and may be subject to change e.g. via obsolescence - check here:
 https://docs.aws.amazon.com/iot/latest/developerguide/server-authentication.html
 """
@@ -47,7 +49,7 @@ from scs_core.aws.greengrass.aws_identity import AWSSetup
 
 from scs_host.sys.host import Host
 
-from scs_mfr.cmd.cmd_aws_greengrass_identity import CmdAWSGreengrassIdentity
+from scs_mfr.cmd.cmd_aws_identity import CmdAWSIdentity
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -94,7 +96,7 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
-    cmd = CmdAWSGreengrassIdentity()
+    cmd = CmdAWSIdentity()
 
     if not cmd.is_valid():
         cmd.print_help(sys.stderr)
@@ -108,7 +110,8 @@ if __name__ == '__main__':
     # Check sudo
 
     if os.geteuid() != 0:
-        exit("You need to have root privileges to run this script.")
+        print("aws_identity: you need to have root privileges to run this script.", file=sys.stderr)
+        exit(1)
 
     # ----------------------------------------------------------------------------------------------------------------
     # resources
@@ -130,4 +133,4 @@ if __name__ == '__main__':
             json_file = aws_setup.as_json()
             print(json.dumps(json_file))
         else:
-            print("No identity found")
+            print("aws_identity: no identity found.")
