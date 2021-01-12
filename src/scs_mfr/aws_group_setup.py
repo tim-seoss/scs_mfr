@@ -111,7 +111,7 @@ if __name__ == '__main__':
             aws_configurator.define_aws_group_resources(Host)
             aws_configurator.define_aws_group_functions()
             aws_configurator.define_aws_group_subscriptions()
-            aws_configurator.define_aws_logger()
+            # aws_configurator.define_aws_logger()
             aws_configurator.create_aws_group_definition()
             aws_configurator.save(Host)
 
