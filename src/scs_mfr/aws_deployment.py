@@ -12,7 +12,7 @@ configuration should already be in place - see aws_identity.py and aws_group_set
 The greengrass service must be running for the deployment to complete.
 
 SYNOPSIS
-aws_deployment.py [-w] [-i INDENT] [-v]
+aws_deployment.py [-k] [-w] [-i INDENT] [-v]
 
 EXAMPLES
 ./aws_deployment.py -vw
@@ -35,6 +35,8 @@ import time
 
 from botocore.exceptions import NoCredentialsError
 
+from scs_core.aws.client.access_key import AccessKey
+from scs_core.aws.client.client import Client
 from scs_core.aws.config.aws import AWS
 from scs_core.aws.greengrass.aws_deployer import AWSGroupDeployer
 
@@ -57,12 +59,16 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # resources...
 
-    deployer = AWSGroupDeployer(AWS.group_name())
-    deployer.create_aws_client()
+    key = AccessKey.from_stdin() if cmd.stdin else AccessKey.from_user()
+    client = Client.construct('greengrass', key)
+
+    # AWSGroupDeployer...
+    deployer = AWSGroupDeployer(AWS.group_name(), client)
 
     if cmd.verbose:
         print(deployer, file=sys.stderr)
         sys.stderr.flush()
+
 
     # ----------------------------------------------------------------------------------------------------------------
     # run...
@@ -100,6 +106,6 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         print(file=sys.stderr)
 
-    except NoCredentialsError:
+    except (EOFError, NoCredentialsError):
         print("aws_group_deployment: credentials error.", file=sys.stderr)
         exit(1)
