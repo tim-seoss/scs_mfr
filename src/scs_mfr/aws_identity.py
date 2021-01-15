@@ -5,12 +5,12 @@ Created on 09 Oct 2020
 @author: Jade Page (jade.page@southcoastscience.com)
 
 DESCRIPTION
-The aws_identity script allows the user to change the identity of an already configured greengrass install,
+The aws_identity script allows the user to change the identity of an already-configured greengrass install,
 in our use case it is to change the greengrass identity of a device which was setup using a cloned
 base image without having to reinstall the greengrass software
 
 The script could also be used to setup a "blank" greengrass install, which does not already have an identity, but
-does already have the greengrass software
+does already have the greengrass software.
 
 If no group name is provided, the host name will be read from the device to generate it.
 If no core name is provided, the host name will be read from the device to generate it.
@@ -24,6 +24,10 @@ EXAMPLES
 
 FILES
 A persistent file is placed in the conf directory when the identity is set, so that it can be read again later.
+
+SEE ALSO
+scs_mfr/aws_deployment.py
+scs_mfr/aws_group_setup.py
 
 REFERENCES
 Created with reference to amazon's own device setup script (URL may change if updated)
@@ -40,11 +44,10 @@ https://docs.aws.amazon.com/iot/latest/developerguide/server-authentication.html
 import boto3
 import json
 import os
-import socket
 import sys
 
-from getpass import getpass
-
+from scs_core.aws.client.access_key import AccessKey
+from scs_core.aws.config.aws import AWS
 from scs_core.aws.greengrass.aws_identity import AWSSetup
 
 from scs_host.sys.host import Host
@@ -55,38 +58,27 @@ from scs_mfr.cmd.cmd_aws_identity import CmdAWSIdentity
 # --------------------------------------------------------------------------------------------------------------------
 
 def create_aws_clients():
-    access_key_secret = ""
-    access_key_id = input("Enter AWS Access Key ID or leave blank to use environment variables: ")
-    if access_key_id:
-        access_key_secret = getpass(prompt="Enter Secret AWS Access Key: ")
+    key = AccessKey.from_user()
 
-    if access_key_id and access_key_secret:
+    if key.ok():
         boto_iot_client = boto3.client(
             'iot',
-            aws_access_key_id=access_key_id,
-            aws_secret_access_key=access_key_secret,
-            region_name='us-west-2'
+            aws_access_key_id=key.id,
+            aws_secret_access_key=key.secret,
+            region_name=AWS.region()
         )
         boto_gg_client = boto3.client(
             'greengrass',
-            aws_access_key_id=access_key_id,
-            aws_secret_access_key=access_key_secret,
-            region_name='us-west-2'
+            aws_access_key_id=key.id,
+            aws_secret_access_key=key.secret,
+            region_name=AWS.region()
         )
+
     else:
-        boto_iot_client = boto3.client('iot', region_name='us-west-2')
-        boto_gg_client = boto3.client('greengrass', region_name='us-west-2')
+        boto_iot_client = boto3.client('iot', region_name=AWS.region())
+        boto_gg_client = boto3.client('greengrass', region_name=AWS.region())
+
     return boto_iot_client, boto_gg_client
-
-
-def return_group_name():
-    host_name = socket.gethostname()
-    return host_name + "-group"
-
-
-def return_core_name():
-    host_name = socket.gethostname()
-    return host_name + "-core"
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -116,17 +108,13 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # resources
 
-    group_name = cmd.group_name if cmd.group_name else return_group_name()
-    core_name = cmd.core_name if cmd.core_name else return_core_name()
-
-    # ----------------------------------------------------------------------------------------------------------------
-
     # run...
     if cmd.setup:
         iot_client, gg_client = create_aws_clients()
-        aws_setup = AWSSetup(iot_client, gg_client, core_name, group_name)
+        aws_setup = AWSSetup(iot_client, gg_client, AWS.core_name(), AWS.group_name())
         aws_setup.setup_device()
         aws_setup.save(Host)
+
     else:
         aws_setup = AWSSetup.load(Host)
         if aws_setup:

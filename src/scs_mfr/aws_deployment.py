@@ -7,12 +7,17 @@ Created on 11 Jan 2021
 
 Usage:
 Run script
+
+SEE ALSO
+scs_mfr/aws_group_setup.py
+scs_mfr/aws_identity.py
 """
 
-import socket
 import sys
 
+from scs_core.aws.config.aws import AWS
 from scs_core.aws.greengrass.aws_deployment import AWSGroupDeployer
+
 from scs_core.data.json import JSONify
 
 from scs_mfr.cmd.cmd_aws_deployment import CMDAWSDeployment
@@ -30,8 +35,7 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # run...
 
-    group_name = socket.gethostname() + "-group"
-    deployer = AWSGroupDeployer(group_name)
+    deployer = AWSGroupDeployer(AWS.group_name())
     result = None
 
     try:

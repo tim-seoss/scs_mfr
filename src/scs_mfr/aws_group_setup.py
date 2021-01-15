@@ -5,32 +5,37 @@ Created on 21 Sep 2020
 
 @author: Jade Page (jade.page@southcoastscience.com)
 
-DESCRIPTION The aws_group_setup utility is designed to automate the creation of AWS Greengrass groups using South
-Coast Science's configuration
+DESCRIPTION
+The aws_group_setup utility is designed to automate the creation of AWS Greengrass groups using South
+Coast Science's configurations.
 
 The group must already exist and the ML lambdas must be associated with the greengrass account for which the IAM auth
-keys are given
+keys are given.
 
 SYNOPSIS
-aws_group_setup.py [{  [-c] | [-s] } [-m] [-a AWS_Group_Name]] [-v]
+aws_group_setup.py [-s [-m] [-a AWS_GROUP_NAME] [-f]] [-i INDENT] [-v]
 
 EXAMPLES
 ./aws_group_setup.py -s -a scs-test-001-group -m
 
 FILES
-A conf file is placed in a default directory referencing the group name and when it was created
+~/SCS/aws/aws_group_config.json
 
+SEE ALSO
+scs_mfr/aws_deployment.py
+scs_mfr/aws_identity.py
+
+RESOURCES
 https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/greengrass.html
 """
 
 import boto3
-import socket
 import sys
 
 from botocore.exceptions import ClientError
 
-from getpass import getpass
-
+from scs_core.aws.client.access_key import AccessKey
+from scs_core.aws.config.aws import AWS
 from scs_core.aws.greengrass.aws_group import AWSGroup
 from scs_core.aws.greengrass.aws_group_configurator import AWSGroupConfigurator
 from scs_core.aws.greengrass.gg_errors import ProjectMissingError
@@ -45,27 +50,17 @@ from scs_mfr.cmd.cmd_aws_group_setup import CmdAWSGroupSetup
 # --------------------------------------------------------------------------------------------------------------------
 
 def create_aws_client():
-    access_key_secret = ""
-    access_key_id = input("Enter AWS Access Key ID or leave blank to use environment variables: ")
-    if access_key_id:
-        access_key_secret = getpass(prompt="Enter Secret AWS Access Key: ")
+    key = AccessKey.from_user()
 
-    if access_key_id and access_key_secret:
-        client = boto3.client(
+    if key.ok():
+        return boto3.client(
             'greengrass',
-            aws_access_key_id=access_key_id,
-            aws_secret_access_key=access_key_secret,
-            region_name='us-west-2'
+            aws_access_key_id=key.id,
+            aws_secret_access_key=key.secret,
+            region_name=AWS.region()
         )
-    else:
-        client = boto3.client('greengrass', region_name=aws_region)
 
-    return client
-
-
-def return_group_name():
-    host_name = socket.gethostname()
-    return host_name + "-group"
+    return boto3.client('greengrass', region_name=AWS.region())
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -85,27 +80,25 @@ if __name__ == '__main__':
         print("aws_group_setup: %s" % cmd, file=sys.stderr)
         sys.stderr.flush()
 
+
     # ----------------------------------------------------------------------------------------------------------------
     # resources...
 
-    aws_group_name = cmd.aws_group_name if cmd.aws_group_name else return_group_name()
-    aws_region = "us-west-2"
+    # AWSGroupConfigurator...
+    conf = AWSGroupConfigurator.load(Host)
+
 
     # ----------------------------------------------------------------------------------------------------------------
     # run...
 
-    # ClientAuth...
-    awsGroupConf = AWSGroupConfigurator.load(Host)
-
     if cmd.set:
-        if awsGroupConf:
-            user_choice = input("Group configuration already exists. Type Yes to update: ")
-            print("")
+        if conf and not cmd.force:
+            user_choice = input("Group configuration already exists. Type Yes to overwrite: ")
             if not user_choice.lower() == "yes":
-                print("Operation cancelled")
-                exit()
+                exit(0)
+
         try:
-            aws_configurator = AWSGroupConfigurator(aws_group_name, create_aws_client(), cmd.use_ml)
+            aws_configurator = AWSGroupConfigurator(AWS.group_name(), create_aws_client(), cmd.use_ml)
 
             aws_configurator.collect_information(Host)
             aws_configurator.define_aws_group_resources(Host)
@@ -118,16 +111,16 @@ if __name__ == '__main__':
         except ClientError as error:
             if error.response['Error']['Code'] == 'BadRequestException':
                 print("aws_group_setup: Invalid request.", file=sys.stderr)
+
             if error.response['Error']['Code'] == 'InternalServerErrorException':
                 print("aws_group_setup: AWS server error.", file=sys.stderr)
 
         except ProjectMissingError:
             print("aws_group_setup: Project configuration not set.", file=sys.stderr)
 
-    if cmd.show_current:
-
+    else:
         try:
-            aws_group_info = AWSGroup(aws_group_name, create_aws_client())
+            aws_group_info = AWSGroup(AWS.group_name(), create_aws_client())
 
             aws_group_info.get_group_info_from_name()
             aws_group_info.get_group_arns()
@@ -139,6 +132,4 @@ if __name__ == '__main__':
                 print(JSONify.dumps(aws_group_info))
 
         except KeyError:
-            print("Group may not have been configured", file=sys.stderr)
-
-
+            print("aws_group_setup: group may not have been configured", file=sys.stderr)
