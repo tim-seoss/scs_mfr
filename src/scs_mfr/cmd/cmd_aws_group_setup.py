@@ -17,7 +17,7 @@ class CmdAWSGroupSetup(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-s [-m] [-a AWS_GROUP_NAME] [-f]] [-i INDENT] [-v]",
+        self.__parser = optparse.OptionParser(usage="%prog [-s [-m] [-a AWS_GROUP_NAME] [-f]] [-k] [-i INDENT] [-v]",
                                               version="%prog 1.0")
 
         # configuration...
@@ -33,6 +33,10 @@ class CmdAWSGroupSetup(object):
         self.__parser.add_option("--force", "-f", action="store_true", dest="force", default=False,
                                  help="force overwrite of existing configuration")
 
+        # input...
+        self.__parser.add_option("--stdin-key", "-k", action="store_true", dest="stdin", default=False,
+                                 help="read key from stdin (--force mode only)")
+
         # output...
         self.__parser.add_option("--indent", "-i", action="store", dest="indent", type=int,
                                  help="pretty-print the output with INDENT")
@@ -47,6 +51,9 @@ class CmdAWSGroupSetup(object):
 
     def is_valid(self):
         if not self.set and (self.use_ml or self.aws_group_name or self.force):
+            return False
+
+        if self.stdin and not self.force:
             return False
 
         return True
@@ -75,6 +82,11 @@ class CmdAWSGroupSetup(object):
 
 
     @property
+    def stdin(self):
+        return self.__opts.stdin
+
+
+    @property
     def indent(self):
         return self.__opts.indent
 
@@ -91,5 +103,5 @@ class CmdAWSGroupSetup(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdAWSGroupSetup:{set:%s, use_ml:%s, aws_group_name:%s, force:%s indent:%s verbose:%s}" % \
-               (self.set, self.use_ml, self.aws_group_name, self.force, self.indent, self.verbose)
+        return "CmdAWSGroupSetup:{set:%s, use_ml:%s, aws_group_name:%s, force:%s, stdin:%s indent:%s verbose:%s}" % \
+               (self.set, self.use_ml, self.aws_group_name, self.force, self.stdin, self.indent, self.verbose)

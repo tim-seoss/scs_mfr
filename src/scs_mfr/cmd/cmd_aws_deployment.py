@@ -16,9 +16,13 @@ class CMDAWSDeployment(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-w] [-i INDENT] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [-k] [-w] [-i INDENT] [-v]", version="%prog 1.0")
 
-        # optional...
+        # input...
+        self.__parser.add_option("--stdin-key", "-k", action="store_true", dest="stdin", default=False,
+                                 help="read key from stdin")
+
+        # output...
         self.__parser.add_option("--wait", "-w", action="store_true", dest="wait", default=False,
                                  help="wait for the deployment to finish")
 
@@ -34,12 +38,19 @@ class CMDAWSDeployment(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
+    def stdin(self):
+        return self.__opts.stdin
+
+
+    @property
     def wait(self):
         return self.__opts.wait
+
 
     @property
     def indent(self):
         return self.__opts.indent
+
 
     @property
     def verbose(self):
@@ -52,4 +63,5 @@ class CMDAWSDeployment(object):
         self.__parser.print_help(file)
 
     def __str__(self, *args, **kwargs):
-        return "CMDAWSDeployment:{indent:%s verbose:%s}" % (self.indent, self.verbose)
+        return "CMDAWSDeployment:{stdin:%s wait:%s indent:%s verbose:%s}" % \
+               (self.stdin, self.wait, self.indent, self.verbose)
