@@ -39,7 +39,7 @@ if __name__ == '__main__':
     result = None
 
     try:
-        result = deployer.deploy()
+        result = deployer.deploy(cmd.wait)
     except KeyError:
         print("aws_group_deployment: group may not have been configured.", file=sys.stderr)
         exit(1)
