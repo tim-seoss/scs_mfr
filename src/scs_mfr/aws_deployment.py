@@ -5,8 +5,25 @@ Created on 11 Jan 2021
 
 @author: Jade Page (jade.page@southcoastscience.com)
 
-Usage:
-Run script
+DESCRIPTION
+The aws_group_deployment utility is used to invoke a deployment by the AWS cloud to the device. The deployment
+configuration should already be in place - see aws_identity.py and aws_group_setup.py.
+
+The greengrass service must be running for the deployment to complete.
+
+SYNOPSIS
+aws_deployment.py [-w] [-i INDENT] [-v]
+
+EXAMPLES
+./aws_deployment.py -vw
+
+DOCUMENT EXAMPLE - OUTPUT
+{"ResponseMetadata": {"RequestId": "72fce673", "HTTPStatusCode": 200,
+"HTTPHeaders": {"date": "Fri, 15 Jan 2021 11:50:15 GMT", "content-type": "application/json", "content-length": "220",
+"connection": "keep-alive", "x-amzn-requestid": "72fce673", "x-amzn-greengrass-trace-id": "Root=1-60018176",
+"x-amz-apigw-id": "ZMEqkE-KvHcFibw=", "x-amzn-trace-id": "Root=1-60018176"}, "RetryAttempts": 0},
+"DeploymentArn": "arn:aws:greengrass:us-west-2:696437392763:/greengrass/groups//deployments/cb645f98-7737",
+"DeploymentId": "cb645f98-7737"}
 
 SEE ALSO
 scs_mfr/aws_group_setup.py
