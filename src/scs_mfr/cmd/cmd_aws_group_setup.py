@@ -17,13 +17,10 @@ class CmdAWSGroupSetup(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog { -c | -s } [-m] [-a AWS_GROUP_NAME] [-i INDENT] [-v]",
+        self.__parser = optparse.OptionParser(usage="%prog [-s [-m] [-a AWS_GROUP_NAME] [-f]] [-i INDENT] [-v]",
                                               version="%prog 1.0")
 
-        # optional...
-        self.__parser.add_option("--current", "-c", action="store_true", dest="show_current", default=False,
-                                 help="view the current group configuration")
-
+        # configuration...
         self.__parser.add_option("--set", "-s", action="store_true", dest="set", default=False,
                                  help="set the group configuration")
 
@@ -33,6 +30,10 @@ class CmdAWSGroupSetup(object):
         self.__parser.add_option("--aws-group-name", "-a", type="string", action="store", dest="aws_group_name",
                                  help="override the name of the AWS group to configure ")
 
+        self.__parser.add_option("--force", "-f", action="store_true", dest="force", default=False,
+                                 help="force overwrite of existing configuration")
+
+        # output...
         self.__parser.add_option("--indent", "-i", action="store", dest="indent", type=int,
                                  help="pretty-print the output with INDENT")
 
@@ -41,44 +42,54 @@ class CmdAWSGroupSetup(object):
 
         self.__opts, self.__args = self.__parser.parse_args()
 
+
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        if bool(self.show_current) == bool(self.set):
+        if not self.set and (self.use_ml or self.aws_group_name or self.force):
             return False
+
         return True
 
-    # ----------------------------------------------------------------------------------------------------------------
 
-    @property
-    def show_current(self):
-        return self.__opts.show_current
+    # ----------------------------------------------------------------------------------------------------------------
 
     @property
     def set(self):
         return self.__opts.set
 
+
     @property
     def use_ml(self):
         return self.__opts.use_ml
+
 
     @property
     def aws_group_name(self):
         return self.__opts.aws_group_name
 
+
+    @property
+    def force(self):
+        return self.__opts.force
+
+
     @property
     def indent(self):
         return self.__opts.indent
 
+
     @property
     def verbose(self):
         return self.__opts.verbose
+
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def print_help(self, file):
         self.__parser.print_help(file)
 
+
     def __str__(self, *args, **kwargs):
-        return "CmdAWSGroupSetup:{current:%s, set:%s, machine-learning:%s, aws-group-name:%s, indent:%s verbose:%s}" % \
-               (self.show_current, self.set, self.use_ml, self.aws_group_name, self.indent, self.verbose)
+        return "CmdAWSGroupSetup:{set:%s, use_ml:%s, aws_group_name:%s, force:%s indent:%s verbose:%s}" % \
+               (self.set, self.use_ml, self.aws_group_name, self.force, self.indent, self.verbose)

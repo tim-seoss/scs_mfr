@@ -16,9 +16,12 @@ class CMDAWSDeployment(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-i INDENT] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [-w] [-i INDENT] [-v]", version="%prog 1.0")
 
         # optional...
+        self.__parser.add_option("--wait", "-w", action="store_true", dest="wait", default=False,
+                                 help="wait for the deployment to finish")
+
         self.__parser.add_option("--indent", "-i", action="store", dest="indent", type=int,
                                  help="pretty-print the output with INDENT")
 
@@ -29,6 +32,10 @@ class CMDAWSDeployment(object):
 
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    @property
+    def wait(self):
+        return self.__opts.wait
 
     @property
     def indent(self):
