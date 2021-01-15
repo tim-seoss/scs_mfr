@@ -50,7 +50,7 @@ from scs_mfr.cmd.cmd_aws_group_setup import CmdAWSGroupSetup
 # --------------------------------------------------------------------------------------------------------------------
 
 def create_aws_client():
-    key = AccessKey.from_user()
+    key = AccessKey.get()
 
     if key.ok():
         return boto3.client(

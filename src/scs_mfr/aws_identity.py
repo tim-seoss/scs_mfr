@@ -58,7 +58,7 @@ from scs_mfr.cmd.cmd_aws_identity import CmdAWSIdentity
 # --------------------------------------------------------------------------------------------------------------------
 
 def create_aws_clients():
-    key = AccessKey.from_user()
+    key = AccessKey.get()
 
     if key.ok():
         boto_iot_client = boto3.client(
