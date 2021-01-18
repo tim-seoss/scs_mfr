@@ -51,6 +51,8 @@ from scs_mfr.cmd.cmd_aws_group_setup import CmdAWSGroupSetup
 
 if __name__ == '__main__':
 
+    key = None
+
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
@@ -68,7 +70,12 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # resources...
 
-    key = AccessKey.from_stdin() if cmd.stdin else AccessKey.from_user()
+    try:
+        key = AccessKey.from_stdin() if cmd.stdin else AccessKey.from_user()
+    except ValueError:
+        print("aws_group_setup: invalid key.", file=sys.stderr)
+        exit(1)
+
     client = Client.construct('greengrass', key)
 
     # AWSGroupConfigurator...
