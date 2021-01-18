@@ -39,6 +39,24 @@ NOTES
 ATS_ROOT_CA_RSA_2048_REMOTE_LOCATION in core.aws.greengrass aws_identity is a certificate provided by
 amazon itself and may be subject to change e.g. via obsolescence - check here:
 https://docs.aws.amazon.com/iot/latest/developerguide/server-authentication.html
+
+root@scs-cube-116:/etc/systemd/system# cat ~scs/SCS/aws/plain_access_key.json | aws_identity -sk
+Logger created
+Core created
+Cert created
+Core attached
+Traceback (most recent call last):
+  File "/home/scs/SCS/scs_mfr/src/scs_mfr/aws_identity.py", line 98, in <module>
+    aws_setup.setup_device()
+  File "/home/scs/SCS/scs_core/src/scs_core/aws/greengrass/aws_identity.py", line 72, in setup_device
+    self.create_thing()
+  File "/home/scs/SCS/scs_core/src/scs_core/aws/greengrass/aws_identity.py", line 106, in create_thing
+    policyDocument=json.dumps(policy_doc)
+  File "/usr/lib/python3/dist-packages/botocore/client.py", line 357, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+  File "/usr/lib/python3/dist-packages/botocore/client.py", line 661, in _make_api_call
+    raise error_class(parsed_response, operation_name)
+botocore.errorfactory.ResourceAlreadyExistsException: An error occurred (ResourceAlreadyExistsException) when calling the CreatePolicy operation: Policy cannot be created - name already exists (name=scs-cube-116-core_basic_policy)
 """
 
 import json
@@ -60,6 +78,8 @@ from scs_mfr.cmd.cmd_aws_identity import CmdAWSIdentity
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
+
+    key = None
 
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
@@ -84,7 +104,11 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # resources
 
-    key = AccessKey.from_stdin() if cmd.stdin else AccessKey.from_user()
+    try:
+        key = AccessKey.from_stdin() if cmd.stdin else AccessKey.from_user()
+    except ValueError:
+        print("aws_identity: invalid key.", file=sys.stderr)
+        exit(1)
 
     # ----------------------------------------------------------------------------------------------------------------
     # run...
