@@ -96,6 +96,7 @@ if __name__ == '__main__':
 
     # ----------------------------------------------------------------------------------------------------------------
     # run...
+
     try:
         if cmd.setup:
             iot_client = Client.construct('iot', key)
@@ -123,4 +124,3 @@ if __name__ == '__main__':
 
     except (EOFError, NoCredentialsError):
         print("aws_identity: credentials error.", file=sys.stderr)
-        exit(1)
