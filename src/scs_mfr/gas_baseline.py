@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
 """
-Created on 1 Mar 2017
+Created on 19 Jan 2020
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The afe_baseline utility is used to adjust the zero offset for electrochemical sensors. For example, if a sensor reports
+The gas_baseline utility is used to adjust the zero offset for electrochemical sensors. For example, if a sensor reports
 a concentration of 25 parts per billion in zero air, its zero offset should be set to -25. The date / time of any change
 is recorded.
 
@@ -20,19 +20,17 @@ an ozone sensor is identified as Ox.
 Note that the scs_dev/gasses_sampler process must be restarted for changes to take effect.
 
 SYNOPSIS
-afe_baseline.py [{ { { -s | -o } GAS VALUE | -c GAS CORRECT REPORTED } [-r HUMID -t TEMP [-p PRESS]] | -z }] [-v]
+gas_baseline.py [{ { { -s | -o } GAS VALUE | -c GAS CORRECT REPORTED } [-r HUMID -t TEMP [-p PRESS]] | -z }] [-v]
 
 EXAMPLES
-./afe_baseline.py -c NO2 10 23
+./gas_baseline.py -c NO2 10 23
 
 DOCUMENT EXAMPLE
-{"sn1": {"calibrated-on": "2019-02-02T12:00:48Z", "offset": 123, "env": {"hmd": 44.0, "tmp": 22.6, "pA": 100.3}},
-"sn2": {"calibrated-on": "2019-02-02T11:30:17Z", "offset": 0, "env": null},
-"sn3": {"calibrated-on": "2019-02-02T11:30:17Z", "offset": 0, "env": null},
-"sn4": {"calibrated-on": "2019-02-02T11:30:17Z", "offset": 0, "env": null}}
+{"CO": {"calibrated-on": "2021-01-19T10:07:27Z", "offset": 2, "env": {"hmd": 41.5, "tmp": 22.1, "pA": null}},
+"NO2": {"calibrated-on": "2021-01-19T10:07:27Z", "offset": 1, "env": {"hmd": 41.5, "tmp": 22.1, "pA": null}}}
 
 FILES
-~/SCS/conf/afe_baseline.json
+~/SCS/conf/gas_baseline.json
 
 SEE ALSO
 scs_dev/gases_sampler
@@ -44,8 +42,7 @@ import sys
 from scs_core.data.datetime import LocalizedDatetime
 from scs_core.data.json import JSONify
 
-from scs_core.gas.afe_baseline import AFEBaseline
-from scs_core.gas.afe_calib import AFECalib
+from scs_core.model.gas.gas_baseline import GasBaseline
 
 from scs_core.gas.sensor_baseline import SensorBaseline, BaselineEnvironment
 
@@ -66,8 +63,6 @@ if __name__ == '__main__':
     sht = None
     mpl = None
 
-    now = LocalizedDatetime.now().utc()
-
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
@@ -78,8 +73,9 @@ if __name__ == '__main__':
         exit(2)
 
     if cmd.verbose:
-        print("afe_baseline: %s" % cmd, file=sys.stderr)
+        print("gas_baseline: %s" % cmd, file=sys.stderr)
         sys.stderr.flush()
+
 
     try:
         I2C.Sensors.open()
@@ -87,18 +83,18 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # resources...
 
-        afe_baseline = AFEBaseline.load(Host)
+        gas_baseline = GasBaseline.load(Host)
 
         if not cmd.env_is_specified():
             # SHTConf...
             sht_conf = SHTConf.load(Host)
 
             if sht_conf is None:
-                print("afe_baseline: SHTConf not available.", file=sys.stderr)
+                print("gas_baseline: SHTConf not available.", file=sys.stderr)
                 exit(1)
 
             if cmd.verbose:
-                print("afe_baseline: %s" % sht_conf, file=sys.stderr)
+                print("gas_baseline: %s" % sht_conf, file=sys.stderr)
 
             # SHT...
             sht = sht_conf.int_sht()
@@ -108,7 +104,7 @@ if __name__ == '__main__':
 
             if mpl_conf is not None:
                 if cmd.verbose:
-                    print("afe_baseline: %s" % mpl_conf, file=sys.stderr)
+                    print("gas_baseline: %s" % mpl_conf, file=sys.stderr)
 
                 # MPL115A2...
                 mpl = MPL115A2.construct(None)
@@ -117,34 +113,22 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # run...
 
+        now = LocalizedDatetime.now().utc()
+
         if mpl is not None:
             mpl.init()
 
         # update...
         if cmd.update():
-            calib = AFECalib.load(Host)
-
-            if calib is None:
-                print("afe_baseline: no AFE calibration document available.", file=sys.stderr)
-                exit(1)
-
-            gas_name = cmd.gas_name()
-
-            index = calib.sensor_index(gas_name)
-
-            if index is None:
-                print("afe_baseline: the gas type is not included in the AFE calibration document.", file=sys.stderr)
-                exit(1)
-
             if cmd.set:
                 new_offset = cmd.set_value()
 
             elif cmd.offset:
-                old_offset = afe_baseline.sensor_baseline(index).offset
+                old_offset = gas_baseline.sensor_offset(cmd.gas_name())
                 new_offset = old_offset + cmd.offset_value()
 
             else:
-                old_offset = afe_baseline.sensor_baseline(index).offset
+                old_offset = gas_baseline.sensor_offset(cmd.gas_name())
                 new_offset = old_offset + (cmd.correct_value() - cmd.reported_value())
 
             if cmd.env_is_specified():
@@ -162,18 +146,18 @@ if __name__ == '__main__':
 
             env = BaselineEnvironment(humid, temp, press)
 
-            afe_baseline.set_sensor_baseline(index, SensorBaseline(now, new_offset, env))
-            afe_baseline.save(Host)
+            gas_baseline.set_sensor_baseline(cmd.gas_name(), SensorBaseline(now, new_offset, env))
+            gas_baseline.save(Host)
 
         # zero...
         elif cmd.zero:
-            for index in range(len(afe_baseline)):
-                afe_baseline.set_sensor_baseline(index, SensorBaseline(now, 0, None))
+            for gas in gas_baseline.gases():
+                gas_baseline.set_sensor_baseline(gas, SensorBaseline(now, 0, None))
 
-            afe_baseline.save(Host)
+            gas_baseline.save(Host)
 
         # report...
-        print(JSONify.dumps(afe_baseline))
+        print(JSONify.dumps(gas_baseline))
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -181,7 +165,7 @@ if __name__ == '__main__':
 
     except KeyboardInterrupt:
         if cmd.verbose:
-            print("afe_baseline: KeyboardInterrupt", file=sys.stderr)
+            print("gas_baseline: KeyboardInterrupt", file=sys.stderr)
 
     finally:
         I2C.Sensors.close()
