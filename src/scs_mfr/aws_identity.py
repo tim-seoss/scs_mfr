@@ -39,13 +39,15 @@ NOTES
 ATS_ROOT_CA_RSA_2048_REMOTE_LOCATION in core.aws.greengrass aws_identity is a certificate provided by
 amazon itself and may be subject to change e.g. via obsolescence - check here:
 https://docs.aws.amazon.com/iot/latest/developerguide/server-authentication.html
+
 """
 
 import json
+
 import os
 import sys
 
-from botocore.exceptions import NoCredentialsError
+from botocore.exceptions import NoCredentialsError, ClientError
 
 from scs_core.aws.client.access_key import AccessKey
 from scs_core.aws.client.client import Client
@@ -94,7 +96,6 @@ if __name__ == '__main__':
 
     # ----------------------------------------------------------------------------------------------------------------
     # run...
-
     try:
         if cmd.setup:
             iot_client = Client.construct('iot', key)
@@ -115,6 +116,10 @@ if __name__ == '__main__':
 
     except KeyboardInterrupt:
         print(file=sys.stderr)
+
+    except ClientError as error:
+        if error.response['Error']['Code'] == 'ResourceAlreadyExistsException':
+            print("aws_identity: the resources for this group already exist.", file=sys.stderr)
 
     except (EOFError, NoCredentialsError):
         print("aws_identity: credentials error.", file=sys.stderr)
