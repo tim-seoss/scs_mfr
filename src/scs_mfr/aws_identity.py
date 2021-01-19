@@ -39,13 +39,15 @@ NOTES
 ATS_ROOT_CA_RSA_2048_REMOTE_LOCATION in core.aws.greengrass aws_identity is a certificate provided by
 amazon itself and may be subject to change e.g. via obsolescence - check here:
 https://docs.aws.amazon.com/iot/latest/developerguide/server-authentication.html
+
 """
 
 import json
+
 import os
 import sys
 
-from botocore.exceptions import NoCredentialsError
+from botocore.exceptions import NoCredentialsError, ClientError
 
 from scs_core.aws.client.access_key import AccessKey
 from scs_core.aws.client.client import Client
@@ -60,6 +62,8 @@ from scs_mfr.cmd.cmd_aws_identity import CmdAWSIdentity
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
+
+    key = None
 
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
@@ -84,7 +88,11 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # resources
 
-    key = AccessKey.from_stdin() if cmd.stdin else AccessKey.from_user()
+    try:
+        key = AccessKey.from_stdin() if cmd.stdin else AccessKey.from_user()
+    except ValueError:
+        print("aws_identity: invalid key.", file=sys.stderr)
+        exit(1)
 
     # ----------------------------------------------------------------------------------------------------------------
     # run...
@@ -110,6 +118,9 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         print(file=sys.stderr)
 
+    except ClientError as error:
+        if error.response['Error']['Code'] == 'ResourceAlreadyExistsException':
+            print("aws_identity: the resources for this group already exist.", file=sys.stderr)
+
     except (EOFError, NoCredentialsError):
         print("aws_identity: credentials error.", file=sys.stderr)
-        exit(1)

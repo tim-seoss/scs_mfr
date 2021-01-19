@@ -9,7 +9,7 @@ import optparse
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class CmdAFEBaseline(object):
+class CmdBaseline(object):
     """unix command line handler"""
 
 
@@ -109,7 +109,7 @@ class CmdAFEBaseline(object):
 
     def gas_name(self):
         if self.set:
-            return
+            return self.set[0]
 
         if self.offset:
             return self.offset[0]
@@ -189,5 +189,5 @@ class CmdAFEBaseline(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdAFEBaseline:{set:%s, offset:%s, correct:%s, humid:%s, temp:%s, press:%s, zero:%s, verbose:%s}" % \
+        return "CmdBaseline:{set:%s, offset:%s, correct:%s, humid:%s, temp:%s, press:%s, zero:%s, verbose:%s}" % \
                (self.set, self.offset, self.correct, self.humid, self.temp, self.press, self.zero, self.verbose)
