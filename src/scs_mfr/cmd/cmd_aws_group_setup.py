@@ -53,7 +53,7 @@ class CmdAWSGroupSetup(object):
         if not self.set and (self.use_ml or self.aws_group_name or self.force):
             return False
 
-        if self.stdin and not self.force:
+        if self.stdin and self.set and not self.force:
             return False
 
         return True
