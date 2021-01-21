@@ -42,6 +42,8 @@ from scs_core.aws.greengrass.aws_deployer import AWSGroupDeployer
 
 from scs_core.data.json import JSONify
 
+from scs_core.sys.logging import Logging
+
 from scs_mfr.cmd.cmd_aws_deployment import CMDAWSDeployment
 
 
@@ -57,23 +59,25 @@ if __name__ == '__main__':
 
     cmd = CMDAWSDeployment()
 
+    # logging...
+    Logging.config('aws_deployment', verbose=cmd.verbose)
+    logger = Logging.getLogger()
+
+
     # ----------------------------------------------------------------------------------------------------------------
     # resources...
 
     try:
         key = AccessKey.from_stdin() if cmd.stdin else AccessKey.from_user()
     except ValueError:
-        print("aws_deployment: invalid key.", file=sys.stderr)
+        logger.error("invalid key.")
         exit(1)
 
     client = Client.construct('greengrass', key)
 
     # AWSGroupDeployer...
     deployer = AWSGroupDeployer(AWS.group_name(), client)
-
-    if cmd.verbose:
-        print(deployer, file=sys.stderr)
-        sys.stderr.flush()
+    logger.info(deployer)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -84,7 +88,7 @@ if __name__ == '__main__':
         try:
             response = deployer.deploy()
         except KeyError:
-            print("aws_deployment: group may not have been configured.", file=sys.stderr)
+            logger.error("group may not have been configured.")
             exit(1)
 
         if cmd.verbose:
@@ -98,11 +102,10 @@ if __name__ == '__main__':
             status = deployer.status(response)
 
             if status == AWSGroupDeployer.FAILURE:
-                print("aws_deployment: deployment failed.", file=sys.stderr)
+                logger.error("deployment failed.")
                 exit(1)
 
-            if cmd.verbose:
-                print("aws_deployment: %s" % status, file=sys.stderr)
+            logger.info(status)
 
             if not cmd.wait or status == AWSGroupDeployer.SUCCESS:
                 break
@@ -113,5 +116,4 @@ if __name__ == '__main__':
         print(file=sys.stderr)
 
     except (EOFError, NoCredentialsError):
-        print("aws_deployment: credentials error.", file=sys.stderr)
-        exit(1)
+        logger.error("credentials error.")
