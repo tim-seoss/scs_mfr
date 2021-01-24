@@ -42,6 +42,8 @@ from scs_core.aws.greengrass.gg_errors import ProjectMissingError
 
 from scs_core.data.json import JSONify
 
+from scs_core.sys.logging import Logging
+
 from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_aws_group_setup import CmdAWSGroupSetup
@@ -62,10 +64,11 @@ if __name__ == '__main__':
         cmd.print_help(sys.stderr)
         exit(2)
 
-    if cmd.verbose:
-        print("aws_group_setup: %s" % cmd, file=sys.stderr)
-        sys.stderr.flush()
+    # logging...
+    Logging.config('aws_group_setup', verbose=cmd.verbose)
+    logger = Logging.getLogger()
 
+    logger.info(cmd)
 
     # ----------------------------------------------------------------------------------------------------------------
     # resources...
@@ -73,17 +76,14 @@ if __name__ == '__main__':
     try:
         key = AccessKey.from_stdin() if cmd.stdin else AccessKey.from_user()
     except ValueError:
-        print("aws_group_setup: invalid key.", file=sys.stderr)
+        logger.error('invalid key.')
         exit(1)
 
     client = Client.construct('greengrass', key)
 
     # AWSGroupConfigurator...
     conf = AWSGroupConfigurator.load(Host)
-
-    if cmd.verbose:
-        print(conf, file=sys.stderr)
-        sys.stderr.flush()
+    logger.info(conf)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -107,15 +107,20 @@ if __name__ == '__main__':
                 aws_configurator.create_aws_group_definition()
                 aws_configurator.save(Host)
 
+                if cmd.indent:
+                    print(JSONify.dumps(aws_configurator, indent=cmd.indent))
+                else:
+                    print(JSONify.dumps(aws_configurator))
+
             except ClientError as error:
                 if error.response['Error']['Code'] == 'BadRequestException':
-                    print("aws_group_setup: Invalid request.", file=sys.stderr)
+                    logger.error("Invalid request.")
 
                 if error.response['Error']['Code'] == 'InternalServerErrorException':
-                    print("aws_group_setup: AWS server error.", file=sys.stderr)
+                    logger.error("AWS server error.")
 
             except ProjectMissingError:
-                print("aws_group_setup: Project configuration not set.", file=sys.stderr)
+                logger.error("Project configuration not set.")
 
         else:
             try:
@@ -131,12 +136,10 @@ if __name__ == '__main__':
                     print(JSONify.dumps(aws_group_info))
 
             except KeyError:
-                print("aws_group_setup: group may not have been configured.", file=sys.stderr)
-                exit(1)
+                logger.error("group may not have been configured.")
 
     except KeyboardInterrupt:
         print(file=sys.stderr)
 
     except (EOFError, NoCredentialsError):
-        print("aws_group_setup: credentials error.", file=sys.stderr)
-        exit(1)
+        logger.error("credentials error.")
