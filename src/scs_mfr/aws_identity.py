@@ -54,6 +54,8 @@ from scs_core.aws.client.client import Client
 from scs_core.aws.config.aws import AWS
 from scs_core.aws.greengrass.aws_identity import AWSSetup
 
+from scs_core.sys.logging import Logging
+
 from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_aws_identity import CmdAWSIdentity
@@ -74,15 +76,17 @@ if __name__ == '__main__':
         cmd.print_help(sys.stderr)
         exit(2)
 
-    if cmd.verbose:
-        print("aws_identity: %s" % cmd, file=sys.stderr)
-        sys.stderr.flush()
+    # logging...
+    Logging.config('aws_identity', verbose=cmd.verbose)
+    logger = Logging.getLogger()
+
+    logger.info(cmd)
 
     # ----------------------------------------------------------------------------------------------------------------
     # Check sudo
 
     if os.geteuid() != 0:
-        print("aws_identity: you need to have root privileges to run this script.", file=sys.stderr)
+        logger.error("you need to have root privileges to run this script.")
         exit(1)
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -91,7 +95,7 @@ if __name__ == '__main__':
     try:
         key = AccessKey.from_stdin() if cmd.stdin else AccessKey.from_user()
     except ValueError:
-        print("aws_identity: invalid key.", file=sys.stderr)
+        logger.error("invalid key.")
         exit(1)
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -113,14 +117,14 @@ if __name__ == '__main__':
                 json_file = aws_setup.as_json()
                 print(json.dumps(json_file))
             else:
-                print("aws_identity: no identity found.", file=sys.stderr)
+                logger.error("no identity found.")
 
     except KeyboardInterrupt:
         print(file=sys.stderr)
 
     except ClientError as error:
         if error.response['Error']['Code'] == 'ResourceAlreadyExistsException':
-            print("aws_identity: the resources for this group already exist.", file=sys.stderr)
+            logger.error("the resources for this group already exist.")
 
     except (EOFError, NoCredentialsError):
-        print("aws_identity: credentials error.", file=sys.stderr)
+        logger.error("credentials error.")
