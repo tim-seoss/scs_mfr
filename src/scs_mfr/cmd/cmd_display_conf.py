@@ -6,10 +6,7 @@ Created on 22 Jun 2019
 
 import optparse
 
-try:
-    from scs_display.display.display_conf import DisplayConf
-except ImportError:
-    from scs_core.display.display_conf import DisplayConf
+from scs_core.display.display_conf import DisplayConf
 
 
 # --------------------------------------------------------------------------------------------------------------------

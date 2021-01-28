@@ -48,6 +48,7 @@ import sys
 
 from scs_core.data.json import JSONify
 from scs_core.sync.interval_timer import IntervalTimer
+from scs_core.psu.batt_pack.fuel_gauge.max17055.max17055_params import Max17055Params
 
 from scs_dfe.interface.interface_conf import InterfaceConf
 
@@ -56,7 +57,6 @@ from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_fuel_gauge_calib import CmdFuelGaugeCalib
 
-from scs_psu.batt_pack.fuel_gauge.max17055.max17055_params import MAX17055Params
 from scs_psu.psu.psu_conf import PSUConf
 
 
@@ -105,7 +105,7 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # run...
 
-        # no auto-initialisation - we want to see the MAX17055 native values
+        # no auto-initialisation - we want to see the Max17055 native values
 
         # single shot...
         if cmd.initialise:
@@ -118,7 +118,7 @@ if __name__ == '__main__':
             params.save(Host)
 
         elif cmd.load == 'F':
-            params = MAX17055Params.load(Host)
+            params = Max17055Params.load(Host)
             batt_pack.write_params(params)
             params.save(Host)
 
