@@ -37,7 +37,7 @@ from scs_core.aws.client.access_key import AccessKey
 from scs_core.aws.client.client import Client
 from scs_core.aws.config.aws import AWS
 from scs_core.aws.greengrass.aws_group import AWSGroup
-from scs_core.aws.greengrass.aws_group_configurator import AWSGroupConfigurator
+from scs_core.aws.greengrass.aws_group_configuration import AWSGroupConfiguration
 from scs_core.aws.greengrass.gg_errors import ProjectMissingError
 
 from scs_core.data.json import JSONify
@@ -82,7 +82,7 @@ if __name__ == '__main__':
     client = Client.construct('greengrass', key)
 
     # AWSGroupConfigurator...
-    conf = AWSGroupConfigurator.load(Host)
+    conf = AWSGroupConfiguration.load(Host)
     logger.info(conf)
 
 
@@ -97,20 +97,20 @@ if __name__ == '__main__':
                     exit(0)
 
             try:
-                aws_configurator = AWSGroupConfigurator(AWS.group_name(), client, cmd.use_ml)
+                aws_configuration = AWSGroupConfiguration(AWS.group_name(), client, cmd.use_ml)
 
-                aws_configurator.collect_information(Host)
-                aws_configurator.define_aws_group_resources(Host)
-                aws_configurator.define_aws_group_functions()
-                aws_configurator.define_aws_group_subscriptions()
-                # aws_configurator.define_aws_logger()
-                aws_configurator.create_aws_group_definition()
-                aws_configurator.save(Host)
+                aws_configuration.collect_information(Host)
+                aws_configuration.define_aws_group_resources(Host)
+                aws_configuration.define_aws_group_functions()
+                aws_configuration.define_aws_group_subscriptions()
+                # aws_configuration.define_aws_logger()
+                aws_configuration.create_aws_group_definition()
+                aws_configuration.save(Host)
 
                 if cmd.indent:
-                    print(JSONify.dumps(aws_configurator, indent=cmd.indent))
+                    print(JSONify.dumps(aws_configuration, indent=cmd.indent))
                 else:
-                    print(JSONify.dumps(aws_configurator))
+                    print(JSONify.dumps(aws_configuration))
 
             except ClientError as error:
                 if error.response['Error']['Code'] == 'BadRequestException':
