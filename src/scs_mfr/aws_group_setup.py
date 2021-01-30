@@ -40,6 +40,7 @@ from scs_core.aws.greengrass.aws_group import AWSGroup
 from scs_core.aws.greengrass.aws_group_configuration import AWSGroupConfiguration
 from scs_core.aws.greengrass.gg_errors import ProjectMissingError
 
+from scs_core.data.datetime import LocalizedDatetime
 from scs_core.data.json import JSONify
 
 from scs_core.sys.logging import Logging
@@ -97,20 +98,20 @@ if __name__ == '__main__':
                     exit(0)
 
             try:
-                aws_configuration = AWSGroupConfiguration(AWS.group_name(), client, cmd.use_ml)
+                now = LocalizedDatetime.now()
+                conf = AWSGroupConfiguration(AWS.group_name(), now, ml=cmd.use_ml)
+                configurator = conf.configurator(client)
 
-                aws_configuration.collect_information(Host)
-                aws_configuration.define_aws_group_resources(Host)
-                aws_configuration.define_aws_group_functions()
-                aws_configuration.define_aws_group_subscriptions()
-                # aws_configuration.define_aws_logger()
-                aws_configuration.create_aws_group_definition()
-                aws_configuration.save(Host)
+                configurator.collect_information(Host)
+                configurator.define_aws_group_resources(Host)
+                configurator.define_aws_group_functions()
+                configurator.define_aws_group_subscriptions()
+                # configurator.define_aws_logger()
+                configurator.create_aws_group_definition()
 
-                if cmd.indent:
-                    print(JSONify.dumps(aws_configuration, indent=cmd.indent))
-                else:
-                    print(JSONify.dumps(aws_configuration))
+                conf.save(Host)
+
+                print(JSONify.dumps(conf, indent=cmd.indent))
 
             except ClientError as error:
                 if error.response['Error']['Code'] == 'BadRequestException':
@@ -130,10 +131,7 @@ if __name__ == '__main__':
                 aws_group_info.get_group_arns()
                 aws_group_info.output_current_info()
 
-                if cmd.indent:
-                    print(JSONify.dumps(aws_group_info, indent=cmd.indent))
-                else:
-                    print(JSONify.dumps(aws_group_info))
+                print(JSONify.dumps(aws_group_info, indent=cmd.indent))
 
             except KeyError:
                 logger.error("group may not have been configured.")

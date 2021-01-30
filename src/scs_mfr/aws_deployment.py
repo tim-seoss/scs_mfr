@@ -92,10 +92,7 @@ if __name__ == '__main__':
             exit(1)
 
         if cmd.verbose:
-            if cmd.indent:
-                print(JSONify.dumps(response, indent=cmd.indent))
-            else:
-                print(JSONify.dumps(response))
+            print(JSONify.dumps(response, indent=cmd.indent))
 
         # wait...
         while True:

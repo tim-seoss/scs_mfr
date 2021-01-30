@@ -9,10 +9,10 @@ DESCRIPTION
 The configuration utility is used to
 
 SYNOPSIS
-configuration.py [-s ORG GROUP LOCATION] [-d] [-v]
+configuration.py [-s CONFIGURATION] [-i INDENT] [-v]
 
 EXAMPLES
-./configuration.py -s south-coast-science-dev development 1
+./configuration.py -i4
 
 DOCUMENT EXAMPLE
 {"location-path": "south-coast-science-dev/development/loc/1",
@@ -57,8 +57,6 @@ if __name__ == '__main__':
 
     if cmd.save():
         conf = Configuration.construct_from_jstr(cmd.configuration)
-        print(JSONify.dumps(conf, indent=4))
-        print("-")
 
         if conf is None:
             logger.error('invalid configuration: %s' % cmd.configuration)
