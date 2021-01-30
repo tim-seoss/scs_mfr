@@ -37,9 +37,8 @@ scs_mfr/mpl115a2_calib
 
 import sys
 
+from scs_core.climate.mpl115a2_conf import MPL115A2Conf
 from scs_core.data.json import JSONify
-
-from scs_dfe.climate.mpl115a2_conf import MPL115A2Conf
 
 from scs_host.sys.host import Host
 
