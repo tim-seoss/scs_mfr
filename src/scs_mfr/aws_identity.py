@@ -43,7 +43,6 @@ https://docs.aws.amazon.com/iot/latest/developerguide/server-authentication.html
 """
 
 import json
-
 import os
 import sys
 
@@ -52,7 +51,7 @@ from botocore.exceptions import NoCredentialsError, ClientError
 from scs_core.aws.client.access_key import AccessKey
 from scs_core.aws.client.client import Client
 from scs_core.aws.config.aws import AWS
-from scs_core.aws.greengrass.aws_identity import AWSSetup
+from scs_core.aws.greengrass.aws_identity import AWSIdentity
 
 from scs_core.sys.logging import Logging
 
@@ -106,12 +105,12 @@ if __name__ == '__main__':
             iot_client = Client.construct('iot', key)
             gg_client = Client.construct('greengrass', key)
 
-            aws_setup = AWSSetup(iot_client, gg_client, AWS.core_name(), AWS.group_name())
+            aws_setup = AWSIdentity(iot_client, gg_client, AWS.core_name(), AWS.group_name())
             aws_setup.setup_device()
             aws_setup.save(Host)
 
         else:
-            aws_setup = AWSSetup.load(Host)
+            aws_setup = AWSIdentity.load(Host)
 
             if aws_setup:
                 json_file = aws_setup.as_json()
