@@ -20,7 +20,7 @@ class CmdConfiguration(object):
 
         # optional...
         self.__parser.add_option("--save", "-s", type="string", nargs=1, action="store", dest="configuration",
-                                 help="save the given JSON configuration")
+                                 help="save the given JSON configuration component(s)")
 
         # output...
         self.__parser.add_option("--indent", "-i", action="store", dest="indent", type=int,
