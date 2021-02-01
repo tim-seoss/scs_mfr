@@ -16,11 +16,11 @@ class CmdConfiguration(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-s CONFIGURATION] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [-s CONFIGURATION] [-i INDENT] [-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--save", "-s", type="string", nargs=1, action="store", dest="configuration",
-                                 help="save the given JSON configuration")
+                                 help="save the given JSON configuration component(s)")
 
         # output...
         self.__parser.add_option("--indent", "-i", action="store", dest="indent", type=int,

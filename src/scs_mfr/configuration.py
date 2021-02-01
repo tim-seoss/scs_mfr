@@ -6,25 +6,63 @@ Created on 29 Jan 2021
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The configuration utility is used to
+The configuration utility is used to marshal all of the device configuration settings into a single JSON document.
+It is intended to be used as one component of a centralised estate management system.
+
+The utility can be used to update a setting on the device. To do this, a JSON document containing at least one field
+of the configuration document must be supplied on the command line. Any fields that are not named will not be updated.
 
 SYNOPSIS
-configuration.py [-s ORG GROUP LOCATION] [-d] [-v]
+configuration.py [-s CONFIGURATION] [-i INDENT] [-v]
 
 EXAMPLES
-./configuration.py -s south-coast-science-dev development 1
+./configuration.py -i4 -s '{"timezone-conf": {"name": "Europe/London"}}'
 
 DOCUMENT EXAMPLE
-{"location-path": "south-coast-science-dev/development/loc/1",
-"device-path": "south-coast-science-dev/development/device"}
-
-FILES
-~/SCS/aws/configuration.json
-
-SEE ALSO
-scs_dev/aws_mqtt_client
-scs_mfr/aws_api_auth
-scs_mfr/aws_client_auth
+{"afe-baseline": {"sn1": {"calibrated-on": "2021-01-03T09:27:42Z", "offset": 136,
+"env": {"hmd": 33.4, "tmp": 23.3, "pA": null}}},
+"afe-calib": {"serial_number": null, "type": "DSI", "calibrated_on": "2020-01-01", "dispatched_on": null,
+"pt1000_v20": null, "sn1": {"serial_number": "212060325", "sensor_type": "NOGA4", "we_electronic_zero_mv": 300,
+"we_sensor_zero_mv": 0, "we_total_zero_mv": 300, "ae_electronic_zero_mv": 300, "ae_sensor_zero_mv": 0,
+"ae_total_zero_mv": 300, "we_sensitivity_na_ppb": -0.254, "we_cross_sensitivity_no2_na_ppb": -0.254,
+"pcb_gain": -0.7, "we_sensitivity_mv_ppb": 0.185, "we_cross_sensitivity_no2_mv_ppb": 0.185}},
+"aws-api-auth": {"endpoint": "aws.southcoastscience.com", "api-key": "de92c5ff-b47a-4cc4-a04c-62d684d64a1f"},
+"aws-client-auth": {"endpoint": "asrfh6e5j5ecz.iot.us-west-2.amazonaws.com", "client-id": "scs-bbe-500",
+"cert-id": "075e2e999f"},
+"aws-group-config": {"group-name": "scs-cube-001-group", "time-initiated": "2021-01-12T09:39:32Z",
+"unix-group": 984, "ml": true},
+"aws-project": {"location-path": "south-coast-science-dev/cube/loc/1", "device-path":
+"south-coast-science-dev/cube/device"},
+"csv-logger-conf": {"root-path": "/srv/removable_data_storage", "delete-oldest": true, "write-interval": 0},
+"display-conf": null,
+"gas-baseline": {"NO2": {"calibrated-on": "2021-01-19T13:01:13Z", "offset": 7,
+"env": {"hmd": 42.8, "tmp": 25.3, "pA": null}}},
+"gas-model-conf": {"uds-path": "pipes/lambda-gas-model.uds", "model-interface": "vB",
+"resource-names": {"NO2": "/trained-models/no2-vB-2020q13/xgboost-model"}},
+"gps-conf": {"model": "SAM8Q", "sample-interval": 10, "tally": 60,
+"report-file": "/tmp/southcoastscience/gps_report.json", "debug": false},
+"interface-conf": {"model": "OPCubeT1"},
+"greengrass-identity": {"core-name": "scs-cube-001-core", "group-name": "scs-cube-001-group"},
+"mpl115a2-calib": {"calibrated-on": "2020-09-14T13:31:46Z", "c25": 509},
+"mpl115a2-conf": null,
+"mqtt-conf": {"inhibit-publishing": false, "report-file": "/tmp/southcoastscience/mqtt_queue_report.json",
+"debug": false},
+"ndir-conf": null,
+"opc-conf": {"model": "N3", "sample-period": 10, "restart-on-zeroes": true, "power-saving": false},
+"pmx-model-conf": {"uds-path": "pipes/lambda-pmx-model.uds", "model-interface": "s1",
+"resource-names": {"pm1": "/trained-models/pm1-s1-2020h1/xgboost-model",
+"pm2p5": "/trained-models/pm2p5-s1-2020h1/xgboost-model",
+"pm10": "/trained-models/pm10-s1-2020h1/xgboost-model"}},
+"psu-conf": {"model": "OPCubeV1", "batt-model": "PackV2", "ignore-threshold": true, "reporting-interval": 5,
+"report-file": "/tmp/southcoastscience/psu_status_report.json"},
+"pt1000-calib": null,
+"scd30-conf": null, "schedule": {"scs-climate": {"interval": 10.0, "tally": 1},
+"scs-gases": {"interval": 10.0, "tally": 1}, "scs-particulates": {"interval": 10.0, "tally": 1},
+"scs-status": {"interval": 60.0, "tally": 1}},
+"shared-secret": {"key": "XXX"},
+"sht-conf": {"int": "0x45", "ext": "0x45"},
+"system-id": {"vendor-id": "SCS", "model-id": "OPC", "model": "Praxis/OPCube", "config": "v1", "system-sn": 1},
+"timezone-conf": {"set-on": "2017-08-15T12:50:05Z", "name": "Europe/London"}}
 """
 
 from scs_core.data.json import JSONify
@@ -37,7 +75,6 @@ from cmd.cmd_configuration import CmdConfiguration
 
 
 # --------------------------------------------------------------------------------------------------------------------
-
 
 if __name__ == '__main__':
 
@@ -57,12 +94,10 @@ if __name__ == '__main__':
 
     if cmd.save():
         conf = Configuration.construct_from_jstr(cmd.configuration)
-        print(JSONify.dumps(conf, indent=4))
-        print("-")
 
         if conf is None:
             logger.error('invalid configuration: %s' % cmd.configuration)
-            exit(1)
+            exit(2)
 
         conf.save(Host)
 
