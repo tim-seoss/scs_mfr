@@ -309,5 +309,4 @@ if __name__ == '__main__':
         conf.save(Host)
 
     sample = Sample(system_id.message_tag(), LocalizedDatetime.now(), values=Configuration.load(Host))
-
     print(JSONify.dumps(sample, indent=cmd.indent))
