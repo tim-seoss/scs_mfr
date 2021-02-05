@@ -20,8 +20,8 @@ class CmdInferenceConf(object):
         self.__interfaces = interfaces
         interface_names = ' | '.join(interfaces)
 
-        self.__parser = optparse.OptionParser(usage="%prog [{ [-u UDS_PATH] [-i INTERFACE] [-s SPECIES RESOURCE_NAME]"
-                                                    " | [-r SPECIES] | -d }] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ [-u UDS_PATH] [-i INTERFACE] | -d }] [-v]",
+                                              version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--uds-path", "-u", type="string", nargs=1, action="store", dest="uds_path",
@@ -29,12 +29,6 @@ class CmdInferenceConf(object):
 
         self.__parser.add_option("--interface", "-i", type="string", nargs=1, action="store", dest="model_interface",
                                  help="set the interface code { %s }" % interface_names)
-
-        self.__parser.add_option("--set", "-s", type="string", nargs=2, action="store", dest="set",
-                                 help="set SPECIES RESOURCE_NAME")
-
-        self.__parser.add_option("--remove", "-r", type="string", nargs=1, action="store", dest="remove_species",
-                                 help="remove SPECIES model")
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="delete the inference configuration")
@@ -48,7 +42,7 @@ class CmdInferenceConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        if self.set() and (self.remove_species or self.delete):
+        if self.set() and self.delete:
             return False
 
         if self.model_interface and self.model_interface not in self.__interfaces:
@@ -58,7 +52,7 @@ class CmdInferenceConf(object):
 
 
     def is_complete(self):
-        if self.uds_path is None or self.model_interface is None or self.set_species is None:
+        if self.uds_path is None or self.model_interface is None:
             return False
 
         return True
@@ -81,21 +75,6 @@ class CmdInferenceConf(object):
 
 
     @property
-    def set_species(self):
-        return self.__opts.set[0] if self.__opts.set else None
-
-
-    @property
-    def set_filename(self):
-        return self.__opts.set[1] if self.__opts.set else None
-
-
-    @property
-    def remove_species(self):
-        return self.__opts.remove_species
-
-
-    @property
     def delete(self):
         return self.__opts.delete
 
@@ -112,5 +91,5 @@ class CmdInferenceConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdInferenceConf:{uds_path:%s, model_interface:%s, set:%s, remove:%s, delete:%s, verbose:%s}" % \
-               (self.uds_path, self.model_interface, self.__opts.set, self.remove_species, self.delete, self.verbose)
+        return "CmdInferenceConf:{uds_path:%s, model_interface:%s, delete:%s, verbose:%s}" % \
+               (self.uds_path, self.model_interface, self.delete, self.verbose)
