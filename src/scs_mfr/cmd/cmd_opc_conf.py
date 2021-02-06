@@ -75,8 +75,7 @@ class CmdOPCConf(object):
 
 
     def is_complete(self):
-        if self.model is None or self.sample_period is None or \
-                self.restart_on_zeroes is None or self.power_saving is None:
+        if self.model is None or self.sample_period is None:
             return False
 
         return True

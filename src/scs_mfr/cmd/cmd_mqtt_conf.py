@@ -42,7 +42,7 @@ class CmdMQTTConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        if self.set and self.delete:
+        if self.set() and self.delete:
             return False
 
         if self.__opts.debug is not None and self.__opts.debug != 0 and self.__opts.debug != 1:
