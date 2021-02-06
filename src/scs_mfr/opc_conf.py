@@ -104,12 +104,12 @@ if __name__ == '__main__':
 
         model = cmd.model if cmd.model else conf.model
         sample_period = cmd.sample_period if cmd.sample_period else conf.sample_period
-        restart_on_zeroes = cmd.restart_on_zeroes if cmd.restart_on_zeroes is not None else conf.restart_on_zeroes
-        power_saving = cmd.power_saving if cmd.power_saving is not None else conf.power_saving
 
         if conf is None:
-            conf = OPCConf(None, 10, True, False, None, None)       # permit None for bus and address settings
+            conf = OPCConf(None, 10, True, False, None, None)
 
+        restart_on_zeroes = cmd.restart_on_zeroes if cmd.restart_on_zeroes is not None else conf.restart_on_zeroes
+        power_saving = cmd.power_saving if cmd.power_saving is not None else conf.power_saving
         bus = conf.bus if cmd.bus is None else cmd.bus
         address = conf.address if cmd.address is None else cmd.address
 
