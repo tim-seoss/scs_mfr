@@ -53,8 +53,6 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_interface_conf import CmdInterfaceConf
 
 
-# TODO: add a field identifying the model of DSI
-
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
