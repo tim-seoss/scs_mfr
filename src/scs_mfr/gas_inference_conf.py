@@ -15,14 +15,13 @@ The gas_inference_conf utility is used to specify how Greengrass data interpreta
 The gases_sampler and Greengrass container must be restarted for changes to take effect.
 
 SYNOPSIS
-gas_inference_conf.py [{ [-u UDS_PATH] [-i INTERFACE] [-s SPECIES RESOURCE_NAME] | [-r SPECIES] | -d }] [-v]
+gas_inference_conf.py [{ [-u UDS_PATH] [-i INTERFACE] | -d }] [-v]
 
 EXAMPLES
-./gas_inference_conf.py -u pipes/lambda-gas-model.uds -i vB -s NO2 /trained-models/no2-vB-2020q13/xgboost-model -v
+./gas_inference_conf.py -u pipes/lambda-gas-model.uds -i vB -v
 
 DOCUMENT EXAMPLE
-{"uds-path": "pipes/lambda-gas-model.uds", "model-interface": "vB",
-"model-filenames": {"NO2": "/trained-models/no2-vB-2020q13/xgboost-model"}}
+{"uds-path": "pipes/lambda-gas-model.uds", "model-interface": "vB"}
 
 FILES
 ~/SCS/conf/gas_model_conf.json
@@ -71,24 +70,15 @@ if __name__ == '__main__':
 
     if cmd.set():
         if conf is None and not cmd.is_complete():
-            print("gas_inference_conf: No configuration is stored - you must therefore set all fields.",
+            print("gas_inference_conf: No configuration is stored - you must therefore set both fields.",
                   file=sys.stderr)
             cmd.print_help(sys.stderr)
             exit(2)
 
         uds_path = cmd.uds_path if cmd.uds_path else conf.uds_path
         model_interface = cmd.model_interface if cmd.model_interface else conf.model_interface
-        resource_names = {} if conf is None else conf.resource_names
 
-        conf = GasModelConf(uds_path, model_interface, resource_names)
-        conf.save(Host)
-
-    if cmd.set_species:
-        conf.set_resource_name(cmd.set_species, cmd.set_filename)
-        conf.save(Host)
-
-    if cmd.remove_species:
-        conf.delete_resource_name(cmd.remove_species)
+        conf = GasModelConf(uds_path, model_interface)
         conf.save(Host)
 
     if cmd.delete and conf is not None:

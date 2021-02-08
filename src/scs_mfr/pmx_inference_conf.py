@@ -15,16 +15,13 @@ The pmx_inference_conf utility is used to specify how Greengrass data interpreta
 The particulates_sampler and Greengrass container must be restarted for changes to take effect.
 
 SYNOPSIS
-pmx_inference_conf.py [{ [-u UDS_PATH] [-i INTERFACE] [-s SPECIES RESOURCE_NAME] | [-r SPECIES] | -d }] [-v]
+pmx_inference_conf.py [{ [-u UDS_PATH] [-i INTERFACE] | -d }] [-v]
 
 EXAMPLES
-./pmx_inference_conf.py -u pipes/lambda-pmx-model.uds -i s1 -s pm1 /trained-models/pm1-s1-2020h1/xgboost-model -v
+./pmx_inference_conf.py -u pipes/lambda-pmx-model.uds -i s1 -v
 
 DOCUMENT EXAMPLE
-{"uds-path": "pipes/lambda-pmx-model.uds", "model-interface": "s1",
-"resource-names": {"pm1": "/trained-models/pm1-s1-2020h1/xgboost-model",
-"pm2p5": "/trained-models/pm2p5-s1-2020h1/xgboost-model",
-"pm10": "/trained-models/pm10-s1-2020h1/xgboost-model"}}
+{"uds-path": "pipes/lambda-pmx-model.uds", "model-interface": "s1"}
 
 FILES
 ~/SCS/conf/pmx_model_conf.json
@@ -80,17 +77,8 @@ if __name__ == '__main__':
 
         uds_path = cmd.uds_path if cmd.uds_path else conf.uds_path
         model_interface = cmd.model_interface if cmd.model_interface else conf.model_interface
-        resource_names = {} if conf is None else conf.resource_names
 
-        conf = PMxModelConf(uds_path, model_interface, resource_names)
-        conf.save(Host)
-
-    if cmd.set_species:
-        conf.set_resource_name(cmd.set_species, cmd.set_filename)
-        conf.save(Host)
-
-    if cmd.remove_species:
-        conf.delete_resource_name(cmd.remove_species)
+        conf = PMxModelConf(uds_path, model_interface)
         conf.save(Host)
 
     if cmd.delete and conf is not None:
