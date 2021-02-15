@@ -41,14 +41,10 @@ if __name__ == '__main__':
 
         key = None
 
-        if not AccessKey.exists(Host):
-            logger.error("access key not available.")
-            exit(1)
-
         try:
-            key = AccessKey.load(Host, encryption_key=AccessKey.password_from_user())
-        except (KeyError, ValueError):
-            logger.error("incorrect password.")
+            key = AccessKey.from_user()
+        except ValueError:
+            logger.error('invalid key.')
             exit(1)
 
         client = Client.construct('greengrass', key)
@@ -68,6 +64,7 @@ if __name__ == '__main__':
 
         res = cloner.run()
         if not res:
+            logger.error("There was an error")
             exit(2)
 
 
@@ -80,5 +77,3 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         print(file=sys.stderr)
 
-    except Exception as ex:
-        status = "%s: %s" % (ex.__class__.__name__, traceback.format_exc())
