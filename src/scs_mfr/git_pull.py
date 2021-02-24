@@ -68,8 +68,8 @@ if __name__ == '__main__':
             print(JSONify.dumps(repo))
 
             path = os.path.join(root, repo)
-            contents = Filesystem.ls(path)
-            print("contents: %s" % [item.name for item in contents])
+            contents = [item.name for item in Filesystem.ls(path)]
+            print("contents: %s" % contents)
 
             if '.git' not in contents:
                 logger.error("'%s' is not a git clone - skipping" % repo)
