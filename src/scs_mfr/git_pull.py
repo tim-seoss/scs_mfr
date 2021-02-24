@@ -69,6 +69,7 @@ if __name__ == '__main__':
 
             path = os.path.join(root, repo)
             contents = Filesystem.ls(path)
+            print("contents: %s" % [item.name for item in contents])
 
             if '.git' not in contents:
                 logger.error("'%s' is not a git clone - skipping" % repo)
