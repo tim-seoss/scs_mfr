@@ -18,17 +18,16 @@ EXAMPLES
 import os
 import sys
 
-from subprocess import Popen, PIPE
-
 from scs_core.data.datetime import LocalizedDatetime
 from scs_core.data.json import JSONify
 
-from scs_core.sys.filesystem import Filesystem
+from scs_core.estate.git_pull import GitPull
+
 from scs_core.sys.logging import Logging
 
 from scs_host.sys.host import Host
 
-from scs_mfr.cmd.cmd_verbose import CmdVerbose
+from scs_mfr.cmd.cmd_git_pull import CmdGitPull
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -36,12 +35,14 @@ from scs_mfr.cmd.cmd_verbose import CmdVerbose
 if __name__ == '__main__':
 
     excluded = ('scs_exegesis', )
-    timeout = 1
+
+    updated = []
+    success = True
 
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
-    cmd = CmdVerbose()
+    cmd = CmdGitPull()
 
     # logging...
     Logging.config('git_pull', verbose=cmd.verbose)
@@ -49,41 +50,59 @@ if __name__ == '__main__':
 
     logger.info(cmd)
 
+
     # ----------------------------------------------------------------------------------------------------------------
     # resources...
 
+    start = LocalizedDatetime.now()
+
     root = Host.scs_path()
-    repos = [item.name for item in Filesystem.ls(root) if item.name.startswith("scs_")]
+    installed = GitPull.dirs(root)
 
 
     # ----------------------------------------------------------------------------------------------------------------
     # run...
 
     try:
-        for repo in repos:
-            if repo in excluded:
-                logger.info("'%s' is excluded - skipping" % repo)
-                continue
+        if cmd.pull:
+            for repo in installed:
+                if repo in excluded:
+                    logger.info("%s: excluded - skipping" % repo)
+                    continue
 
-            print(JSONify.dumps(repo))
+                path = os.path.join(root, repo)
 
-            path = os.path.join(root, repo)
-            contents = [item.name for item in Filesystem.ls(path)]
+                if not GitPull.is_clone(path):
+                    logger.error("%s: not a git clone - skipping" % repo)
+                    success = False
+                    continue
 
-            if '.git' not in contents:
-                logger.error("'%s' is not a git clone - skipping" % repo)
-                continue
+                try:
+                    repo_success, stdout, stderr = GitPull.pull_repo(path, cmd.timeout)
 
-            p = Popen(['git', '-C', path, 'pull'], stdout=PIPE, stderr=PIPE)
-            stdout_bytes, stderr_bytes = p.communicate(None, timeout)
+                    if cmd.verbose:
+                        print(stdout, end='')
+                        print(stderr, end='', file=sys.stderr)
 
-            if cmd.verbose:
-                print(stdout_bytes.decode(), end='')
-                print(stderr_bytes.decode(), end='', file=sys.stderr)
+                    if not repo_success:
+                        logger.error("%s: pull failed" % repo)
+                        success = False
+                        continue
 
-            if p.returncode != 0:
-                logger.error("'%s' pull return code: %d" % (repo, p.returncode))
-                exit(1)
+                except TimeoutError:
+                    logger.error("%s: timed out" % repo)
+                    success = False
+                    continue
+
+                updated.append(repo)
+
+            git = GitPull(start, success, installed, updated)
+            git.save(Host)
+
+        else:
+            git = GitPull.load(Host, default=None)
+
+        print(JSONify.dumps(git))
 
     except KeyboardInterrupt:
         print(file=sys.stderr)
