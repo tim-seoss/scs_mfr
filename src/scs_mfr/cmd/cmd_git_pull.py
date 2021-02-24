@@ -18,13 +18,14 @@ class CmdGitPull(object):
         """
         self.__parser = optparse.OptionParser(usage="%prog [-p [-t TIMEOUT]] [-v]", version="%prog 1.0")
 
-        # optional...
+        # pull...
         self.__parser.add_option("--pull", "-p", action="store_true", dest="pull", default=False,
                                  help="perform a git pull")
 
         self.__parser.add_option("--timeout", "-t", type="int", nargs=1, action="store", dest="timeout", default=10,
                                  help="timeout for each pull (default 10 seconds)")
 
+        # narrative...
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
 
@@ -40,7 +41,7 @@ class CmdGitPull(object):
 
     @property
     def timeout(self):
-        return self.__opts.timeout
+        return self.__opts.timeout if self.pull else None
 
 
     @property

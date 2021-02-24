@@ -6,10 +6,11 @@ Created on 24 Feb 2021
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The configuration utility is used to
+The configuration utility is used to perform a git pull on all of the repos in the ~/SCS directory. When the pulls
+are complete, a JSON document is saved, summarising the state of the installed repos.
 
 SYNOPSIS
-git_pull.py [-v]
+git_pull.py [-p [-t TIMEOUT]] [-v]
 
 EXAMPLES
 ./git_pull.py -vp
@@ -17,7 +18,7 @@ EXAMPLES
 DOCUMENT EXAMPLE
 {"pulled-on": "2021-02-24T17:35:08Z", "success": true,
 "installed": ["scs_core", "scs_dev", "scs_dfe_eng", "scs_host_cpc", "scs_mfr", "scs_psu"],
-"updated": ["scs_core", "scs_dev", "scs_dfe_eng", "scs_host_cpc", "scs_mfr", "scs_psu"]}
+"pulled": ["scs_core", "scs_dev", "scs_dfe_eng", "scs_host_cpc", "scs_mfr", "scs_psu"]}
 
 FILES
 ~/SCS/conf/git_pull.json
@@ -88,7 +89,7 @@ if __name__ == '__main__':
                     repo_success, stdout, stderr = GitPull.pull_repo(path, cmd.timeout)
 
                     if cmd.verbose:
-                        print(stdout, end='')
+                        print(stdout, end='', file=sys.stderr)
                         print(stderr, end='', file=sys.stderr)
 
                     if not repo_success:
@@ -109,7 +110,8 @@ if __name__ == '__main__':
         else:
             git = GitPull.load(Host, default=None)
 
-        print(JSONify.dumps(git))
+        if git:
+            print(JSONify.dumps(git))
 
     except KeyboardInterrupt:
         print(file=sys.stderr)

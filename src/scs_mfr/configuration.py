@@ -27,6 +27,25 @@ DOCUMENT EXAMPLE
     "tag": "scs-be2-3",
     "val": {
         "hostname": "scs-bbe-003",
+        "git-pull": {
+            "pulled-on": "2021-02-24T18:04:46Z",
+            "success": false,
+            "installed": [
+                "scs_comms_ge910",
+                "scs_core",
+                "scs_dev",
+                "scs_dfe_eng",
+                "scs_exegesis",
+                "scs_host_bbe",
+                "scs_host_bbe_southern",
+                "scs_inference",
+                "scs_mfr",
+                "scs_ndir",
+                "scs_osio",
+                "scs_psu"
+            ],
+            "pulled": []
+        },
         "afe-baseline": {
             "sn1": {
                 "calibrated-on": null,
@@ -285,6 +304,7 @@ if __name__ == '__main__':
 
     logger.info(cmd)
 
+
     # ----------------------------------------------------------------------------------------------------------------
     # resources...
 
@@ -296,6 +316,7 @@ if __name__ == '__main__':
 
     logger.info(system_id)
 
+
     # ----------------------------------------------------------------------------------------------------------------
     # run...
 
@@ -306,7 +327,11 @@ if __name__ == '__main__':
             logger.error('invalid configuration: %s' % cmd.configuration)
             exit(2)
 
-        conf.save(Host)
+        try:
+            conf.save(Host)
 
-    sample = Sample(system_id.message_tag(), LocalizedDatetime.now(), values=Configuration.load(Host))
-    print(JSONify.dumps(sample, indent=cmd.indent))
+            sample = Sample(system_id.message_tag(), LocalizedDatetime.now(), values=Configuration.load(Host))
+            print(JSONify.dumps(sample, indent=cmd.indent))
+
+        except ValueError as ex:
+            logger.error(ex)
