@@ -36,7 +36,7 @@ from scs_mfr.cmd.cmd_verbose import CmdVerbose
 if __name__ == '__main__':
 
     excluded = ('scs_exegesis', )
-    timeout = 20
+    timeout = 1
 
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
@@ -69,7 +69,6 @@ if __name__ == '__main__':
 
             path = os.path.join(root, repo)
             contents = [item.name for item in Filesystem.ls(path)]
-            print("contents: %s" % contents)
 
             if '.git' not in contents:
                 logger.error("'%s' is not a git clone - skipping" % repo)
