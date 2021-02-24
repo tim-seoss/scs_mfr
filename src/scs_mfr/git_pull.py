@@ -78,6 +78,7 @@ if __name__ == '__main__':
                     continue
 
                 try:
+                    logger.info(repo)
                     repo_success, stdout, stderr = GitPull.pull_repo(path, cmd.timeout)
 
                     if cmd.verbose:
