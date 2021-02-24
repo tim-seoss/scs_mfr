@@ -12,7 +12,15 @@ SYNOPSIS
 git_pull.py [-v]
 
 EXAMPLES
-./git_pull.py -v
+./git_pull.py -vp
+
+DOCUMENT EXAMPLE
+{"pulled-on": "2021-02-24T17:35:08Z", "success": true,
+"installed": ["scs_core", "scs_dev", "scs_dfe_eng", "scs_host_cpc", "scs_mfr", "scs_psu"],
+"updated": ["scs_core", "scs_dev", "scs_dfe_eng", "scs_host_cpc", "scs_mfr", "scs_psu"]}
+
+FILES
+~/SCS/conf/git_pull.json
 """
 
 import os
@@ -34,9 +42,7 @@ from scs_mfr.cmd.cmd_git_pull import CmdGitPull
 
 if __name__ == '__main__':
 
-    excluded = ('scs_exegesis', )
-
-    updated = []
+    pulled = []
     success = True
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -66,7 +72,7 @@ if __name__ == '__main__':
     try:
         if cmd.pull:
             for repo in installed:
-                if repo in excluded:
+                if GitPull.excludes(repo):
                     logger.info("%s: excluded - skipping" % repo)
                     continue
 
@@ -95,9 +101,9 @@ if __name__ == '__main__':
                     success = False
                     continue
 
-                updated.append(repo)
+                pulled.append(repo)
 
-            git = GitPull(start, success, installed, updated)
+            git = GitPull(start, success, installed, pulled)
             git.save(Host)
 
         else:
