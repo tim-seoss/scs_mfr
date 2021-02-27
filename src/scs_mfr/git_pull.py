@@ -6,8 +6,14 @@ Created on 24 Feb 2021
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The configuration utility is used to perform a git pull on all of the repos in the ~/SCS directory. When the pulls
-are complete, a JSON document is saved, summarising the state of the installed repos.
+The git_pull utility is used to perform a git pull on all of the repos in the ~/SCS directory. When the pulls
+are complete, a JSON document is saved, summarising the state of the installed repos. When run without the --pull flag
+the git_pull utility  reports on the most recent operation.
+
+Note that the utility skips private repos (such as scs_exegesis).
+
+Warning: the overall operation is not atomic - if one or more repo pulls fail, the resulting set will lose consistency.
+The "success" field  report indicates whether the outcome is consistent.
 
 SYNOPSIS
 git_pull.py [-p [-t TIMEOUT]] [-v]
@@ -16,9 +22,10 @@ EXAMPLES
 ./git_pull.py -vp
 
 DOCUMENT EXAMPLE
-{"pulled-on": "2021-02-24T17:35:08Z", "success": true,
+{"pulled-on": "2021-02-27T08:37:09Z", "success": true,
 "installed": ["scs_core", "scs_dev", "scs_dfe_eng", "scs_host_cpc", "scs_mfr", "scs_psu"],
-"pulled": ["scs_core", "scs_dev", "scs_dfe_eng", "scs_host_cpc", "scs_mfr", "scs_psu"]}
+"pulled": ["scs_core", "scs_dev", "scs_dfe_eng", "scs_host_cpc", "scs_mfr", "scs_psu"],
+"excluded": []}
 
 FILES
 ~/SCS/conf/git_pull.json
@@ -44,6 +51,7 @@ from scs_mfr.cmd.cmd_git_pull import CmdGitPull
 if __name__ == '__main__':
 
     pulled = []
+    excluded = []
     success = True
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -75,6 +83,7 @@ if __name__ == '__main__':
             for repo in installed:
                 if GitPull.excludes(repo):
                     logger.info("%s: excluded - skipping" % repo)
+                    excluded.append(repo)
                     continue
 
                 path = os.path.join(root, repo)
@@ -104,7 +113,7 @@ if __name__ == '__main__':
 
                 pulled.append(repo)
 
-            git = GitPull(start, success, installed, pulled)
+            git = GitPull(start, success, installed, pulled, excluded)
             git.save(Host)
 
         else:
