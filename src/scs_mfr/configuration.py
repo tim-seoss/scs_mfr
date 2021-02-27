@@ -28,23 +28,25 @@ DOCUMENT EXAMPLE
     "val": {
         "hostname": "scs-bbe-003",
         "git-pull": {
-            "pulled-on": "2021-02-24T18:04:46Z",
-            "success": false,
+            "pulled-on": "2021-02-27T08:37:09Z",
+            "success": true,
             "installed": [
-                "scs_comms_ge910",
                 "scs_core",
                 "scs_dev",
                 "scs_dfe_eng",
-                "scs_exegesis",
-                "scs_host_bbe",
-                "scs_host_bbe_southern",
-                "scs_inference",
+                "scs_host_cpc",
                 "scs_mfr",
-                "scs_ndir",
-                "scs_osio",
                 "scs_psu"
             ],
-            "pulled": []
+            "pulled": [
+                "scs_core",
+                "scs_dev",
+                "scs_dfe_eng",
+                "scs_host_cpc",
+                "scs_mfr",
+                "scs_psu"
+            ],
+            "excluded": []
         },
         "afe-baseline": {
             "sn1": {
