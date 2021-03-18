@@ -136,8 +136,8 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # end...
 
-    except OSError:
-        print("mpl115a2_calib: MPL115A2 not available", file=sys.stderr)
+    # except OSError:
+    #     print("mpl115a2_calib: MPL115A2 not available", file=sys.stderr)
 
     finally:
         I2C.Sensors.close()
