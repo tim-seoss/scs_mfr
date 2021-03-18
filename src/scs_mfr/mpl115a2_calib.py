@@ -53,6 +53,8 @@ from scs_mfr.cmd.cmd_mpl115a2_calib import CmdMPL115A2Calib
 
 if __name__ == '__main__':
 
+    sht_datum = None
+
     try:
         I2C.Sensors.open()
 
@@ -82,6 +84,11 @@ if __name__ == '__main__':
 
         # SHT...
         sht_conf = SHTConf.load(Host)
+
+        if sht_conf is None:
+            print("mpl115a2_calib: SHTConf not available.", file=sys.stderr)
+            exit(1)
+
         sht = sht_conf.int_sht()
 
         # MPL115A2Calib...
@@ -100,7 +107,11 @@ if __name__ == '__main__':
 
         if cmd.set:
             # SHT...
-            sht_datum = sht.sample()
+            try:
+                sht_datum = sht.sample()
+            except OSError:
+                print("mpl115a2_calib: SHT31 not available", file=sys.stderr)
+                exit(1)
 
             if cmd.verbose:
                 print(sht_datum, file=sys.stderr)
@@ -136,8 +147,8 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # end...
 
-    # except OSError:
-    #     print("mpl115a2_calib: MPL115A2 not available", file=sys.stderr)
+    except OSError:
+        print("mpl115a2_calib: MPL115A2 not available", file=sys.stderr)
 
     finally:
         I2C.Sensors.close()
