@@ -261,6 +261,12 @@ DOCUMENT EXAMPLE
             "int": "0x45",
             "ext": "0x45"
         },
+        "sim": {
+            "imsi": "234301951432538",
+            "iccid": "8944303382697124831",
+            "operator-code": "23430",
+            "operator-name": "EE"
+        },
         "system-id": {
             "vendor-id": "SCS",
             "model-id": "BE2",
