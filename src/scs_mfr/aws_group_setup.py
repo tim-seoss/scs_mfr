@@ -80,6 +80,10 @@ if __name__ == '__main__':
         logger.error('invalid key.')
         exit(1)
 
+    except KeyboardInterrupt:
+        print(file=sys.stderr)
+        exit(0)
+
     client = Client.construct('greengrass', key)
 
     # AWSGroupConfigurator...
