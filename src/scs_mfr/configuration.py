@@ -329,10 +329,11 @@ if __name__ == '__main__':
     logger.info(system_id)
 
     interface_conf = InterfaceConf.load(Host)
-    interface = None if interface_conf is None else interface_conf.interface()
+    interface_model = None if interface_conf is None else interface_conf.model
 
-    psu_conf = None if interface is None else PSUConf.load(Host)
-    psu = None if psu_conf is None else psu_conf.psu(Host, interface)
+    psu_conf = None if interface_model is None else PSUConf.load(Host)
+    psu = None if psu_conf is None else psu_conf.psu(Host, interface_model)
+
 
     # ----------------------------------------------------------------------------------------------------------------
     # run...
