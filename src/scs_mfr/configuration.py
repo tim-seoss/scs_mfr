@@ -208,6 +208,7 @@ DOCUMENT EXAMPLE
     }
 }
 """
+import sys
 
 from scs_core.data.datetime import LocalizedDatetime
 from scs_core.data.json import JSONify
@@ -258,10 +259,16 @@ if __name__ == '__main__':
 
     # PSU...
     interface_conf = InterfaceConf.load(Host)
+    print("interface_conf: %s" % interface_conf, file=sys.stderr)
+
     interface_model = None if interface_conf is None else interface_conf.model
+    print("interface_model: %s" % interface_model, file=sys.stderr)
 
     psu_conf = None if interface_model is None else PSUConf.load(Host)
+    print("psu_conf: %s" % psu_conf, file=sys.stderr)
+
     psu = None if psu_conf is None else psu_conf.psu(Host, interface_model)
+    print("psu: %s" % psu, file=sys.stderr)
 
 
     # ----------------------------------------------------------------------------------------------------------------
