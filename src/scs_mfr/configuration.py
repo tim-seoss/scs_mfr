@@ -23,36 +23,20 @@ EXAMPLES
 
 DOCUMENT EXAMPLE
 {
-    "rec": "2021-02-04T17:08:17Z",
-    "tag": "scs-be2-3",
+    "rec": "2021-04-13T12:27:43Z",
+    "tag": "scs-opc-1",
     "val": {
-        "hostname": "scs-bbe-003",
-        "git-pull": {
-            "pulled-on": "2021-02-27T08:37:09Z",
-            "success": true,
-            "installed": [
-                "scs_core",
-                "scs_dev",
-                "scs_dfe_eng",
-                "scs_host_cpc",
-                "scs_mfr",
-                "scs_psu"
-            ],
-            "pulled": [
-                "scs_core",
-                "scs_dev",
-                "scs_dfe_eng",
-                "scs_host_cpc",
-                "scs_mfr",
-                "scs_psu"
-            ],
-            "excluded": []
-        },
+        "hostname": "scs-cube-001",
+        "git-pull": null,
         "afe-baseline": {
             "sn1": {
-                "calibrated-on": null,
-                "offset": 0,
-                "env": null
+                "calibrated-on": "2021-01-03T09:27:42Z",
+                "offset": 136,
+                "env": {
+                    "hmd": 33.4,
+                    "tmp": 23.3,
+                    "pA": null
+                }
             },
             "sn2": {
                 "calibrated-on": null,
@@ -71,70 +55,25 @@ DOCUMENT EXAMPLE
             }
         },
         "afe-calib": {
-            "serial_number": "27-000001",
-            "type": "810-0023-02",
-            "calibrated_on": "2016-11-01",
+            "serial_number": null,
+            "type": "DSI",
+            "calibrated_on": "2020-01-01",
             "dispatched_on": null,
-            "pt1000_v20": 1.0,
+            "pt1000_v20": null,
             "sn1": {
-                "serial_number": "212060308",
-                "sensor_type": "NO2A43F",
-                "we_electronic_zero_mv": 309,
-                "we_sensor_zero_mv": 3,
-                "we_total_zero_mv": 312,
-                "ae_electronic_zero_mv": 308,
-                "ae_sensor_zero_mv": 1,
-                "ae_total_zero_mv": 309,
-                "we_sensitivity_na_ppb": -0.264,
-                "we_cross_sensitivity_no2_na_ppb": -0.264,
-                "pcb_gain": -0.73,
-                "we_sensitivity_mv_ppb": 0.192,
-                "we_cross_sensitivity_no2_mv_ppb": 0.192
-            },
-            "sn2": {
-                "serial_number": "132950202",
-                "sensor_type": "CO A4",
-                "we_electronic_zero_mv": 249,
-                "we_sensor_zero_mv": 62,
-                "we_total_zero_mv": 311,
-                "ae_electronic_zero_mv": 253,
-                "ae_sensor_zero_mv": -1,
-                "ae_total_zero_mv": 252,
-                "we_sensitivity_na_ppb": 0.299,
-                "we_cross_sensitivity_no2_na_ppb": "n/a",
-                "pcb_gain": 0.8,
-                "we_sensitivity_mv_ppb": 0.239,
-                "we_cross_sensitivity_no2_mv_ppb": "n/a"
-            },
-            "sn3": {
-                "serial_number": "134060009",
-                "sensor_type": "SO2A4",
-                "we_electronic_zero_mv": 266,
-                "we_sensor_zero_mv": -1,
-                "we_total_zero_mv": 265,
-                "ae_electronic_zero_mv": 263,
-                "ae_sensor_zero_mv": 2,
-                "ae_total_zero_mv": 265,
-                "we_sensitivity_na_ppb": 0.444,
-                "we_cross_sensitivity_no2_na_ppb": "n/a",
-                "pcb_gain": 0.8,
-                "we_sensitivity_mv_ppb": 0.355,
-                "we_cross_sensitivity_no2_mv_ppb": "n/a"
-            },
-            "sn4": {
-                "serial_number": "133910023",
-                "sensor_type": "H2SA4",
-                "we_electronic_zero_mv": 245,
-                "we_sensor_zero_mv": -12,
-                "we_total_zero_mv": 233,
-                "ae_electronic_zero_mv": 251,
-                "ae_sensor_zero_mv": 13,
-                "ae_total_zero_mv": 264,
-                "we_sensitivity_na_ppb": 1.782,
-                "we_cross_sensitivity_no2_na_ppb": "n/a",
-                "pcb_gain": 0.8,
-                "we_sensitivity_mv_ppb": 1.425,
-                "we_cross_sensitivity_no2_mv_ppb": "n/a"
+                "serial_number": "212060325",
+                "sensor_type": "NOGA4",
+                "we_electronic_zero_mv": 300,
+                "we_sensor_zero_mv": 0,
+                "we_total_zero_mv": 300,
+                "ae_electronic_zero_mv": 300,
+                "ae_sensor_zero_mv": 0,
+                "ae_total_zero_mv": 300,
+                "we_sensitivity_na_ppb": -0.254,
+                "we_cross_sensitivity_no2_na_ppb": -0.254,
+                "pcb_gain": -0.7,
+                "we_sensitivity_mv_ppb": 0.185,
+                "we_cross_sensitivity_no2_mv_ppb": 0.185
             }
         },
         "aws-api-auth": {
@@ -143,18 +82,18 @@ DOCUMENT EXAMPLE
         },
         "aws-client-auth": {
             "endpoint": "asrfh6e5j5ecz.iot.us-west-2.amazonaws.com",
-            "client-id": "scs-bbe-003",
-            "cert-id": "cd505d98bf"
+            "client-id": "scs-bbe-500",
+            "cert-id": "075e2e999f"
         },
         "aws-group-config": {
-            "group-name": "scs-bbe-003-group",
-            "time-initiated": "2021-01-29T11:52:25Z",
-            "unix-group": 987,
+            "group-name": "scs-cube-001-group",
+            "time-initiated": "2021-02-08T16:38:55Z",
+            "unix-group": 984,
             "ml": true
         },
         "aws-project": {
-            "location-path": "south-coast-science-dev/development/loc/1",
-            "device-path": "south-coast-science-dev/development/device"
+            "location-path": "south-coast-science-dev/cube/loc/1",
+            "device-path": "south-coast-science-dev/cube/device"
         },
         "csv-logger-conf": {
             "root-path": "/srv/removable_data_storage",
@@ -164,21 +103,18 @@ DOCUMENT EXAMPLE
         "display-conf": null,
         "gas-baseline": {
             "NO2": {
-                "calibrated-on": "2021-01-19T13:42:55Z",
-                "offset": -3,
+                "calibrated-on": "2021-01-19T13:01:13Z",
+                "offset": 7,
                 "env": {
-                    "hmd": 40.9,
-                    "tmp": 25.0,
+                    "hmd": 42.8,
+                    "tmp": 25.3,
                     "pA": null
                 }
             }
         },
         "gas-model-conf": {
             "uds-path": "pipes/lambda-gas-model.uds",
-            "model-interface": "vB",
-            "resource-names": {
-                "NO2": "/trained-models/no2-vB-2020q13/xgboost-model"
-            }
+            "model-interface": "vB"
         },
         "gps-conf": {
             "model": "SAM8Q",
@@ -188,54 +124,45 @@ DOCUMENT EXAMPLE
             "debug": false
         },
         "interface-conf": {
-            "model": "DFE"
+            "model": "OPCubeT1"
         },
-        "greengrass-identity": null,
-        "mpl115a2-calib": {
-            "calibrated-on": "2020-11-15T11:29:23Z",
-            "c25": 510
+        "greengrass-identity": {
+            "core-name": "scs-cube-001-core",
+            "group-name": "scs-cube-001-group"
         },
+        "mpl115a2-calib": null,
         "mpl115a2-conf": null,
         "mqtt-conf": {
             "inhibit-publishing": false,
-            "report-file": null,
+            "report-file": "/tmp/southcoastscience/mqtt_queue_report.json",
             "debug": false
         },
-        "ndir-conf": {
-            "model": "t1f1",
-            "tally": 1,
-            "raw": false
-        },
+        "ndir-conf": null,
         "opc-conf": {
             "model": "N3",
             "sample-period": 10,
-            "restart-on-zeroes": false,
+            "restart-on-zeroes": true,
             "power-saving": false
         },
         "pmx-model-conf": {
             "uds-path": "pipes/lambda-pmx-model.uds",
-            "model-interface": "s1",
-            "resource-names": {
-                "pm1": "/trained-models/pm1/xgboost-model",
-                "pm2p5": "/trained-models/pm2p5/xgboost-model",
-                "pm10": "/trained-models/pm10/xgboost-model"
-            }
+            "model-interface": "s1"
         },
         "psu-conf": {
-            "model": "OsloV1",
-            "batt-model": null,
-            "ignore-threshold": false,
-            "reporting-interval": 20,
+            "model": "OPCubeV1",
+            "batt-model": "PackV2",
+            "ignore-threshold": true,
+            "reporting-interval": 5,
             "report-file": "/tmp/southcoastscience/psu_status_report.json"
         },
-        "pt1000-calib": {
-            "calibrated-on": "2017-08-15T11:21:45Z",
-            "v20": 0.320208
+        "psu-version": {
+            "id": "SCS OPCube Controller type 1 firmware 1",
+            "tag": "1.1.1",
+            "c-date": null,
+            "c-time": null
         },
-        "scd30-conf": {
-            "sample-interval": 5,
-            "temp-offset": 0.0
-        },
+        "pt1000-calib": null,
+        "scd30-conf": null,
         "schedule": {
             "scs-climate": {
                 "interval": 10.0,
@@ -255,27 +182,27 @@ DOCUMENT EXAMPLE
             }
         },
         "shared-secret": {
-            "key": "pYL7B1JcgJ2gy6MP"
+            "key": "xxx"
         },
         "sht-conf": {
             "int": "0x45",
             "ext": "0x45"
         },
         "sim": {
-            "imsi": "234301951432538",
-            "iccid": "8944303382697124831",
-            "operator-code": "23430",
-            "operator-name": "EE"
+            "imsi": "234104886708667",
+            "iccid": "8944110068256270054",
+            "operator-code": "23410",
+            "operator-name": "giffgaff"
         },
         "system-id": {
             "vendor-id": "SCS",
-            "model-id": "BE2",
-            "model": "Alpha BB Eng",
-            "config": "V2",
-            "system-sn": 3
+            "model-id": "OPC",
+            "model": "Praxis/OPCube",
+            "config": "v1",
+            "system-sn": 1
         },
         "timezone-conf": {
-            "set-on": "2021-01-31T11:26:14Z",
+            "set-on": "2017-08-15T12:50:05Z",
             "name": "Europe/London"
         }
     }
@@ -320,6 +247,7 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # resources...
 
+    # SystemID...
     system_id = SystemID.load(Host)
 
     if system_id is None:
@@ -328,6 +256,7 @@ if __name__ == '__main__':
 
     logger.info(system_id)
 
+    # PSU...
     interface_conf = InterfaceConf.load(Host)
     interface_model = None if interface_conf is None else interface_conf.model
 
