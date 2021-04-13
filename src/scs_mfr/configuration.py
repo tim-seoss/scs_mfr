@@ -222,6 +222,7 @@ from scs_core.sys.system_id import SystemID
 
 from scs_dfe.interface.interface_conf import InterfaceConf
 
+from scs_host.lock.lock_timeout import LockTimeout
 from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_configuration import CmdConfiguration
@@ -259,25 +260,22 @@ if __name__ == '__main__':
 
     # PSU...
     interface_conf = InterfaceConf.load(Host)
-    print("interface_conf: %s" % interface_conf, file=sys.stderr)
-
     interface_model = None if interface_conf is None else interface_conf.model
-    print("interface_model: %s" % interface_model, file=sys.stderr)
 
     psu_conf = None if interface_model is None else PSUConf.load(Host)
-    print("psu_conf: %s" % psu_conf, file=sys.stderr)
-
     psu = None if psu_conf is None else psu_conf.psu(Host, interface_model)
-    print("psu: %s" % psu, file=sys.stderr)
 
 
     # ----------------------------------------------------------------------------------------------------------------
     # run...
 
-    try:
-        if psu:
+    if psu:
+        try:
             psu.open()
+        except LockTimeout:
+            psu = None
 
+    try:
         if cmd.save():
             conf = Configuration.construct_from_jstr(cmd.configuration)
 
