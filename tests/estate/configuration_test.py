@@ -11,7 +11,11 @@ import json
 from scs_core.data.json import JSONify
 from scs_core.estate.configuration import Configuration
 
+from scs_dfe.interface.interface_conf import InterfaceConf
+
 from scs_host.sys.host import Host
+
+from scs_psu.psu.psu_conf import PSUConf
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -72,13 +76,24 @@ conf = '{"hostname": "scs-bbe-003", ' \
        '"system-sn": 3}, "timezone-conf": {"set-on": "2021-01-29T12:51:37Z", "name": null}}'
 
 # --------------------------------------------------------------------------------------------------------------------
+# resources...
 
-conf1 = Configuration.load(Host)
+interface_conf = InterfaceConf.load(Host)
+interface_model = None if interface_conf is None else interface_conf.model
+
+psu_conf = None if interface_model is None else PSUConf.load(Host)
+psu = None if psu_conf is None else psu_conf.psu(Host, interface_model)
+
+
+# --------------------------------------------------------------------------------------------------------------------
+# run...
+
+conf1 = Configuration.load(Host, psu)
 print(conf1)
 print("-")
 
 conf1.save(Host)
-conf1 = Configuration.load(Host)
+conf1 = Configuration.load(Host, psu)
 print(conf1)
 print("-")
 
