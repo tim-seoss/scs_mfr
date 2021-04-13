@@ -292,9 +292,13 @@ from scs_core.sample.sample import Sample
 from scs_core.sys.logging import Logging
 from scs_core.sys.system_id import SystemID
 
+from scs_dfe.interface.interface_conf import InterfaceConf
+
 from scs_host.sys.host import Host
 
-from cmd.cmd_configuration import CmdConfiguration
+from scs_mfr.cmd.cmd_configuration import CmdConfiguration
+
+from scs_psu.psu.psu_conf import PSUConf
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -324,6 +328,11 @@ if __name__ == '__main__':
 
     logger.info(system_id)
 
+    interface_conf = InterfaceConf.load(Host)
+    interface = None if interface_conf is None else interface_conf.interface()
+
+    psu_conf = None if interface is None else PSUConf.load(Host)
+    psu = None if psu_conf is None else psu_conf.psu(Host, interface)
 
     # ----------------------------------------------------------------------------------------------------------------
     # run...
@@ -341,5 +350,5 @@ if __name__ == '__main__':
             logger.error(ex)
             exit(1)
 
-    sample = Sample(system_id.message_tag(), LocalizedDatetime.now(), values=Configuration.load(Host))
+    sample = Sample(system_id.message_tag(), LocalizedDatetime.now(), values=Configuration.load(Host, psu))
     print(JSONify.dumps(sample, indent=cmd.indent))
