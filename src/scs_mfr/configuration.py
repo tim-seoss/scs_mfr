@@ -274,18 +274,26 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # run...
 
-    if cmd.save():
-        conf = Configuration.construct_from_jstr(cmd.configuration)
+    try:
+        if psu:
+            psu.open()
 
-        if conf is None:
-            logger.error('invalid configuration: %s' % cmd.configuration)
-            exit(2)
+        if cmd.save():
+            conf = Configuration.construct_from_jstr(cmd.configuration)
 
-        try:
-            conf.save(Host)
-        except ValueError as ex:
-            logger.error(ex)
-            exit(1)
+            if conf is None:
+                logger.error('invalid configuration: %s' % cmd.configuration)
+                exit(2)
 
-    sample = Sample(system_id.message_tag(), LocalizedDatetime.now(), values=Configuration.load(Host, psu))
-    print(JSONify.dumps(sample, indent=cmd.indent))
+            try:
+                conf.save(Host)
+            except ValueError as ex:
+                logger.error(ex)
+                exit(1)
+
+        sample = Sample(system_id.message_tag(), LocalizedDatetime.now(), values=Configuration.load(Host, psu))
+        print(JSONify.dumps(sample, indent=cmd.indent))
+
+    finally:
+        if psu:
+            psu.close()
