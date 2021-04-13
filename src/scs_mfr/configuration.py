@@ -269,13 +269,13 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # run...
 
-    try:
-        if psu:
-            try:
-                psu.open()
-            except LockTimeout:
-                psu = None
+    if psu:
+        try:
+            psu.open()
+        except LockTimeout:
+            psu = None
 
+    try:
         if cmd.save():
             conf = Configuration.construct_from_jstr(cmd.configuration)
 
