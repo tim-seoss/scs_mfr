@@ -208,8 +208,6 @@ DOCUMENT EXAMPLE
     }
 }
 """
-import sys
-
 from scs_core.data.datetime import LocalizedDatetime
 from scs_core.data.json import JSONify
 
@@ -227,7 +225,10 @@ from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_configuration import CmdConfiguration
 
-from scs_psu.psu.psu_conf import PSUConf
+try:
+    from scs_psu.psu.psu_conf import PSUConf
+except ImportError:
+    from scs_core.psu.psu_conf import PSUConf
 
 
 # --------------------------------------------------------------------------------------------------------------------
