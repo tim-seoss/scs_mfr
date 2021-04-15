@@ -208,7 +208,6 @@ DOCUMENT EXAMPLE
     }
 }
 """
-
 from scs_core.data.datetime import LocalizedDatetime
 from scs_core.data.json import JSONify
 
@@ -221,11 +220,15 @@ from scs_core.sys.system_id import SystemID
 
 from scs_dfe.interface.interface_conf import InterfaceConf
 
+from scs_host.lock.lock_timeout import LockTimeout
 from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_configuration import CmdConfiguration
 
-from scs_psu.psu.psu_conf import PSUConf
+try:
+    from scs_psu.psu.psu_conf import PSUConf
+except ImportError:
+    from scs_core.psu.psu_conf import PSUConf
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -267,18 +270,29 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # run...
 
-    if cmd.save():
-        conf = Configuration.construct_from_jstr(cmd.configuration)
-
-        if conf is None:
-            logger.error('invalid configuration: %s' % cmd.configuration)
-            exit(2)
-
+    if psu:
         try:
-            conf.save(Host)
-        except ValueError as ex:
-            logger.error(ex)
-            exit(1)
+            psu.open()
+        except LockTimeout:
+            psu = None
 
-    sample = Sample(system_id.message_tag(), LocalizedDatetime.now(), values=Configuration.load(Host, psu))
-    print(JSONify.dumps(sample, indent=cmd.indent))
+    try:
+        if cmd.save():
+            conf = Configuration.construct_from_jstr(cmd.configuration)
+
+            if conf is None:
+                logger.error('invalid configuration: %s' % cmd.configuration)
+                exit(2)
+
+            try:
+                conf.save(Host)
+            except ValueError as ex:
+                logger.error(ex)
+                exit(1)
+
+        sample = Sample(system_id.message_tag(), LocalizedDatetime.now(), values=Configuration.load(Host, psu))
+        print(JSONify.dumps(sample, indent=cmd.indent))
+
+    finally:
+        if psu:
+            psu.close()
