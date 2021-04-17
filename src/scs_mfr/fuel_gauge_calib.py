@@ -17,7 +17,7 @@ When a new fuel gauge is put into use, it should be initialised with these value
 --initialise flag - this sets both the parameters and the fuel gauge configuration.
 
 SYNOPSIS
-fuel_gauge_calib.py { { -c | -d | -l | -s | -r | -z { D | L } } | { -f | -g | -p } [-i INTERVAL] } [-v]
+fuel_gauge_calib.py { { -c | -d | -l | -r | -z { D | L } } | { -f | -s | -g | -p } [-i INTERVAL] } [-v]
 
 EXAMPLES
 ./batt_conf.py -i5 -f
@@ -140,7 +140,6 @@ if __name__ == '__main__':
 
         if cmd.init is not None:
             if cmd.init == 'D':
-                Max17055Params.delete(Host)
                 params = batt_pack.default_params()
                 params.save(Host)
 
