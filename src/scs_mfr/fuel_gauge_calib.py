@@ -1,4 +1,4 @@
- #!/usr/bin/env python3
+#!/usr/bin/env python3
 
 """
 Created on 16 Apr 2021
@@ -134,12 +134,6 @@ if __name__ == '__main__':
                 print(JSONify.dumps(params))
             exit(0)
 
-        if cmd.save_learned:
-            params = batt_pack.read_learned_params()
-            params.save(Host)
-            print(JSONify.dumps(params))
-            exit(0)
-
         if cmd.remove_learned:
             Max17055Params.delete(Host)
             exit(0)
@@ -161,6 +155,14 @@ if __name__ == '__main__':
             if cmd.gauge_learned:
                 params = batt_pack.read_learned_params()
                 print(JSONify.dumps(params))
+
+            if cmd.save_learned:
+                saved_params = Max17055Params.load(Host)
+                params = batt_pack.read_learned_params()
+
+                if params != saved_params:
+                    params.save(Host)
+                    print(JSONify.dumps(params))
 
             if cmd.fuel:
                 fuel = batt_pack.sample()

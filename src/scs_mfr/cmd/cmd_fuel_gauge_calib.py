@@ -30,9 +30,6 @@ class CmdFuelGaugeCalib(object):
         self.__parser.add_option("--host-learned", "-l", action="store_true", dest="host_learned", default=False,
                                  help="read params from host")
 
-        self.__parser.add_option("--save-learned", "-s", action="store_true", dest="save_learned", default=False,
-                                 help="save learned params to host")
-
         self.__parser.add_option("--remove-learned", "-r", action="store_true", dest="remove_learned", default=False,
                                  help="delete params from host")
 
@@ -42,6 +39,9 @@ class CmdFuelGaugeCalib(object):
         # iterable...
         self.__parser.add_option("--gauge-learned", "-g", action="store_true", dest="gauge_learned", default=False,
                                  help="read learned params from gauge")
+
+        self.__parser.add_option("--save-learned", "-s", action="store_true", dest="save_learned", default=False,
+                                 help="save learned params to host")
 
         self.__parser.add_option("--fuel", "-f", action="store_true", dest="fuel", default=False,
                                  help="report fuel status")
@@ -73,9 +73,6 @@ class CmdFuelGaugeCalib(object):
         if self.host_learned:
             count += 1
 
-        if self.save_learned:
-            count += 1
-
         if self.remove_learned:
             count += 1
 
@@ -83,6 +80,9 @@ class CmdFuelGaugeCalib(object):
             count += 1
 
         if self.gauge_learned:
+            count += 1
+
+        if self.save_learned:
             count += 1
 
         if self.fuel:
@@ -97,7 +97,8 @@ class CmdFuelGaugeCalib(object):
         if self.init is not None and self.init != 'D' and self.init != 'L':
             return False
 
-        if self.__opts.interval is not None and not self.gauge_learned and not self.fuel and not self.psu:
+        if self.__opts.interval is not None and not self.gauge_learned and not self.save_learned and \
+                not self.fuel and not self.psu:
             return False
 
         return True
@@ -121,11 +122,6 @@ class CmdFuelGaugeCalib(object):
 
 
     @property
-    def save_learned(self):
-        return self.__opts.save_learned
-
-
-    @property
     def remove_learned(self):
         return self.__opts.remove_learned
 
@@ -138,6 +134,11 @@ class CmdFuelGaugeCalib(object):
     @property
     def gauge_learned(self):
         return self.__opts.gauge_learned
+
+
+    @property
+    def save_learned(self):
+        return self.__opts.save_learned
 
 
     @property
@@ -167,7 +168,7 @@ class CmdFuelGaugeCalib(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdFuelGaugeCalib:{gauge_conf:%s, default_learned:%s, host_learned:%s, save_learned:%s, " \
-               "remove_learned:%s, init:%s, gauge_learned:%s, fuel:%s, psu:%s, interval:%s, verbose:%s}" % \
-               (self.gauge_conf, self.default_learned, self.host_learned, self.save_learned, self.remove_learned,
-                self.init, self.gauge_learned, self.fuel, self.psu, self.__opts.interval, self.verbose)
+        return "CmdFuelGaugeCalib:{gauge_conf:%s, default_learned:%s, host_learned:%s, remove_learned:%s, init:%s, " \
+               "gauge_learned:%s, save_learned:%s, fuel:%s, psu:%s, interval:%s, verbose:%s}" % \
+               (self.gauge_conf, self.default_learned, self.host_learned, self.remove_learned, self.init,
+                self.gauge_learned, self.save_learned, self.fuel, self.psu, self.__opts.interval, self.verbose)
