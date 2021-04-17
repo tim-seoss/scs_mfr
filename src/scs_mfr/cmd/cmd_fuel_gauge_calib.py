@@ -16,8 +16,8 @@ class CmdFuelGaugeCalib(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog { { -c | -d | -l | -s | -r | -z { D | L } } | "
-                                                    "{ -f | -g | -p } [-i INTERVAL] } [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog { { -c | -d | -l | -r | -z { D | L } } | "
+                                                    "{ -f | -s | -g | -p } [-i INTERVAL] } [-v]", version="%prog 1.0")
 
         # configuration...
         self.__parser.add_option("--gauge-conf", "-c", action="store_true", dest="gauge_conf", default=False,
