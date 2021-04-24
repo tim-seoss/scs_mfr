@@ -290,7 +290,9 @@ if __name__ == '__main__':
                 logger.error(ex)
                 exit(1)
 
-        sample = ConfigurationSample(system_id.message_tag(), LocalizedDatetime.now(), Configuration.load(Host, psu))
+        configuration = Configuration.load(Host, psu=psu)
+        sample = ConfigurationSample(system_id.message_tag(), LocalizedDatetime.now(), configuration)
+
         print(JSONify.dumps(sample, indent=cmd.indent))
 
     finally:

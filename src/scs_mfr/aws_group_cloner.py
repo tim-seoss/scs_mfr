@@ -7,9 +7,7 @@ Created on 21 Jan 2021
 @author: Jade Page (jade.page@southcoastscience.com)
 """
 
-# --------------------------------------------------------------------------------------------------------------------
 import sys
-import traceback
 
 from botocore.exceptions import ClientError
 
@@ -17,9 +15,14 @@ from scs_core.aws.client.access_key import AccessKey
 from scs_core.aws.client.client import Client
 from scs_core.aws.greengrass.aws_deployment_reporter import AWSDeploymentReporter
 from scs_core.aws.greengrass.aws_group_clone import AWSGroupCloner
+
 from scs_core.sys.logging import Logging
+
 from scs_host.sys.host import Host
+
 from scs_mfr.cmd.cmd_aws_group_cloner import CmdAWSGroupCloner
+
+# --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
 
@@ -62,7 +65,7 @@ if __name__ == '__main__':
             logger.error("Inputs are not SCS valid group names")
             exit(2)
 
-        res = cloner.run()
+        res = cloner.run(Host)
         if not res:
             logger.error("There was an error")
             exit(2)
