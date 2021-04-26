@@ -213,7 +213,7 @@ from scs_core.data.json import JSONify
 
 from scs_core.estate.configuration import Configuration
 
-from scs_core.sample.sample import Sample
+from scs_core.sample.configuration_sample import ConfigurationSample
 
 from scs_core.sys.logging import Logging
 from scs_core.sys.system_id import SystemID
@@ -290,7 +290,9 @@ if __name__ == '__main__':
                 logger.error(ex)
                 exit(1)
 
-        sample = Sample(system_id.message_tag(), LocalizedDatetime.now(), values=Configuration.load(Host, psu))
+        configuration = Configuration.load(Host, psu=psu)
+        sample = ConfigurationSample(system_id.message_tag(), LocalizedDatetime.now(), configuration)
+
         print(JSONify.dumps(sample, indent=cmd.indent))
 
     finally:
