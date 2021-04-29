@@ -22,8 +22,8 @@ class CmdGitPull(object):
         self.__parser.add_option("--pull", "-p", action="store_true", dest="pull", default=False,
                                  help="perform a git pull")
 
-        self.__parser.add_option("--timeout", "-t", type="int", nargs=1, action="store", dest="timeout", default=10,
-                                 help="timeout for each pull (default 10 seconds)")
+        self.__parser.add_option("--timeout", "-t", type="int", nargs=1, action="store", dest="timeout", default=20,
+                                 help="timeout for each pull (default 20 seconds)")
 
         # narrative...
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
