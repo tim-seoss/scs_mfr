@@ -6,8 +6,6 @@ Created on 08 Feb 2021
 
 import optparse
 
-from scs_core.data.datetime import LocalizedDatetime
-
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -94,5 +92,5 @@ class CmdAWSGroupCloner(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdAWSDuplicateDeployments:{ group_name:%s,  dest:%s, gas:%s, parts:%s, indent:%s, verbose:%s}" % \
-               ( self.group_name, self.dest, self.gas, self.parts, self.indent, self.verbose)
+        return "CmdAWSGroupCloner:{ group_name:%s,  dest:%s, gas:%s, parts:%s, indent:%s, verbose:%s}" % \
+               (self.group_name, self.dest, self.gas, self.parts, self.indent, self.verbose)

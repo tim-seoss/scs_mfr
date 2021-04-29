@@ -88,12 +88,12 @@ psu = None if psu_conf is None else psu_conf.psu(Host, interface_model)
 # --------------------------------------------------------------------------------------------------------------------
 # run...
 
-conf1 = Configuration.load(Host, psu)
+conf1 = Configuration.load(Host, psu=psu)
 print(conf1)
 print("-")
 
 conf1.save(Host)
-conf1 = Configuration.load(Host, psu)
+conf1 = Configuration.load(Host, psu=psu)
 print(conf1)
 print("-")
 
