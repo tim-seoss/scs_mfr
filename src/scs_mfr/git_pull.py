@@ -124,3 +124,6 @@ if __name__ == '__main__':
 
     except KeyboardInterrupt:
         print(file=sys.stderr)
+
+    finally:
+        exit(0 if success else 1)
