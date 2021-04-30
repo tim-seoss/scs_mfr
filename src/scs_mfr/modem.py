@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 
 """
-Created on 20 Apr 2021
+Created on 30 Apr 2021
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The modem utility is used to
+The modem utility is used to report on the modem connection status and SIM parameters. The reports provided by this
+utility are included in the the configuration utility report.
 
 SYNOPSIS
 modem.py { -c | -s } [-v]
@@ -18,7 +19,7 @@ DOCUMENT EXAMPLE - CONNECTION
 {"state": "connected", "signal": {"quality": 34, "recent": true}}
 
 DOCUMENT EXAMPLE - SIM
-{"imsi": "234104886708667", "iccid": "8944110068256270054", "operator-code": "23410", "operator-name": "O2 - UK"}
+{"imsi": "234104886708567", "iccid": "8944110068257270054", "operator-code": "23410", "operator-name": "O2 - UK"}
 
 SEE ALSO
 scs_mfr/configuration
