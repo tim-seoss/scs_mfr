@@ -16,9 +16,12 @@ class CmdModem(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog { -c | -s } [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog { -m | -c | -s } [-v]", version="%prog 1.0")
 
         # modem...
+        self.__parser.add_option("--model", "-m", action="store_true", dest="model", default=False,
+                                 help="report on modem model ")
+
         self.__parser.add_option("--connection", "-c", action="store_true", dest="connection", default=False,
                                  help="report on modem connection ")
 
@@ -35,13 +38,29 @@ class CmdModem(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        if self.connection == self.sim:
+        count = 0
+
+        if self.model:
+            count += 1
+
+        if self.connection:
+            count += 1
+
+        if self.sim:
+            count += 1
+
+        if count != 1:
             return False
 
         return True
 
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    @property
+    def model(self):
+        return self.__opts.model
+
 
     @property
     def connection(self):
@@ -65,4 +84,5 @@ class CmdModem(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdModem:{connection:%s, sim:%s, verbose:%s}" % (self.connection, self.sim, self.verbose)
+        return "CmdModem:{model:%s, connection:%s, sim:%s, verbose:%s}" % \
+               (self.model, self.connection, self.sim, self.verbose)
