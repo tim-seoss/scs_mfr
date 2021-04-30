@@ -60,7 +60,7 @@ if __name__ == '__main__':
     # run...
 
     if cmd.connection:
-        report = Host.modem_connection()
+        report = Host.modem_conn()
 
     if cmd.sim:
         report = Host.sim()
