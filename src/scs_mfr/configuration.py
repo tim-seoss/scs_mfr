@@ -207,6 +207,9 @@ DOCUMENT EXAMPLE
         }
     }
 }
+
+SEE ALSO
+scs_mfr/modem
 """
 from scs_core.data.datetime import LocalizedDatetime
 from scs_core.data.json import JSONify
