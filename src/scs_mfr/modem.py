@@ -10,10 +10,14 @@ The modem utility is used to report on the modem connection status and SIM param
 utility are included in the the configuration utility report.
 
 SYNOPSIS
-modem.py { -c | -s } [-v]
+modem.py { -m | -c | -s } [-v]
 
 EXAMPLES
 ./modem.py -s
+
+DOCUMENT EXAMPLE - MODEM
+{"id": "3f07553c31ce11715037ac16c24ceddcfb6f7a0b", "mfr": "QUALCOMM INCORPORATED",
+"model": "QUECTEL Mobile Broadband Module", "rev": "EC21EFAR06A01M4G"}
 
 DOCUMENT EXAMPLE - CONNECTION
 {"state": "connected", "signal": {"quality": 34, "recent": true}}
@@ -58,6 +62,9 @@ if __name__ == '__main__':
 
     # ----------------------------------------------------------------------------------------------------------------
     # run...
+
+    if cmd.model:
+        report = Host.modem()
 
     if cmd.connection:
         report = Host.modem_conn()
