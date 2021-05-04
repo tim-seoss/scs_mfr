@@ -16,8 +16,6 @@ import os
 from setuptools import setup, find_packages
 
 
-# TODO: update scripts
-
 # --------------------------------------------------------------------------------------------------------------------
 
 def read(rel_path):
@@ -63,31 +61,56 @@ setup(
     scripts=[
         'src/scs_mfr/afe_baseline.py',
         'src/scs_mfr/afe_calib.py',
-        'src/scs_mfr/afe_conf.py',
+        'src/scs_mfr/airnow_site_conf.py',
+        'src/scs_mfr/aws_api_auth.py',
+        'src/scs_mfr/aws_client_auth.py',
+        'src/scs_mfr/aws_deployment.py',
+        'src/scs_mfr/aws_group_cloner.py',
+        'src/scs_mfr/aws_group_deployment.py',
+        'src/scs_mfr/aws_group_setup.py',
+        'src/scs_mfr/aws_identity.py',
+        'src/scs_mfr/aws_project.py',
+        'src/scs_mfr/configuration.py',
+        'src/scs_mfr/csv_logger_conf.py',
         'src/scs_mfr/csv_reader.py',
         'src/scs_mfr/csv_writer.py',
         'src/scs_mfr/dfe_id.py',
         'src/scs_mfr/dfe_test.py',
+        'src/scs_mfr/display_conf.py',
         'src/scs_mfr/eeprom_read.py',
         'src/scs_mfr/eeprom_write.py',
+        'src/scs_mfr/fuel_gauge_calib.py',
+        'src/scs_mfr/gas_baseline.py',
+        'src/scs_mfr/gas_inference_conf.py',
+        'src/scs_mfr/gauge_conf.py',
+        'src/scs_mfr/git_pull.py',
         'src/scs_mfr/gps_conf.py',
         'src/scs_mfr/host_id.py',
+        'src/scs_mfr/interface_conf.py',
+        'src/scs_mfr/modem.py',
+        'src/scs_mfr/mpl115a2_calib.py',
+        'src/scs_mfr/mpl115a2_conf.py',
+        'src/scs_mfr/mqtt_conf.py',
         'src/scs_mfr/ndir_conf.py',
+        'src/scs_mfr/opc_cleaning_interval.py',
         'src/scs_mfr/opc_conf.py',
+        'src/scs_mfr/opc_firmware_conf.py',
+        'src/scs_mfr/opc_version.py',
         'src/scs_mfr/osio_api_auth.py',
         'src/scs_mfr/osio_client_auth.py',
-        'src/scs_mfr/osio_host_organisation.py',
         'src/scs_mfr/osio_project.py',
+        'src/scs_mfr/pmx_inference_conf.py',
         'src/scs_mfr/psu_conf.py',
         'src/scs_mfr/pt1000_calib.py',
-        'src/scs_mfr/dfe_conf.py',
         'src/scs_mfr/rtc.py',
+        'src/scs_mfr/scd30_conf.py',
         'src/scs_mfr/schedule.py',
+        'src/scs_mfr/shared_secret.py',
         'src/scs_mfr/sht_conf.py',
         'src/scs_mfr/system_id.py',
-        'src/scs_mfr/timezone.py',
+        'src/scs_mfr/timezone.py'
     ],
     install_requires=required,
     platforms=['any'],
-    python_requires=">=3.3",
+    python_requires=">=3.3"
 )
