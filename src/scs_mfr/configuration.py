@@ -207,6 +207,9 @@ DOCUMENT EXAMPLE
         }
     }
 }
+
+SEE ALSO
+scs_mfr/modem
 """
 from scs_core.data.datetime import LocalizedDatetime
 from scs_core.data.json import JSONify
@@ -291,7 +294,7 @@ if __name__ == '__main__':
                 exit(1)
 
         configuration = Configuration.load(Host, psu=psu)
-        sample = ConfigurationSample(system_id.message_tag(), LocalizedDatetime.now(), configuration)
+        sample = ConfigurationSample(system_id.message_tag(), LocalizedDatetime.now().utc(), configuration)
 
         print(JSONify.dumps(sample, indent=cmd.indent))
 
