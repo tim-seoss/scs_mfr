@@ -123,15 +123,15 @@ if __name__ == '__main__':
 
         # update...
         if cmd.update():
+            old_offset = gas_baseline.sensor_offset(cmd.gas_name())
+
             if cmd.set:
                 new_offset = cmd.set_value()
 
             elif cmd.offset:
-                old_offset = gas_baseline.sensor_offset(cmd.gas_name())
                 new_offset = old_offset + cmd.offset_value()
 
             else:
-                old_offset = gas_baseline.sensor_offset(cmd.gas_name())
                 new_offset = old_offset + (cmd.correct_value() - cmd.reported_value())
 
             if cmd.env_is_specified():
@@ -151,6 +151,9 @@ if __name__ == '__main__':
 
             gas_baseline.set_sensor_baseline(cmd.gas_name(), SensorBaseline(now, new_offset, env))
             gas_baseline.save(Host)
+
+            if cmd.verbose:
+                print("gas_baseline: %s: was: %s now: %s" % (cmd.gas_name(), old_offset, new_offset), file=sys.stderr)
 
         # zero...
         elif cmd.zero:
