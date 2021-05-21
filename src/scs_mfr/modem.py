@@ -15,7 +15,7 @@ modem.py { -m | -c | -s } [-v]
 EXAMPLES
 ./modem.py -s
 
-DOCUMENT EXAMPLE - MODEM
+DOCUMENT EXAMPLE - MODEL
 {"id": "3f07553c31ce11715037ac16c24ceddcfb6f7a0b", "mfr": "QUALCOMM INCORPORATED",
 "model": "QUECTEL Mobile Broadband Module", "rev": "EC21EFAR06A01M4G"}
 
@@ -26,7 +26,7 @@ DOCUMENT EXAMPLE - SIM
 {"imsi": "234104886708567", "iccid": "8944110068257270054", "operator-code": "23410", "operator-name": "O2 - UK"}
 
 SEE ALSO
-scs_mfr/configuration
+scs_dev/status_sampler
 """
 
 import sys
