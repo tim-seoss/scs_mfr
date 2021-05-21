@@ -26,7 +26,7 @@ DOCUMENT EXAMPLE - SIM
 {"imsi": "234104886708567", "iccid": "8944110068257270054", "operator-code": "23410", "operator-name": "O2 - UK"}
 
 SEE ALSO
-scs_mfr/configuration
+scs_dev/status_sampler
 """
 
 import sys
