@@ -15,7 +15,7 @@ modem.py { -m | -c | -s } [-v]
 EXAMPLES
 ./modem.py -s
 
-DOCUMENT EXAMPLE - MODEM
+DOCUMENT EXAMPLE - MODEL
 {"id": "3f07553c31ce11715037ac16c24ceddcfb6f7a0b", "mfr": "QUALCOMM INCORPORATED",
 "model": "QUECTEL Mobile Broadband Module", "rev": "EC21EFAR06A01M4G"}
 
