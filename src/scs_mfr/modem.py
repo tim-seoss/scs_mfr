@@ -27,6 +27,7 @@ DOCUMENT EXAMPLE - SIM
 
 SEE ALSO
 scs_dev/status_sampler
+scs_mfr/configuration
 """
 
 import sys
