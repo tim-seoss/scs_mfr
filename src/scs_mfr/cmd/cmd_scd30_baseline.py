@@ -96,7 +96,7 @@ class CmdSCD30Baseline(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def update(self):
-        return self.__opts.set or self.__opts.offset or self.__opts.offset
+        return self.__opts.set or self.__opts.offset or self.__opts.correct
 
 
     # ----------------------------------------------------------------------------------------------------------------
