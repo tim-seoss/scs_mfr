@@ -6,8 +6,7 @@ Created on 2 Jun 2021
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The scd30_baseline utility is used to adjust the zero offset for electrochemical sensors, as interpreted by the
-Alphasense application note AAN 803-02.
+The scd30_baseline utility is used to adjust the zero offset for the Sensirion SCD30 NDIR CO2 sensor.
 
 If the system reports a concentration of 25 parts per billion in zero air, its zero offset should be set to -25.
 The date / time of any change is recorded.
@@ -25,14 +24,14 @@ EXAMPLES
 ./scd30_baseline.py -c 10 23
 
 DOCUMENT EXAMPLE
-{"sn": {"calibrated-on": "2019-02-02T11:34:16Z", "offset": 50, "env": {"hmd": 66.0, "tmp": 11.0, "pA": 99.0}}}
+{"baseline": {"calibrated-on": "2019-02-02T11:34:16Z", "offset": 50, "env": {"hmd": 66.0, "tmp": 11.0, "pA": 99.0}}}
 
 FILES
 ~/SCS/conf/scd30_baseline.json
 
 SEE ALSO
 scs_dev/gases_sampler
-scs_mfr/afe_calib
+scs_mfr/scd30_conf
 """
 
 import sys
