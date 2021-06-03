@@ -25,6 +25,7 @@ FILES
 
 SEE ALSO
 scs_dev/gases_sampler
+scs_mfr/scd30_baseline
 """
 
 import sys
