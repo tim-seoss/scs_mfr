@@ -6,7 +6,7 @@ Created on 17 May 2018
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The mqtt_conf utility is used to control the behaviour of MQTT client scripts.
+The mqtt_conf utility is not relevant to systems running AWS Greengrass.
 
 The INHIBIT_PUBLISHING field determines whether the MQTT client will publish messages. If inhibit is set to true,
 then the client will continue to accept messages and echo these to stdout if required, but will not publish. This
