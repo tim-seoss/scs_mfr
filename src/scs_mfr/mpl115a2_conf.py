@@ -45,6 +45,7 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_mpl115a2_conf import CmdMPL115A2Conf
 
 
+# TODO: delete this utility
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
