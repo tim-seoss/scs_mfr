@@ -89,7 +89,7 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # resources...
 
-        afe_baseline = AFEBaseline.load(Host)
+        afe_baseline = AFEBaseline.load(Host, shell=True)
 
         if not cmd.env_is_specified():
             # SHTConf...

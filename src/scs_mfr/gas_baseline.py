@@ -84,7 +84,7 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # resources...
 
-        gas_baseline = GasBaseline.load(Host)
+        gas_baseline = GasBaseline.load(Host, shell=True)
 
         if not cmd.env_is_specified():
             # SHTConf...
