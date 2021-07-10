@@ -58,13 +58,13 @@ conf = '{"hostname": "scs-bbe-003", ' \
        '"report-file": "/tmp/southcoastscience/gps_report.json", "debug": false}, ' \
        '"interface-conf": {"model": "DFE"}, "greengrass-identity": null, ' \
        '"mpl115a2-calib": {"calibrated-on": "2020-11-15T11:29:23Z", "c25": 510}, ' \
-       '"mpl115a2-conf": null, "mqtt-conf": {"inhibit-publishing": false, "report-file": null, "debug": false}, ' \
        '"ndir-conf": {"model": "t1f1", "tally": 1, "raw": false}, ' \
        '"opc-conf": {"model": "N3", "sample-period": 10, "restart-on-zeroes": false, "power-saving": false}, ' \
        '"pmx-model-conf": {"uds-path": "pipes/lambda-pmx-model.uds", "model-interface": "s1", ' \
        '"resource-names": {"pm1": "/trained-models/pm1-s1-2020h1/xgboost-model", ' \
        '"pm2p5": "/trained-models/pm2p5-s1-2020h1/xgboost-model", ' \
        '"pm10": "/trained-models/pm10-s1-2020h1/xgboost-model"}}, ' \
+       '"pressure-conf": {"model": "ICP","altitude": 100}, ' \
        '"psu-conf": {"model": "OsloV1", "batt-model": null, "ignore-threshold": false, "reporting-interval": 20, ' \
        '"report-file": "/tmp/southcoastscience/psu_status_report.json"}, ' \
        '"pt1000-calib": {"calibrated-on": "2017-08-15T11:21:45Z", "v20": 0.320208}, ' \
@@ -92,10 +92,10 @@ conf1 = Configuration.load(Host, psu=psu)
 print(conf1)
 print("-")
 
-conf1.save(Host)
-conf1 = Configuration.load(Host, psu=psu)
-print(conf1)
-print("-")
+# conf1.save(Host)
+# conf1 = Configuration.load(Host, psu=psu)
+# print(conf1)
+# print("-")
 
 jstr = JSONify.dumps(conf1, indent=4)
 

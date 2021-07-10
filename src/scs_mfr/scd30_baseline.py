@@ -39,12 +39,11 @@ import sys
 from scs_core.data.datetime import LocalizedDatetime
 from scs_core.data.json import JSONify
 
-from scs_core.climate.mpl115a2_conf import MPL115A2Conf
+from scs_core.climate.pressure_conf import PressureConf
 
 from scs_core.gas.scd30.scd30_baseline import SCD30Baseline
 from scs_core.gas.sensor_baseline import SensorBaseline, BaselineEnvironment
 
-from scs_dfe.climate.mpl115a2 import MPL115A2
 from scs_dfe.climate.sht_conf import SHTConf
 
 from scs_host.bus.i2c import I2C
@@ -58,7 +57,7 @@ from scs_mfr.cmd.cmd_scd30_baseline import CmdSCD30Baseline
 if __name__ == '__main__':
 
     sht = None
-    mpl = None
+    barometer = None
 
     now = LocalizedDatetime.now().utc()
 
@@ -81,7 +80,7 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # resources...
 
-        scd30_baseline = SCD30Baseline.load(Host)
+        scd30_baseline = SCD30Baseline.load(Host, shell=True)
 
         if not cmd.env_is_specified():
             # SHTConf...
@@ -97,22 +96,22 @@ if __name__ == '__main__':
             # SHT...
             sht = sht_conf.int_sht()
 
-            # MPL115A2Conf...
-            mpl_conf = MPL115A2Conf.load(Host)
+            # PressureConf...
+            pressure_conf = PressureConf.load(Host)
 
-            if mpl_conf is not None:
+            if pressure_conf is not None:
                 if cmd.verbose:
-                    print("scd30_baseline: %s" % mpl_conf, file=sys.stderr)
+                    print("scd30_baseline: %s" % pressure_conf, file=sys.stderr)
 
-                # MPL115A2...
-                mpl = MPL115A2.construct(None)
+                # barometer...
+                barometer = pressure_conf.sensor(None)
 
 
         # ------------------------------------------------------------------------------------------------------------
         # run...
 
-        if mpl is not None:
-            mpl.init()
+        if barometer is not None:
+            barometer.init()
 
         # update...
         if cmd.update():
@@ -135,11 +134,11 @@ if __name__ == '__main__':
 
             else:
                 sht_datum = sht.sample()
-                mpl_datum = None if mpl is None else mpl.sample()
+                pressure_datum = None if barometer is None else barometer.sample()
 
                 humid = sht_datum.humid
                 temp = sht_datum.temp
-                press = None if mpl_datum is None else mpl_datum.actual_press
+                press = None if pressure_datum is None else pressure_datum.actual_press
 
             env = BaselineEnvironment(humid, temp, press)
 
