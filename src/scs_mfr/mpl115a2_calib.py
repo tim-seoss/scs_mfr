@@ -30,7 +30,7 @@ DOCUMENT EXAMPLE
 
 SEE ALSO
 scs_dev/pressure_sampler
-scs_mfr/mpl115a2_conf
+scs_mfr/pressure_conf
 """
 
 import sys
