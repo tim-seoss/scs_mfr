@@ -117,7 +117,7 @@ if __name__ == '__main__':
             git.save(Host)
 
         else:
-            git = GitPull.load(Host, default=None)
+            git = GitPull.load(Host)
 
         if git:
             print(JSONify.dumps(git))

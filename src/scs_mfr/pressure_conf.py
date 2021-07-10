@@ -71,7 +71,7 @@ if __name__ == '__main__':
     # resources...
 
     # PressureConf...
-    conf = PressureConf.load(Host)
+    conf = PressureConf.load(Host, shell=True)
 
 
     # ----------------------------------------------------------------------------------------------------------------
