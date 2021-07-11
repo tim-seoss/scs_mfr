@@ -70,7 +70,7 @@ if __name__ == '__main__':
     # resources...
 
     # OPCConf...
-    conf = MQTTConf.load(Host, shell=True)
+    conf = MQTTConf.load(Host, skeleton=True)
 
 
     # ----------------------------------------------------------------------------------------------------------------

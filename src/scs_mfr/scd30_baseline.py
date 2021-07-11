@@ -80,7 +80,7 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # resources...
 
-        scd30_baseline = SCD30Baseline.load(Host, shell=True)
+        scd30_baseline = SCD30Baseline.load(Host, skeleton=True)
 
         if not cmd.env_is_specified():
             # SHTConf...
