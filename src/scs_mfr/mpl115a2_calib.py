@@ -30,13 +30,13 @@ DOCUMENT EXAMPLE
 
 SEE ALSO
 scs_dev/pressure_sampler
-scs_mfr/mpl115a2_conf
+scs_mfr/pressure_conf
 """
 
 import sys
 
 from scs_core.climate.mpl115a2_calib import MPL115A2Calib
-from scs_core.climate.mpl115a2_conf import MPL115A2Conf
+from scs_core.climate.pressure_conf import PressureConf
 
 from scs_core.data.json import JSONify
 
@@ -75,11 +75,11 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # resources...
 
-        # MPL115A2Conf...
-        conf = MPL115A2Conf.load(Host)
+        # PressureConf...
+        conf = PressureConf.load(Host)
 
         if conf is None:
-            print("mpl115a2_calib: MPL115A2Conf not available.", file=sys.stderr)
+            print("mpl115a2_calib: PressureConf not available.", file=sys.stderr)
             exit(1)
 
         # SHT...

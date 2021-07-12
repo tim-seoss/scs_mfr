@@ -75,7 +75,7 @@ if __name__ == '__main__':
     # resources...
 
     # InterfaceConf...
-    conf = InterfaceConf.load(Host)
+    conf = InterfaceConf.load(Host, skeleton=True)
 
 
     # ----------------------------------------------------------------------------------------------------------------

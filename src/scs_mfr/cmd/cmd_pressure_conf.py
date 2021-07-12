@@ -1,15 +1,18 @@
 """
-Created on 21 Jun 2018
+Created on 9 Jul 2021
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
 import optparse
 
+from scs_core.data.datum import Datum
+from scs_dfe.climate.pressure_conf import PressureConf
+
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class CmdMPL115A2Conf(object):
+class CmdPressureConf(object):
     """
     unix command line handler
     """
@@ -17,17 +20,20 @@ class CmdMPL115A2Conf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self):
-        self.__parser = optparse.OptionParser(usage="%prog [{ -s [-a ALTITUDE] | -d }] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog { [-m MODEL] [-a ALTITUDE] | -d } [-v]",
+                                              version="%prog 1.0")
+
+        models = ' | '.join(PressureConf.models())
 
         # optional...
-        self.__parser.add_option("--set", "-s", action="store_true", dest="set", default=False,
-                                 help="create or update an MPL115A2 configuration")
+        self.__parser.add_option("--model", "-m", type="string", nargs=1, action="store", dest="model",
+                                 help="barometer model { %s }" % models)
 
         self.__parser.add_option("--altitude", "-a", type="string", nargs=1, action="store", dest="altitude",
                                  help="altitude in metres or 'GPS' for GPS altitude")
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
-                                 help="delete the MPL115A2 configuration")
+                                 help="delete the pressure configuration")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
@@ -38,25 +44,20 @@ class CmdMPL115A2Conf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        if self.set() and self.delete:
+        if (self.model is not None or self.altitude is not None) and self.delete:
             return False
 
-        if not self.set() and self.altitude is not None:
+        if self.altitude is not None and not (self.altitude == 'GPS' or Datum.is_int(self.altitude)):
             return False
 
-        if self.altitude is None or self.altitude == 'GPS':
-            return True
-
-        try:
-            int(self.altitude)
-        except ValueError:
+        if self.model is not None and self.model not in PressureConf.models():
             return False
 
         return True
 
 
     def set(self):
-        return self.__opts.set
+        return self.altitude or self.model
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -67,6 +68,11 @@ class CmdMPL115A2Conf(object):
             return int(self.__opts.altitude)
         except (TypeError, ValueError):
             return self.__opts.altitude
+
+
+    @property
+    def model(self):
+        return self.__opts.model
 
 
     @property
@@ -86,5 +92,5 @@ class CmdMPL115A2Conf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdMPL115A2Conf:{set:%s, altitude:%s, delete:%s, verbose:%s}" % \
-               (self.set(), self.altitude, self.delete, self.verbose)
+        return "CmdPressureConf:{model:%s, altitude:%s, delete:%s, verbose:%s}" % \
+               (self.model, self.altitude, self.delete, self.verbose)
