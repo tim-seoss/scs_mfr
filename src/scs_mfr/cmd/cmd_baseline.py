@@ -116,7 +116,7 @@ class CmdBaseline(object):
 
     def gas_name(self):
         if self.baseline:
-            return self.set
+            return self.baseline
 
         if self.set:
             return self.set[0]
