@@ -22,7 +22,8 @@ an ozone sensor is identified as Ox.
 Note that the scs_dev/gasses_sampler and greengrass processes must be restarted for changes to take effect.
 
 SYNOPSIS
-gas_baseline.py [{ { { -s | -o } GAS VALUE | -c GAS CORRECT REPORTED } [-r HUMID -t TEMP [-p PRESS]] | -z }] [-v]
+gas_baseline.py [{ { -b GAS  | { -s | -o } GAS VALUE | -c GAS CORRECT REPORTED } \
+[-r HUMID -t TEMP [-p PRESS]] | -z }] [-v]
 
 EXAMPLES
 ./gas_baseline.py -c NO2 10 23
