@@ -31,10 +31,14 @@ class CmdBaseline(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [{ { { -s | -o } GAS VALUE | -c GAS CORRECT REPORTED } "
-                                                    "[-r HUMID -t TEMP [-p PRESS]] | -z }] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ { -b GAS  | { -s | -o } GAS VALUE | "
+                                                    "-c GAS CORRECT REPORTED } [-r HUMID -t TEMP [-p PRESS]] | -z }] "
+                                                    "[-v]", version="%prog 1.0")
 
         # optional...
+        self.__parser.add_option("--baseline", "-b", type="string", nargs=1, action="store", dest="baseline",
+                                 help="report offset for GAS")
+
         self.__parser.add_option("--set", "-s", type="string", nargs=2, action="store", dest="set",
                                  help="set offset for GAS to integer VALUE")
 
@@ -68,6 +72,9 @@ class CmdBaseline(object):
         param_count = 0
 
         # setters...
+        if self.baseline is not None:
+            param_count += 1
+
         if self.set is not None:
             param_count += 1
 
@@ -108,6 +115,9 @@ class CmdBaseline(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def gas_name(self):
+        if self.baseline:
+            return self.set
+
         if self.set:
             return self.set[0]
 
@@ -125,6 +135,11 @@ class CmdBaseline(object):
 
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    @property
+    def baseline(self):
+        return self.__opts.baseline
+
 
     @property
     def set(self):
@@ -189,5 +204,7 @@ class CmdBaseline(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdBaseline:{set:%s, offset:%s, correct:%s, humid:%s, temp:%s, press:%s, zero:%s, verbose:%s}" % \
-               (self.set, self.offset, self.correct, self.humid, self.temp, self.press, self.zero, self.verbose)
+        return "CmdBaseline:{baseline:%s, set:%s, offset:%s, correct:%s, humid:%s, temp:%s, press:%s, zero:%s, " \
+               "verbose:%s}" % \
+               (self.baseline, self.set, self.offset, self.correct, self.humid, self.temp, self.press, self.zero,
+                self.verbose)

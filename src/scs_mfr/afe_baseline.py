@@ -170,6 +170,19 @@ if __name__ == '__main__':
             if cmd.verbose:
                 print("afe_baseline: %s: was: %s now: %s" % (cmd.gas_name(), old_offset, new_offset), file=sys.stderr)
 
+        # baseline...
+        elif cmd.baseline:
+            calib = AFECalib.load(Host)
+
+            gas_name = cmd.gas_name()
+            index = calib.sensor_index(gas_name)
+
+            if index is None:
+                print("afe_baseline: the gas type is not included in the AFE calibration document.", file=sys.stderr)
+                exit(1)
+
+            afe_baseline = AFEBaseline([afe_baseline[index]])
+
         # zero...
         elif cmd.zero:
             for index in range(len(afe_baseline)):
