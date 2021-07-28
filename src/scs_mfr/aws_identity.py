@@ -84,8 +84,8 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # Check sudo
 
-    if os.geteuid() != 0:
-        logger.error("you need to have root privileges to run this script.")
+    if cmd.setup and os.geteuid() != 0:
+        logger.error("you must have root privileges to run this script.")
         exit(1)
 
     # ----------------------------------------------------------------------------------------------------------------
