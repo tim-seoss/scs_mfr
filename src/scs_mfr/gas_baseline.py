@@ -153,6 +153,17 @@ if __name__ == '__main__':
             if cmd.verbose:
                 print("gas_baseline: %s: was: %s now: %s" % (cmd.gas_name(), old_offset, new_offset), file=sys.stderr)
 
+        # baseline...
+        elif cmd.baseline:
+            gas_name = cmd.gas_name()
+            sensor_baseline = gas_baseline.sensor_baseline(gas_name)
+
+            if sensor_baseline is None:
+                print("gas_baseline: %s is not included in the calibration document." % gas_name, file=sys.stderr)
+                exit(1)
+
+            gas_baseline = GasBaseline({gas_name: sensor_baseline})
+
         # zero...
         elif cmd.zero:
             for gas in gas_baseline.gases():
