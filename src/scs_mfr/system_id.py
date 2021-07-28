@@ -16,7 +16,7 @@ When the "verbose" "-v" flag is used, the system_id utility reports all of the i
 its specification.
 
 SYNOPSIS
-system_id.py [-d VENDOR_ID] [-m MODEL_ID] [-n MODEL_NAME] [-c CONFIG] [-s SYSTEM_SERIAL_NUMBER] [-v]
+system_id.py [-d VENDOR_ID] [-m MODEL_ID] [-n MODEL_NAME] [-c CONFIG] [{-s SYSTEM_SERIAL_NUMBER | -a }] [-v]
 
 EXAMPLES
 ./system_id.py -v -d SCS -m BGX -n Praxis -c BGX -s 401
@@ -49,14 +49,21 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_system_id import CmdSystemID
 
 
+# TODO: update documentation
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
+
+    serial_number = None
 
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
     cmd = CmdSystemID()
+
+    if not cmd.is_valid():
+        cmd.print_help(sys.stderr)
+        exit(2)
 
     if cmd.verbose:
         print("system_id: %s" % cmd, file=sys.stderr)
@@ -79,11 +86,19 @@ if __name__ == '__main__':
             cmd.print_help(sys.stderr)
             exit(2)
 
+        if cmd.auto_serial:
+            try:
+                serial_number = Host.numeric_component_of_name()
+            except ValueError as ex:
+                print("system_id: hostname '%s' cannot provide a serial number." % ex, file=sys.stderr)
+                exit(1)
+        else:
+            serial_number = system_id.system_serial_number if cmd.serial_number is None else cmd.serial_number
+
         vendor_id = system_id.vendor_id if cmd.vendor_id is None else cmd.vendor_id
         model_id = system_id.model_id if cmd.model_id is None else cmd.model_id
         model_name = system_id.model_name if cmd.model_name is None else cmd.model_name
         configuration = system_id.configuration if cmd.configuration is None else cmd.configuration
-        serial_number = system_id.system_serial_number if cmd.serial_number is None else cmd.serial_number
 
         system_id = SystemID(vendor_id, model_id, model_name, configuration, serial_number)
         system_id.save(Host)
