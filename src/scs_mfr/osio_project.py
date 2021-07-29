@@ -104,7 +104,7 @@ class HostProject(object):
             self.__topic_manager.update(topic.path, updated)
 
         else:
-            info = TopicInfo(TopicInfo.FORMAT_JSON, None, None, None)     # for the v2 API, schema_id goes in Topic
+            info = TopicInfo(TopicInfo.FORMAT_JSON)         # for the v2 API, schema_id goes in Topic
             constructed = Topic(path, schema.name, schema.description, True, info, True, schema.schema_id)
 
             self.__topic_manager.create(constructed)
