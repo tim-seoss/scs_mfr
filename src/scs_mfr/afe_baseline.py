@@ -134,11 +134,12 @@ if __name__ == '__main__':
             gas_name = cmd.gas_name()
 
             index = calib.sensor_index(gas_name)
-            old_offset = afe_baseline.sensor_baseline(index).offset
 
             if index is None:
                 print("afe_baseline: %s is not included in the AFE calibration document." % gas_name, file=sys.stderr)
                 exit(1)
+
+            old_offset = afe_baseline.sensor_baseline(index).offset
 
             if cmd.set:
                 new_offset = cmd.set_value()
