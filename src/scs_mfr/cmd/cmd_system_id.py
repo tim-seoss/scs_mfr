@@ -17,7 +17,7 @@ class CmdSystemID(object):
         Constructor
         """
         self.__parser = optparse.OptionParser(usage="%prog [-d VENDOR_ID] [-m MODEL_ID] [-n MODEL_NAME] [-c CONFIG] "
-                                                    "[-s SYSTEM_SERIAL_NUMBER] [-v]", version="%prog 1.0")
+                                                    "[{-s SYSTEM_SERIAL_NUMBER | -a }] [-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--vendor", "-d", type="string", nargs=1, action="store", dest="vendor_id",
@@ -35,18 +35,27 @@ class CmdSystemID(object):
         self.__parser.add_option("--serial", "-s", type="int", nargs=1, action="store", dest="serial_number",
                                  help="set serial number")
 
+        self.__parser.add_option("--auto-serial", "-a", action="store_true", dest="auto_serial", default=False,
+                                 help="set serial number automatically from hostname")
+
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
 
         self.__opts, self.__args = self.__parser.parse_args()
 
 
-
     # ----------------------------------------------------------------------------------------------------------------
+
+    def is_valid(self):
+        if self.serial_number is not None and self.auto_serial:
+            return False
+
+        return True
+
 
     def is_complete(self):
         if self.vendor_id is None or self.model_id is None or self.model_name is None or \
-                        self.configuration is None or self.serial_number is None:
+                        self.configuration is None or (self.serial_number is None and not self.auto_serial):
             return False
 
         return True
@@ -54,7 +63,7 @@ class CmdSystemID(object):
 
     def set(self):
         if self.vendor_id is not None or self.model_id is not None or self.model_name is not None or \
-                        self.configuration is not None or self.serial_number is not None:
+                        self.configuration is not None or self.serial_number is not None or self.auto_serial:
             return True
 
         return False
@@ -88,6 +97,11 @@ class CmdSystemID(object):
 
 
     @property
+    def auto_serial(self):
+        return self.__opts.auto_serial
+
+
+    @property
     def verbose(self):
         return self.__opts.verbose
 
@@ -100,6 +114,6 @@ class CmdSystemID(object):
 
     def __str__(self, *args, **kwargs):
         return "CmdSystemID:{vendor_id:%s, model_id:%s, model_name:%s, " \
-               "configuration:%s, serial_number:%s, verbose:%s}" % \
+               "configuration:%s, serial_number:%s, auto_serial:%s, verbose:%s}" % \
                (self.vendor_id, self.model_id, self.model_name,
-                self.configuration, self.serial_number, self.verbose)
+                self.configuration, self.serial_number, self.auto_serial, self.verbose)

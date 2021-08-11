@@ -22,7 +22,8 @@ an ozone sensor is identified as Ox.
 Note that the scs_dev/gasses_sampler process must be restarted for changes to take effect.
 
 SYNOPSIS
-afe_baseline.py [{ { { -s | -o } GAS VALUE | -c GAS CORRECT REPORTED } [-r HUMID -t TEMP [-p PRESS]] | -z }] [-v]
+afe_baseline.py [{ { -b GAS  | { -s | -o } GAS VALUE | -c GAS CORRECT REPORTED } \
+[-r HUMID -t TEMP [-p PRESS]] | -z }] [-v]
 
 EXAMPLES
 ./afe_baseline.py -c NO2 10 23
@@ -133,11 +134,12 @@ if __name__ == '__main__':
             gas_name = cmd.gas_name()
 
             index = calib.sensor_index(gas_name)
-            old_offset = afe_baseline.sensor_baseline(index).offset
 
             if index is None:
-                print("afe_baseline: the gas type is not included in the AFE calibration document.", file=sys.stderr)
+                print("afe_baseline: %s is not included in the AFE calibration document." % gas_name, file=sys.stderr)
                 exit(1)
+
+            old_offset = afe_baseline.sensor_baseline(index).offset
 
             if cmd.set:
                 new_offset = cmd.set_value()
@@ -169,6 +171,19 @@ if __name__ == '__main__':
 
             if cmd.verbose:
                 print("afe_baseline: %s: was: %s now: %s" % (cmd.gas_name(), old_offset, new_offset), file=sys.stderr)
+
+        # baseline...
+        elif cmd.baseline:
+            calib = AFECalib.load(Host)
+
+            gas_name = cmd.gas_name()
+            index = calib.sensor_index(gas_name)
+
+            if index is None:
+                print("afe_baseline: %s is not included in the AFE calibration document." % gas_name, file=sys.stderr)
+                exit(1)
+
+            afe_baseline = AFEBaseline([afe_baseline.sensor_baseline(index)])
 
         # zero...
         elif cmd.zero:
