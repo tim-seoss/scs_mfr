@@ -30,6 +30,9 @@ The Alphasense OPC-N2, OPC-N3, OPC-R1, and Sensirion SPS30 models are supported.
 Alternate exegetes (data interpretation models) can be added or removed - available interpretations can be listed with
 the --help flag.
 
+Note that, although support is provided for multiple named configurations, the configuration utility will only access
+unnamed (solitary) configurations.
+
 SYNOPSIS
 opc_conf.py [-n NAME] [{ [-m MODEL] [-s SAMPLE_PERIOD] [-z { 0 | 1 }] [-p { 0 | 1 }] [-b BUS] [-a ADDRESS] | -d }] [-v]
 
@@ -45,6 +48,7 @@ FILES
 SEE ALSO
 scs_dev/particulates_sampler
 scs_mfr/opc_cleaning_interval
+scs_mfr/opc_version
 
 REFERENCES
 https://github.com/south-coast-science/scs_core/blob/develop/src/scs_core/particulate/exegesis/exegete_catalogue.py
