@@ -23,57 +23,81 @@ EXAMPLES
 
 DOCUMENT EXAMPLE
 {
-    "rec": "2021-04-13T12:27:43Z",
     "tag": "scs-opc-1",
+    "rec": "2021-09-03T11:03:52Z",
     "val": {
         "hostname": "scs-cube-001",
-        "git-pull": null,
+        "packs": {
+            "scs_core": {
+                "repo": "scs_core",
+                "version": "1.0.27"
+            },
+            "scs_dev": {
+                "repo": "scs_dev",
+                "version": "1.0.10"
+            },
+            "scs_dfe": {
+                "repo": "scs_dfe_eng",
+                "version": "1.0.9"
+            },
+            "scs_greengrass": {
+                "repo": "scs_greengrass",
+                "version": "1.0.3"
+            },
+            "scs_host": {
+                "repo": "scs_host_cpc",
+                "version": "1.0.5"
+            },
+            "scs_inference": {
+                "repo": "scs_inference",
+                "version": null
+            },
+            "scs_mfr": {
+                "repo": "scs_mfr",
+                "version": "1.0.12"
+            },
+            "scs_ndir": {
+                "repo": "scs_ndir",
+                "version": null
+            },
+            "scs_psu": {
+                "repo": "scs_psu",
+                "version": "1.0.9"
+            }
+        },
         "afe-baseline": {
             "sn1": {
-                "calibrated-on": "2021-01-03T09:27:42Z",
-                "offset": 136,
+                "calibrated-on": "2021-08-05T11:29:35Z",
+                "offset": 135,
                 "env": {
-                    "hmd": 33.4,
-                    "tmp": 23.3,
+                    "hmd": 51.8,
+                    "tmp": 26.5,
                     "pA": null
                 }
             },
             "sn2": {
-                "calibrated-on": null,
+                "calibrated-on": "2021-06-28T10:25:13Z",
                 "offset": 0,
                 "env": null
             },
             "sn3": {
-                "calibrated-on": null,
+                "calibrated-on": "2021-06-28T10:25:13Z",
                 "offset": 0,
                 "env": null
             },
             "sn4": {
-                "calibrated-on": null,
+                "calibrated-on": "2021-06-28T10:25:13Z",
                 "offset": 0,
                 "env": null
             }
         },
-        "afe-calib": {
+        "afe-id": {
             "serial_number": null,
             "type": "DSI",
-            "calibrated_on": "2020-01-01",
-            "dispatched_on": null,
-            "pt1000_v20": null,
+            "calibrated_on": "2021-01-01",
             "sn1": {
-                "serial_number": "212060325",
-                "sensor_type": "NOGA4",
-                "we_electronic_zero_mv": 300,
-                "we_sensor_zero_mv": 0,
-                "we_total_zero_mv": 300,
-                "ae_electronic_zero_mv": 300,
-                "ae_sensor_zero_mv": 0,
-                "ae_total_zero_mv": 300,
-                "we_sensitivity_na_ppb": -0.254,
-                "we_cross_sensitivity_no2_na_ppb": -0.254,
-                "pcb_gain": -0.7,
-                "we_sensitivity_mv_ppb": 0.185,
-                "we_cross_sensitivity_no2_mv_ppb": 0.185
+                "serial_number": "354931395",
+                "sensor_type": "PID"
             }
         },
         "aws-api-auth": {
@@ -103,11 +127,11 @@ DOCUMENT EXAMPLE
         "display-conf": null,
         "gas-baseline": {
             "NO2": {
-                "calibrated-on": "2021-01-19T13:01:13Z",
-                "offset": 7,
+                "calibrated-on": "2021-08-05T11:29:30Z",
+                "offset": 11,
                 "env": {
-                    "hmd": 42.8,
-                    "tmp": 25.3,
+                    "hmd": 51.8,
+                    "tmp": 26.5,
                     "pA": null
                 }
             }
@@ -131,7 +155,6 @@ DOCUMENT EXAMPLE
             "group-name": "scs-cube-001-group"
         },
         "mpl115a2-calib": null,
-        "mpl115a2-conf": null,
         "mqtt-conf": {
             "inhibit-publishing": false,
             "report-file": "/tmp/southcoastscience/mqtt_queue_report.json",
@@ -144,10 +167,15 @@ DOCUMENT EXAMPLE
             "restart-on-zeroes": true,
             "power-saving": false
         },
+        "opc-version": {
+            "serial": "177336702",
+            "firmware": "OPC-N3 Iss1.1 FirmwareVer=1.17a...........................BS"
+        },
         "pmx-model-conf": {
             "uds-path": "pipes/lambda-pmx-model.uds",
             "model-interface": "s1"
         },
+        "pressure-conf": null,
         "psu-conf": {
             "model": "OPCubeV1",
             "batt-model": "PackV2",
@@ -157,15 +185,16 @@ DOCUMENT EXAMPLE
         },
         "psu-version": {
             "id": "SCS OPCube Controller type 1 firmware 1",
-            "tag": "1.1.1",
+            "tag": "001.001.003",
             "c-date": null,
             "c-time": null
         },
         "pt1000-calib": null,
+        "scd30-baseline": null,
         "scd30-conf": null,
         "schedule": {
             "scs-climate": {
-                "interval": 10.0,
+                "interval": 60.0,
                 "tally": 1
             },
             "scs-gases": {
@@ -182,17 +211,36 @@ DOCUMENT EXAMPLE
             }
         },
         "shared-secret": {
-            "key": "xxx"
+            "key": "Ytzglk6oYpzJY0FB"
         },
         "sht-conf": {
             "int": "0x45",
             "ext": "0x45"
         },
+        "networks": {
+            "eth0": {
+                "kind": "ethernet",
+                "state": "connected",
+                "connection": "Ethernet eth0"
+            },
+            "cdc-wdm0": {
+                "kind": "gsm",
+                "state": "connected",
+                "connection": "giffgaff"
+            }
+        },
+        "modem": {
+            "id": "3f07553c31ce11715037ac16c24ceddcfb6f7a0b",
+            "imei": "867962041294151",
+            "mfr": "QUALCOMM INCORPORATED",
+            "model": "QUECTEL Mobile Broadband Module",
+            "rev": "EC21EFAR06A01M4G"
+        },
         "sim": {
             "imsi": "234104886708667",
             "iccid": "8944110068256270054",
             "operator-code": "23410",
-            "operator-name": "giffgaff"
+            "operator-name": "O2 - UK"
         },
         "system-id": {
             "vendor-id": "SCS",
