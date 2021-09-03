@@ -16,19 +16,21 @@ class CmdOPCVersion(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog { -w | -s } [-n NAME] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [-n NAME] [{ -s | -d }] [-v]", version="%prog 1.0")
 
-        # compulsory...
-        self.__parser.add_option("--firmware", "-w", action="store_true", dest="firmware", default=False,
-                                 help="report firmware version")
-
-        self.__parser.add_option("--serial", "-s", action="store_true", dest="serial", default=False,
-                                 help="report serial number")
-
-        # optional...
+        # identity...
         self.__parser.add_option("--name", "-n", type="string", nargs=1, action="store", dest="name",
-                                 help="the name of the OPC configuration")
+                                 help="the name of the OPC")
 
+        # function...
+        self.__parser.add_option("--set", "-s", action="store_true", dest="set", default=False,
+                                 help="read from OPC and save to file")
+
+        self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
+                                 help="delete the file")
+
+
+        # output...
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
 
@@ -38,7 +40,15 @@ class CmdOPCVersion(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        if bool(self.firmware) == bool(self.serial):
+        count = 0
+
+        if self.set:
+            count += 1
+
+        if self.delete:
+            count += 1
+
+        if count > 1:
             return False
 
         return True
@@ -47,18 +57,18 @@ class CmdOPCVersion(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
-    def firmware(self):
-        return self.__opts.firmware
-
-
-    @property
-    def serial(self):
-        return self.__opts.serial
-
-
-    @property
     def name(self):
         return self.__opts.name
+
+
+    @property
+    def set(self):
+        return self.__opts.set
+
+
+    @property
+    def delete(self):
+        return self.__opts.delete
 
 
     @property
@@ -73,5 +83,5 @@ class CmdOPCVersion(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdOPCVersion:{firmware:%s, serial:%s, name:%s, verbose:%s}" % \
-               (self.firmware, self.serial, self.name, self.verbose)
+        return "CmdOPCVersion:{name:%s, set:%s, delete:%s, verbose:%s}" % \
+               (self.name, self.set, self.delete, self.verbose)
