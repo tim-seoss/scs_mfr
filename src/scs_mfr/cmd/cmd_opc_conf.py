@@ -23,10 +23,11 @@ class CmdOPCConf(object):
                                                     "[-p { 0 | 1 }] [-b BUS] [-a ADDRESS] | -d }] [-v]",
                                               version="%prog 1.0")
 
-        # optional...
+        # identity...
         self.__parser.add_option("--name", "-n", type="string", nargs=1, action="store", dest="name",
                                  help="the name of the OPC configuration")
 
+        # function...
         self.__parser.add_option("--model", "-m", type="string", nargs=1, action="store", dest="model",
                                  help="set MODEL { N2 | N3 | R1 | S30 }")
 

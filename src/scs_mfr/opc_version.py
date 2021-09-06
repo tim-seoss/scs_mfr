@@ -6,20 +6,26 @@ Created on 4 Sep 2018
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The opc_version utility reports either the firmware version or serial number of an attached optical particle counter
-(OPC). The reported string is written to stdout.
+The opc_version utility is used to interrogate, update or delete the firmware version and serial number of an
+attached optical particle counter (OPC).
 
-The opc_version utility exits with 1 if no version string could be read, and exits with 0 if a string was read. The
-command can therefore be used to test for the presence / operability of an OPC.
+The report is updated automatically each time the particulates_sampler command is run. The report is persisted in the
+host's filesystem, enabling it to be read by the configuration utility.
+
+Note that, although support is provided for multiple named version reports, the configuration utility will only access
+unnamed (solitary) version reports.
 
 SYNOPSIS
-opc_version.py { -w | -s } [-n NAME] [-v]
+opc_version.py [-n NAME] [{ -s | -d }] [-v]
 
 EXAMPLES
-./opc_version.py -w -v
+./opc_version.py -vs
 
-DOCUMENT EXAMPLE - OUTPUT
-"OPC-N2 FirmwareVer=OPC-018.2..............................BD"
+DOCUMENT EXAMPLE
+{"serial": "177336702", "firmware": "OPC-N3 Iss1.1 FirmwareVer=1.17a...........................BS"}
+
+FILES
+~/SCS/conf/opc_version.json
 
 SEE ALSO
 scs_dev/opc_cleaner
@@ -32,6 +38,7 @@ scs_mfr/opc_firmware_conf
 import sys
 
 from scs_core.data.json import JSONify
+from scs_core.particulate.opc_version import OPCVersion
 
 from scs_dfe.interface.interface_conf import InterfaceConf
 from scs_dfe.particulate.opc_conf import OPCConf
@@ -47,6 +54,7 @@ from scs_mfr.cmd.cmd_opc_version import CmdOPCVersion
 if __name__ == '__main__':
 
     opc = None
+    report = None
 
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
@@ -93,25 +101,35 @@ if __name__ == '__main__':
         if cmd.verbose and interface:
             print("opc_version: %s" % interface, file=sys.stderr)
 
-        # OPC...
-        opc = opc_conf.opc(interface, Host)
+        if cmd.set:
+            # OPC...
+            opc = opc_conf.opc(interface, Host)
 
-        if cmd.verbose:
-            print("opc_version: %s" % opc, file=sys.stderr)
+            if not opc:
+                print("opc_version: OPC not available", file=sys.stderr)
+                exit(1)
+
+            if cmd.verbose:
+                print("opc_version: %s" % opc, file=sys.stderr)
 
 
         # ------------------------------------------------------------------------------------------------------------
         # run...
 
-        opc.power_on()
+        if cmd.set:
+            opc.power_on()
 
-        report = opc.firmware() if cmd.firmware else opc.serial_no()
+            report = OPCVersion(opc.serial_no(), opc.firmware(), name=cmd.name)
+            report.save(Host)
 
-        if not report:
-            print("opc_version: OPC not available", file=sys.stderr)
-            exit(1)
+        elif cmd.delete:
+            OPCVersion.delete(Host, name=cmd.name)
 
-        print(JSONify.dumps(report))
+        else:
+            report = OPCVersion.load(Host, name=cmd.name)
+
+        if report:
+            print(JSONify.dumps(report))
 
 
     # ----------------------------------------------------------------------------------------------------------------
