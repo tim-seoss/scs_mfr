@@ -103,6 +103,8 @@ if __name__ == '__main__':
         system_id = SystemID(vendor_id, model_id, model_name, configuration, serial_number)
         system_id.save(Host)
 
+        system_id = SystemID.load(Host)     # update last_modified
+
     if system_id:
         print(JSONify.dumps(system_id))
 
