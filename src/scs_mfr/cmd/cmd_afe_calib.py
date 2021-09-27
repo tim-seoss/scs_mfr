@@ -19,9 +19,9 @@ class CmdAFECalib(object):
         Constructor
         """
         self.__parser = optparse.OptionParser(usage="%prog [{ -a SERIAL_NUMBER | -s SERIAL_NUMBER YYYY-MM-DD | -t  | "
-                                                    "-d }] [-v]", version="%prog 1.0")
+                                                    "-d }] [-i INDENT] [-v]", version="%prog 1.0")
 
-        # optional...
+        # functions...
         self.__parser.add_option("--afe", "-a", type="string", nargs=1, action="store", dest="afe_serial_number",
                                  help="set AFE serial number")
 
@@ -33,6 +33,10 @@ class CmdAFECalib(object):
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="delete this calibration")
+
+        # output...
+        self.__parser.add_option("--indent", "-i", action="store", dest="indent", type=int,
+                                 help="pretty-print the output with INDENT")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
@@ -111,6 +115,11 @@ class CmdAFECalib(object):
 
 
     @property
+    def indent(self):
+        return self.__opts.indent
+
+
+    @property
     def verbose(self):
         return self.__opts.verbose
 
@@ -122,5 +131,5 @@ class CmdAFECalib(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdAFECalib:{afe_serial_number:%s, sensor:%s, test:%s, delete:%s, verbose:%s}" % \
-               (self.afe_serial_number, self.sensor, self.test, self.delete, self.verbose)
+        return "CmdAFECalib:{afe_serial_number:%s, sensor:%s, test:%s, delete:%s, indent:%s, verbose:%s}" % \
+               (self.afe_serial_number, self.sensor, self.test, self.delete, self.indent, self.verbose)
