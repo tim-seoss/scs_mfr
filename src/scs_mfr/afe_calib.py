@@ -18,7 +18,7 @@ The afe_calib utility may also be used to set a "test" calibration sheet, for us
 Note that the scs_dev/gasses_sampler process must be restarted for changes to take effect.
 
 SYNOPSIS
-afe_calib.py [{ -a SERIAL_NUMBER | -s SERIAL_NUMBER YYYY-MM-DD | -t }] [-v]
+afe_calib.py [{ -a SERIAL_NUMBER | -s SERIAL_NUMBER YYYY-MM-DD | -t  | -d }] [-i INDENT] [-v]
 
 EXAMPLES
 ./afe_calib.py -s 212810465 2019-08-22
@@ -113,7 +113,7 @@ if __name__ == '__main__':
             calib = None
 
         if calib:
-            print(JSONify.dumps(calib))
+            print(JSONify.dumps(calib, indent=cmd.indent))
 
 
     # ----------------------------------------------------------------------------------------------------------------
