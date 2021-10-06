@@ -16,13 +16,18 @@ class DFETestDatum(Sample):
     classdocs
     """
 
+    VERSION = 1.0
+
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, tag, rec, host_serial_number, dfe_serial_number, subjects, afe, result):
+    def __init__(self, tag, rec, host_serial_number, dfe_serial_number, subjects, afe, result, version=None):
         """
         Constructor
         """
-        super().__init__(tag, rec)
+        if version is None:
+            version = self.VERSION
+
+        super().__init__(tag, rec, version)
 
         self.__host_serial_number = host_serial_number                  # string
         self.__dfe_serial_number = dfe_serial_number                    # string
