@@ -22,7 +22,7 @@ EXAMPLES
 ./configuration.py -i4 -s '{"timezone-conf": {"name": "Europe/London"}}'
 
 DOCUMENT EXAMPLE
-{"rec": "2021-10-06T11:27:48Z", "tag": "scs-be2-3", "ver": 1.0, "val": {"hostname": "scs-bbe-003",
+{"rec": "2021-10-06T11:27:48Z", "tag": "scs-be2-3", "ver": 1.00, "val": {"hostname": "scs-bbe-003",
 "packs": {"scs_comms": {"repo": "scs_comms_ge910", "version": null}, "scs_core": {"repo": "scs_core",
 "version": "1.0.32"}, "scs_dev": {"repo": "scs_dev", "version": "1.0.11"}, "scs_dfe": {"repo": "scs_dfe_eng",
 "version": "1.0.10"}, "scs_exegesis": {"repo": "scs_exegesis", "version": null},
