@@ -21,7 +21,7 @@ EXAMPLES
 ./gas_inference_conf.py -u pipes/lambda-gas-model.uds -i vB -v
 
 DOCUMENT EXAMPLE
-{"uds-path": "pipes/lambda-gas-model.uds", "model-interface": "vB2", "model-compendium-group": "OE.g1"}
+{"uds-path": "pipes/lambda-gas-model.uds", "model-interface": "vE", "model-compendium-group": "OE.g1"}
 
 FILES
 ~/SCS/conf/gas_model_conf.json
