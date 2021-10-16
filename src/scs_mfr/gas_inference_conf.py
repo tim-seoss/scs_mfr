@@ -41,6 +41,7 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_inference_conf import CmdInferenceConf
 
 
+# TODO: rename as gas_model_conf.py?
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
