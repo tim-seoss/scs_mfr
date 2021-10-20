@@ -6,7 +6,8 @@ Created on 15 Oct 2021
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The vcal_baseline utility is used to adjust the zero offset of the reported vCal value.
+The vcal_baseline utility is used to adjust the zero offset of the reported vCal value. A positive offset value
+cause the output to be higher.
 
 IMPORTANT NOTE: the vCal baseline does not change the vCal value as reported by the gases_sampler utility. Instead,
 it is used by the gas exegesis system, as part of the preprocessing of data that is passed to the interpretation

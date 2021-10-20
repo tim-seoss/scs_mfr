@@ -9,8 +9,8 @@ DESCRIPTION
 The gas_baseline utility is used to adjust the zero offset for electrochemical sensors, as interpreted by the
 current gas interpretation machine learning model.
 
-If the system reports a concentration of 25 parts per billion in zero air, its zero offset should be set to -25.
-The date / time of any change is recorded.
+WARNING: because ML models typically do not report negative values, the effect of raising the offset above zero is to
+raise the limit of detection of the sensor system.
 
 The environmental temperature, relative humidity and, optionally, absolute barometric pressure are stored alongside
 the offset. These environmental parameters may be sourced either from sensors at the moment at which the offset is
@@ -20,6 +20,8 @@ Each sensor is identified by the gas that it detects. For example, a nitrogen di
 an ozone sensor is identified as Ox.
 
 Note that the scs_dev/gasses_sampler and greengrass processes must be restarted for changes to take effect.
+
+WARNING:
 
 SYNOPSIS
 gas_baseline.py [{ { -b GAS  | { -s | -o } GAS VALUE | -c GAS CORRECT REPORTED } \
