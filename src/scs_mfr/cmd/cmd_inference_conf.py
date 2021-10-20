@@ -20,19 +20,26 @@ class CmdInferenceConf(object):
         self.__interfaces = interfaces
         interface_names = ' | '.join(interfaces)
 
-        self.__parser = optparse.OptionParser(usage="%prog [{ [-u UDS_PATH] [-i INTERFACE] | -d }] [-v]",
-                                              version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ -l | [-u UDS_PATH] [-i INTERFACE] [-g GROUP] | -d }] "
+                                                    "[-v]", version="%prog 1.0")
 
-        # optional...
+        # functions...
+        self.__parser.add_option("--list", "-l", action="store_true", dest="list", default=False,
+                                 help="list the available model compendium groups")
+
         self.__parser.add_option("--uds-path", "-u", type="string", nargs=1, action="store", dest="uds_path",
                                  help="set the UDS path (relative to ~/SCS)")
 
         self.__parser.add_option("--interface", "-i", type="string", nargs=1, action="store", dest="model_interface",
                                  help="set the interface code { %s }" % interface_names)
 
+        self.__parser.add_option("--group", "-g", type="string", nargs=1, action="store", dest="model_compendium_group",
+                                 help="set the model compendium group")
+
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="delete the inference configuration")
 
+        # output...
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
 
@@ -42,7 +49,18 @@ class CmdInferenceConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        if self.set() and self.delete:
+        count = 0
+
+        if self.list:
+            count += 1
+
+        if self.set():
+            count += 1
+
+        if self.delete:
+            count += 1
+
+        if count > 1:
             return False
 
         if self.model_interface and self.model_interface not in self.__interfaces:
@@ -59,10 +77,15 @@ class CmdInferenceConf(object):
 
 
     def set(self):
-        return self.uds_path is not None or self.model_interface is not None
+        return self.uds_path is not None or self.model_interface is not None or self.model_compendium_group is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    @property
+    def list(self):
+        return self.__opts.list
+
 
     @property
     def uds_path(self):
@@ -72,6 +95,11 @@ class CmdInferenceConf(object):
     @property
     def model_interface(self):
         return self.__opts.model_interface
+
+
+    @property
+    def model_compendium_group(self):
+        return self.__opts.model_compendium_group
 
 
     @property
@@ -91,5 +119,7 @@ class CmdInferenceConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdInferenceConf:{uds_path:%s, model_interface:%s, delete:%s, verbose:%s}" % \
-               (self.uds_path, self.model_interface, self.delete, self.verbose)
+        return "CmdInferenceConf:{list:%s, uds_path:%s, model_interface:%s, model_compendium_group:%s, delete:%s, " \
+               "verbose:%s}" % \
+               (self.list, self.uds_path, self.model_interface, self.model_compendium_group, self.delete,
+                self.verbose)

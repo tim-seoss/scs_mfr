@@ -9,8 +9,8 @@ DESCRIPTION
 The afe_baseline utility is used to adjust the zero offset for electrochemical sensors, as interpreted by the
 Alphasense application note AAN 803-02.
 
-If the system reports a concentration of 25 parts per billion in zero air, its zero offset should be set to -25.
-The date / time of any change is recorded.
+A positive offset value cause the result to be higher - if the system reports a concentration of 25 parts per billion
+in zero air, its zero offset should be set to -25. The date / time of any change is recorded.
 
 The environmental temperature, relative humidity and, optionally, absolute barometric pressure are stored alongside
 the offset. These environmental parameters may be sourced either from sensors at the moment at which the offset is
