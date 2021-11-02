@@ -12,10 +12,6 @@ current gas interpretation machine learning model.
 WARNING: because ML models typically do not report negative values, the effect of raising the offset above zero is to
 raise the limit of detection of the sensor system.
 
-The environmental temperature, relative humidity and, optionally, absolute barometric pressure are stored alongside
-the offset. These environmental parameters may be sourced either from sensors at the moment at which the offset is
-recorded (the default), or supplied on the command line.
-
 Each sensor is identified by the gas that it detects. For example, a nitrogen dioxide sensor is identified as NO2, and
 an ozone sensor is identified as Ox.
 
@@ -24,15 +20,14 @@ Note that the scs_dev/gasses_sampler and greengrass processes must be restarted 
 WARNING:
 
 SYNOPSIS
-gas_baseline.py [{ { -b GAS  | { -s | -o } GAS VALUE | -c GAS CORRECT REPORTED } \
-[-r HUMID -t TEMP [-p PRESS]] | -z }] [-v]
+gas_baseline.py [{ { -b GAS  | { -s | -o } GAS VALUE | -c GAS CORRECT REPORTED } | -z }] [-v]
 
 EXAMPLES
 ./gas_baseline.py -c NO2 10 23
 
 DOCUMENT EXAMPLE
-{"CO": {"calibrated-on": "2021-01-19T10:07:27Z", "offset": 2, "env": {"hmd": 41.5, "tmp": 22.1, "pA": null}},
-"NO2": {"calibrated-on": "2021-01-19T10:07:27Z", "offset": 1, "env": {"hmd": 41.5, "tmp": 22.1, "pA": null}}}
+{"CO": {"calibrated-on": "2021-01-19T10:07:27Z", "offset": 2},
+"NO2": {"calibrated-on": "2021-01-19T10:07:27Z", "offset": 1}}
 
 FILES
 ~/SCS/conf/gas_baseline.json
@@ -49,10 +44,7 @@ from scs_core.data.json import JSONify
 
 from scs_core.model.gas.gas_baseline import GasBaseline
 
-from scs_core.gas.sensor_baseline import SensorBaseline, BaselineEnvironment
-
-from scs_dfe.climate.pressure_conf import PressureConf
-from scs_dfe.climate.sht_conf import SHTConf
+from scs_core.gas.sensor_baseline import SensorBaseline
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -89,38 +81,11 @@ if __name__ == '__main__':
 
         gas_baseline = GasBaseline.load(Host, skeleton=True)
 
-        if not cmd.env_is_specified():
-            # SHTConf...
-            sht_conf = SHTConf.load(Host)
-
-            if sht_conf is None:
-                print("gas_baseline: SHTConf not available.", file=sys.stderr)
-                exit(1)
-
-            if cmd.verbose:
-                print("gas_baseline: %s" % sht_conf, file=sys.stderr)
-
-            # SHT...
-            sht = sht_conf.int_sht()
-
-            # PressureConf...
-            pressure_conf = PressureConf.load(Host)
-
-            if pressure_conf is not None:
-                if cmd.verbose:
-                    print("gas_baseline: %s" % pressure_conf, file=sys.stderr)
-
-                # barometer...
-                barometer = pressure_conf.sensor(None)
-
 
         # ------------------------------------------------------------------------------------------------------------
         # run...
 
         now = LocalizedDatetime.now().utc()
-
-        if barometer is not None:
-            barometer.init()
 
         # update...
         if cmd.update():
@@ -135,22 +100,7 @@ if __name__ == '__main__':
             else:
                 new_offset = old_offset + (cmd.correct_value() - cmd.reported_value())
 
-            if cmd.env_is_specified():
-                humid = cmd.humid
-                temp = cmd.temp
-                press = cmd.press
-
-            else:
-                sht_datum = sht.sample()
-                mpl_datum = None if barometer is None else barometer.sample()
-
-                humid = sht_datum.humid
-                temp = sht_datum.temp
-                press = None if mpl_datum is None else mpl_datum.actual_press
-
-            env = BaselineEnvironment(humid, temp, press)
-
-            gas_baseline.set_sensor_baseline(cmd.gas_name(), SensorBaseline(now, new_offset, env))
+            gas_baseline.set_sensor_baseline(cmd.gas_name(), SensorBaseline(now, new_offset))
             gas_baseline.save(Host)
 
             if cmd.verbose:
@@ -170,7 +120,7 @@ if __name__ == '__main__':
         # zero...
         elif cmd.zero:
             for gas in gas_baseline.gases():
-                gas_baseline.set_sensor_baseline(gas, SensorBaseline(now, 0, None))
+                gas_baseline.set_sensor_baseline(gas, SensorBaseline(now, 0))
 
             gas_baseline.save(Host)
 

@@ -32,8 +32,7 @@ class CmdBaseline(object):
         Constructor
         """
         self.__parser = optparse.OptionParser(usage="%prog [{ { -b GAS  | { -s | -o } GAS VALUE | "
-                                                    "-c GAS CORRECT REPORTED } [-r HUMID -t TEMP [-p PRESS]] | -z }] "
-                                                    "[-v]", version="%prog 1.0")
+                                                    "-c GAS CORRECT REPORTED } | -z }] [-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--baseline", "-b", type="string", nargs=1, action="store", dest="baseline",
@@ -47,15 +46,6 @@ class CmdBaseline(object):
 
         self.__parser.add_option("--correct", "-c", type="string", nargs=3, action="store", dest="correct",
                                  help="change offset for GAS, by the difference between CORRECT and REPORTED values")
-
-        self.__parser.add_option("--humid", "-r", type="float", nargs=1, action="store", dest="humid",
-                                 help="record relative humidity value (%)")
-
-        self.__parser.add_option("--temp", "-t", type="float", nargs=1, action="store", dest="temp",
-                                 help="record temperature value (°C)")
-
-        self.__parser.add_option("--press", "-p", type="float", nargs=1, action="store", dest="press",
-                                 help="record barometric pressure value (kPa)")
 
         self.__parser.add_option("--zero", "-z", action="store_true", dest="zero",
                                  help="zero all offsets")
@@ -101,15 +91,7 @@ class CmdBaseline(object):
                 (not self.__is_integer(self.correct[1]) or not self.__is_integer(self.correct[2])):
             return False
 
-        # environment...
-        if bool(self.humid is None) != bool(self.temp is None):
-            return False
-
         return True
-
-
-    def env_is_specified(self):
-        return self.humid is not None and self.temp is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -173,21 +155,6 @@ class CmdBaseline(object):
 
 
     @property
-    def humid(self):
-        return self.__opts.humid
-
-
-    @property
-    def temp(self):
-        return self.__opts.temp
-
-
-    @property
-    def press(self):
-        return self.__opts.press
-
-
-    @property
     def zero(self):
         return self.__opts.zero
 
@@ -204,7 +171,5 @@ class CmdBaseline(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdBaseline:{baseline:%s, set:%s, offset:%s, correct:%s, humid:%s, temp:%s, press:%s, zero:%s, " \
-               "verbose:%s}" % \
-               (self.baseline, self.set, self.offset, self.correct, self.humid, self.temp, self.press, self.zero,
-                self.verbose)
+        return "CmdBaseline:{baseline:%s, set:%s, offset:%s, correct:%s, zero:%s, verbose:%s}" % \
+               (self.baseline, self.set, self.offset, self.correct, self.zero, self.verbose)
