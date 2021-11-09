@@ -74,6 +74,8 @@ if __name__ == '__main__':
         print(JSONify.dumps(ModelCompendiumGroup.list()))
 
     elif cmd.set():
+        conf = GasModelConf.load(Host, skeleton=True)
+
         if conf is None and not cmd.is_complete():
             print("gas_inference_conf: No configuration is stored - you must therefore set the UDS path and "
                   "the interface.", file=sys.stderr)
