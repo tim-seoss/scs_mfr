@@ -69,6 +69,8 @@ if __name__ == '__main__':
     # run...
 
     if cmd.set():
+        conf = PMxModelConf.load(Host, skeleton=True)
+
         if conf is None and not cmd.is_complete():
             print("pmx_inference_conf: No configuration is stored - you must therefore set all fields.",
                   file=sys.stderr)
