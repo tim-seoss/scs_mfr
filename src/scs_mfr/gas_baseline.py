@@ -20,7 +20,7 @@ Note that the scs_dev/gasses_sampler and greengrass processes must be restarted 
 WARNING:
 
 SYNOPSIS
-gas_baseline.py [{ { -b GAS  | { -s | -o } GAS VALUE | -c GAS CORRECT REPORTED } | -z }] [-v]
+gas_baseline.py [{ -b GAS  | { -s | -o } GAS VALUE | -c GAS CORRECT REPORTED | -z }] [-v]
 
 EXAMPLES
 ./gas_baseline.py -c NO2 10 23
