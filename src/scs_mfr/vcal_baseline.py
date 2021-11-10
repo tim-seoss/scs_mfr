@@ -19,14 +19,14 @@ an ozone sensor is identified as Ox.
 Note that the greengrass processes must be restarted for changes to take effect.
 
 SYNOPSIS
-vcal_baseline.py [{ { -b GAS  | { -s | -o } GAS VALUE | -c GAS CORRECT REPORTED } | -z }] [-v]
+vcal_baseline.py [{ -b GAS  | { -s | -o } GAS VALUE  | -z }] [-v]
 
 EXAMPLES
-./vcal_baseline.py -c NO2 16 -65
+./vcal_baseline.py -s NO2 16
 
 DOCUMENT EXAMPLE
 {"CO": {"calibrated-on": "2021-01-19T10:07:27Z", "offset": 2},
-"NO2": {"calibrated-on": "2021-01-19T10:07:27Z", "offset": 1}}
+"NO2": {"calibrated-on": "2021-01-19T10:07:27Z", "offset": 16}}
 
 FILES
 ~/SCS/conf/vcal_baseline.json
@@ -47,7 +47,7 @@ from scs_core.gas.sensor_baseline import SensorBaseline
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
-from scs_mfr.cmd.cmd_baseline import CmdBaseline
+from scs_mfr.cmd.cmd_vcal_baseline import CmdVCalBaseline
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -60,7 +60,7 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
-    cmd = CmdBaseline()
+    cmd = CmdVCalBaseline()
 
     if not cmd.is_valid():
         cmd.print_help(sys.stderr)
@@ -92,11 +92,8 @@ if __name__ == '__main__':
             if cmd.set:
                 new_offset = cmd.set_value()
 
-            elif cmd.offset:
-                new_offset = old_offset + cmd.offset_value()
-
             else:
-                new_offset = old_offset + (cmd.correct_value() - cmd.reported_value())
+                new_offset = old_offset + cmd.offset_value()
 
             vcal_baseline.set_sensor_baseline(cmd.gas_name(), SensorBaseline(now, new_offset))
             vcal_baseline.save(Host)
