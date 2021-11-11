@@ -13,10 +13,13 @@ The group must already exist and the ML lambdas must be associated with the gree
 keys are given.
 
 SYNOPSIS
-aws_group_setup.py [-s [-m] [-a AWS_GROUP_NAME] [-f]] [-k] [-i INDENT] [-v]
+aws_group_setup.py [-s -m TEMPLATE [-a AWS_GROUP_NAME] [-f]] [-k] [-i INDENT] [-v]
 
 EXAMPLES
-./aws_group_setup.py -s -a scs-test-001-group -m
+./aws_group_setup.py -s -a scs-test-001-group -m oE1
+
+EXAMPLE DOCUMENT
+{"group-name": "scs-bbe-651-group", "time-initiated": "2021-09-21T13:00:31Z","unix-group": 987, "ml": "oE1"}
 
 FILES
 ~/SCS/aws/aws_group_config.json
@@ -103,7 +106,7 @@ if __name__ == '__main__':
 
             try:
                 now = LocalizedDatetime.now()
-                conf = AWSGroupConfiguration(AWS.group_name(), now, ml=cmd.use_ml)
+                conf = AWSGroupConfiguration(AWS.group_name(), now, ml=cmd.ml)
                 configurator = conf.configurator(client)
 
                 configurator.collect_information(Host)
