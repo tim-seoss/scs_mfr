@@ -13,13 +13,13 @@ The group must already exist and the ML lambdas must be associated with the gree
 keys are given.
 
 SYNOPSIS
-aws_group_setup.py [-s -m TEMPLATE [-a AWS_GROUP_NAME] [-f]] [-k] [-i INDENT] [-v]
+aws_group_setup.py [-s -TEMPLATE [-a AWS_GROUP_NAME] [-f]] [-k] [-i INDENT] [-v]
 
 EXAMPLES
-./aws_group_setup.py -s -a scs-test-001-group -m oE1
+./aws_group_setup.py -s oE.1 -a scs-test-001-group -f
 
 EXAMPLE DOCUMENT
-{"group-name": "scs-bbe-651-group", "time-initiated": "2021-09-21T13:00:31Z","unix-group": 987, "ml": "oE1"}
+{"group-name": "scs-bbe-651-group", "time-initiated": "2021-09-21T13:00:31Z","unix-group": 987, "ml": "oE.1"}
 
 FILES
 ~/SCS/aws/aws_group_config.json
@@ -98,7 +98,7 @@ if __name__ == '__main__':
     # run...
 
     try:
-        if cmd.set:
+        if cmd.set is not None:
             if conf and not cmd.force:
                 user_choice = input("Group configuration already exists. Type Yes to overwrite: ")
                 if not user_choice.lower() == "yes":
@@ -106,7 +106,7 @@ if __name__ == '__main__':
 
             try:
                 now = LocalizedDatetime.now()
-                conf = AWSGroupConfiguration(AWS.group_name(), now, ml=cmd.ml)
+                conf = AWSGroupConfiguration(AWS.group_name(), now, ml=cmd.set)
                 configurator = conf.configurator(client)
 
                 configurator.collect_information(Host)
