@@ -1,5 +1,5 @@
 """
-Created on 1 Mar 2017
+Created on 10 Nov 2021
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
@@ -9,7 +9,7 @@ import optparse
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class CmdBaseline(object):
+class CmdVCalBaseline(object):
     """unix command line handler"""
 
 
@@ -31,8 +31,8 @@ class CmdBaseline(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [{ -b GAS  | { -s | -o } GAS VALUE | "
-                                                    "-c GAS CORRECT REPORTED | -z }] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ -b GAS  | { -s | -o } GAS VALUE | -z }] [-v]",
+                                              version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--baseline", "-b", type="string", nargs=1, action="store", dest="baseline",
@@ -43,9 +43,6 @@ class CmdBaseline(object):
 
         self.__parser.add_option("--offset", "-o", type="string", nargs=2, action="store", dest="offset",
                                  help="change offset for GAS, by integer VALUE")
-
-        self.__parser.add_option("--correct", "-c", type="string", nargs=3, action="store", dest="correct",
-                                 help="change offset for GAS, by the difference between CORRECT and REPORTED values")
 
         self.__parser.add_option("--zero", "-z", action="store_true", dest="zero",
                                  help="zero all offsets")
@@ -71,9 +68,6 @@ class CmdBaseline(object):
         if self.offset is not None:
             param_count += 1
 
-        if self.correct is not None:
-            param_count += 1
-
         if self.zero is not None:
             param_count += 1
 
@@ -85,10 +79,6 @@ class CmdBaseline(object):
             return False
 
         if self.offset is not None and not self.__is_integer(self.offset[1]):
-            return False
-
-        if self.correct is not None and \
-                (not self.__is_integer(self.correct[1]) or not self.__is_integer(self.correct[2])):
             return False
 
         return True
@@ -106,14 +96,11 @@ class CmdBaseline(object):
         if self.offset:
             return self.offset[0]
 
-        if self.correct:
-            return self.correct[0]
-
         return None
 
 
     def update(self):
-        return self.set or self.offset or self.correct
+        return self.set or self.offset
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -142,19 +129,6 @@ class CmdBaseline(object):
 
 
     @property
-    def correct(self):
-        return self.__opts.correct
-
-
-    def correct_value(self):
-        return int(self.correct[1]) if self.correct else None
-
-
-    def reported_value(self):
-        return int(self.correct[2]) if self.correct else None
-
-
-    @property
     def zero(self):
         return self.__opts.zero
 
@@ -171,5 +145,5 @@ class CmdBaseline(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdBaseline:{baseline:%s, set:%s, offset:%s, correct:%s, zero:%s, verbose:%s}" % \
-               (self.baseline, self.set, self.offset, self.correct, self.zero, self.verbose)
+        return "CmdVCalBaseline:{baseline:%s, set:%s, offset:%s, zero:%s, verbose:%s}" % \
+               (self.baseline, self.set, self.offset, self.zero, self.verbose)

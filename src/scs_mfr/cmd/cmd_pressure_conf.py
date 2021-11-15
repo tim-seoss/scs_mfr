@@ -20,10 +20,9 @@ class CmdPressureConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self):
-        self.__parser = optparse.OptionParser(usage="%prog { [-m MODEL] [-a ALTITUDE] | -d } [-v]",
-                                              version="%prog 1.0")
-
         models = ' | '.join(PressureConf.models())
+
+        self.__parser = optparse.OptionParser(usage="%prog { [-m MODEL] [-a ALTITUDE] | -d } [-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--model", "-m", type="string", nargs=1, action="store", dest="model",
