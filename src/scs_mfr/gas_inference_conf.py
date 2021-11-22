@@ -18,7 +18,7 @@ SYNOPSIS
 gas_inference_conf.py [{ -l | [-u UDS_PATH] [-i INTERFACE] [-g GROUP] | -d }] [-v]
 
 EXAMPLES
-./gas_inference_conf.py -u pipes/lambda-gas-model.uds -i vE -g OE21HA
+./gas_inference_conf.py -u pipes/lambda-gas-model.uds -i vE -g oE.1
 
 DOCUMENT EXAMPLE
 {"uds-path": "pipes/lambda-gas-model.uds", "model-interface": "vE", "model-compendium-group": "OE21HA"}
