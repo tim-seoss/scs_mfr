@@ -32,9 +32,9 @@ class CmdBaseline(object):
         Constructor
         """
         self.__parser = optparse.OptionParser(usage="%prog [{ -b GAS  | { -s | -o } GAS VALUE | "
-                                                    "-c GAS CORRECT REPORTED | -z }] [-v]", version="%prog 1.0")
+                                                    "-c GAS CORRECT REPORTED | -z | -d }] [-v]", version="%prog 1.0")
 
-        # optional...
+        # functions...
         self.__parser.add_option("--baseline", "-b", type="string", nargs=1, action="store", dest="baseline",
                                  help="report offset for GAS")
 
@@ -50,6 +50,10 @@ class CmdBaseline(object):
         self.__parser.add_option("--zero", "-z", action="store_true", dest="zero",
                                  help="zero all offsets")
 
+        self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
+                                 help="delete the baseline configuration")
+
+        # output...
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
 
@@ -75,6 +79,9 @@ class CmdBaseline(object):
             param_count += 1
 
         if self.zero is not None:
+            param_count += 1
+
+        if self.delete is not None:
             param_count += 1
 
         if param_count > 1:
@@ -160,6 +167,11 @@ class CmdBaseline(object):
 
 
     @property
+    def delete(self):
+        return self.__opts.delete
+
+
+    @property
     def verbose(self):
         return self.__opts.verbose
 
@@ -171,5 +183,5 @@ class CmdBaseline(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdBaseline:{baseline:%s, set:%s, offset:%s, correct:%s, zero:%s, verbose:%s}" % \
-               (self.baseline, self.set, self.offset, self.correct, self.zero, self.verbose)
+        return "CmdBaseline:{baseline:%s, set:%s, offset:%s, correct:%s, zero:%s, delete:%s, verbose:%s}" % \
+               (self.baseline, self.set, self.offset, self.correct, self.zero, self.delete, self.verbose)

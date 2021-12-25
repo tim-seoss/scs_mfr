@@ -109,8 +109,7 @@ if __name__ == '__main__':
                 calib.save(Host)
 
         elif cmd.delete:
-            calib.delete(Host)
-            calib = None
+            AFECalib.delete(Host)
 
         if calib:
             print(JSONify.dumps(calib, indent=cmd.indent))
@@ -118,6 +117,9 @@ if __name__ == '__main__':
 
     # ----------------------------------------------------------------------------------------------------------------
     # end...
+
+    except KeyboardInterrupt:
+        pass
 
     except (ConnectionError, HTTPException) as ex:
         print("afe_calib: %s: %s" % (ex.__class__.__name__, ex), file=sys.stderr)
