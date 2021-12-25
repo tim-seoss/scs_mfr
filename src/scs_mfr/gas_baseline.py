@@ -6,7 +6,7 @@ Created on 19 Jan 2020
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The gas_baseline utility is used to adjust the zero offset for electrochemical sensors, as interpreted by the
+The baseline utility is used to adjust the zero offset for electrochemical sensors, as interpreted by the
 current gas interpretation machine learning model.
 
 WARNING: because ML models typically do not report negative values, the effect of raising the offset above zero is to
@@ -20,17 +20,17 @@ Note that the scs_dev/gasses_sampler and greengrass processes must be restarted 
 WARNING:
 
 SYNOPSIS
-gas_baseline.py [{ -b GAS  | { -s | -o } GAS VALUE | -c GAS CORRECT REPORTED | -z }] [-v]
+baseline.py [{ -b GAS  | { -s | -o } GAS VALUE | -c GAS CORRECT REPORTED | -z | -d }] [-v]
 
 EXAMPLES
-./gas_baseline.py -c NO2 10 23
+./baseline.py -c NO2 10 23
 
 DOCUMENT EXAMPLE
 {"CO": {"calibrated-on": "2021-01-19T10:07:27Z", "offset": 2},
 "NO2": {"calibrated-on": "2021-01-19T10:07:27Z", "offset": 1}}
 
 FILES
-~/SCS/conf/gas_baseline.json
+~/SCS/conf/baseline.json
 
 SEE ALSO
 scs_dev/gases_sampler
@@ -42,9 +42,9 @@ import sys
 from scs_core.data.datetime import LocalizedDatetime
 from scs_core.data.json import JSONify
 
-from scs_core.model.gas.gas_baseline import GasBaseline
-
 from scs_core.gas.sensor_baseline import SensorBaseline
+
+from scs_core.model.gas.gas_baseline import GasBaseline
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -69,7 +69,7 @@ if __name__ == '__main__':
         exit(2)
 
     if cmd.verbose:
-        print("gas_baseline: %s" % cmd, file=sys.stderr)
+        print("baseline: %s" % cmd, file=sys.stderr)
         sys.stderr.flush()
 
 
@@ -79,7 +79,7 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # resources...
 
-        gas_baseline = GasBaseline.load(Host, skeleton=True)
+        baseline = GasBaseline.load(Host, skeleton=True)
 
 
         # ------------------------------------------------------------------------------------------------------------
@@ -89,7 +89,7 @@ if __name__ == '__main__':
 
         # update...
         if cmd.update():
-            old_offset = gas_baseline.sensor_offset(cmd.gas_name())
+            old_offset = baseline.sensor_offset(cmd.gas_name())
 
             if cmd.set:
                 new_offset = cmd.set_value()
@@ -100,40 +100,45 @@ if __name__ == '__main__':
             else:
                 new_offset = old_offset + (cmd.correct_value() - cmd.reported_value())
 
-            gas_baseline.set_sensor_baseline(cmd.gas_name(), SensorBaseline(now, new_offset))
-            gas_baseline.save(Host)
+            baseline.set_sensor_baseline(cmd.gas_name(), SensorBaseline(now, new_offset))
+            baseline.save(Host)
 
             if cmd.verbose:
-                print("gas_baseline: %s: was: %s now: %s" % (cmd.gas_name(), old_offset, new_offset), file=sys.stderr)
+                print("baseline: %s: was: %s now: %s" % (cmd.gas_name(), old_offset, new_offset), file=sys.stderr)
 
         # baseline...
-        elif cmd.baseline:
+        if cmd.baseline:
             gas_name = cmd.gas_name()
-            sensor_baseline = gas_baseline.sensor_baseline(gas_name)
+            sensor_baseline = baseline.sensor_baseline(gas_name)
 
             if sensor_baseline is None:
-                print("gas_baseline: %s is not included in the calibration document." % gas_name, file=sys.stderr)
+                print("baseline: %s is not included in the calibration document." % gas_name, file=sys.stderr)
                 exit(1)
 
-            gas_baseline = GasBaseline({gas_name: sensor_baseline})
+            baseline = GasBaseline({gas_name: sensor_baseline})
 
         # zero...
-        elif cmd.zero:
-            for gas in gas_baseline.gases():
-                gas_baseline.set_sensor_baseline(gas, SensorBaseline(now, 0))
+        if cmd.zero:
+            for gas in baseline.gases():
+                baseline.set_sensor_baseline(gas, SensorBaseline(now, 0))
 
-            gas_baseline.save(Host)
+            baseline.save(Host)
+
+        # delete...
+        if cmd.delete:
+            GasBaseline.delete(Host)
+            baseline = None
 
         # report...
-        print(JSONify.dumps(gas_baseline))
+        if baseline:
+            print(JSONify.dumps(baseline))
 
 
     # ----------------------------------------------------------------------------------------------------------------
     # end...
 
     except KeyboardInterrupt:
-        if cmd.verbose:
-            print("gas_baseline: KeyboardInterrupt", file=sys.stderr)
+        pass
 
     finally:
         I2C.Sensors.close()
