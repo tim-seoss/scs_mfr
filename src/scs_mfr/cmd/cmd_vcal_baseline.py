@@ -72,10 +72,10 @@ class CmdVCalBaseline(object):
         if self.offset is not None:
             param_count += 1
 
-        if self.zero is not None:
+        if self.zero:
             param_count += 1
 
-        if self.delete is not None:
+        if self.delete:
             param_count += 1
 
         if param_count > 1:
