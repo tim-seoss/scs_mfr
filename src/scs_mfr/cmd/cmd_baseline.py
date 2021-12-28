@@ -47,7 +47,7 @@ class CmdBaseline(object):
         self.__parser.add_option("--correct", "-c", type="string", nargs=3, action="store", dest="correct",
                                  help="change offset for GAS, by the difference between CORRECT and REPORTED values")
 
-        self.__parser.add_option("--zero", "-z", action="store_true", dest="zero",
+        self.__parser.add_option("--zero", "-z", action="store_true", dest="zero", default=False,
                                  help="zero all offsets")
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
@@ -78,10 +78,10 @@ class CmdBaseline(object):
         if self.correct is not None:
             param_count += 1
 
-        if self.zero is not None:
+        if self.zero:
             param_count += 1
 
-        if self.delete is not None:
+        if self.delete:
             param_count += 1
 
         if param_count > 1:
