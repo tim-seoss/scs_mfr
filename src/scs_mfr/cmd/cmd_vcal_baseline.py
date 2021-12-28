@@ -44,7 +44,7 @@ class CmdVCalBaseline(object):
         self.__parser.add_option("--offset", "-o", type="string", nargs=2, action="store", dest="offset",
                                  help="change offset for GAS, by integer VALUE")
 
-        self.__parser.add_option("--zero", "-z", action="store_true", dest="zero",
+        self.__parser.add_option("--zero", "-z", action="store_true", dest="zero", default=False,
                                  help="zero all offsets")
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
