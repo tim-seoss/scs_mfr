@@ -10,7 +10,7 @@ The gas_inference_conf utility is used to specify how Greengrass data interpreta
 
 * UDS_PATH - the Unix domain socket for communication between the gas sampler and the inference server
 * INTERFACE - the format of the request
-* GROUP - the performance parameters of the model(s) to be used
+* GROUP - the performance parameters of the model(s) to be used (not required for VB or vB2)
 
 The gases_sampler and Greengrass container must be restarted for changes to take effect.
 
@@ -21,7 +21,7 @@ EXAMPLES
 ./gas_inference_conf.py -u pipes/lambda-gas-model.uds -i vE -g oE.1
 
 DOCUMENT EXAMPLE
-{"uds-path": "pipes/lambda-gas-model.uds", "model-interface": "vE", "model-compendium-group": "OE21HA"}
+{"uds-path": "pipes/lambda-gas-model.uds", "model-interface": "vE", "model-compendium-group": "oE.1"}
 
 FILES
 ~/SCS/conf/gas_model_conf.json
