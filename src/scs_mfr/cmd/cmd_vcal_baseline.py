@@ -31,10 +31,10 @@ class CmdVCalBaseline(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [{ -b GAS  | { -s | -o } GAS VALUE | -z }] [-v]",
+        self.__parser = optparse.OptionParser(usage="%prog [{ -b GAS  | { -s | -o } GAS VALUE | -z | -d }] [-v]",
                                               version="%prog 1.0")
 
-        # optional...
+        # functions...
         self.__parser.add_option("--baseline", "-b", type="string", nargs=1, action="store", dest="baseline",
                                  help="report offset for GAS")
 
@@ -44,9 +44,13 @@ class CmdVCalBaseline(object):
         self.__parser.add_option("--offset", "-o", type="string", nargs=2, action="store", dest="offset",
                                  help="change offset for GAS, by integer VALUE")
 
-        self.__parser.add_option("--zero", "-z", action="store_true", dest="zero",
+        self.__parser.add_option("--zero", "-z", action="store_true", dest="zero", default=False,
                                  help="zero all offsets")
 
+        self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
+                                 help="delete the baseline configuration")
+
+        # output...
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
 
@@ -68,7 +72,10 @@ class CmdVCalBaseline(object):
         if self.offset is not None:
             param_count += 1
 
-        if self.zero is not None:
+        if self.zero:
+            param_count += 1
+
+        if self.delete:
             param_count += 1
 
         if param_count > 1:
@@ -134,6 +141,11 @@ class CmdVCalBaseline(object):
 
 
     @property
+    def delete(self):
+        return self.__opts.delete
+
+
+    @property
     def verbose(self):
         return self.__opts.verbose
 
@@ -145,5 +157,5 @@ class CmdVCalBaseline(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdVCalBaseline:{baseline:%s, set:%s, offset:%s, zero:%s, verbose:%s}" % \
-               (self.baseline, self.set, self.offset, self.zero, self.verbose)
+        return "CmdVCalBaseline:{baseline:%s, set:%s, offset:%s, zero:%s, delete:%s, verbose:%s}" % \
+               (self.baseline, self.set, self.offset, self.zero, self.delete, self.verbose)
