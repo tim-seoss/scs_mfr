@@ -110,6 +110,7 @@ if __name__ == '__main__':
 
         elif cmd.delete:
             AFECalib.delete(Host)
+            calib = None
 
         if calib:
             print(JSONify.dumps(calib, indent=cmd.indent))
