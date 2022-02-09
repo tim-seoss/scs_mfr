@@ -48,8 +48,7 @@ class CmdMQTTConf(object):
         if self.__opts.debug is not None and self.__opts.debug != 0 and self.__opts.debug != 1:
             return False
 
-        if self.__opts.inhibit_publishing is not None and \
-                self.__opts.inhibit_publishing != 0 and self.__opts.inhibit_publishing != 1:
+        if self.__opts.inhibit_publishing is not None and self.__opts.inhibit_publishing not in (0, 1):
             return False
 
         return True
