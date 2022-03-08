@@ -91,7 +91,7 @@ if __name__ == '__main__':
 
     # AWSGroupConfigurator...
     conf = AWSGroupConfiguration.load(Host)
-    logger.info(conf)
+    logger.info("existing: %s" % conf)
 
 
     # ----------------------------------------------------------------------------------------------------------------
