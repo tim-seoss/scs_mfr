@@ -5,7 +5,7 @@ Created on 19 Aug 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-source repo: scs_mfr
+source repo: scs_analysis
 
 DESCRIPTION
 The csv_writer utility is used to convert from JSON format to comma-separated value (CSV) format.
@@ -33,7 +33,7 @@ SYNOPSIS
 csv_writer.py [{ -a | -x | -s }] [-q] [-e] [-v] [FILENAME]
 
 EXAMPLES
-./socket_receiver.py | ./csv_writer.py temp.csv -e
+socket_receiver.py | csv_writer.py temp.csv -e
 
 DOCUMENT EXAMPLE - INPUT
 {"tag": "scs-ap1-6", "rec": "2018-04-04T14:50:27.641+00:00", "val": {"hmd": 59.6, "tmp": 23.8}}
@@ -43,7 +43,8 @@ tag,rec,val.hmd,val.tmp
 scs-ap1-6,2018-04-04T14:50:38.394+00:00,59.7,23.8
 
 SEE ALSO
-scs_mfr/csv_reader
+scs_analysis/csv_logger
+scs_analysis/csv_reader
 """
 
 import sys
