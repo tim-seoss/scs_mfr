@@ -78,7 +78,7 @@ class CmdVCalBaseline(object):
         if self.delete:
             param_count += 1
 
-        if param_count != 1:
+        if param_count > 1:
             return False
 
         # validate VALUE...
