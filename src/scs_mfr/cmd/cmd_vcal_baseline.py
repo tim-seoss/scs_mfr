@@ -31,8 +31,8 @@ class CmdVCalBaseline(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [{ -b GAS  | { -s | -o } GAS VALUE | -z | -d }] [-v]",
-                                              version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ -b GAS  | -s GAS VALUE | -m GAS MINIMUM | -r GAS | -d }] "
+                                                    "[-v]", version="%prog 1.0")
 
         # functions...
         self.__parser.add_option("--baseline", "-b", type="string", nargs=1, action="store", dest="baseline",
@@ -41,11 +41,11 @@ class CmdVCalBaseline(object):
         self.__parser.add_option("--set", "-s", type="string", nargs=2, action="store", dest="set",
                                  help="set offset for GAS to integer VALUE")
 
-        self.__parser.add_option("--offset", "-o", type="string", nargs=2, action="store", dest="offset",
-                                 help="change offset for GAS, by integer VALUE")
+        self.__parser.add_option("--match", "-m", type="string", nargs=2, action="store", dest="match",
+                                 help="set offset for GAS to match MINIMUM of the compendium")
 
-        self.__parser.add_option("--zero", "-z", action="store_true", dest="zero", default=False,
-                                 help="zero all offsets")
+        self.__parser.add_option("--remove", "-r", type="string", nargs=1, action="store", dest="remove",
+                                 help="remove the baseline for the given GAS")
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="delete the baseline configuration")
@@ -69,23 +69,23 @@ class CmdVCalBaseline(object):
         if self.set is not None:
             param_count += 1
 
-        if self.offset is not None:
+        if self.match is not None:
             param_count += 1
 
-        if self.zero:
+        if self.remove is not None:
             param_count += 1
 
         if self.delete:
             param_count += 1
 
-        if param_count > 1:
+        if param_count != 1:
             return False
 
         # validate VALUE...
         if self.set is not None and not self.__is_integer(self.set[1]):
             return False
 
-        if self.offset is not None and not self.__is_integer(self.offset[1]):
+        if self.match is not None and not self.__is_integer(self.match[1]):
             return False
 
         return True
@@ -100,14 +100,17 @@ class CmdVCalBaseline(object):
         if self.set:
             return self.set[0]
 
-        if self.offset:
-            return self.offset[0]
+        if self.match:
+            return self.match[0]
+
+        if self.remove:
+            return self.remove[0]
 
         return None
 
 
     def update(self):
-        return self.set or self.offset
+        return self.set is not None or self.match is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -123,21 +126,21 @@ class CmdVCalBaseline(object):
 
 
     def set_value(self):
-        return int(self.set[1]) if self.set else None
+        return None if self.set is None else int(self.set[1])
 
 
     @property
-    def offset(self):
-        return self.__opts.offset
+    def match(self):
+        return self.__opts.match
 
 
-    def offset_value(self):
-        return int(self.offset[1]) if self.offset else None
+    def match_value(self):
+        return None if self.match is None else int(self.match[1])
 
 
     @property
-    def zero(self):
-        return self.__opts.zero
+    def remove(self):
+        return self.__opts.remove
 
 
     @property
@@ -157,5 +160,5 @@ class CmdVCalBaseline(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdVCalBaseline:{baseline:%s, set:%s, offset:%s, zero:%s, delete:%s, verbose:%s}" % \
-               (self.baseline, self.set, self.offset, self.zero, self.delete, self.verbose)
+        return "CmdVCalBaseline:{baseline:%s, set:%s, match:%s, remove:%s, delete:%s, verbose:%s}" % \
+               (self.baseline, self.set, self.match, self.remove, self.delete, self.verbose)
