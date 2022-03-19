@@ -52,7 +52,6 @@ from scs_core.model.gas.vcal_baseline import VCalBaseline
 
 from scs_core.sys.logging import Logging
 
-from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_vcal_baseline import CmdVCalBaseline
@@ -80,8 +79,6 @@ if __name__ == '__main__':
     logger.info(cmd)
 
     try:
-        I2C.Sensors.open()
-
         # ------------------------------------------------------------------------------------------------------------
         # resources...
 
@@ -161,6 +158,3 @@ if __name__ == '__main__':
 
     except KeyboardInterrupt:
         print(file=sys.stderr)
-
-    finally:
-        I2C.Sensors.close()
