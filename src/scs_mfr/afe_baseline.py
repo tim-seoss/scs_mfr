@@ -46,6 +46,8 @@ from scs_core.gas.afe_baseline import AFEBaseline
 from scs_core.gas.afe_calib import AFECalib
 from scs_core.gas.sensor_baseline import SensorBaseline
 
+from scs_core.sys.logging import Logging
+
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
@@ -70,9 +72,10 @@ if __name__ == '__main__':
         cmd.print_help(sys.stderr)
         exit(2)
 
-    if cmd.verbose:
-        print("baseline: %s" % cmd, file=sys.stderr)
-        sys.stderr.flush()
+    Logging.config('afe_baseline', verbose=cmd.verbose)
+    logger = Logging.getLogger()
+
+    logger.info(cmd)
 
     try:
         I2C.Sensors.open()
@@ -91,7 +94,7 @@ if __name__ == '__main__':
             calib = AFECalib.load(Host)
 
             if calib is None:
-                print("baseline: no AFE calibration document available.", file=sys.stderr)
+                logger.error("no AFE calibration document available.")
                 exit(1)
 
             gas_name = cmd.gas_name()
@@ -99,7 +102,7 @@ if __name__ == '__main__':
             index = calib.sensor_index(gas_name)
 
             if index is None:
-                print("baseline: %s is not included in the AFE calibration document." % gas_name, file=sys.stderr)
+                logger.error("%s is not included in the AFE calibration document." % gas_name)
                 exit(1)
 
             old_offset = baseline.sensor_baseline(index).offset
@@ -117,8 +120,7 @@ if __name__ == '__main__':
             baseline.set_sensor_baseline(index, SensorBaseline(now, new_offset))
             baseline.save(Host)
 
-            if cmd.verbose:
-                print("baseline: %s: was: %s now: %s" % (cmd.gas_name(), old_offset, new_offset), file=sys.stderr)
+            logger.info("%s: was: %s now: %s" % (cmd.gas_name(), old_offset, new_offset))
 
         # baseline...
         if cmd.baseline:
@@ -128,7 +130,7 @@ if __name__ == '__main__':
             index = calib.sensor_index(gas_name)
 
             if index is None:
-                print("baseline: %s is not included in the AFE calibration document." % gas_name, file=sys.stderr)
+                logger.error("%s is not included in the AFE calibration document." % gas_name)
                 exit(1)
 
             baseline = AFEBaseline([baseline.sensor_baseline(index)])
@@ -154,7 +156,7 @@ if __name__ == '__main__':
     # end...
 
     except KeyboardInterrupt:
-        pass
+        print(file=sys.stderr)
 
     finally:
         I2C.Sensors.close()

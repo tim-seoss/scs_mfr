@@ -46,6 +46,8 @@ from scs_core.gas.sensor_baseline import SensorBaseline
 
 from scs_core.model.gas.gas_baseline import GasBaseline
 
+from scs_core.sys.logging import Logging
+
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
@@ -68,9 +70,10 @@ if __name__ == '__main__':
         cmd.print_help(sys.stderr)
         exit(2)
 
-    if cmd.verbose:
-        print("baseline: %s" % cmd, file=sys.stderr)
-        sys.stderr.flush()
+    Logging.config('gas_baseline', verbose=cmd.verbose)
+    logger = Logging.getLogger()
+
+    logger.info(cmd)
 
 
     try:
@@ -103,8 +106,7 @@ if __name__ == '__main__':
             baseline.set_sensor_baseline(cmd.gas_name(), SensorBaseline(now, new_offset))
             baseline.save(Host)
 
-            if cmd.verbose:
-                print("baseline: %s: was: %s now: %s" % (cmd.gas_name(), old_offset, new_offset), file=sys.stderr)
+            logger.info("%s: was: %s now: %s" % (cmd.gas_name(), old_offset, new_offset))
 
         # baseline...
         if cmd.baseline:
@@ -112,7 +114,7 @@ if __name__ == '__main__':
             sensor_baseline = baseline.sensor_baseline(gas_name)
 
             if sensor_baseline is None:
-                print("baseline: %s is not included in the calibration document." % gas_name, file=sys.stderr)
+                logger.error("%s is not included in the calibration document." % gas_name)
                 exit(1)
 
             baseline = GasBaseline({gas_name: sensor_baseline})
@@ -138,7 +140,7 @@ if __name__ == '__main__':
     # end...
 
     except KeyboardInterrupt:
-        pass
+        print(file=sys.stderr)
 
     finally:
         I2C.Sensors.close()
