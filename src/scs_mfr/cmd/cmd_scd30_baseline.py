@@ -31,7 +31,7 @@ class CmdSCD30Baseline(object):
         Constructor
         """
         self.__parser = optparse.OptionParser(usage="%prog [{ { { -s | -o } VALUE | -c CORRECT REPORTED } "
-                                                    "[-r HUMID -t TEMP [-p PRESS]] | -z }] [-v]", version="%prog 1.0")
+                                                    "[-t TEMP -m HUMID [-p PRESS]] | -z }] [-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--set", "-s", type="int", nargs=1, action="store", dest="set",
@@ -43,17 +43,23 @@ class CmdSCD30Baseline(object):
         self.__parser.add_option("--correct", "-c", type="int", nargs=2, action="store", dest="correct",
                                  help="change offset by the difference between CORRECT and REPORTED values")
 
-        self.__parser.add_option("--humid", "-r", type="float", nargs=1, action="store", dest="humid",
-                                 help="record relative humidity value (%)")
-
-        self.__parser.add_option("--temp", "-t", type="float", nargs=1, action="store", dest="temp",
-                                 help="record temperature value (°C)")
-
-        self.__parser.add_option("--press", "-p", type="float", nargs=1, action="store", dest="press",
-                                 help="record barometric pressure value (kPa)")
 
         self.__parser.add_option("--zero", "-z", action="store_true", dest="zero",
                                  help="zero all offsets")
+
+        # sample...
+        self.__parser.add_option("--temp", "-t", type="float", nargs=1, action="store", dest="temp",
+                                 help="record temperature value (°C)")
+
+        self.__parser.add_option("--humid", "-m", type="float", nargs=1, action="store", dest="humid",
+                                 help="record relative humidity value (%)")
+
+        self.__parser.add_option("--press", "-p", type="float", nargs=1, action="store", dest="press",
+                                 help="record actual barometric pressure value (kPa)")
+
+        # output...
+        self.__parser.add_option("--indent", "-i", action="store", dest="indent", type=int,
+                                 help="pretty-print the output with INDENT")
 
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
@@ -99,6 +105,10 @@ class CmdSCD30Baseline(object):
         return self.__opts.set or self.__opts.offset or self.__opts.correct
 
 
+    def has_sample(self):
+        return self.__opts.temp is not None
+
+
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
@@ -122,13 +132,13 @@ class CmdSCD30Baseline(object):
 
 
     @property
-    def humid(self):
-        return self.__opts.humid
+    def temp(self):
+        return self.__opts.temp
 
 
     @property
-    def temp(self):
-        return self.__opts.temp
+    def humid(self):
+        return self.__opts.humid
 
 
     @property
@@ -139,6 +149,11 @@ class CmdSCD30Baseline(object):
     @property
     def zero(self):
         return self.__opts.zero
+
+
+    @property
+    def indent(self):
+        return self.__opts.indent
 
 
     @property
@@ -153,7 +168,7 @@ class CmdSCD30Baseline(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdSCD30Baseline:{set:%s, offset:%s, correct:%s, humid:%s, temp:%s, press:%s, zero:%s, " \
-               "verbose:%s}" % \
-               (self.set_value, self.offset_value, self.__opts.correct, self.humid, self.temp, self.press, self.zero,
-                self.verbose)
+        return "CmdSCD30Baseline:{set:%s, offset:%s, correct:%s, temp:%s, humid:%s, press:%s, zero:%s, " \
+               "indent:%s, verbose:%s}" % \
+               (self.set_value, self.offset_value, self.__opts.correct, self.temp, self.humid, self.press, self.zero,
+                self.indent, self.verbose)

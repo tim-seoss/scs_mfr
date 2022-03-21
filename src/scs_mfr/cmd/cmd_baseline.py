@@ -6,6 +6,8 @@ Created on 1 Mar 2017
 
 import optparse
 
+from scs_core.data.datetime import LocalizedDatetime
+
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -31,8 +33,10 @@ class CmdBaseline(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [{ -b GAS  | { -s | -o } GAS VALUE | "
-                                                    "-c GAS CORRECT REPORTED | -z | -d }] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ -b GAS  | "
+                                                    "{ { -s | -o } GAS VALUE | -c GAS CORRECT REPORTED } "
+                                                    "[-r SAMPLE_REC -t SAMPLE_TEMP -m SAMPLE_HUMID] | -z | -d }] "
+                                                    "[-i INDENT] [-v]", version="%prog 1.0")
 
         # functions...
         self.__parser.add_option("--baseline", "-b", type="string", nargs=1, action="store", dest="baseline",
@@ -53,7 +57,20 @@ class CmdBaseline(object):
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="delete the baseline configuration")
 
+        # sample...
+        self.__parser.add_option("--sample-rec", "-r", type="string", nargs=1, action="store", dest="sample_rec",
+                                 help="sample ISO 8601 datetime")
+
+        self.__parser.add_option("--sample-temp", "-t", type="float", nargs=1, action="store", dest="sample_temp",
+                                 help="sample temperature")
+
+        self.__parser.add_option("--sample-humid", "-m", type="float", nargs=1, action="store", dest="sample_humid",
+                                 help="sample humidity")
+
         # output...
+        self.__parser.add_option("--indent", "-i", action="store", dest="indent", type=int,
+                                 help="pretty-print the output with INDENT")
+
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
 
@@ -63,31 +80,49 @@ class CmdBaseline(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        param_count = 0
+        # commands...
+        count = 0
 
-        # setters...
         if self.baseline is not None:
-            param_count += 1
+            count += 1
 
         if self.set is not None:
-            param_count += 1
+            count += 1
 
         if self.offset is not None:
-            param_count += 1
+            count += 1
 
         if self.correct is not None:
-            param_count += 1
+            count += 1
 
         if self.zero:
-            param_count += 1
+            count += 1
 
         if self.delete:
-            param_count += 1
+            count += 1
 
-        if param_count > 1:
+        if count > 1:
             return False
 
-        # validate VALUE...
+        # sample...
+        count = 0
+
+        if self.__opts.sample_rec is not None:
+            count += 1
+
+        if self.__opts.sample_temp is not None:
+            count += 1
+
+        if self.__opts.sample_humid is not None:
+            count += 1
+
+        if count != 0 and count != 3:
+            return False
+
+        if count == 3 and self.set is None and self.offset is None and self.correct is None:
+            return False
+
+        # VALUE...
         if self.set is not None and not self.__is_integer(self.set[1]):
             return False
 
@@ -99,6 +134,13 @@ class CmdBaseline(object):
             return False
 
         return True
+
+
+    def is_valid_sample_rec(self):
+        if self.__opts.sample_rec is None:
+            return True
+
+        return self.sample_rec is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -121,6 +163,10 @@ class CmdBaseline(object):
 
     def update(self):
         return self.set or self.offset or self.correct
+
+
+    def has_sample(self):
+        return self.__opts.sample_rec is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -172,6 +218,26 @@ class CmdBaseline(object):
 
 
     @property
+    def sample_rec(self):
+        return LocalizedDatetime.construct_from_iso8601(self.__opts.sample_rec)
+
+
+    @property
+    def sample_temp(self):
+        return self.__opts.sample_temp
+
+
+    @property
+    def sample_humid(self):
+        return self.__opts.sample_humid
+
+
+    @property
+    def indent(self):
+        return self.__opts.indent
+
+
+    @property
     def verbose(self):
         return self.__opts.verbose
 
@@ -183,5 +249,7 @@ class CmdBaseline(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdBaseline:{baseline:%s, set:%s, offset:%s, correct:%s, zero:%s, delete:%s, verbose:%s}" % \
-               (self.baseline, self.set, self.offset, self.correct, self.zero, self.delete, self.verbose)
+        return "CmdBaseline:{baseline:%s, set:%s, offset:%s, correct:%s, zero:%s, delete:%s, " \
+               "sample_rec:%s, sample_temp:%s, sample_humid:%s, indent:%s, verbose:%s}" % \
+               (self.baseline, self.set, self.offset, self.correct, self.zero, self.delete,
+                self.sample_rec, self.sample_temp, self.sample_humid, self.indent, self.verbose)
