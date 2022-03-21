@@ -18,16 +18,20 @@ an ozone sensor is identified as Ox.
 Note that the scs_dev/gasses_sampler process must be restarted for changes to take effect.
 
 SYNOPSIS
-baseline.py [{ -b GAS  | { -s | -o } GAS VALUE | -c GAS CORRECT REPORTED | -z | -d }] [-v]
+afe_baseline.py [{ -b GAS  | { { -s | -o } GAS VALUE | -c GAS CORRECT REPORTED }
+[-r SAMPLE_REC -t SAMPLE_TEMP -m SAMPLE_HUMID] | -z | -d }] [-i INDENT] [-v]
 
 EXAMPLES
 ./baseline.py -c NO2 10 23
 
 DOCUMENT EXAMPLE
-{"sn1": {"calibrated-on": "2019-02-02T12:00:48Z", "offset": 123},
-"sn2": {"calibrated-on": "2019-02-02T11:30:17Z", "offset": 0},
-"sn3": {"calibrated-on": "2019-02-02T11:30:17Z", "offset": 0},
-"sn4": {"calibrated-on": "2019-02-02T11:30:17Z", "offset": 0}}
+{"sn1": {"calibrated-on": "2022-03-21T11:46:43Z", "offset": -1,
+"env": {"rec": "2022-03-16T07:45:00Z", "hmd": 51.6, "tmp": 21.8}},
+"sn2": {"calibrated-on": "2022-03-21T11:46:48Z", "offset": 44,
+"env": {"rec": "2022-03-16T06:15:00Z", "hmd": 48.1, "tmp": 22.0}},
+"sn3": {"calibrated-on": null, "offset": 0, "env": null},
+"sn4": {"calibrated-on": "2022-03-21T11:46:37Z", "offset": 174,
+"env": {"rec": "2022-03-16T06:30:00Z", "hmd": 48.2, "tmp": 21.9}}}
 
 FILES
 ~/SCS/conf/baseline.json
@@ -44,7 +48,7 @@ from scs_core.data.json import JSONify
 
 from scs_core.gas.afe_baseline import AFEBaseline
 from scs_core.gas.afe_calib import AFECalib
-from scs_core.gas.sensor_baseline import SensorBaseline
+from scs_core.gas.sensor_baseline import SensorBaseline, SensorBaselineSample
 
 from scs_core.sys.logging import Logging
 
@@ -68,12 +72,16 @@ if __name__ == '__main__':
 
     cmd = CmdBaseline()
 
+    Logging.config('afe_baseline', verbose=cmd.verbose)
+    logger = Logging.getLogger()
+
+    if not cmd.is_valid_sample_rec():
+        logger.error("invalid format for sample rec.")
+        exit(2)
+
     if not cmd.is_valid():
         cmd.print_help(sys.stderr)
         exit(2)
-
-    Logging.config('afe_baseline', verbose=cmd.verbose)
-    logger = Logging.getLogger()
 
     logger.info(cmd)
 
@@ -88,6 +96,10 @@ if __name__ == '__main__':
 
         # ------------------------------------------------------------------------------------------------------------
         # run...
+
+        # sample...
+        sample = SensorBaselineSample(cmd.sample_rec, cmd.sample_humid, cmd.sample_temp, None) if cmd.has_sample() \
+            else None
 
         # update...
         if cmd.update():
@@ -117,7 +129,7 @@ if __name__ == '__main__':
                 old_offset = baseline.sensor_baseline(index).offset
                 new_offset = old_offset + (cmd.correct_value() - cmd.reported_value())
 
-            baseline.set_sensor_baseline(index, SensorBaseline(now, new_offset))
+            baseline.set_sensor_baseline(index, SensorBaseline(now, new_offset, sample=sample))
             baseline.save(Host)
 
             logger.info("%s: was: %s now: %s" % (cmd.gas_name(), old_offset, new_offset))
@@ -149,7 +161,7 @@ if __name__ == '__main__':
 
         # report...
         if baseline:
-            print(JSONify.dumps(baseline))
+            print(JSONify.dumps(baseline, indent=cmd.indent))
 
 
     # ----------------------------------------------------------------------------------------------------------------
