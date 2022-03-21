@@ -20,7 +20,7 @@ EXAMPLES
 ./scd30_baseline.py -c 10 23
 
 DOCUMENT EXAMPLE
-{"baseline": {"calibrated-on": "2019-02-02T11:34:16Z", "offset": 50}}
+{"CO2": {"calibrated-on": "2022-03-21T12:46:52Z", "offset": 321, "env": {"hmd": 54.3, "tmp": 21.3, "pA": 99.6}}}
 
 FILES
 ~/SCS/conf/scd30_baseline.json
