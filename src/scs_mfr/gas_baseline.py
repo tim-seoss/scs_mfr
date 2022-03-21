@@ -20,7 +20,8 @@ Note that the scs_dev/gasses_sampler and greengrass processes must be restarted 
 WARNING:
 
 SYNOPSIS
-baseline.py [{ -b GAS  | { -s | -o } GAS VALUE | -c GAS CORRECT REPORTED | -z | -d }] [-v]
+gas_baseline.py [{ -b GAS  | { { -s | -o } GAS VALUE | -c GAS CORRECT REPORTED }
+[-r SAMPLE_REC -t SAMPLE_TEMP -m SAMPLE_HUMID] | -z | -d }] [-i INDENT] [-v]
 
 EXAMPLES
 ./baseline.py -c NO2 10 23
@@ -42,7 +43,7 @@ import sys
 from scs_core.data.datetime import LocalizedDatetime
 from scs_core.data.json import JSONify
 
-from scs_core.gas.sensor_baseline import SensorBaseline
+from scs_core.gas.sensor_baseline import SensorBaseline, SensorBaselineSample
 
 from scs_core.model.gas.gas_baseline import GasBaseline
 
@@ -61,17 +62,23 @@ if __name__ == '__main__':
     sht = None
     barometer = None
 
+    now = LocalizedDatetime.now().utc()
+
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
     cmd = CmdBaseline()
 
+    Logging.config('gas_baseline', verbose=cmd.verbose)
+    logger = Logging.getLogger()
+
+    if not cmd.is_valid_sample_rec():
+        logger.error("invalid format for sample rec.")
+        exit(2)
+
     if not cmd.is_valid():
         cmd.print_help(sys.stderr)
         exit(2)
-
-    Logging.config('gas_baseline', verbose=cmd.verbose)
-    logger = Logging.getLogger()
 
     logger.info(cmd)
 
@@ -88,7 +95,9 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # run...
 
-        now = LocalizedDatetime.now().utc()
+        # sample...
+        sample = SensorBaselineSample(cmd.sample_rec, cmd.sample_humid, cmd.sample_temp, None) if cmd.has_sample() \
+            else None
 
         # update...
         if cmd.update():
@@ -103,7 +112,7 @@ if __name__ == '__main__':
             else:
                 new_offset = old_offset + (cmd.correct_value() - cmd.reported_value())
 
-            baseline.set_sensor_baseline(cmd.gas_name(), SensorBaseline(now, new_offset))
+            baseline.set_sensor_baseline(cmd.gas_name(), SensorBaseline(now, new_offset, sample=sample))
             baseline.save(Host)
 
             logger.info("%s: was: %s now: %s" % (cmd.gas_name(), old_offset, new_offset))
@@ -133,7 +142,7 @@ if __name__ == '__main__':
 
         # report...
         if baseline:
-            print(JSONify.dumps(baseline))
+            print(JSONify.dumps(baseline, indent=cmd.indent))
 
 
     # ----------------------------------------------------------------------------------------------------------------

@@ -18,6 +18,7 @@ from scs_host.sys.host import Host
 from scs_psu.psu.psu_conf import PSUConf
 
 
+# TODO: check size of configuration JSON with baseline environment
 # --------------------------------------------------------------------------------------------------------------------
 
 conf = '{"hostname": "scs-bbe-003", ' \
