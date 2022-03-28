@@ -9,6 +9,9 @@ DESCRIPTION
 The baseline utility is used to adjust the zero offset of the reported vCal value. A positive offset value
 cause the output to be higher.
 
+In normal circumstances, the vCal offset should be set so that the minimum vCal value for the given gas on the given
+device matches the minimum vCal value in the model compendium.
+
 IMPORTANT NOTE: the vCal baseline does not change the vCal value as reported by the gases_sampler utility. Instead,
 it is used by the gas exegesis system, as part of the preprocessing of data that is passed to the interpretation
 model.
@@ -19,20 +22,22 @@ an ozone sensor is identified as Ox.
 Note that the greengrass processes must be restarted for changes to take effect.
 
 SYNOPSIS
-baseline.py [{ -b GAS  | { -s | -o } GAS VALUE  | -z | -d }] [-v]
+vcal_baseline.py [{ -b GAS  | { -s GAS VALUE | -m GAS MINIMUM }
+[-r SAMPLE_REC -t SAMPLE_TEMP -c SAMPLE_HUMID] | -d }] [-v]
 
 EXAMPLES
-./baseline.py -s NO2 16
+./vcal_baseline.py -m NO2 -5
 
 DOCUMENT EXAMPLE
-{"CO": {"calibrated-on": "2021-01-19T10:07:27Z", "offset": 2},
-"NO2": {"calibrated-on": "2021-01-19T10:07:27Z", "offset": 16}}
+{"NO2": {"calibrated-on": "2022-03-21T11:46:45Z", "offset": -31,
+"env": {"rec": "2022-03-16T05:10:00Z", "hmd": 48.3, "tmp": 22.4}}}
 
 FILES
 ~/SCS/conf/baseline.json
 
 SEE ALSO
 scs_dev/gases_sampler
+scs_mfr/gas_inference_conf
 """
 
 import sys
@@ -40,11 +45,14 @@ import sys
 from scs_core.data.datetime import LocalizedDatetime
 from scs_core.data.json import JSONify
 
-from scs_core.gas.sensor_baseline import SensorBaseline
+from scs_core.gas.sensor_baseline import SensorBaseline, SensorBaselineSample
 
+from scs_core.model.catalogue.model_compendium_group import ModelCompendiumGroup
+from scs_core.model.gas.gas_model_conf import GasModelConf
 from scs_core.model.gas.vcal_baseline import VCalBaseline
 
-from scs_host.bus.i2c import I2C
+from scs_core.sys.logging import Logging
+
 from scs_host.sys.host import Host
 
 from scs_mfr.cmd.cmd_vcal_baseline import CmdVCalBaseline
@@ -54,52 +62,79 @@ from scs_mfr.cmd.cmd_vcal_baseline import CmdVCalBaseline
 
 if __name__ == '__main__':
 
-    sht = None
-    barometer = None
+    model = None
+    primary = None
+
+    now = LocalizedDatetime.now().utc()
 
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
     cmd = CmdVCalBaseline()
 
+    Logging.config('vcal_baseline', verbose=cmd.verbose)
+    logger = Logging.getLogger()
+
+    if not cmd.is_valid_sample_rec():
+        logger.error("invalid format for sample rec.")
+        exit(2)
+
     if not cmd.is_valid():
         cmd.print_help(sys.stderr)
         exit(2)
 
-    if cmd.verbose:
-        print("baseline: %s" % cmd, file=sys.stderr)
-        sys.stderr.flush()
-
+    logger.info(cmd)
 
     try:
-        I2C.Sensors.open()
-
         # ------------------------------------------------------------------------------------------------------------
         # resources...
 
         baseline = VCalBaseline.load(Host, skeleton=True)
 
+        if cmd.match:
+            conf = GasModelConf.load(Host)
+
+            if conf is None:
+                logger.error("GasModelConf not available.")
+                exit(1)
+
+            logger.info(conf)
+
+            group_name = conf.model_compendium_group
+            group = ModelCompendiumGroup.retrieve(group_name)
+
+            if conf is None:
+                logger.error("ModelCompendiumGroup not available for '%s'." % group_name)
+                exit(1)
+
+            try:
+                model = group.compendium(cmd.gas_name())
+            except KeyError:
+                logger.error("ModelCompendium not available for gas '%s'." % cmd.gas_name())
+                exit(1)
+
+            primary = model.primaries['.'.join((cmd.gas_name(), 'vCal'))]
+
+            logger.info(primary)
+
 
         # ------------------------------------------------------------------------------------------------------------
         # run...
 
-        now = LocalizedDatetime.now().utc()
+        # sample...
+        sample = SensorBaselineSample(cmd.sample_rec, cmd.sample_humid, cmd.sample_temp, None) if cmd.has_sample() \
+            else None
 
         # update...
         if cmd.update():
             old_offset = baseline.sensor_offset(cmd.gas_name())
+            new_offset = int(round(primary.minimum - cmd.match_value())) if cmd.match else cmd.set_value()
 
-            if cmd.set:
-                new_offset = cmd.set_value()
-
-            else:
-                new_offset = old_offset + cmd.offset_value()
-
-            baseline.set_sensor_baseline(cmd.gas_name(), SensorBaseline(now, new_offset))
+            baseline.set_sensor_baseline(cmd.gas_name(), SensorBaseline(now, new_offset, sample=sample))
             baseline.save(Host)
 
             if cmd.verbose:
-                print("baseline: %s: was: %s now: %s" % (cmd.gas_name(), old_offset, new_offset), file=sys.stderr)
+                logger.info("%s: was: %s now: %s" % (cmd.gas_name(), old_offset, new_offset))
 
         # baseline...
         if cmd.baseline:
@@ -107,17 +142,10 @@ if __name__ == '__main__':
             sensor_baseline = baseline.sensor_baseline(gas_name)
 
             if sensor_baseline is None:
-                print("baseline: %s is not included in the calibration document." % gas_name, file=sys.stderr)
+                logger.error("%s is not included in the calibration document." % gas_name)
                 exit(1)
 
             baseline = VCalBaseline({gas_name: sensor_baseline})
-
-        # zero...
-        if cmd.zero:
-            for gas in baseline.gases():
-                baseline.set_sensor_baseline(gas, SensorBaseline(now, 0))
-
-            baseline.save(Host)
 
         # delete...
         if cmd.delete:
@@ -133,7 +161,4 @@ if __name__ == '__main__':
     # end...
 
     except KeyboardInterrupt:
-        pass
-
-    finally:
-        I2C.Sensors.close()
+        print(file=sys.stderr)
