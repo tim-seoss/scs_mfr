@@ -9,29 +9,19 @@ import optparse
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class CmdCognitoIdentity(object):
+class CmdCognitoDeviceIdentity(object):
     """unix command line handler"""
 
     def __init__(self):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-c CREDENTIALS] | -C | -R | -U } [-i INDENT] [-v]",
+        self.__parser = optparse.OptionParser(usage="%prog [-t] [-i INDENT] [-v]",
                                               version="%prog 1.0")
 
-        # identity...
-        self.__parser.add_option("--credentials", "-c", type="string", action="store", dest="credentials_name",
-                                 help="the stored credentials to be presented")
-
         # operations...
-        self.__parser.add_option("--Create", "-C", action="store_true", dest="create", default=False,
-                                 help="create my identity")
-
-        self.__parser.add_option("--Retrieve", "-R", action="store_true", dest="retrieve", default=False,
-                                 help="retrieve my identity")
-
-        self.__parser.add_option("--Update", "-U", action="store_true", dest="update", default=False,
-                                 help="update my identity")
+        self.__parser.add_option("--test", "-t", action="store_true", dest="test", default=False,
+                                 help="test the credentials")
 
         # output...
         self.__parser.add_option("--indent", "-i", type="int", nargs=1, action="store", dest="indent",
@@ -45,44 +35,9 @@ class CmdCognitoIdentity(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def is_valid(self):
-        count = 0
-
-        if self.create:
-            count += 1
-
-        if self.retrieve:
-            count += 1
-
-        if self.update:
-            count += 1
-
-        if count != 1:
-            return False
-
-        return True
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
     @property
-    def credentials_name(self):
-        return self.__opts.credentials_name
-
-
-    @property
-    def create(self):
-        return self.__opts.create
-
-
-    @property
-    def retrieve(self):
-        return self.__opts.retrieve
-
-
-    @property
-    def update(self):
-        return self.__opts.update
+    def test(self):
+        return self.__opts.test
 
 
     @property
@@ -102,5 +57,5 @@ class CmdCognitoIdentity(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdCognitoIdentity:{credentials_name:%s, retrieve:%s, create:%s, update:%s, indent:%s, verbose:%s}" % \
-               (self.credentials_name, self.retrieve, self.create, self.update, self.indent, self.verbose)
+        return "CmdCognitoDeviceIdentity:{test:%s, indent:%s, verbose:%s}" % \
+               (self.test, self.indent, self.verbose)
