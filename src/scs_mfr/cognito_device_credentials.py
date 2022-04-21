@@ -1,38 +1,31 @@
 #!/usr/bin/env python3
 
 """
-Created on 24 Nov 2021
+Created on 20 Apr 2022
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-source repo: scs_analysis
+source repo: scs_mfr
 
 DESCRIPTION
-The cognito_device_identity utility is used to retrieve or test the Cognito identity for the device.
-
+The cognito_device_credentials utility is used to test the validity of the Cognito identity for the device.
 
 SYNOPSIS
-Usage: cognito_device_identity.py [-t] [-i INDENT] [-v]
+Usage: cognito_device_credentials.py [-t] [-i INDENT] [-v]
 
 EXAMPLES
-./cognito_device_identity.py -R
+./cognito_device_credentials.py -R
 
 DOCUMENT EXAMPLE
-{"username": "8", "creation-date": "2021-11-24T12:51:12Z", "confirmation-status": "CONFIRMED", "enabled": true,
-"email": "bruno.beloff@southcoastscience.com", "given-name": "Bruno", "family-name": "Beloff", "is-super": true}
+{"username": "scs-opc-1", "password": "Ytzglk6oYpzJY0FB"}
 
 SEE ALSO
-scs_analysis/cognito_credentials
-
-RESOURCES
-https://docs.aws.amazon.com/cognito/latest/developerguide/signing-up-users-in-your-app.html
-https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-settings-policies.html
+scs_analysis/cognito_user_credentials
 """
 
 import requests
 import sys
 
-from scs_core.aws.security.cognito_device_finder import CognitoDeviceFinder
 from scs_core.aws.security.cognito_login_manager import CognitoDeviceLoginManager
 from scs_core.aws.security.cognito_device import CognitoDeviceCredentials
 
@@ -45,7 +38,7 @@ from scs_core.sys.system_id import SystemID
 
 from scs_host.sys.host import Host
 
-from scs_mfr.cmd.cmd_cognito_device_identity import CmdCognitoDeviceIdentity
+from scs_mfr.cmd.cmd_cognito_device_credentials import CmdCognitoDeviceCredentials
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -53,14 +46,15 @@ from scs_mfr.cmd.cmd_cognito_device_identity import CmdCognitoDeviceIdentity
 if __name__ == '__main__':
 
     auth = None
+    logger = None
 
     try:
         # ------------------------------------------------------------------------------------------------------------
         # cmd...
 
-        cmd = CmdCognitoDeviceIdentity()
+        cmd = CmdCognitoDeviceCredentials()
 
-        Logging.config('cognito_device_identity', verbose=cmd.verbose)
+        Logging.config('cognito_device_credentials', verbose=cmd.verbose)
         logger = Logging.getLogger()
 
         logger.info(cmd)
@@ -88,35 +82,29 @@ if __name__ == '__main__':
         credentials = CognitoDeviceCredentials(system_id.message_tag(), shared_secret.key)
         logger.info(credentials)
 
-        gatekeeper = CognitoDeviceLoginManager(requests)
-
-        try:
-            auth = gatekeeper.login(credentials)
-
-        except HTTPException as ex:
-            logger.error(ex.data)
-            exit(1)
-
-        logger.info(auth)
-
-
-        # ------------------------------------------------------------------------------------------------------------
-        # resources...
-
-        finder = CognitoDeviceFinder(requests)
-
 
         # ------------------------------------------------------------------------------------------------------------
         # run...
 
-        report = finder.find_by_tag(auth.id_token, credentials.tag)
+        if cmd.test:
+            gatekeeper = CognitoDeviceLoginManager(requests)
 
+            auth = gatekeeper.login(credentials)
+            logger.info(auth)
 
-    # ----------------------------------------------------------------------------------------------------------------
-    # end...
+            if auth is None:
+                logger.error("invalid auth")
+                exit(1)
 
-        if credentials is not None:
-            print(JSONify.dumps(report, indent=cmd.indent))
+        # ----------------------------------------------------------------------------------------------------------------
+        # end...
+
+        if credentials:
+            print(JSONify.dumps(credentials))
 
     except KeyboardInterrupt:
         print(file=sys.stderr)
+
+    except HTTPException as ex:
+        logger.error(ex.data)
+        exit(1)
