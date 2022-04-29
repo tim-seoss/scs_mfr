@@ -33,7 +33,10 @@ scs_dev/particulates_sampler
 import sys
 
 from scs_core.data.json import JSONify
+
 from scs_core.model.pmx.pmx_model_conf import PMxModelConf
+
+from scs_core.sys.logging import Logging
 
 from scs_host.sys.host import Host
 
@@ -53,9 +56,11 @@ if __name__ == '__main__':
         cmd.print_help(sys.stderr)
         exit(2)
 
-    if cmd.verbose:
-        print("pmx_inference_conf: %s" % cmd, file=sys.stderr)
-        sys.stderr.flush()
+    # logging...
+    Logging.config('pmx_inference_conf', verbose=cmd.verbose)
+    logger = Logging.getLogger()
+
+    logger.info(cmd)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -72,8 +77,7 @@ if __name__ == '__main__':
         conf = PMxModelConf.load(Host, skeleton=True)
 
         if conf is None and not cmd.is_complete():
-            print("pmx_inference_conf: No configuration is stored - you must therefore set all fields.",
-                  file=sys.stderr)
+            logger.error("No configuration is stored - you must therefore set all fields.")
             cmd.print_help(sys.stderr)
             exit(2)
 
