@@ -9,7 +9,7 @@ import optparse
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class CmdInferenceConf(object):
+class CmdModelConf(object):
     """
     unix command line handler
     """
@@ -119,7 +119,7 @@ class CmdInferenceConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdInferenceConf:{list:%s, uds_path:%s, model_interface:%s, model_compendium_group:%s, delete:%s, " \
+        return "CmdModelConf:{list:%s, uds_path:%s, model_interface:%s, model_compendium_group:%s, delete:%s, " \
                "verbose:%s}" % \
                (self.list, self.uds_path, self.model_interface, self.model_compendium_group, self.delete,
                 self.verbose)
