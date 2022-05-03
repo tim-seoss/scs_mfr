@@ -37,6 +37,7 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_shared_secret import CmdSharedSecret
 
 
+# TODO: update cognito device identity if shared secret changes
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
