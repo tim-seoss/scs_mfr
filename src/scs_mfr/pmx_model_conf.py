@@ -6,7 +6,7 @@ Created on 23 Dec 2020
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The pmx_inference_conf utility is used to specify how Greengrass data interpretation models are to be accessed:
+The pmx_model_conf utility is used to specify how Greengrass data interpretation models are to be accessed:
 
 * UDS_PATH - the Unix domain socket for communication between the particulates sampler and the inference server
 * INTERFACE - the format of the request
@@ -15,10 +15,10 @@ The pmx_inference_conf utility is used to specify how Greengrass data interpreta
 The particulates_sampler and Greengrass container must be restarted for changes to take effect.
 
 SYNOPSIS
-pmx_inference_conf.py [{ [-u UDS_PATH] [-i INTERFACE] | -d }] [-v]
+pmx_model_conf.py [{ [-u UDS_PATH] [-i INTERFACE] | -d }] [-v]
 
 EXAMPLES
-./pmx_inference_conf.py -u pipes/lambda-pmx-model.uds -i s1 -v
+./pmx_model_conf.py -u pipes/lambda-pmx-model.uds -i s1 -v
 
 DOCUMENT EXAMPLE
 {"uds-path": "pipes/lambda-pmx-model.uds", "model-interface": "s1"}
@@ -40,7 +40,7 @@ from scs_core.sys.logging import Logging
 
 from scs_host.sys.host import Host
 
-from scs_mfr.cmd.cmd_inference_conf import CmdInferenceConf
+from scs_mfr.cmd.cmd_model_conf import CmdModelConf
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -50,14 +50,14 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
-    cmd = CmdInferenceConf(PMxModelConf.interfaces())
+    cmd = CmdModelConf(PMxModelConf.interfaces())
 
     if not cmd.is_valid():
         cmd.print_help(sys.stderr)
         exit(2)
 
     # logging...
-    Logging.config('pmx_inference_conf', verbose=cmd.verbose)
+    Logging.config('pmx_model_conf', verbose=cmd.verbose)
     logger = Logging.getLogger()
 
     logger.info(cmd)

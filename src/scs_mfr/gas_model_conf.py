@@ -6,7 +6,7 @@ Created on 22 Dec 2020
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The gas_inference_conf utility is used to specify how Greengrass data interpretation models are to be accessed:
+The gas_model_conf utility is used to specify how Greengrass data interpretation models are to be accessed:
 
 * UDS_PATH - the Unix domain socket for communication between the gas sampler and the inference server
 * INTERFACE - the format of the request
@@ -15,10 +15,10 @@ The gas_inference_conf utility is used to specify how Greengrass data interpreta
 The gases_sampler and Greengrass container must be restarted for changes to take effect.
 
 SYNOPSIS
-gas_inference_conf.py [{ -l | [-u UDS_PATH] [-i INTERFACE] [-g GROUP] | -d }] [-v]
+gas_model_conf.py [{ -l | [-u UDS_PATH] [-i INTERFACE] [-g GROUP] | -d }] [-v]
 
 EXAMPLES
-./gas_inference_conf.py -u pipes/lambda-gas-model.uds -i vE -g oE.1
+./gas_model_conf.py -u pipes/lambda-gas-model.uds -i vE -g oE.1
 
 DOCUMENT EXAMPLE
 {"uds-path": "pipes/lambda-gas-model.uds", "model-interface": "vE", "model-compendium-group": "oE.1"}
@@ -44,10 +44,9 @@ from scs_core.sys.logging import Logging
 
 from scs_host.sys.host import Host
 
-from scs_mfr.cmd.cmd_inference_conf import CmdInferenceConf
+from scs_mfr.cmd.cmd_model_conf import CmdModelConf
 
 
-# TODO: rename as gas_model_conf.py?
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
@@ -55,14 +54,14 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
-    cmd = CmdInferenceConf(GasModelConf.interfaces())
+    cmd = CmdModelConf(GasModelConf.interfaces())
 
     if not cmd.is_valid():
         cmd.print_help(sys.stderr)
         exit(2)
 
     # logging...
-    Logging.config('gas_inference_conf', verbose=cmd.verbose)
+    Logging.config('gas_model_conf', verbose=cmd.verbose)
     logger = Logging.getLogger()
 
     logger.info(cmd)
