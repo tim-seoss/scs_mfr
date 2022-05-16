@@ -56,11 +56,14 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_aws_group_setup import CmdAWSGroupSetup
 
 
+# TODO: just to view the configuration, key should not be required? retrieve / set / summary commands?
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
 
     key = None
+    client = None
+    conf = None
 
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
@@ -93,6 +96,7 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # resources...
 
+    # if cmd.set:
     try:
         key = AccessKey.from_stdin() if cmd.stdin else AccessKey.from_user()
     except ValueError:

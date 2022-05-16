@@ -91,15 +91,16 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # resources
 
-    try:
-        key = AccessKey.from_stdin() if cmd.stdin else AccessKey.from_user()
-    except ValueError:
-        logger.error("invalid key.")
-        exit(1)
+    if cmd.setup:
+        try:
+            key = AccessKey.from_stdin() if cmd.stdin else AccessKey.from_user()
+        except ValueError:
+            logger.error("invalid key.")
+            exit(1)
 
-    except KeyboardInterrupt:
-        print(file=sys.stderr)
-        exit(0)
+        except KeyboardInterrupt:
+            print(file=sys.stderr)
+            exit(0)
 
 
     # ----------------------------------------------------------------------------------------------------------------
