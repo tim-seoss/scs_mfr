@@ -33,6 +33,7 @@ RESOURCES
 https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/greengrass.html
 """
 
+import os
 import sys
 
 from botocore.exceptions import ClientError, NoCredentialsError
@@ -56,7 +57,7 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_aws_group_setup import CmdAWSGroupSetup
 
 
-# TODO: just to view the configuration, key should not be required? retrieve / set / summary commands?
+# TODO: just to view the configuration, key should not be required? retrieve / set / "configuration" commands?
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
@@ -83,6 +84,10 @@ if __name__ == '__main__':
 
     # ----------------------------------------------------------------------------------------------------------------
     # validation...
+
+    if cmd.set and os.geteuid() != 0:
+        logger.error("you must have root privileges to set up the group.")
+        exit(1)
 
     model_conf = GasModelConf.load(Host)
     model_compendium_group = None if model_conf is None else model_conf.model_compendium_group

@@ -16,7 +16,7 @@ class CmdAWSIdentity(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-s [-g GROUP_NAME] [-c CORE_NAME]] [-k] [-v] ",
+        self.__parser = optparse.OptionParser(usage="%prog [-s [-g GROUP_NAME] [-c CORE_NAME] [-k]]  [-v] ",
                                               version="%prog 1.0")
         # commands...
         self.__parser.add_option("--setup", "-s", action="store_true", dest="setup", default=False,
@@ -42,7 +42,7 @@ class CmdAWSIdentity(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        if not self.setup and (bool(self.group_name) or bool(self.core_name)):
+        if not self.setup and (bool(self.group_name) or bool(self.core_name) or bool(self.stdin)):
             return False
 
         return True
