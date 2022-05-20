@@ -17,7 +17,7 @@ If no core name is provided, the host name will be read from the device to gener
 If the set flag is not provided, the current identity will be read from the persistent file.
 
 SYNOPSIS
-aws_identity.py [-s] [-g GROUP_NAME] [-c CORE_NAME] [-k] [-v]
+aws_identity.py [-s [-g GROUP_NAME] [-c CORE_NAME] [-k]]  [-v]
 
 EXAMPLES
 ./aws_identity.py -s -g scs-test-003-group -c scs-test-003-core -v
@@ -42,7 +42,6 @@ https://docs.aws.amazon.com/iot/latest/developerguide/server-authentication.html
 
 """
 
-import json
 import os
 import sys
 
@@ -52,6 +51,8 @@ from scs_core.aws.client.access_key import AccessKey
 from scs_core.aws.client.client import Client
 from scs_core.aws.config.aws import AWS
 from scs_core.aws.greengrass.aws_identity import AWSIdentity
+
+from scs_core.data.json import JSONify
 
 from scs_core.sys.logging import Logging
 
@@ -81,25 +82,28 @@ if __name__ == '__main__':
 
     logger.info(cmd)
 
+
     # ----------------------------------------------------------------------------------------------------------------
-    # Check sudo
+    # validation...
 
     if cmd.setup and os.geteuid() != 0:
-        logger.error("you must have root privileges to run this script.")
+        logger.error("you must have root privileges to set the identity.")
         exit(1)
+
 
     # ----------------------------------------------------------------------------------------------------------------
     # resources
 
-    try:
-        key = AccessKey.from_stdin() if cmd.stdin else AccessKey.from_user()
-    except ValueError:
-        logger.error("invalid key.")
-        exit(1)
+    if cmd.setup:
+        try:
+            key = AccessKey.from_stdin() if cmd.stdin else AccessKey.from_user()
+        except ValueError:
+            logger.error("invalid key.")
+            exit(1)
 
-    except KeyboardInterrupt:
-        print(file=sys.stderr)
-        exit(0)
+        except KeyboardInterrupt:
+            print(file=sys.stderr)
+            exit(0)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -110,18 +114,15 @@ if __name__ == '__main__':
             iot_client = Client.construct('iot', key)
             gg_client = Client.construct('greengrass', key)
 
-            aws_setup = AWSIdentity(iot_client, gg_client, AWS.core_name(), AWS.group_name())
-            aws_setup.setup_device()
-            aws_setup.save(Host)
+            identity = AWSIdentity(iot_client, gg_client, AWS.core_name(), AWS.group_name())
+            identity.setup_device()
+            identity.save(Host)
 
         else:
-            aws_setup = AWSIdentity.load(Host)
+            identity = AWSIdentity.load(Host)
 
-            if aws_setup:
-                json_file = aws_setup.as_json()
-                print(json.dumps(json_file))
-            else:
-                logger.error("no identity found.")
+        if identity:
+            print(JSONify.dumps(identity))
 
     except KeyboardInterrupt:
         print(file=sys.stderr)
