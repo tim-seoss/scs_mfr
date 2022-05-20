@@ -20,8 +20,12 @@ class CmdAWSGroupSetup(object):
         """
         templates = ' | '.join(AWSGroupConfiguration.templates())
 
-        self.__parser = optparse.OptionParser(usage="%prog [-s TEMPLATE [-a AWS_GROUP_NAME] [-f]] [-k] "
+        self.__parser = optparse.OptionParser(usage="%prog [{ -r | -s TEMPLATE [-a AWS_GROUP_NAME] [-f [-k]] }] "
                                                     "[-i INDENT] [-v]", version="%prog 1.0")
+
+        # retrieval...
+        self.__parser.add_option("--retrieve", "-r", action="store_true", dest="retrieve", default=False,
+                                 help="retrieve the configuration from AWS")
 
         # configuration...
         self.__parser.add_option("--set", "-s", type="string", action="store", dest="set",
@@ -50,6 +54,9 @@ class CmdAWSGroupSetup(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
+        if self.retrieve and self.set is not None:
+            return False
+
         if self.set is None and (self.aws_group_name is not None or self.force):
             return False
 
@@ -62,7 +69,16 @@ class CmdAWSGroupSetup(object):
         return True
 
 
+    def requires_aws_client(self):
+        return self.retrieve or self.set is not None
+
+
     # ----------------------------------------------------------------------------------------------------------------
+
+    @property
+    def retrieve(self):
+        return self.__opts.retrieve
+
 
     @property
     def set(self):
@@ -101,5 +117,5 @@ class CmdAWSGroupSetup(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdAWSGroupSetup:{set:%s, aws_group_name:%s, force:%s, stdin:%s indent:%s verbose:%s}" % \
-               (self.set, self.aws_group_name, self.force, self.stdin, self.indent, self.verbose)
+        return "CmdAWSGroupSetup:{retrieve:%s, set:%s, aws_group_name:%s, force:%s, stdin:%s indent:%s verbose:%s}" % \
+               (self.retrieve, self.set, self.aws_group_name, self.force, self.stdin, self.indent, self.verbose)

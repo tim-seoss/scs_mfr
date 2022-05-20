@@ -121,8 +121,8 @@ if __name__ == '__main__':
         else:
             identity = AWSIdentity.load(Host)
 
-            if identity:
-                print(JSONify.dumps(identity))
+        if identity:
+            print(JSONify.dumps(identity))
 
     except KeyboardInterrupt:
         print(file=sys.stderr)

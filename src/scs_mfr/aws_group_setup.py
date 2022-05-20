@@ -9,8 +9,11 @@ DESCRIPTION
 The aws_group_setup utility is designed to automate the creation of AWS Greengrass groups using South
 Coast Science's configurations.
 
-The group must already exist and the ML lambdas must be associated with the greengrass account for which the IAM auth
-keys are given.
+When setting the group, the group must already exist and the ML lambdas must be associated with the greengrass
+account for which the IAM auth keys are given.
+
+If neither --retrieve or --set flags are used, the aws_group_setup utility reports the group summary as stored on
+the device, if it exists.
 
 SYNOPSIS
 aws_group_setup.py [-s TEMPLATE [-a AWS_GROUP_NAME] [-f]] [-k] [-i INDENT] [-v]
@@ -19,7 +22,7 @@ EXAMPLES
 ./aws_group_setup.py -s oE.1 -a scs-test-001-group -f
 
 EXAMPLE DOCUMENT
-{"group-name": "scs-test-001-group", "time-initiated": "2021-09-21T13:00:31Z","unix-group": 987, "ml": "oE.1"}
+{"group-name": "scs-cube-001-group", "time-initiated": "2022-04-07T13:26:59Z", "unix-group": 984, "ml": "oE.1"}
 
 FILES
 ~/SCS/aws/aws_group_config.json
@@ -57,14 +60,12 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_aws_group_setup import CmdAWSGroupSetup
 
 
-# TODO: just to view the configuration, key should not be required? retrieve / set / "configuration" commands?
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
 
     key = None
     client = None
-    conf = None
 
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
@@ -101,22 +102,22 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # resources...
 
-    # if cmd.set:
-    try:
-        key = AccessKey.from_stdin() if cmd.stdin else AccessKey.from_user()
-    except ValueError:
-        logger.error('invalid key.')
-        exit(1)
-
-    except KeyboardInterrupt:
-        print(file=sys.stderr)
-        exit(0)
-
-    client = Client.construct('greengrass', key)
-
-    # AWSGroupConfigurator...
+    # AWSGroupConfiguration...
     conf = AWSGroupConfiguration.load(Host)
-    logger.info("existing: %s" % conf)
+
+    # client...
+    if cmd.requires_aws_client():
+        try:
+            key = AccessKey.from_stdin() if cmd.stdin else AccessKey.from_user()
+        except ValueError:
+            logger.error('invalid key.')
+            exit(1)
+
+        except KeyboardInterrupt:
+            print(file=sys.stderr)
+            exit(0)
+
+        client = Client.construct('greengrass', key)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -155,7 +156,7 @@ if __name__ == '__main__':
             except ProjectMissingError:
                 logger.error("Project configuration not set.")
 
-        else:
+        elif cmd.retrieve:
             try:
                 aws_group_info = AWSGroup(AWS.group_name(), client)
 
@@ -167,6 +168,11 @@ if __name__ == '__main__':
 
             except KeyError:
                 logger.error("group may not have been configured.")
+
+        else:
+            if conf:
+                print(JSONify.dumps(conf, indent=cmd.indent))
+
 
     except KeyboardInterrupt:
         print(file=sys.stderr)
