@@ -79,6 +79,10 @@ class CmdAFECalib(object):
         return self.afe_serial_number is not None or self.sensor is not None
 
 
+    def update(self):
+        return self.afe_serial_number is not None or self.sensor is not None or self.reload or self.test
+
+
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
