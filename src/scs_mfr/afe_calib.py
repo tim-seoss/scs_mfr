@@ -90,14 +90,23 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # run...
 
+        if cmd.set():
+            if cmd.afe_serial_number is not None:
+                calib = AFECalib.download(cmd.afe_serial_number)
+
+            else:
+                calib = DSICalib.download(cmd.sensor_serial_number)
+                calib.calibrated_on = cmd.sensor_calibration_date
+
         if cmd.reload:
             if calib is None:
                 logger.error("No AFECalib found.")
                 exit(1)
 
             if calib.afe_type == DSICalib.TYPE:
+                calibrated_on = calib.calibrated_on
                 calib = DSICalib.download(calib.sensor_calib(0).serial_number)
-                calib.calibrated_on = calib.calibrated_on
+                calib.calibrated_on = calibrated_on
 
             else:
                 calib = AFECalib.download(calib.serial_number)
@@ -106,15 +115,7 @@ if __name__ == '__main__':
             jdict = json.loads(AFECalib.TEST_LOAD)
             calib = AFECalib.construct_from_jdict(jdict)
 
-        if cmd.set():
-            if cmd.afe_serial_number is not None:
-                calib = AFECalib.download(cmd.afe_serial_number)
-
-            else:
-                calibration = DSICalib.download(cmd.sensor_serial_number)
-                calibration.calibrated_on = cmd.sensor_calibration_date
-
-        if (cmd.reload or cmd.test or cmd.set()) and calib is not None:
+        if cmd.update():
             calib.save(Host)
 
         elif cmd.delete:
