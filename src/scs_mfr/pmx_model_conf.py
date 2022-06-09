@@ -85,11 +85,11 @@ if __name__ == '__main__':
         model_interface = cmd.model_interface if cmd.model_interface else conf.model_interface
 
         if uds_path is None:
-            logger.error("the UDS path may not be null.")
+            logger.error("the UDS path must be set.")
             exit(2)
 
         if model_interface is None:
-            logger.error("the interface code may not be null.")
+            logger.error("the interface code must be set.")
             exit(2)
 
         conf = PMxModelConf(uds_path, model_interface)

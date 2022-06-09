@@ -111,11 +111,11 @@ if __name__ == '__main__':
             conf.model_compendium_group
 
         if uds_path is None:
-            logger.error("the UDS path may not be null.")
+            logger.error("the UDS path must be set.")
             exit(2)
 
         if model_interface is None:
-            logger.error("the interface code may not be null.")
+            logger.error("the interface code must be set.")
             exit(2)
 
         conf = GasModelConf(uds_path, model_interface, model_compendium_group)
