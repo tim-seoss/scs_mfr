@@ -16,7 +16,8 @@ class CmdConfiguration(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-s CONFIGURATION] [-i INDENT] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [-s CONFIGURATION] [{ -i INDENT | -t }] [-v]",
+                                              version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--save", "-s", type="string", nargs=1, action="store", dest="configuration",
@@ -26,6 +27,9 @@ class CmdConfiguration(object):
         self.__parser.add_option("--indent", "-i", action="store", dest="indent", type=int,
                                  help="pretty-print the output with INDENT")
 
+        self.__parser.add_option("--table", "-t", action="store_true", dest="table", default=False,
+                                 help="output in comma-separated format")
+
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
 
@@ -33,6 +37,13 @@ class CmdConfiguration(object):
 
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    def is_valid(self):
+        if self.indent and self.table:
+            return False
+
+        return True
+
 
     def save(self):
         return self.__opts.configuration is not None
@@ -51,6 +62,11 @@ class CmdConfiguration(object):
 
 
     @property
+    def table(self):
+        return self.__opts.table
+
+
+    @property
     def verbose(self):
         return self.__opts.verbose
 
@@ -62,5 +78,5 @@ class CmdConfiguration(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdConfiguration:{configuration:%s, indent:%s, verbose:%s}" % \
-               (self.configuration, self.indent, self.verbose)
+        return "CmdConfiguration:{configuration:%s, indent:%s, table:%s, verbose:%s}" % \
+               (self.configuration, self.indent, self.table, self.verbose)
