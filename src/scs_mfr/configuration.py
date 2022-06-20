@@ -16,7 +16,7 @@ Note that the hostname field cannot be updated by the configuration utility. If 
 update JSON specification, it is silently ignored.
 
 SYNOPSIS
-configuration.py [-s CONFIGURATION] [-i INDENT] [-v]
+configuration.py [-s CONFIGURATION] [{ -i INDENT | -t }] [-v]
 
 EXAMPLES
 ./configuration.py -i4 -s '{"timezone-conf": {"name": "Europe/London"}}'
@@ -283,6 +283,8 @@ SEE ALSO
 scs_mfr/modem
 """
 
+import sys
+
 from scs_core.data.datetime import LocalizedDatetime
 from scs_core.data.json import JSONify
 
@@ -314,6 +316,10 @@ if __name__ == '__main__':
     # cmd...
 
     cmd = CmdConfiguration()
+
+    if not cmd.is_valid():
+        cmd.print_help(sys.stderr)
+        exit(2)
 
     # logging...
     Logging.config('configuration', verbose=cmd.verbose)
@@ -368,8 +374,13 @@ if __name__ == '__main__':
         configuration = Configuration.load(Host, psu=psu)
         sample = ConfigurationSample(system_id.message_tag(), LocalizedDatetime.now().utc(), configuration)
 
-        if cmd.indent is not None:
+        if cmd.table:
+            for row in sample.as_table():
+                print(row)
+
+        elif cmd.indent is not None:
             print(JSONify.dumps(sample, indent=cmd.indent))
+
         else:
             print(JSONify.dumps(sample, separators=(',', ':')))         # maximum compactness
 
