@@ -28,9 +28,9 @@ FILES
 ~/SCS/aws/aws_group_config.json
 
 SEE ALSO
-scs_mfr/aws_deployment.py
-scs_mfr/aws_identity.py
-scs_mfr/gas_inference_conf
+scs_mfr/aws_deployment
+scs_mfr/aws_identity
+scs_mfr/gas_model_conf
 
 RESOURCES
 https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/greengrass.html
