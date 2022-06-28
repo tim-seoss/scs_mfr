@@ -128,7 +128,7 @@ if __name__ == '__main__':
 
         # report...
         if baseline:
-            print(JSONify.dumps(baseline))
+            print(JSONify.dumps(baseline, indent=cmd.indent))
 
 
     # ----------------------------------------------------------------------------------------------------------------
