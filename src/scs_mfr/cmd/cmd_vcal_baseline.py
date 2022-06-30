@@ -35,7 +35,7 @@ class CmdVCalBaseline(object):
         """
         self.__parser = optparse.OptionParser(usage="%prog [{ -b GAS  | { { -s | -o } GAS VALUE "
                                                     "[-r SAMPLE_REC -t SAMPLE_TEMP -m SAMPLE_HUMID] } "
-                                                    "| -d }] [-v]", version="%prog 1.0")
+                                                    "| -d }] [-i INDENT] [-v]", version="%prog 1.0")
 
         # functions...
         self.__parser.add_option("--baseline", "-b", type="string", nargs=1, action="store", dest="baseline",

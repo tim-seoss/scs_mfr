@@ -28,8 +28,7 @@ EXAMPLES
 ./vcal_baseline.py -o NO2 -5
 
 DOCUMENT EXAMPLE
-{"NO2": {"calibrated-on": "2022-03-21T11:46:45Z", "offset": -31,
-"env": {"rec": "2022-03-16T05:10:00Z", "hmd": 48.3, "tmp": 22.4}}}
+{"NO2": {"calibrated-on": "2022-06-23T08:40:06Z", "offset": 134, "env": null}}
 
 FILES
 ~/SCS/conf/baseline.json
@@ -129,7 +128,7 @@ if __name__ == '__main__':
 
         # report...
         if baseline:
-            print(JSONify.dumps(baseline))
+            print(JSONify.dumps(baseline, indent=cmd.indent))
 
 
     # ----------------------------------------------------------------------------------------------------------------
