@@ -39,7 +39,7 @@ https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/green
 import os
 import sys
 
-from botocore.exceptions import ClientError, NoCredentialsError
+from botocore.exceptions import ClientError, EndpointConnectionError, NoCredentialsError
 
 from scs_core.aws.client.access_key import AccessKey
 from scs_core.aws.client.client import Client
@@ -179,3 +179,6 @@ if __name__ == '__main__':
 
     except (EOFError, NoCredentialsError):
         logger.error("credentials error.")
+
+    except EndpointConnectionError as ex:
+        logger.error(ex)
