@@ -5,6 +5,8 @@ Created on 21 Sep 2020
 
 @author: Jade Page (jade.page@southcoastscience.com)
 
+source repo: scs_analysis
+
 DESCRIPTION
 The aws_group_setup utility is designed to automate the creation of AWS Greengrass groups using South
 Coast Science's configurations.
@@ -16,12 +18,12 @@ If neither --retrieve or --set flags are used, the aws_group_setup utility repor
 the device, if it exists.
 
 SYNOPSIS
-aws_group_setup.py [-s TEMPLATE [-a AWS_GROUP_NAME] [-f]] [-k] [-i INDENT] [-v]
+aws_group_setup.py [{ -r | -s TEMPLATE [-a AWS_GROUP_NAME] [-f [-k]] }] [-i INDENT] [-v]
 
 EXAMPLES
 ./aws_group_setup.py -s oE.1 -a scs-test-001-group -f
 
-EXAMPLE DOCUMENT
+EXAMPLE DOCUMENT - SHORTFORM (LOCAL)
 {"group-name": "scs-cube-001-group", "time-initiated": "2022-04-07T13:26:59Z", "unix-group": 984, "ml": "oE.1"}
 
 FILES
@@ -31,6 +33,7 @@ SEE ALSO
 scs_mfr/aws_deployment
 scs_mfr/aws_identity
 scs_mfr/gas_model_conf
+scs_mfr/pmx_model_conf
 
 RESOURCES
 https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/greengrass.html
