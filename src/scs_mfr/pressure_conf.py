@@ -47,6 +47,7 @@ from scs_core.sys.logging import Logging
 from scs_mfr.cmd.cmd_pressure_conf import CmdPressureConf
 
 
+# TODO: don't show skeleton
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
