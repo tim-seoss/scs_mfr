@@ -71,7 +71,8 @@ if __name__ == '__main__':
     # resources...
 
     # PressureConf...
-    conf = PressureConf.load(Host, skeleton=True)
+    skeleton = cmd.set()                                # only get a skeleton is a set is happening
+    conf = PressureConf.load(Host, skeleton=skeleton)
 
 
     # ----------------------------------------------------------------------------------------------------------------
