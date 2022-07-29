@@ -7,6 +7,7 @@ Created on 8 Sep 2020
 import optparse
 
 
+# TODO: sort out flag syntax
 # --------------------------------------------------------------------------------------------------------------------
 
 class CmdSCD30Conf(object):
