@@ -22,22 +22,20 @@ an ozone sensor is identified as Ox.
 Note that the greengrass processes must be restarted for changes to take effect.
 
 SYNOPSIS
-vcal_baseline.py [{ -b GAS  | { -s GAS VALUE | -m GAS MINIMUM }
-[-r SAMPLE_REC -t SAMPLE_TEMP -c SAMPLE_HUMID] | -d }] [-v]
+vcal_baseline.py [{ -b GAS  | { { -s | -o } GAS VALUE [-r SAMPLE_REC -t SAMPLE_TEMP -m SAMPLE_HUMID] } | -d }] [-v]
 
 EXAMPLES
-./vcal_baseline.py -m NO2 -5
+./vcal_baseline.py -o NO2 -5
 
 DOCUMENT EXAMPLE
-{"NO2": {"calibrated-on": "2022-03-21T11:46:45Z", "offset": -31,
-"env": {"rec": "2022-03-16T05:10:00Z", "hmd": 48.3, "tmp": 22.4}}}
+{"NO2": {"calibrated-on": "2022-06-23T08:40:06Z", "offset": 134, "env": null}}
 
 FILES
 ~/SCS/conf/baseline.json
 
 SEE ALSO
 scs_dev/gases_sampler
-scs_mfr/gas_inference_conf
+scs_mfr/gas_model_conf
 """
 
 import sys
@@ -47,8 +45,6 @@ from scs_core.data.json import JSONify
 
 from scs_core.gas.sensor_baseline import SensorBaseline, SensorBaselineSample
 
-from scs_core.model.catalogue.model_compendium_group import ModelCompendiumGroup
-from scs_core.model.gas.gas_model_conf import GasModelConf
 from scs_core.model.gas.vcal_baseline import VCalBaseline
 
 from scs_core.sys.logging import Logging
@@ -91,32 +87,6 @@ if __name__ == '__main__':
 
         baseline = VCalBaseline.load(Host, skeleton=True)
 
-        if cmd.match:
-            conf = GasModelConf.load(Host)
-
-            if conf is None:
-                logger.error("GasModelConf not available.")
-                exit(1)
-
-            logger.info(conf)
-
-            group_name = conf.model_compendium_group
-            group = ModelCompendiumGroup.retrieve(group_name)
-
-            if conf is None:
-                logger.error("ModelCompendiumGroup not available for '%s'." % group_name)
-                exit(1)
-
-            try:
-                model = group.compendium(cmd.gas_name())
-            except KeyError:
-                logger.error("ModelCompendium not available for gas '%s'." % cmd.gas_name())
-                exit(1)
-
-            primary = model.primaries['.'.join((cmd.gas_name(), 'vCal'))]
-
-            logger.info(primary)
-
 
         # ------------------------------------------------------------------------------------------------------------
         # run...
@@ -127,8 +97,12 @@ if __name__ == '__main__':
 
         # update...
         if cmd.update():
+            if cmd.offset and cmd.gas_name() not in baseline.gases():
+                logger.error("gas '%s' not in baseline group." % cmd.gas_name())
+                exit(2)
+
             old_offset = baseline.sensor_offset(cmd.gas_name())
-            new_offset = int(round(primary.minimum - cmd.match_value())) if cmd.match else cmd.set_value()
+            new_offset = int(round(old_offset + cmd.offset_value())) if cmd.offset else cmd.set_value()
 
             baseline.set_sensor_baseline(cmd.gas_name(), SensorBaseline(now, new_offset, sample=sample))
             baseline.save(Host)
@@ -154,7 +128,7 @@ if __name__ == '__main__':
 
         # report...
         if baseline:
-            print(JSONify.dumps(baseline))
+            print(JSONify.dumps(baseline, indent=cmd.indent))
 
 
     # ----------------------------------------------------------------------------------------------------------------

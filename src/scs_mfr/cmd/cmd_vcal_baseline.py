@@ -33,9 +33,9 @@ class CmdVCalBaseline(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [{ -b GAS  | { -s GAS VALUE | -c GAS MINIMUM } "
-                                                    "[-r SAMPLE_REC -t SAMPLE_TEMP -m SAMPLE_HUMID] "
-                                                    "| -d }] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ -b GAS  | { { -s | -o } GAS VALUE "
+                                                    "[-r SAMPLE_REC -t SAMPLE_TEMP -m SAMPLE_HUMID] } "
+                                                    "| -d }] [-i INDENT] [-v]", version="%prog 1.0")
 
         # functions...
         self.__parser.add_option("--baseline", "-b", type="string", nargs=1, action="store", dest="baseline",
@@ -44,8 +44,8 @@ class CmdVCalBaseline(object):
         self.__parser.add_option("--set", "-s", type="string", nargs=2, action="store", dest="set",
                                  help="set offset for GAS to integer VALUE")
 
-        self.__parser.add_option("--match-compendium", "-c", type="string", nargs=2, action="store", dest="match",
-                                 help="set offset for GAS to match MINIMUM of the compendium")
+        self.__parser.add_option("--offset", "-o", type="string", nargs=2, action="store", dest="offset",
+                                 help="change offset for GAS, by integer VALUE")
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="delete the baseline configuration")
@@ -82,7 +82,7 @@ class CmdVCalBaseline(object):
         if self.set is not None:
             count += 1
 
-        if self.match is not None:
+        if self.offset is not None:
             count += 1
 
         if self.delete:
@@ -106,14 +106,14 @@ class CmdVCalBaseline(object):
         if count != 0 and count != 3:
             return False
 
-        if count == 3 and not self.set and not self.match:
+        if count == 3 and self.set is None and self.offset is None:
             return False
 
         # VALUE...
         if self.set is not None and not self.__is_integer(self.set[1]):
             return False
 
-        if self.match is not None and not self.__is_integer(self.match[1]):
+        if self.offset is not None and not self.__is_integer(self.offset[1]):
             return False
 
         return True
@@ -135,14 +135,14 @@ class CmdVCalBaseline(object):
         if self.set:
             return self.set[0]
 
-        if self.match:
-            return self.match[0]
+        if self.offset:
+            return self.offset[0]
 
         return None
 
 
     def update(self):
-        return self.set is not None or self.match is not None
+        return self.set is not None or self.offset is not None
 
 
     def has_sample(self):
@@ -166,12 +166,12 @@ class CmdVCalBaseline(object):
 
 
     @property
-    def match(self):
-        return self.__opts.match
+    def offset(self):
+        return self.__opts.offset
 
 
-    def match_value(self):
-        return None if self.match is None else int(self.match[1])
+    def offset_value(self):
+        return int(self.offset[1]) if self.offset else None
 
 
     @property
@@ -211,7 +211,7 @@ class CmdVCalBaseline(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdVCalBaseline:{baseline:%s, set:%s, match:%s, delete:%s, " \
+        return "CmdVCalBaseline:{baseline:%s, set:%s, offset:%s, delete:%s, " \
                "sample_rec:%s, sample_temp:%s, sample_humid:%s, indent:%s, verbose:%s}" % \
-               (self.baseline, self.set, self.match, self.delete,
+               (self.baseline, self.set, self.offset, self.delete,
                 self.sample_rec, self.sample_temp, self.sample_humid, self.indent, self.verbose)

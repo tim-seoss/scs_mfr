@@ -5,6 +5,8 @@ Created on 11 Jan 2021
 
 @author: Jade Page (jade.page@southcoastscience.com)
 
+source repo: scs_analysis
+
 DESCRIPTION
 The aws_deployment utility is used to invoke a deployment by the AWS cloud to the device. The deployment
 configuration should already be in place - see aws_identity.py and aws_group_setup.py.
@@ -63,6 +65,8 @@ if __name__ == '__main__':
     Logging.config('aws_deployment', verbose=cmd.verbose)
     logger = Logging.getLogger()
 
+    logger.info(cmd)
+
 
     # ----------------------------------------------------------------------------------------------------------------
     # resources...
@@ -95,8 +99,7 @@ if __name__ == '__main__':
             logger.error("group may not have been configured.")
             exit(1)
 
-        if cmd.verbose:
-            print(JSONify.dumps(response, indent=cmd.indent))
+        print(JSONify.dumps(response, indent=cmd.indent))
 
         # wait...
         while True:

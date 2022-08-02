@@ -18,7 +18,7 @@ The afe_calib utility may also be used to set a "test" calibration sheet, for us
 Note that the scs_dev/gasses_sampler process must be restarted for changes to take effect.
 
 SYNOPSIS
-afe_calib.py [{ -a SERIAL_NUMBER | -s SERIAL_NUMBER YYYY-MM-DD | -t  | -d }] [-i INDENT] [-v]
+afe_calib.py [{ -a SERIAL_NUMBER | -s SERIAL_NUMBER YYYY-MM-DD | -r | -t  | -d }] [-i INDENT] [-v]
 
 EXAMPLES
 ./afe_calib.py -s 212810465 2019-08-22
@@ -50,6 +50,7 @@ from scs_core.gas.afe_calib import AFECalib
 from scs_core.gas.dsi_calib import DSICalib
 
 from scs_core.sys.http_exception import HTTPException
+from scs_core.sys.logging import Logging
 
 from scs_host.sys.host import Host
 
@@ -69,9 +70,15 @@ if __name__ == '__main__':
 
     cmd = CmdAFECalib()
 
-    if cmd.verbose:
-        print("afe_calib: %s" % cmd, file=sys.stderr)
-        sys.stderr.flush()
+    if not cmd.is_valid():
+        cmd.print_help(sys.stderr)
+        exit(2)
+
+    # logging...
+    Logging.config('afe_calib', verbose=cmd.verbose)
+    logger = Logging.getLogger()
+
+    logger.info(cmd)
 
     try:
         # ------------------------------------------------------------------------------------------------------------
@@ -84,29 +91,32 @@ if __name__ == '__main__':
         # run...
 
         if cmd.set():
-            if cmd.test:
-                jdict = json.loads(AFECalib.TEST_LOAD)
-                calib = AFECalib.construct_from_jdict(jdict)
-
-            elif cmd.afe_serial_number:
-                try:
-                    calib = AFECalib.download(cmd.afe_serial_number)
-
-                except HTTPException as ex:
-                    print("afe_calib: %s" % ex, file=sys.stderr)
-                    exit(1)
+            if cmd.afe_serial_number is not None:
+                calib = AFECalib.download(cmd.afe_serial_number)
 
             else:
-                try:
-                    calib = DSICalib.download(cmd.sensor_serial_number)
-                    calib.calibrated_on = cmd.sensor_calibration_date
+                calib = DSICalib.download(cmd.sensor_serial_number)
+                calib.calibrated_on = cmd.sensor_calibration_date
 
-                except HTTPException as ex:
-                    print("afe_calib: %s" % ex, file=sys.stderr)
-                    exit(1)
+        if cmd.reload:
+            if calib is None:
+                logger.error("No AFECalib found.")
+                exit(1)
 
-            if calib is not None:
-                calib.save(Host)
+            if calib.afe_type == DSICalib.TYPE:
+                calibrated_on = calib.calibrated_on
+                calib = DSICalib.download(calib.sensor_calib(0).serial_number)
+                calib.calibrated_on = calibrated_on
+
+            else:
+                calib = AFECalib.download(calib.serial_number)
+
+        if cmd.test:
+            jdict = json.loads(AFECalib.TEST_LOAD)
+            calib = AFECalib.construct_from_jdict(jdict)
+
+        if cmd.update():
+            calib.save(Host)
 
         elif cmd.delete:
             AFECalib.delete(Host)
@@ -120,7 +130,7 @@ if __name__ == '__main__':
     # end...
 
     except KeyboardInterrupt:
-        pass
+        print(file=sys.stderr)
 
     except (ConnectionError, HTTPException) as ex:
-        print("afe_calib: %s: %s" % (ex.__class__.__name__, ex), file=sys.stderr)
+        logger.error("%s: %s" % (ex.__class__.__name__, ex))

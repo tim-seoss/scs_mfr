@@ -18,15 +18,18 @@ class CmdAFECalib(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [{ -a SERIAL_NUMBER | -s SERIAL_NUMBER YYYY-MM-DD | -t  | "
-                                                    "-d }] [-i INDENT] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ -a SERIAL_NUMBER | -s SERIAL_NUMBER YYYY-MM-DD | -r | "
+                                                    "-t  | -d }] [-i INDENT] [-v]", version="%prog 1.0")
 
         # functions...
         self.__parser.add_option("--afe", "-a", type="string", nargs=1, action="store", dest="afe_serial_number",
-                                 help="set AFE serial number")
+                                 help="load calibration data for AFE with serial number")
 
         self.__parser.add_option("--sensor", "-s", type="string", nargs=2, action="store", dest="sensor",
-                                 help="set single sensor serial number and calibration date")
+                                 help="load calibration data for DSI with serial number and calibration date")
+
+        self.__parser.add_option("--reload", "-r", action="store_true", dest="reload", default=False,
+                                 help="reload calibration data")
 
         self.__parser.add_option("--test", "-t", action="store_true", dest="test", default=False,
                                  help="set AFE as test load")
@@ -55,6 +58,9 @@ class CmdAFECalib(object):
         if self.sensor is not None:
             count += 1
 
+        if self.reload:
+            count += 1
+
         if self.test:
             count += 1
 
@@ -70,7 +76,11 @@ class CmdAFECalib(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def set(self):
-        return self.afe_serial_number is not None or self.sensor is not None or self.test
+        return self.afe_serial_number is not None or self.sensor is not None
+
+
+    def update(self):
+        return self.afe_serial_number is not None or self.sensor is not None or self.reload or self.test
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -105,6 +115,11 @@ class CmdAFECalib(object):
 
 
     @property
+    def reload(self):
+        return self.__opts.reload
+
+
+    @property
     def test(self):
         return self.__opts.test
 
@@ -131,5 +146,5 @@ class CmdAFECalib(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdAFECalib:{afe_serial_number:%s, sensor:%s, test:%s, delete:%s, indent:%s, verbose:%s}" % \
-               (self.afe_serial_number, self.sensor, self.test, self.delete, self.indent, self.verbose)
+        return "CmdAFECalib:{afe_serial_number:%s, sensor:%s, reload:%s, test:%s, delete:%s, indent:%s, verbose:%s}" % \
+               (self.afe_serial_number, self.sensor, self.reload, self.test, self.delete, self.indent, self.verbose)

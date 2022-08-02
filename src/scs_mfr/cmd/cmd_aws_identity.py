@@ -16,7 +16,7 @@ class CmdAWSIdentity(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-s [-g GROUP_NAME] [-c CORE_NAME]] [-k] [-v] ",
+        self.__parser = optparse.OptionParser(usage="%prog [-s [-g GROUP_NAME] [-c CORE_NAME] [-k]] [-i INDENT] [-v]",
                                               version="%prog 1.0")
         # commands...
         self.__parser.add_option("--setup", "-s", action="store_true", dest="setup", default=False,
@@ -34,6 +34,9 @@ class CmdAWSIdentity(object):
                                  help="read key from stdin")
 
         # output...
+        self.__parser.add_option("--indent", "-i", action="store", dest="indent", type=int,
+                                 help="pretty-print the output with INDENT")
+
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
 
@@ -42,7 +45,7 @@ class CmdAWSIdentity(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        if not self.setup and (bool(self.group_name) or bool(self.core_name)):
+        if not self.setup and (bool(self.group_name) or bool(self.core_name) or bool(self.stdin)):
             return False
 
         return True
@@ -70,6 +73,11 @@ class CmdAWSIdentity(object):
 
 
     @property
+    def indent(self):
+        return self.__opts.indent
+
+
+    @property
     def verbose(self):
         return self.__opts.verbose
 
@@ -81,5 +89,5 @@ class CmdAWSIdentity(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdAWSIdentity:{setup:%s, group-name:%s, core-name:%s, stdin:%s, verbose:%s}" % \
-               (self.setup, self.group_name, self.core_name, self.stdin, self.verbose)
+        return "CmdAWSIdentity:{setup:%s, group-name:%s, core-name:%s, stdin:%s, indent:%s, verbose:%s}" % \
+               (self.setup, self.group_name, self.core_name, self.stdin, self.indent, self.verbose)
