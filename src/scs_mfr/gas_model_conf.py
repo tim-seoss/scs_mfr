@@ -12,6 +12,8 @@ The gas_model_conf utility is used to specify how Greengrass data interpretation
 * INTERFACE - the format of the request
 * GROUP - the performance parameters of the model(s) to be used (not required for VB or vB2)
 
+Note that the template name for the AWS group is specified by the group name as set here.
+
 The gases_sampler and Greengrass container must be restarted for changes to take effect.
 
 SYNOPSIS
@@ -54,7 +56,7 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
-    cmd = CmdModelConf(GasModelConf.interfaces())
+    cmd = CmdModelConf()
 
     if not cmd.is_valid():
         cmd.print_help(sys.stderr)
@@ -75,7 +77,7 @@ if __name__ == '__main__':
 
     if cmd.model_compendium_group is not None and ml is not None:
         if cmd.model_compendium_group != ml:
-            logger.error("WARNING: the specified group '%s' does not match the server model group '%s'" %
+            logger.error("WARNING: the specified group '%s' does not match the server template '%s'" %
                          (cmd.model_compendium_group, ml))
 
 
