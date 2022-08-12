@@ -31,9 +31,10 @@ class CmdSCD30Baseline(object):
         Constructor
         """
         self.__parser = optparse.OptionParser(usage="%prog [{ { { -s | -o } VALUE | -c CORRECT REPORTED } "
-                                                    "[-t TEMP -m HUMID [-p PRESS]] | -z }] [-v]", version="%prog 1.0")
+                                                    "[-t TEMP -m HUMID [-p PRESS]] | -z  | -d }] [-v]",
+                                              version="%prog 1.0")
 
-        # optional...
+        # function...
         self.__parser.add_option("--set", "-s", type="int", nargs=1, action="store", dest="set",
                                  help="set offset to integer VALUE")
 
@@ -43,9 +44,11 @@ class CmdSCD30Baseline(object):
         self.__parser.add_option("--correct", "-c", type="int", nargs=2, action="store", dest="correct",
                                  help="change offset by the difference between CORRECT and REPORTED values")
 
-
         self.__parser.add_option("--zero", "-z", action="store_true", dest="zero",
                                  help="zero all offsets")
+
+        self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
+                                 help="delete the baseline configuration")
 
         # sample...
         self.__parser.add_option("--temp", "-t", type="float", nargs=1, action="store", dest="temp",
@@ -83,6 +86,9 @@ class CmdSCD30Baseline(object):
             param_count += 1
 
         if self.zero is not None:
+            param_count += 1
+
+        if self.delete:
             param_count += 1
 
         if param_count > 1:
@@ -152,6 +158,11 @@ class CmdSCD30Baseline(object):
 
 
     @property
+    def delete(self):
+        return self.__opts.delete
+
+
+    @property
     def indent(self):
         return self.__opts.indent
 
@@ -169,6 +180,6 @@ class CmdSCD30Baseline(object):
 
     def __str__(self, *args, **kwargs):
         return "CmdSCD30Baseline:{set:%s, offset:%s, correct:%s, temp:%s, humid:%s, press:%s, zero:%s, " \
-               "indent:%s, verbose:%s}" % \
+               "delete:%s, indent:%s, verbose:%s}" % \
                (self.set_value, self.offset_value, self.__opts.correct, self.temp, self.humid, self.press, self.zero,
-                self.indent, self.verbose)
+                self.delete, self.indent, self.verbose)
