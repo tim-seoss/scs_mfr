@@ -6,8 +6,6 @@ Created on 21 Sep 2020
 
 import optparse
 
-from scs_core.aws.greengrass.aws_group_configuration import AWSGroupConfiguration
-
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -18,9 +16,7 @@ class CmdAWSGroupSetup(object):
         """
         Constructor
         """
-        templates = ' | '.join(AWSGroupConfiguration.templates())
-
-        self.__parser = optparse.OptionParser(usage="%prog [{ -r | -s TEMPLATE [-a AWS_GROUP_NAME] [-f [-k]] }] "
+        self.__parser = optparse.OptionParser(usage="%prog [{ -r | -s [-a AWS_GROUP_NAME] [-f [-k]] }] "
                                                     "[-i INDENT] [-v]", version="%prog 1.0")
 
         # retrieval...
@@ -28,8 +24,8 @@ class CmdAWSGroupSetup(object):
                                  help="retrieve the configuration from AWS")
 
         # configuration...
-        self.__parser.add_option("--set", "-s", type="string", action="store", dest="set",
-                                 help="set the group configuration with template { %s }" % templates)
+        self.__parser.add_option("--set", "-s", action="store_true", dest="set", default=False,
+                                 help="set the group configuration")
 
         self.__parser.add_option("--aws-group-name", "-a", type="string", action="store", dest="aws_group_name",
                                  help="override the name of the AWS group to configure")
@@ -54,23 +50,20 @@ class CmdAWSGroupSetup(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        if self.retrieve and self.set is not None:
+        if self.retrieve and self.set:
             return False
 
-        if self.set is None and (self.aws_group_name is not None or self.force):
+        if not self.set and (self.aws_group_name is not None or self.force):
             return False
 
-        if self.set is not None and self.set not in AWSGroupConfiguration.templates():
-            return False
-
-        if self.set is not None and self.stdin and not self.force:
+        if not self.set and self.stdin and not self.force:
             return False
 
         return True
 
 
     def requires_aws_client(self):
-        return self.retrieve or self.set is not None
+        return self.retrieve or self.set
 
 
     # ----------------------------------------------------------------------------------------------------------------

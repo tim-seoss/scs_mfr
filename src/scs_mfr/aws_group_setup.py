@@ -11,6 +11,8 @@ DESCRIPTION
 The aws_group_setup utility is designed to automate the creation of AWS Greengrass groups using South
 Coast Science's configurations.
 
+Note that the template name for the AWS group is specified by the group name as set by the gas_model_conf utility.
+
 When setting the group, the group must already exist and the ML lambdas must be associated with the greengrass
 account for which the IAM auth keys are given.
 
@@ -18,7 +20,7 @@ If neither --retrieve or --set flags are used, the aws_group_setup utility repor
 the device, if it exists.
 
 SYNOPSIS
-aws_group_setup.py [{ -r | -s TEMPLATE [-a AWS_GROUP_NAME] [-f [-k]] }] [-i INDENT] [-v]
+aws_group_setup.py [{ -r | -s [-a AWS_GROUP_NAME] [-f [-k]] }] [-i INDENT] [-v]
 
 EXAMPLES
 ./aws_group_setup.py -s oE.1 -a scs-test-001-group -f
@@ -69,6 +71,7 @@ if __name__ == '__main__':
 
     key = None
     client = None
+    model_conf = None
 
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
@@ -89,17 +92,18 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # validation...
 
-    if cmd.set and os.geteuid() != 0:
-        logger.error("you must have root privileges to set up the group.")
-        exit(1)
+    if cmd.set:
+        if os.geteuid() != 0:
+            logger.error("you must have root privileges to set up the group.")
+            exit(1)
 
-    model_conf = GasModelConf.load(Host)
-    model_compendium_group = None if model_conf is None else model_conf.model_compendium_group
+        model_conf = GasModelConf.load(Host)
 
-    if cmd.set is not None and model_compendium_group is not None:
-        if cmd.set != model_compendium_group:
-            logger.error("WARNING: the specified group '%s' does not match the client model group '%s'" %
-                         (cmd.set, model_compendium_group))
+        if model_conf is None:
+            logger.error("GasModelConf not found.")
+            exit(1)
+
+        logger.info(model_conf)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -135,7 +139,7 @@ if __name__ == '__main__':
 
             try:
                 now = LocalizedDatetime.now()
-                conf = AWSGroupConfiguration(AWS.group_name(), now, ml=cmd.set)
+                conf = AWSGroupConfiguration(AWS.group_name(), now, ml=model_conf.model_compendium_group)
                 configurator = conf.configurator(client)
 
                 configurator.collect_information(Host)

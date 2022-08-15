@@ -6,6 +6,9 @@ Created on 22 Dec 2020
 
 import optparse
 
+from scs_core.aws.greengrass.aws_group_configuration import AWSGroupConfiguration
+from scs_core.model.gas.gas_model_conf import GasModelConf
+
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -16,9 +19,9 @@ class CmdModelConf(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, interfaces):
-        self.__interfaces = interfaces
-        interface_names = ' | '.join(interfaces)
+    def __init__(self):
+        interface_names = ' | '.join(GasModelConf.interfaces())
+        group_names = ' | '.join(AWSGroupConfiguration.templates())
 
         self.__parser = optparse.OptionParser(usage="%prog [{ -l | [-u UDS_PATH] [-i INTERFACE] [-g GROUP] | -d }] "
                                                     "[-v]", version="%prog 1.0")
@@ -34,7 +37,7 @@ class CmdModelConf(object):
                                  help="set the interface code { %s }" % interface_names)
 
         self.__parser.add_option("--group", "-g", type="string", nargs=1, action="store", dest="model_compendium_group",
-                                 help="set the model compendium group")
+                                 help="set the model compendium group { %s }" % group_names)
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="delete the inference configuration")
@@ -63,7 +66,7 @@ class CmdModelConf(object):
         if count > 1:
             return False
 
-        if self.model_interface and self.model_interface not in self.__interfaces:
+        if self.model_interface and self.model_interface not in GasModelConf.interfaces():
             return False
 
         return True
