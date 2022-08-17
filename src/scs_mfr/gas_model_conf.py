@@ -56,7 +56,7 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
-    cmd = CmdModelConf()
+    cmd = CmdModelConf(GasModelConf.interfaces())
 
     if not cmd.is_valid():
         cmd.print_help(sys.stderr)
