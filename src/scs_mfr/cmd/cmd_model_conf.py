@@ -19,8 +19,8 @@ class CmdModelConf(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self):
-        interface_names = ' | '.join(GasModelConf.interfaces())
+    def __init__(self, interface):
+        interface_names = ' | '.join(interface)
         group_names = ' | '.join(AWSGroupConfiguration.templates())
 
         self.__parser = optparse.OptionParser(usage="%prog [{ -l | [-u UDS_PATH] [-i INTERFACE] [-g GROUP] | -d }] "
