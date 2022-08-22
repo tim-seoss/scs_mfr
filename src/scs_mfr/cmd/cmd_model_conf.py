@@ -7,7 +7,6 @@ Created on 22 Dec 2020
 import optparse
 
 from scs_core.aws.greengrass.aws_group_configuration import AWSGroupConfiguration
-from scs_core.model.gas.gas_model_conf import GasModelConf
 
 
 # --------------------------------------------------------------------------------------------------------------------
