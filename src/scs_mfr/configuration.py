@@ -290,6 +290,8 @@ from scs_core.data.json import JSONify
 
 from scs_core.estate.configuration import Configuration
 
+from scs_core.psu.psu_version import PSUVersion
+
 from scs_core.sample.configuration_sample import ConfigurationSample
 
 from scs_core.sys.logging import Logging
@@ -311,6 +313,8 @@ except ImportError:
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
+
+    psu_version = None
 
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
@@ -354,8 +358,9 @@ if __name__ == '__main__':
     if psu:
         try:
             psu.open()
+            psu_version = psu.version()
         except LockTimeout:
-            psu = None
+            psu_version = PSUVersion.load(Host)     # a report will be present if psu_monitor is running
 
     try:
         if cmd.save():
@@ -371,7 +376,7 @@ if __name__ == '__main__':
                 logger.error(ex)
                 exit(1)
 
-        configuration = Configuration.load(Host, psu=psu)
+        configuration = Configuration.load(Host, psu_version=psu_version)
         sample = ConfigurationSample(system_id.message_tag(), LocalizedDatetime.now().utc(), configuration)
 
         if cmd.table:
