@@ -7,7 +7,6 @@ Created on 22 Dec 2020
 import optparse
 
 from scs_core.aws.greengrass.aws_group_configuration import AWSGroupConfiguration
-from scs_core.model.gas.gas_model_conf import GasModelConf
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -20,8 +19,8 @@ class CmdModelConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, interface):
-        interface_names = ' | '.join(interface)
-        group_names = ' | '.join(AWSGroupConfiguration.templates())
+        self.__interface_names = ' | '.join(interface)
+        self.__group_names = ' | '.join(AWSGroupConfiguration.templates())
 
         self.__parser = optparse.OptionParser(usage="%prog [{ -l | [-u UDS_PATH] [-i INTERFACE] [-g GROUP] | -d }] "
                                                     "[-v]", version="%prog 1.0")
@@ -34,10 +33,10 @@ class CmdModelConf(object):
                                  help="set the UDS path (relative to ~/SCS)")
 
         self.__parser.add_option("--interface", "-i", type="string", nargs=1, action="store", dest="model_interface",
-                                 help="set the interface code { %s }" % interface_names)
+                                 help="set the interface code { %s }" % self.__interface_names)
 
         self.__parser.add_option("--group", "-g", type="string", nargs=1, action="store", dest="model_compendium_group",
-                                 help="set the model compendium group { %s }" % group_names)
+                                 help="set the model compendium group { %s }" % self.__group_names)
 
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="delete the inference configuration")
@@ -66,7 +65,10 @@ class CmdModelConf(object):
         if count > 1:
             return False
 
-        if self.model_interface and self.model_interface not in GasModelConf.interfaces():
+        if self.model_interface is not None and self.model_interface not in self.__interface_names:
+            return False
+
+        if self.model_compendium_group is not None and self.model_compendium_group not in self.__group_names:
             return False
 
         return True
