@@ -18,9 +18,9 @@ If a DFE is selected, the use of the analogue-digital converter for the Pt1000 t
 Options are:
 
 * DFE - Pt1000 not used
+* DFE/ISI - DFE using DSI board
 * DFE/0x68 - Pt1000 used, ADC I2C address is 0x68
 * DFE/0x69 - Pt1000 used, ADC I2C address is 0x69
-* DFE/ISI - DFE using DSI board
 * PZHBt1 - Pi Zero header breakout (type 1)
 * PZHBt2 - Pi Zero header breakout (type 2)
 
