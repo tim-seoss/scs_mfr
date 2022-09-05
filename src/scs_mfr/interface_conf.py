@@ -18,6 +18,7 @@ If a DFE is selected, the use of the analogue-digital converter for the Pt1000 t
 Options are:
 
 * DFE - Pt1000 not used
+* DFE/ISI - DFE using DSI board
 * DFE/0x68 - Pt1000 used, ADC I2C address is 0x68
 * DFE/0x69 - Pt1000 used, ADC I2C address is 0x69
 * PZHBt1 - Pi Zero header breakout (type 1)
@@ -32,7 +33,7 @@ EXAMPLES
 ./interface_conf.py -m DFE - i /home/scs/SCS/pipes/lambda-model-gas-s1.uds
 
 DOCUMENT EXAMPLE
-{"model": "DFE", "inf": "/home/scs/SCS/pipes/lambda-model-gas-s1.uds"}
+{"model": "DFE"}
 
 FILES
 ~/SCS/conf/interface_conf.json
