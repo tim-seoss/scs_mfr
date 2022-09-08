@@ -360,7 +360,9 @@ if __name__ == '__main__':
             psu.open()
             psu_version = psu.version()
         except LockTimeout:
-            psu_version = PSUVersion.load(Host)     # a report will be present if psu_monitor is running
+            psu_version = PSUVersion.load(Host)         # a report will be present if psu_monitor is running
+        except OSError:
+            psu_version = None                          # PSU fault
 
     try:
         if cmd.save():
