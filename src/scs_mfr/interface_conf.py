@@ -26,7 +26,7 @@ If an AFE is selected, the use of the analogue-digital converter for the Pt1000 
 The scs_dev sampler processes must be restarted for changes to take effect.
 
 SYNOPSIS
-interface_conf.py [{ [-m MODEL] | -d }] [-v]
+interface_conf.py [{ -m MODEL | -d }] [-v]
 
 EXAMPLES
 ./interface_conf.py -m DFE
