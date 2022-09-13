@@ -29,7 +29,7 @@ SYNOPSIS
 interface_conf.py [{ [-m MODEL] | -d }] [-v]
 
 EXAMPLES
-./interface_conf.py -m DFE - i /home/scs/SCS/pipes/lambda-model-gas-s1.uds
+./interface_conf.py -m DFE
 
 DOCUMENT EXAMPLE
 {"model": "DFE"}
