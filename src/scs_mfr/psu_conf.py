@@ -9,9 +9,12 @@ DESCRIPTION
 The psu_conf utility is used to specify whether a South Coast Science power supply (PSU) board is present
 and if so, which model is provided. Three models are currently available:
 
-* MobileV1 via PZHBt1 or PZHBt2 interface
-* PrototypeV1 via serial port
-* OsloV1 via serial port
+* MobileV1 - I2C - PZHBt1 or PZHBt2 interface
+* MobileV2 - I2C - PZHBt1 or PZHBt2 interface
+* OPCubeV1 - I2C - charger is PCA9534A at 0x38
+* OPCubeV1.1 - I2C - charger is PCA9849 at 0x20
+* OsloV1 - serial port
+* PrototypeV1 - serial port
 
 A battery pack may also be specified. A warning is given if a battery is specified for a PSU that does not use one,
 or if a battery is not specified for one that does.
