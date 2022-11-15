@@ -6,31 +6,30 @@ Created on 20 Jun 2019
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The interface_conf utility is used to specify whether a South Coast Science sensor interface board is present on the
-host system and, if so, which type it is.
+The interface_conf utility is used to specify whether a South Coast Science sensor interface is present on the
+host system and, if so, which type it is. A distinction is made between the sensor interface (which controls power
+and access to all sensors) and the gas interface, which controls access to electrochemical and VOC A4 sensors.
 
-Types are:
+Sensor interface types are:
 
-* DFE - uses the Alphasense analogue front-end board (default)
-* ISI - uses the South Coast Science integrated electrochem interface
+* DFE - the digital front-end board for Praxis/Urban
+* OPCubeT1 - the man processor board for Praxis/Cube
+* PZHBtN - the header breakout board for Praxis/Handheld
 
-If a DFE is selected, the use of the analogue-digital converter for the Pt1000 temperature sensor should be specified.
-Options are:
+Gas interface types are:
 
-* DFE - Pt1000 not used
-* DFE/ISI - DFE using DSI board
-* DFE/0x68 - Pt1000 used, ADC I2C address is 0x68
-* DFE/0x69 - Pt1000 used, ADC I2C address is 0x69
-* PZHBt1 - Pi Zero header breakout (type 1)
-* PZHBt2 - Pi Zero header breakout (type 2)
+* AFE - Alphasense analogue front-end board
+* ISI - South Coast Science integrated single interface
+
+If an AFE is selected, the use of the analogue-digital converter for the Pt1000 temperature sensor should be specified.
 
 The scs_dev sampler processes must be restarted for changes to take effect.
 
 SYNOPSIS
-interface_conf.py [{ [-m MODEL] | -d }] [-v]
+interface_conf.py [{ -m MODEL | -d }] [-v]
 
 EXAMPLES
-./interface_conf.py -m DFE - i /home/scs/SCS/pipes/lambda-model-gas-s1.uds
+./interface_conf.py -m DFE
 
 DOCUMENT EXAMPLE
 {"model": "DFE"}
