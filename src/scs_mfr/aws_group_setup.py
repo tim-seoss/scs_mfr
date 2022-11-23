@@ -188,4 +188,4 @@ if __name__ == '__main__':
         logger.error("credentials error.")
 
     except EndpointConnectionError as ex:
-        logger.error(ex)
+        logger.error("%s: %s" % (ex.__class__.__name__, ex))
