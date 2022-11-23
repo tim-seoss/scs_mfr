@@ -9,10 +9,10 @@ source repo: scs_analysis
 
 DESCRIPTION
 The aws_identity script allows the user to change the identity of an already-configured greengrass install,
-in our use case it is to change the greengrass identity of a device which was setup using a cloned
+in our use case it is to change the greengrass identity of a device which was set up using a cloned
 base image without having to reinstall the greengrass software
 
-The script could also be used to setup a "blank" greengrass install, which does not already have an identity, but
+The script could also be used to set up a "blank" greengrass install, which does not already have an identity, but
 does already have the greengrass software.
 
 If no group name is provided, the host name will be read from the device.
