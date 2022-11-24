@@ -375,7 +375,7 @@ if __name__ == '__main__':
             try:
                 conf.save(Host)
             except ValueError as ex:
-                logger.error("%s: %s" % (ex.__class__.__name__, ex))
+                logger.error(repr(ex))
                 exit(1)
 
         configuration = Configuration.load(Host, psu_version=psu_version)
