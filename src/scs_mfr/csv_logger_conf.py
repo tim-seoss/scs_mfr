@@ -11,15 +11,16 @@ specifies the csv_logger behaviour when the volume becomes full: if delete-oldes
 removed to make space, if false, then logging stops. A write-interval parameter may be used to specify time between
 flushes, in order to extend the life of SD cards.
 
-The --filesystem is used to report on the condition of the filesystem that will be used by the csv_logger.
+The --filesystem flag is used to report on the condition of the filesystem that will be used by the csv_logger.
 
 Note that the logging process(es) must be restarted for configuration changes to take effect.
 
 SYNOPSIS
-csv_logger_conf.py { -f | [-r ROOT_PATH] [-o DELETE_OLDEST] [-i WRITE_INTERVAL] | -d } [-v]
+csv_logger_conf.py [{ -f | [-r ROOT_PATH] [-o DELETE_OLDEST] [-i WRITE_INTERVAL] | -d }] [-v]
 
 EXAMPLES
 ./csv_logger_conf.py -r /srv/removable_data_storage -o 1 -i 0
+./csv_logger_conf.py -f
 
 FILES
 ~/SCS/conf/csv_logger_conf.json
@@ -28,7 +29,7 @@ DOCUMENT EXAMPLE - CONFIGURATION
 {"root-path": "/srv/removable_data_storage", "delete-oldest": true, "write-interval": 0}
 
 DOCUMENT EXAMPLE - FILESYSTEM REPORT
-{"path": "/srv/removable_data_storage", "available": true, "on-root": false}
+{"path": "/srv/removable_data_storage", "is-available": true, "on-root": false}
 
 SEE ALSO
 scs_dev/csv_logger
