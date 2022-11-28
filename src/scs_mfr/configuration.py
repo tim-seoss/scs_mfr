@@ -23,47 +23,35 @@ EXAMPLES
 
 DOCUMENT EXAMPLE
 {
-    "rec": "2022-03-21T11:51:46Z",
-    "tag": "scs-be2-3",
+    "rec": "2022-11-25T11:33:58Z",
+    "tag": "scs-opc-1",
     "ver": 1.0,
     "val": {
-        "hostname": "scs-bbe-003",
+        "hostname": "scs-cube-001",
         "packs": {
-            "scs_comms": {
-                "repo": "scs_comms_ge910",
-                "version": null
-            },
             "scs_core": {
                 "repo": "scs_core",
-                "version": "1.1.18"
+                "version": "1.4.18"
             },
             "scs_dev": {
                 "repo": "scs_dev",
-                "version": "1.1.10"
+                "version": "2.1.6"
             },
             "scs_dfe": {
                 "repo": "scs_dfe_eng",
-                "version": "1.1.4"
-            },
-            "scs_exegesis": {
-                "repo": "scs_exegesis",
-                "version": null
+                "version": "2.1.3"
             },
             "scs_greengrass": {
                 "repo": "scs_greengrass",
-                "version": "2.1.9"
+                "version": "2.3.1"
             },
             "scs_host": {
-                "repo": "scs_host_bbe_southern",
-                "version": "1.0.10"
-            },
-            "scs_inference": {
-                "repo": "scs_inference",
-                "version": null
+                "repo": "scs_host_cpc",
+                "version": "1.0.12"
             },
             "scs_mfr": {
                 "repo": "scs_mfr",
-                "version": "1.1.14"
+                "version": "1.4.8"
             },
             "scs_ndir": {
                 "repo": "scs_ndir",
@@ -71,126 +59,81 @@ DOCUMENT EXAMPLE
             },
             "scs_psu": {
                 "repo": "scs_psu",
-                "version": "1.0.10"
+                "version": "1.1.4"
             }
         },
         "afe-baseline": {
             "sn1": {
-                "calibrated-on": "2022-03-21T11:46:43Z",
-                "offset": -1,
+                "calibrated-on": "2022-11-16T15:14:30Z",
+                "offset": 272,
                 "env": {
-                    "rec": "2022-03-16T07:45:00Z",
-                    "hmd": 51.6,
-                    "tmp": 21.8
+                    "rec": "2022-11-15T21:40:00Z",
+                    "hmd": 58.9,
+                    "tmp": 20.6
                 }
             },
             "sn2": {
-                "calibrated-on": "2022-03-21T11:46:48Z",
-                "offset": 44,
-                "env": {
-                    "rec": "2022-03-16T06:15:00Z",
-                    "hmd": 48.1,
-                    "tmp": 22.0
-                }
+                "calibrated-on": "2022-11-15T13:12:54Z",
+                "offset": 0,
+                "env": null
             },
             "sn3": {
-                "calibrated-on": null,
+                "calibrated-on": "2022-11-15T13:12:54Z",
                 "offset": 0,
                 "env": null
             },
             "sn4": {
-                "calibrated-on": "2022-03-21T11:46:37Z",
-                "offset": 174,
-                "env": {
-                    "rec": "2022-03-16T06:30:00Z",
-                    "hmd": 48.2,
-                    "tmp": 21.9
-                }
+                "calibrated-on": "2022-11-15T13:12:54Z",
+                "offset": 0,
+                "env": null
             }
         },
         "afe-id": {
-            "serial_number": "26-000063",
-            "type": "810-0023",
-            "calibrated_on": "2017-04-27",
+            "serial_number": null,
+            "type": "DSI",
+            "calibrated_on": "2022-01-01",
             "sn1": {
-                "serial_number": "212560016",
+                "serial_number": "212060325",
                 "sensor_type": "NO2A43F"
-            },
-            "sn2": {
-                "serial_number": "214690108",
-                "sensor_type": "OXA431"
-            },
-            "sn3": null,
-            "sn4": {
-                "serial_number": "132930028",
-                "sensor_type": "CO A4"
             }
         },
-        "aws-api-auth": {
-            "endpoint": "aws.southcoastscience.com",
-            "api-key": "south-coast-science-dev"
-        },
         "aws-group-config": {
-            "group-name": "scs-bbe-003-group",
-            "time-initiated": "2022-03-08T11:30:36Z",
-            "unix-group": 987,
-            "ml": "uE.1"
+            "group-name": "scs-cube-001-group",
+            "time-initiated": "2022-11-15T13:20:17Z",
+            "unix-group": 984,
+            "ml": "oE.1"
         },
         "aws-project": {
-            "location-path": "south-coast-science-dev/development/loc/1",
-            "device-path": "south-coast-science-dev/development/device"
+            "location-path": "south-coast-science-dev/cube/loc/1",
+            "device-path": "south-coast-science-dev/cube/device"
         },
-        "csv-logger-conf": {
-            "root-path": "/srv/removable_data_storage",
-            "delete-oldest": true,
-            "write-interval": 0
+        "data-log": {
+            "path": "/srv/removable_data_storage",
+            "available": true,
+            "on-root": false
         },
         "display-conf": null,
         "vcal-baseline": {
             "NO2": {
-                "calibrated-on": "2022-03-21T11:46:45Z",
-                "offset": -31,
-                "env": {
-                    "rec": "2022-03-16T05:10:00Z",
-                    "hmd": 48.3,
-                    "tmp": 22.4
-                }
+                "calibrated-on": "2022-11-16T15:04:46Z",
+                "offset": 206,
+                "env": null
             }
         },
         "gas-baseline": null,
         "gas-model-conf": {
             "uds-path": "pipes/lambda-gas-model.uds",
             "model-interface": "vE",
-            "model-compendium-group": "uE.1"
+            "model-compendium-group": "oE.1"
         },
-        "gps-conf": {
-            "model": "SAM8Q",
-            "sample-interval": 10,
-            "tally": 60,
-            "report-file": "/tmp/southcoastscience/gps_report.json",
-            "debug": false
-        },
+        "gps-conf": null,
         "interface-conf": {
-            "model": "DFE"
+            "model": "OPCubeT1"
         },
-        "greengrass-identity": {
-            "core-name": "scs-bbe-003-core",
-            "group-name": "scs-bbe-003-group"
-        },
-        "mpl115a2-calib": {
-            "calibrated-on": "2020-11-15T11:29:23Z",
-            "c25": 510
-        },
-        "mqtt-conf": {
-            "inhibit-publishing": true,
-            "report-file": null,
-            "debug": false
-        },
-        "ndir-conf": {
-            "model": "t1f1",
-            "tally": 1,
-            "raw": false
-        },
+        "greengrass-identity": null,
+        "mpl115a2-calib": null,
+        "mqtt-conf": null,
+        "ndir-conf": null,
         "opc-conf": {
             "model": "N3",
             "sample-period": 10,
@@ -198,36 +141,29 @@ DOCUMENT EXAMPLE
             "power-saving": false
         },
         "opc-version": {
-            "serial": "177510317",
+            "serial": "177336702",
             "firmware": "OPC-N3 Iss1.1 FirmwareVer=1.17a...........................BS"
         },
         "pmx-model-conf": {
             "uds-path": "pipes/lambda-pmx-model.uds",
             "model-interface": "s2"
         },
-        "pressure-conf": {
-            "model": "ICP",
-            "altitude": 101
-        },
+        "pressure-conf": null,
         "psu-conf": {
-            "model": "OsloV1",
-            "batt-model": null,
+            "model": "OPCubeV1",
+            "batt-model": "PackV2",
             "ignore-threshold": false,
-            "reporting-interval": 20,
+            "reporting-interval": 10,
             "report-file": "/tmp/southcoastscience/psu_status_report.json"
         },
-        "psu-version": null,
-        "pt1000-calib": {
-            "calibrated-on": "2017-08-15T11:21:45Z",
-            "v20": 0.320208
+        "psu-version": {
+            "id": "SCS OPCube Controller type 1 firmware 1",
+            "tag": "001.001.003",
+            "c-date": null,
+            "c-time": null
         },
-        "scd30-baseline": {
-            "CO2": {
-                "calibrated-on": "2021-06-02T13:11:31+01:00",
-                "offset": -123,
-                "env": null
-            }
-        },
+        "pt1000-calib": null,
+        "scd30-baseline": null,
         "scd30-conf": null,
         "schedule": {
             "scs-climate": {
@@ -238,13 +174,17 @@ DOCUMENT EXAMPLE
                 "interval": 10.0,
                 "tally": 1
             },
-            "scs-status": {
+            "scs-particulates": {
                 "interval": 10.0,
+                "tally": 1
+            },
+            "scs-status": {
+                "interval": 60.0,
                 "tally": 1
             }
         },
         "shared-secret": {
-            "key": "pYL7B1JcgJ2gy6MP"
+            "key": "IuIIGqwQWX5c7Z0Z"
         },
         "sht-conf": {
             "int": "0x45",
@@ -256,24 +196,30 @@ DOCUMENT EXAMPLE
                 "state": "connected",
                 "connection": "Ethernet eth0"
             },
-            "usb0": {
-                "kind": "ethernet",
+            "cdc-wdm0": {
+                "kind": "gsm",
                 "state": "unavailable",
                 "connection": null
             }
         },
-        "modem": null,
+        "modem": {
+            "id": "3f07553c31ce11715037ac16c247a0b",
+            "imei": null,
+            "mfr": "QUALCOMM INCORPORATED",
+            "model": "QUECTEL Mobile Broadband Module",
+            "rev": "EC26A01M4G"
+        },
         "sim": null,
         "system-id": {
-            "set-on": "2022-03-08T11:29:20Z",
+            "set-on": "2022-11-15T13:17:28Z",
             "vendor-id": "SCS",
-            "model-id": "BE2",
-            "model": "Alpha BB Eng",
-            "config": "V2",
-            "system-sn": 3
+            "model-id": "OPC",
+            "model": "Praxis/OPCube",
+            "config": "v1",
+            "system-sn": 1
         },
         "timezone-conf": {
-            "set-on": "2021-01-31T11:26:14Z",
+            "set-on": "2022-11-15T13:46:10Z",
             "name": "Europe/London"
         }
     }

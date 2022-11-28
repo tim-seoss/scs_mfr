@@ -11,19 +11,25 @@ specifies the csv_logger behaviour when the volume becomes full: if delete-oldes
 removed to make space, if false, then logging stops. A write-interval parameter may be used to specify time between
 flushes, in order to extend the life of SD cards.
 
-Note that the logging process(es) must be restarted for changes to take effect.
+The --filesystem flag is used to report on the condition of the filesystem that will be used by the csv_logger.
+
+Note that the logging process(es) must be restarted for configuration changes to take effect.
 
 SYNOPSIS
-csv_logger_conf.py { [-r ROOT_PATH] [-o DELETE_OLDEST] [-i WRITE_INTERVAL] | -d } [-v]
+csv_logger_conf.py [{ -f | [-r ROOT_PATH] [-o DELETE_OLDEST] [-i WRITE_INTERVAL] | -d }] [-v]
 
 EXAMPLES
 ./csv_logger_conf.py -r /srv/removable_data_storage -o 1 -i 0
+./csv_logger_conf.py -f
 
 FILES
 ~/SCS/conf/csv_logger_conf.json
 
-DOCUMENT EXAMPLE
+DOCUMENT EXAMPLE - CONFIGURATION
 {"root-path": "/srv/removable_data_storage", "delete-oldest": true, "write-interval": 0}
+
+DOCUMENT EXAMPLE - FILESYSTEM REPORT
+{"path": "/srv/removable_data_storage", "is-available": true, "on-root": false}
 
 SEE ALSO
 scs_dev/csv_logger
@@ -32,8 +38,11 @@ scs_dev/csv_logger
 import sys
 
 from scs_core.csv.csv_logger_conf import CSVLoggerConf
+
 from scs_core.data.json import JSONify
+
 from scs_core.sys.filesystem import Filesystem
+from scs_core.sys.logging import Logging
 
 from scs_host.sys.host import Host
 
@@ -44,6 +53,8 @@ from scs_mfr.cmd.cmd_csv_logger_conf import CmdCSVLoggerConf
 
 if __name__ == '__main__':
 
+    report = None
+
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
 
@@ -53,9 +64,11 @@ if __name__ == '__main__':
         cmd.print_help(sys.stderr)
         exit(2)
 
-    if cmd.verbose:
-        print("csv_logger_conf: %s" % cmd, file=sys.stderr)
-        sys.stderr.flush()
+    # logging...
+    Logging.config('csv_logger_conf', verbose=cmd.verbose)
+    logger = Logging.getLogger()
+
+    logger.info(cmd)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -68,9 +81,16 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # run...
 
-    if cmd.set():
+    if cmd.filesystem:
+        if conf is None:
+            logger.error("No configuration is present.")
+            exit(1)
+
+        report = conf.filesystem_report()
+
+    elif cmd.set():
         if conf is None and not cmd.is_complete():
-            print("csv_logger_conf: No configuration is present - you must therefore set all fields.", file=sys.stderr)
+            logger.error("No configuration is present - you must therefore set all fields.")
             cmd.print_help(sys.stderr)
             exit(2)
 
@@ -81,15 +101,18 @@ if __name__ == '__main__':
         try:
             Filesystem.mkdir(root_path)
         except PermissionError:
-            print("csv_logger_conf: You do not have permission to write in that directory.", file=sys.stderr)
+            logger.error("You do not have permission to write in that directory.")
             exit(1)
 
-        conf = CSVLoggerConf(root_path, delete_oldest, write_interval)
-        conf.save(Host)
+        report = CSVLoggerConf(root_path, delete_oldest, write_interval)
+        report.save(Host)
 
     elif cmd.delete and conf is not None:
         conf.delete(Host)
-        conf = None
+        report = None
 
-    if conf:
-        print(JSONify.dumps(conf))
+    else:
+        report = conf
+
+    if report:
+        print(JSONify.dumps(report))

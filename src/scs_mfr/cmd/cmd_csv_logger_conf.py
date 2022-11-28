@@ -16,10 +16,14 @@ class CmdCSVLoggerConf(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog { [-r ROOT_PATH] [-o DELETE_OLDEST] [-i WRITE_INTERVAL] | "
-                                                    "-d } [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ -f | [-r ROOT_PATH] [-o DELETE_OLDEST] "
+                                                    "[-i WRITE_INTERVAL] | -d }] [-v]", version="%prog 1.0")
 
-        # optional...
+        # filesystem...
+        self.__parser.add_option("--filesystem", "-f", action="store_true", dest="filesystem", default=False,
+                                 help="report on the logging filesystem")
+
+        # configuration...
         self.__parser.add_option("--root", "-r", type="string", nargs=1, action="store", dest="root_path",
                                  help="set filesystem logging directory")
 
@@ -32,6 +36,7 @@ class CmdCSVLoggerConf(object):
         self.__parser.add_option("--delete", "-d", action="store_true", dest="delete", default=False,
                                  help="delete the logger configuration")
 
+        # output...
         self.__parser.add_option("--verbose", "-v", action="store_true", dest="verbose", default=False,
                                  help="report narrative to stderr")
 
@@ -41,7 +46,18 @@ class CmdCSVLoggerConf(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
-        if self.set() and self.delete:
+        count = 0
+
+        if self.filesystem:
+            count += 1
+
+        if self.set():
+            count += 1
+
+        if self.delete:
+            count += 1
+
+        if count > 1:
             return False
 
         if self.write_interval is not None and self.write_interval < 0:
@@ -65,6 +81,11 @@ class CmdCSVLoggerConf(object):
 
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    @property
+    def filesystem(self):
+        return self.__opts.filesystem
+
 
     @property
     def root_path(self):
@@ -98,5 +119,7 @@ class CmdCSVLoggerConf(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdCSVLoggerConf:{root_path:%s, delete_oldest:%s, write_interval:%s, delete:%s, verbose:%s}" % \
-               (self.root_path, self.delete_oldest, self.write_interval, self.delete, self.verbose)
+        return "CmdCSVLoggerConf:{filesystem:%s, root_path:%s, delete_oldest:%s, write_interval:%s, delete:%s, " \
+               "verbose:%s}" % \
+               (self.filesystem, self.root_path, self.delete_oldest, self.write_interval, self.delete,
+                self.verbose)
