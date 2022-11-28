@@ -35,7 +35,7 @@ scs_mfr/aws_identity.py
 import sys
 import time
 
-from botocore.exceptions import NoCredentialsError
+from botocore.exceptions import ClientError, NoCredentialsError
 
 from scs_core.aws.client.access_key import AccessKey
 from scs_core.aws.client.client import Client
@@ -118,6 +118,9 @@ if __name__ == '__main__':
 
     except KeyboardInterrupt:
         print(file=sys.stderr)
+
+    except ClientError as ex:
+        logger.error(repr(ex))
 
     except (EOFError, NoCredentialsError):
         logger.error("credentials error.")

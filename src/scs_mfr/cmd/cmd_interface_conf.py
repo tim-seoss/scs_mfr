@@ -21,7 +21,7 @@ class CmdInterfaceConf(object):
     def __init__(self):
         models = ' | '.join(InterfaceConf.models())
 
-        self.__parser = optparse.OptionParser(usage="%prog [{ [-m MODEL] | -d }] [-v]", version="%prog 1.0")
+        self.__parser = optparse.OptionParser(usage="%prog [{ -m MODEL | -d }] [-v]", version="%prog 1.0")
 
         # optional...
         self.__parser.add_option("--model", "-m", type="string", nargs=1, action="store", dest="model",
