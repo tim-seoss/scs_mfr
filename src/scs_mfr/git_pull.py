@@ -6,7 +6,7 @@ Created on 24 Feb 2021
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 DESCRIPTION
-The git_pull utility is used to perform a git pull on all of the repos in the ~/SCS directory. When the pulls
+The git_pull utility is used to perform a git pull on all the repos in the ~/SCS directory. When the pulls
 are complete, a JSON document is saved, summarising the state of the installed repos. When run without the --pull flag
 the git_pull utility  reports on the most recent operation.
 
@@ -46,6 +46,7 @@ from scs_host.sys.host import Host
 from scs_mfr.cmd.cmd_git_pull import CmdGitPull
 
 
+# TODO: why does this not report result when doing a pull?
 # --------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
@@ -119,8 +120,11 @@ if __name__ == '__main__':
         else:
             git = GitPull.load(Host)
 
-        if git:
-            print(JSONify.dumps(git))
+
+        # ----------------------------------------------------------------------------------------------------------------
+        # end...
+
+        print(JSONify.dumps(git))
 
     except KeyboardInterrupt:
         print(file=sys.stderr)
