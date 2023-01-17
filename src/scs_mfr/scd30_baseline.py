@@ -91,10 +91,10 @@ if __name__ == '__main__':
 
             old_offset = baseline.sensor_baseline.offset
 
-            if cmd.set_value:
+            if cmd.set_value is not None:
                 new_offset = cmd.set_value
 
-            elif cmd.offset_value:
+            elif cmd.offset_value is not None:
                 new_offset = old_offset + cmd.offset_value
 
             else:
@@ -102,6 +102,7 @@ if __name__ == '__main__':
                 new_offset = old_offset + (cmd.correct_value - cmd.reported_value)
 
             baseline = SCD30Baseline(SensorBaseline(now, new_offset, sample=sample))
+            print("baseline: %s" % baseline)
             baseline.save(Host)
 
             logger.info("was: %s now: %s" % (old_offset, new_offset))
