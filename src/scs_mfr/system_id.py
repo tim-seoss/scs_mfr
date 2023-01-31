@@ -12,7 +12,7 @@ Science / AWS or OpenSensors.io Community Edition messaging infrastructures.
 The identity is also used to tag all environmental sensing records. It is therefore important that a device retains
 a fixed identity throughout its lifetime.
 
-When the "verbose" "-v" flag is used, the system_id utility reports all of the identity formats derived from
+When the "verbose" "-v" flag is used, the system_id utility reports all the identity formats derived from
 its specification.
 
 SYNOPSIS
