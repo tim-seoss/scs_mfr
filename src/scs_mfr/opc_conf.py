@@ -11,7 +11,7 @@ which model is attached. An option is also available to override the host's defa
 lines for the OPC.
 
 The specification also includes the number of seconds between readings by the OPC monitor sub-process. The maximum
-time between readings is 10 seconds, the minimum five. A 10 second period provides the highest precision, but sampling
+time between readings is 10 seconds, the minimum five. A 10-second period provides the highest precision, but sampling
 at this rate may be subject to clipping in extremely polluted environments.
 
 The --restart-on-zeroes flag can be used to test the OPC in some situations, by overriding the default behaviour,

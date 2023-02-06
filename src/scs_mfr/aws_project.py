@@ -25,7 +25,7 @@ location paths are used by the device only when it is installed at a given locat
 
 The location ID may be an integer or a string.
 
-When the "verbose" "-v" flag is used, the osio_project utility reports all of the topic paths derived from
+When the "verbose" "-v" flag is used, the osio_project utility reports all the topic paths derived from
 its specification.
 
 Note that the scs_mfr/aws_mqtt_client process must be restarted for changes to take effect.
@@ -75,42 +75,50 @@ if __name__ == '__main__':
         print("aws_project: %s" % cmd, file=sys.stderr)
         sys.stderr.flush()
 
+    try:
+        # ----------------------------------------------------------------------------------------------------------------
+        # resources...
 
-    # ----------------------------------------------------------------------------------------------------------------
-    # resources...
-
-    # SystemID...
-    if cmd.verbose:
-        system_id = SystemID.load(Host)
-
-        if system_id is None:
-            print("aws_project: SystemID not available.", file=sys.stderr)
-            exit(1)
-
-        print("aws_project: %s" % system_id, file=sys.stderr)
-    else:
-        system_id = None
-
-
-    # ClientAuth...
-    project = Project.load(Host)
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-    # run...
-
-    if cmd.set():
-        project = Project.construct(cmd.organisation, cmd.group, cmd.location)
-        project.save(Host)
-
-    if cmd.delete and project is not None:
-        project.delete(Host)
-        project = None
-
-    if project:
-        print(JSONify.dumps(project))
-
+        # SystemID...
         if cmd.verbose:
-            print("-")
-            for channel in Project.CHANNELS:
-                print(project.channel_path(channel, system_id), file=sys.stderr)
+            system_id = SystemID.load(Host)
+
+            if system_id is None:
+                print("aws_project: SystemID not available.", file=sys.stderr)
+                exit(1)
+
+            print("aws_project: %s" % system_id, file=sys.stderr)
+        else:
+            system_id = None
+
+
+        # ClientAuth...
+        project = Project.load(Host)
+
+
+        # ------------------------------------------------------------------------------------------------------------
+        # run...
+
+        if cmd.set():
+            project = Project.construct(cmd.organisation, cmd.group, cmd.location)
+            project.save(Host)
+
+        if cmd.delete and project is not None:
+            project.delete(Host)
+            project = None
+
+        if project:
+            print(JSONify.dumps(project))
+
+            if cmd.verbose:
+                print("-")
+                for channel in Project.CHANNELS:
+                    print(project.channel_path(channel, system_id), file=sys.stderr)
+
+
+        # ------------------------------------------------------------------------------------------------------------
+        # end...
+
+    except KeyboardInterrupt:
+        print(file=sys.stderr)
+
