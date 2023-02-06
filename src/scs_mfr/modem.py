@@ -7,7 +7,7 @@ Created on 30 Apr 2021
 
 DESCRIPTION
 The modem utility is used to report on the modem connection status and SIM parameters. The reports provided by this
-utility are included in the the configuration utility report.
+utility are included in the configuration utility report.
 
 SYNOPSIS
 modem.py { -m | -c | -s } [-v]
