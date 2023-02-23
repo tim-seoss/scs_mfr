@@ -92,9 +92,10 @@ if __name__ == '__main__':
             auth = gatekeeper.login(credentials)
             logger.info(auth)
 
-            if auth is None:
-                logger.error("invalid auth")
+            if auth is None:                            # TODO: fix
+                logger.error("invalid auth.")
                 exit(1)
+
 
         # ----------------------------------------------------------------------------------------------------------------
         # end...
