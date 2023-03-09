@@ -12,7 +12,7 @@ The cognito_device_credentials utility is used to test the validity of the Cogni
 credentials are derived from the device system ID and shared secret.
 
 SYNOPSIS
-Usage: cognito_device_credentials.py [-t] [-i INDENT] [-v]
+cognito_device_credentials.py [-t] [-v]
 
 EXAMPLES
 ./cognito_device_credentials.py -R
@@ -72,17 +72,14 @@ if __name__ == '__main__':
             logger.error("SystemID not available.")
             exit(1)
 
-        logger.info(system_id)
-
         shared_secret = SharedSecret.load(Host)
 
         if not shared_secret:
             logger.error("SharedSecret not available.")
             exit(1)
 
-        logger.info(shared_secret)
-
         credentials = CognitoDeviceCredentials(system_id.message_tag(), shared_secret.key)
+        logger.info(credentials)
 
 
         # ------------------------------------------------------------------------------------------------------------
@@ -91,12 +88,10 @@ if __name__ == '__main__':
         if cmd.test:
             gatekeeper = CognitoLoginManager(requests)
 
-            auth = gatekeeper.device_login(credentials)
-            logger.info(auth)
+            result = gatekeeper.device_login(credentials)
+            logger.error(result.authentication_status.description)
 
-            if auth is None:                            # TODO: fix
-                logger.error("invalid auth.")
-                exit(1)
+            exit(0 if result.is_ok() else 1)
 
 
         # ----------------------------------------------------------------------------------------------------------------
