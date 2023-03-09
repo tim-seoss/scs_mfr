@@ -29,7 +29,7 @@ scs_mfr/system_id
 import requests
 import sys
 
-from scs_core.aws.security.cognito_login_manager import CognitoDeviceLoginManager
+from scs_core.aws.security.cognito_login_manager import CognitoLoginManager
 from scs_core.aws.security.cognito_device import CognitoDeviceCredentials
 
 from scs_core.data.json import JSONify
@@ -89,9 +89,9 @@ if __name__ == '__main__':
         # run...
 
         if cmd.test:
-            gatekeeper = CognitoDeviceLoginManager(requests)
+            gatekeeper = CognitoLoginManager(requests)
 
-            auth = gatekeeper.login(credentials)
+            auth = gatekeeper.device_login(credentials)
             logger.info(auth)
 
             if auth is None:                            # TODO: fix
