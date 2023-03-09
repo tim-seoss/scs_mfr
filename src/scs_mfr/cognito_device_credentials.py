@@ -8,7 +8,8 @@ Created on 20 Apr 2022
 source repo: scs_mfr
 
 DESCRIPTION
-The cognito_device_credentials utility is used to test the validity of the Cognito identity for the device.
+The cognito_device_credentials utility is used to test the validity of the Cognito identity for the device. The
+credentials are derived from the device system ID and shared secret.
 
 SYNOPSIS
 Usage: cognito_device_credentials.py [-t] [-i INDENT] [-v]
@@ -21,6 +22,8 @@ DOCUMENT EXAMPLE
 
 SEE ALSO
 scs_analysis/cognito_user_credentials
+scs_mfr/shared_secret
+scs_mfr/system_id
 """
 
 import requests
@@ -80,7 +83,6 @@ if __name__ == '__main__':
         logger.info(shared_secret)
 
         credentials = CognitoDeviceCredentials(system_id.message_tag(), shared_secret.key)
-        logger.info(credentials)
 
 
         # ------------------------------------------------------------------------------------------------------------
