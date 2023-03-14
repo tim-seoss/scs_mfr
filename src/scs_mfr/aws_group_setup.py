@@ -71,7 +71,7 @@ if __name__ == '__main__':
 
     key = None
     client = None
-    model_conf = None
+    model_compendium_group = None
 
     # ----------------------------------------------------------------------------------------------------------------
     # cmd...
@@ -99,11 +99,8 @@ if __name__ == '__main__':
 
         model_conf = GasModelConf.load(Host)
 
-        if model_conf is None:
-            logger.error("GasModelConf not found.")
-            exit(1)
-
-        logger.info(model_conf)
+        model_compendium_group = "g0" if model_conf is None else model_conf.model_compendium_group
+        logger.info("model_compendium_group: %s" % model_compendium_group)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -139,7 +136,7 @@ if __name__ == '__main__':
 
             try:
                 now = LocalizedDatetime.now()
-                conf = AWSGroupConfiguration(AWS.group_name(), now, ml=model_conf.model_compendium_group)
+                conf = AWSGroupConfiguration(AWS.group_name(), now, ml=model_compendium_group)
                 configurator = conf.configurator(client)
 
                 configurator.collect_information(Host)
