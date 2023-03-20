@@ -16,7 +16,7 @@ Note that the hostname field cannot be updated by the configuration utility. If 
 update JSON specification, it is silently ignored.
 
 SYNOPSIS
-configuration.py [-s CONFIGURATION] [{ -i INDENT | -t }] [-v]
+configuration.py [-s CONFIGURATION] [-x] [{ -i INDENT | -t }] [-v]
 
 EXAMPLES
 ./configuration.py -i4 -s '{"timezone-conf": {"name": "Europe/London"}}'
@@ -238,7 +238,7 @@ DOCUMENT EXAMPLE
             }
         },
         "shared-secret": {
-            "key": "jYPAFZoQDiSJJ1Rl"
+            "key": "0jZoQDiSJJ1Rl"
         },
         "sht-conf": {
             "int": "0x45",
@@ -257,11 +257,11 @@ DOCUMENT EXAMPLE
             }
         },
         "modem": {
-            "id": "e3f0ca1c313dcbcf4d586a9c47dc4fd6c1cb46e6",
+            "id": "e3f0ca1c313f4d586a9c47dc4fd6c1cb46e6",
             "imei": "866758042325619",
             "mfr": "QUALCOMM INCORPORATED",
             "model": "QUECTEL Mobile Broadband Module",
-            "rev": "EC25EFAR06A03M4G"
+            "rev": "EC2506A03M4G"
         },
         "sim": {
             "imsi": "234301951432536",
@@ -383,7 +383,7 @@ if __name__ == '__main__':
                 logger.error(repr(ex))
                 exit(1)
 
-        configuration = Configuration.load(Host, psu_version=psu_version)
+        configuration = Configuration.load(Host, psu_version=psu_version, exclude_sim=cmd.exclude_sim)
         sample = ConfigurationSample(system_id.message_tag(), LocalizedDatetime.now().utc(), configuration)
 
         if cmd.table:
