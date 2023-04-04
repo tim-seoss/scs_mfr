@@ -129,8 +129,13 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # end...
 
+    except ValueError as ex:
+        logger.error(ex)                    # zero sensitivity in calibration document
+        exit(1)
+
     except KeyboardInterrupt:
         print(file=sys.stderr)
 
     except (ConnectionError, HTTPException) as ex:
         logger.error(repr(ex))
+        exit(1)
