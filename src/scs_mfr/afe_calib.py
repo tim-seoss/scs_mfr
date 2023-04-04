@@ -130,7 +130,7 @@ if __name__ == '__main__':
     # end...
 
     except ValueError as ex:
-        logger.error(ex)                    # zero sensitivity in calibration document
+        logger.error(ex)                    # zero-sensitivity in calibration document
         exit(1)
 
     except KeyboardInterrupt:
