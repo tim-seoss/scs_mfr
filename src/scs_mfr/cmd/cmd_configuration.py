@@ -16,7 +16,7 @@ class CmdConfiguration(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-s CONFIGURATION] [{ -i INDENT | -t }] [-v]",
+        self.__parser = optparse.OptionParser(usage="%prog [-s CONFIGURATION] [-x] [{ -i INDENT | -t }] [-v]",
                                               version="%prog 1.0")
 
         # optional...
@@ -24,6 +24,9 @@ class CmdConfiguration(object):
                                  help="save the given JSON configuration component(s)")
 
         # output...
+        self.__parser.add_option("--exclude-sim", "-x", action="store_true", dest="exclude_sim", default=False,
+                                 help="exclude SIM information from output")
+
         self.__parser.add_option("--indent", "-i", action="store", dest="indent", type=int,
                                  help="pretty-print the output with INDENT")
 
@@ -57,6 +60,11 @@ class CmdConfiguration(object):
 
 
     @property
+    def exclude_sim(self):
+        return self.__opts.exclude_sim
+
+
+    @property
     def indent(self):
         return self.__opts.indent
 
@@ -78,5 +86,5 @@ class CmdConfiguration(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdConfiguration:{configuration:%s, indent:%s, table:%s, verbose:%s}" % \
-               (self.configuration, self.indent, self.table, self.verbose)
+        return "CmdConfiguration:{configuration:%s, exclude_sim:%s, indent:%s, table:%s, verbose:%s}" % \
+               (self.configuration, self.exclude_sim, self.indent, self.table, self.verbose)

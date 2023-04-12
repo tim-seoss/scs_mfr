@@ -7,7 +7,7 @@ Created on 29 Jan 2017
 
 DESCRIPTION
 The dfe_test utility is used to perform a quality control test on South Coast Science digital front-end (DFE) boards.
-The test exercises all of the ADCs and connectors.
+The test exercises the ADCs and connectors.
 
 The output of the test is a JSON document, summarising the result of each of a series of tests.
 

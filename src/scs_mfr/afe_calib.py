@@ -13,12 +13,12 @@ Alphasense electrochemical sensors are calibrated in the factory when fitted to 
 The calibration values are provided in a structured document, either on paper or - for sensors provided by South Coast
 Science - in electronic form. The afe_calib utility is used to retrieve this JSON document via a web API.
 
-The afe_calib utility may also be used to set a "test" calibration sheet, for use in a manufacturing environment.
+The afe_calib utility may also be used to set a "test" calibration sheet, for use in an R & D environment.
 
 Note that the scs_dev/gasses_sampler process must be restarted for changes to take effect.
 
 SYNOPSIS
-afe_calib.py [{ -a SERIAL_NUMBER | -s SERIAL_NUMBER YYYY-MM-DD | -r | -t  | -d }] [-i INDENT] [-v]
+afe_calib.py [{ -f SERIAL_NUMBER | -a SERIAL_NUMBER | -s SERIAL_NUMBER YYYY-MM-DD | -r | -t  | -d }] [-i INDENT] [-v]
 
 EXAMPLES
 ./afe_calib.py -s 212810465 2019-08-22
@@ -90,6 +90,12 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # run...
 
+        if cmd.find_serial_number:
+            if '-' in cmd.find_serial_number:
+                calib = AFECalib.download(cmd.find_serial_number, parse=False)
+            else:
+                calib = DSICalib.download(cmd.find_serial_number, parse=False)
+
         if cmd.set():
             if cmd.afe_serial_number is not None:
                 calib = AFECalib.download(cmd.afe_serial_number)
@@ -129,8 +135,13 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # end...
 
+    except ValueError as ex:
+        logger.error(ex)                    # zero-sensitivity found in calibration document
+        exit(1)
+
     except KeyboardInterrupt:
         print(file=sys.stderr)
 
     except (ConnectionError, HTTPException) as ex:
         logger.error(repr(ex))
+        exit(1)

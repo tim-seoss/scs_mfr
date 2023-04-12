@@ -8,10 +8,11 @@ Created on 20 Apr 2022
 source repo: scs_mfr
 
 DESCRIPTION
-The cognito_device_credentials utility is used to test the validity of the Cognito identity for the device.
+The cognito_device_credentials utility is used to test the validity of the Cognito identity for the device. The
+credentials are derived from the device system ID and shared secret.
 
 SYNOPSIS
-Usage: cognito_device_credentials.py [-t] [-i INDENT] [-v]
+cognito_device_credentials.py [-t] [-v]
 
 EXAMPLES
 ./cognito_device_credentials.py -R
@@ -21,13 +22,15 @@ DOCUMENT EXAMPLE
 
 SEE ALSO
 scs_analysis/cognito_user_credentials
+scs_mfr/shared_secret
+scs_mfr/system_id
 """
 
 import requests
 import sys
 
-from scs_core.aws.security.cognito_login_manager import CognitoDeviceLoginManager
 from scs_core.aws.security.cognito_device import CognitoDeviceCredentials
+from scs_core.aws.security.cognito_login_manager import CognitoLoginManager
 
 from scs_core.data.json import JSONify
 
@@ -69,15 +72,11 @@ if __name__ == '__main__':
             logger.error("SystemID not available.")
             exit(1)
 
-        logger.info(system_id)
-
         shared_secret = SharedSecret.load(Host)
 
         if not shared_secret:
             logger.error("SharedSecret not available.")
             exit(1)
-
-        logger.info(shared_secret)
 
         credentials = CognitoDeviceCredentials(system_id.message_tag(), shared_secret.key)
         logger.info(credentials)
@@ -87,14 +86,13 @@ if __name__ == '__main__':
         # run...
 
         if cmd.test:
-            gatekeeper = CognitoDeviceLoginManager(requests)
+            gatekeeper = CognitoLoginManager(requests)
 
-            auth = gatekeeper.login(credentials)
-            logger.info(auth)
+            result = gatekeeper.device_login(credentials)
+            logger.error(result.authentication_status.description)
 
-            if auth is None:
-                logger.error("invalid auth")
-                exit(1)
+            exit(0 if result.is_ok() else 1)
+
 
         # ----------------------------------------------------------------------------------------------------------------
         # end...
