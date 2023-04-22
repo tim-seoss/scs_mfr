@@ -35,7 +35,6 @@ FILES
 
 SEE ALSO
 scs_dev/aws_mqtt_client
-scs_dev/osio_mqtt_client
 """
 
 import sys
