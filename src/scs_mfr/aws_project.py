@@ -25,7 +25,7 @@ location paths are used by the device only when it is installed at a given locat
 
 The location ID may be an integer or a string.
 
-When the "verbose" "-v" flag is used, the osio_project utility reports all the topic paths derived from
+When the "verbose" "-v" flag is used, the aws_project utility reports all the topic paths derived from
 its specification.
 
 Note that the scs_mfr/aws_mqtt_client process must be restarted for changes to take effect.

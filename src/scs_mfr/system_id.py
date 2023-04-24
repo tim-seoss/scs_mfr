@@ -30,8 +30,6 @@ FILES
 SEE ALSO
 scs_dev/aws_topic_publisher
 scs_dev/aws_topic_subscriber
-scs_dev/osio_topic_publisher
-scs_dev/osio_topic_subscriber
 scs_dev/climate_sampler
 scs_dev/gases_sampler
 scs_dev/particulates_sampler
