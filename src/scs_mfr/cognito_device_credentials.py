@@ -30,11 +30,13 @@ import requests
 import sys
 
 from scs_core.aws.security.cognito_device import CognitoDeviceCredentials
+from scs_core.aws.security.cognito_device_creator import CognitoDeviceCreator
+from scs_core.aws.security.cognito_device_finder import CognitoDeviceFinder
 from scs_core.aws.security.cognito_login_manager import CognitoLoginManager
 
 from scs_core.data.json import JSONify
 
-from scs_core.sys.http_exception import HTTPException
+from scs_core.sys.http_exception import HTTPException, HTTPConflictException
 from scs_core.sys.logging import Logging
 from scs_core.sys.shared_secret import SharedSecret
 from scs_core.sys.system_id import SystemID
@@ -85,23 +87,41 @@ if __name__ == '__main__':
         # ------------------------------------------------------------------------------------------------------------
         # run...
 
-        if cmd.test:
+        if cmd.assert_device:
+            creator = CognitoDeviceCreator(requests)
+
+            report = creator.create(credentials)
+
+        elif cmd.test:
             gatekeeper = CognitoLoginManager(requests)
 
-            result = gatekeeper.device_login(credentials)
-            logger.error(result.authentication_status.description)
+            auth = gatekeeper.device_login(credentials)
 
-            exit(0 if result.is_ok() else 1)
+            if auth.is_ok():
+                print(auth.id_token)
+                finder = CognitoDeviceFinder(requests)
+                report = finder.get_by_tag(auth.id_token, system_id.message_tag())
+
+            else:
+                logger.error(auth.authentication_status.description)
+                exit(1)
+
+        else:
+            report = credentials
 
 
         # ----------------------------------------------------------------------------------------------------------------
         # end...
 
         if credentials:
-            print(JSONify.dumps(credentials))
+            print(JSONify.dumps(report))
 
     except KeyboardInterrupt:
         print(file=sys.stderr)
+
+    except HTTPConflictException:
+        logger.error("the device is already known to Cognito.")
+        exit(1)
 
     except HTTPException as ex:
         logger.error(ex.data)
