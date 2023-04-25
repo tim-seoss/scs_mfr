@@ -39,9 +39,10 @@ from scs_core.aws.security.cognito_device_creator import CognitoDeviceCreator
 from scs_core.aws.security.cognito_device_finder import CognitoDeviceIntrospector
 from scs_core.aws.security.cognito_login_manager import CognitoLoginManager
 
+from scs_core.client.http_exception import HTTPException, HTTPConflictException
+
 from scs_core.data.json import JSONify
 
-from scs_core.sys.http_exception import HTTPException, HTTPConflictException
 from scs_core.sys.logging import Logging
 from scs_core.sys.shared_secret import SharedSecret
 from scs_core.sys.system_id import SystemID
