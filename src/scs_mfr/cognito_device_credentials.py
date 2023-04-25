@@ -8,20 +8,25 @@ Created on 20 Apr 2022
 source repo: scs_mfr
 
 DESCRIPTION
-The cognito_device_credentials utility is used to test the validity of the Cognito identity for the device. The
-credentials are derived from the device system ID and shared secret.
+The cognito_device_credentials utility is used to assert the device in the Cognito devices pool, or test the validity
+of the Cognito identity for the device. The credentials are derived from the device system ID and shared secret.
+
+In --assert and --test modes, the utility outputs the Cognito device record. Otherwise, the utility outputs the
+credentials.
 
 SYNOPSIS
-cognito_device_credentials.py [-t] [-v]
+Usage: cognito_device_credentials.py [{ -a | -t }] [-v]
 
 EXAMPLES
-./cognito_device_credentials.py -R
+./cognito_device_credentials.py -t
 
-DOCUMENT EXAMPLE
-{"username": "scs-opc-1", "password": "Ytzglk6oYpzJY0FB"}
+DOCUMENT EXAMPLE - CREDENTIALS
+{"username": "scs-be2-3", "password": "################"}
+
+DOCUMENT EXAMPLE - DEVICE
+{"username": "scs-be2-3", "created": "2023-04-25T10:05:55Z", "last-updated": "2023-04-25T10:05:55Z"}
 
 SEE ALSO
-scs_analysis/cognito_user_credentials
 scs_mfr/shared_secret
 scs_mfr/system_id
 """
@@ -31,7 +36,7 @@ import sys
 
 from scs_core.aws.security.cognito_device import CognitoDeviceCredentials
 from scs_core.aws.security.cognito_device_creator import CognitoDeviceCreator
-from scs_core.aws.security.cognito_device_finder import CognitoDeviceFinder
+from scs_core.aws.security.cognito_device_finder import CognitoDeviceIntrospector
 from scs_core.aws.security.cognito_login_manager import CognitoLoginManager
 
 from scs_core.data.json import JSONify
@@ -89,18 +94,15 @@ if __name__ == '__main__':
 
         if cmd.assert_device:
             creator = CognitoDeviceCreator(requests)
-
             report = creator.create(credentials)
 
         elif cmd.test:
             gatekeeper = CognitoLoginManager(requests)
-
             auth = gatekeeper.device_login(credentials)
 
             if auth.is_ok():
-                print(auth.id_token)
-                finder = CognitoDeviceFinder(requests)
-                report = finder.get_by_tag(auth.id_token, system_id.message_tag())
+                finder = CognitoDeviceIntrospector(requests)
+                report = finder.find_self(auth.id_token)
 
             else:
                 logger.error(auth.authentication_status.description)
