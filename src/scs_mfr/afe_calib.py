@@ -44,12 +44,13 @@ https://www.alphasense-technology.co.uk/
 import json
 import sys
 
+from scs_core.client.http_exception import HTTPException
+
 from scs_core.data.json import JSONify
 
 from scs_core.gas.afe_calib import AFECalib
 from scs_core.gas.dsi_calib import DSICalib
 
-from scs_core.sys.http_exception import HTTPException
 from scs_core.sys.logging import Logging
 
 from scs_host.sys.host import Host
