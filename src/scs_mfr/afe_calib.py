@@ -136,8 +136,9 @@ if __name__ == '__main__':
     # ----------------------------------------------------------------------------------------------------------------
     # end...
 
-    except ValueError as ex:
-        logger.error(ex)                    # zero-sensitivity found in calibration document
+    except ValueError as ex:                        # incorrect sensitivity found in calibration document
+        logger.error(str(ex) + ':')
+        logger.error(JSONify.dumps(calib))
         exit(1)
 
     except KeyboardInterrupt:
