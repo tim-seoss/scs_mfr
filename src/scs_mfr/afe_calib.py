@@ -99,9 +99,11 @@ if __name__ == '__main__':
 
         if cmd.set():
             if cmd.afe_serial_number is not None:
+                logger.info("doing AFE set")
                 calib = AFECalib.download(cmd.afe_serial_number)
 
             else:
+                logger.info("doing DSI set")
                 calib = DSICalib.download(cmd.sensor_serial_number)
                 calib.calibrated_on = cmd.sensor_calibration_date
 
