@@ -237,9 +237,6 @@ DOCUMENT EXAMPLE
                 "tally": 1
             }
         },
-        "shared-secret": {
-            "key": "0jZoQDiSJJ1Rl"
-        },
         "sht-conf": {
             "int": "0x45",
             "ext": "0x45"
