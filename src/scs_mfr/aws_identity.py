@@ -96,6 +96,9 @@ if __name__ == '__main__':
     # resources
 
     if cmd.setup:
+
+        # TODO: load key from API
+
         try:
             key = AccessKey.from_stdin() if cmd.stdin else AccessKey.from_user()
         except ValueError:
