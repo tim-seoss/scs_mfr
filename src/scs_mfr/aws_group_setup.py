@@ -20,7 +20,7 @@ If neither --retrieve or --set flags are used, the aws_group_setup utility repor
 the device, if it exists.
 
 SYNOPSIS
-aws_group_setup.py [{ -r | -s [-a AWS_GROUP_NAME] [-f [-k]] }] [-i INDENT] [-v]
+aws_group_setup.py [{ -r | -s [-a AWS_GROUP_NAME] [-f] }] [-i INDENT] [-v]
 
 EXAMPLES
 ./aws_group_setup.py -s oE.1 -a scs-test-001-group -f
@@ -107,7 +107,7 @@ if __name__ == '__main__':
 
 
     # ----------------------------------------------------------------------------------------------------------------
-    # resources...
+    # authentication...
 
     # AWSGroupConfiguration...
     conf = AWSGroupConfiguration.load(Host)

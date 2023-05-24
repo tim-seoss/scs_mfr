@@ -19,7 +19,7 @@ If no group name is provided, the host name will be read from the device.
 If no core name is provided, the host name will be read from the device.
 
 SYNOPSIS
-aws_identity.py [-s [-g GROUP_NAME] [-c CORE_NAME] [-k]] [-i INDENT] [-v]
+aws_identity.py [-s [-g GROUP_NAME] [-c CORE_NAME]] [-i INDENT] [-v]
 
 EXAMPLES
 ./aws_identity.py -s -g scs-test-003-group -c scs-test-003-core -v
@@ -97,7 +97,7 @@ if __name__ == '__main__':
 
 
     # ----------------------------------------------------------------------------------------------------------------
-    # resources
+    # authentication...
 
     if cmd.setup:
         # credentials...
