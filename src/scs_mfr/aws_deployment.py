@@ -14,7 +14,7 @@ configuration should already be in place - see aws_identity.py and aws_group_set
 The greengrass service must be running for the deployment to complete.
 
 SYNOPSIS
-aws_deployment.py [-k] [-w] [-i INDENT] [-v]
+aws_deployment.py [-w] [-i INDENT] [-v]
 
 EXAMPLES
 ./aws_deployment.py -vw
