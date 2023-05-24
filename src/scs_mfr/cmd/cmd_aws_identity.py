@@ -16,7 +16,7 @@ class CmdAWSIdentity(object):
         """
         Constructor
         """
-        self.__parser = optparse.OptionParser(usage="%prog [-s [-g GROUP_NAME] [-c CORE_NAME] [-k]] [-i INDENT] [-v]",
+        self.__parser = optparse.OptionParser(usage="%prog [-s [-g GROUP_NAME] [-c CORE_NAME]] [-i INDENT] [-v]",
                                               version="%prog 1.0")
         # commands...
         self.__parser.add_option("--setup", "-s", action="store_true", dest="setup", default=False,
@@ -29,10 +29,6 @@ class CmdAWSIdentity(object):
         self.__parser.add_option("--core-name", "-c", action="store", dest="core_name", default=False,
                                  help="Overwrite the name of the core to create")
 
-        # input...
-        self.__parser.add_option("--stdin-key", "-k", action="store_true", dest="stdin", default=False,
-                                 help="read key from stdin")
-
         # output...
         self.__parser.add_option("--indent", "-i", action="store", dest="indent", type=int,
                                  help="pretty-print the output with INDENT")
@@ -41,6 +37,7 @@ class CmdAWSIdentity(object):
                                  help="report narrative to stderr")
 
         self.__opts, self.__args = self.__parser.parse_args()
+
 
     # ----------------------------------------------------------------------------------------------------------------
 
@@ -68,11 +65,6 @@ class CmdAWSIdentity(object):
 
 
     @property
-    def stdin(self):
-        return self.__opts.stdin
-
-
-    @property
     def indent(self):
         return self.__opts.indent
 
@@ -89,5 +81,5 @@ class CmdAWSIdentity(object):
 
 
     def __str__(self, *args, **kwargs):
-        return "CmdAWSIdentity:{setup:%s, group-name:%s, core-name:%s, stdin:%s, indent:%s, verbose:%s}" % \
-               (self.setup, self.group_name, self.core_name, self.stdin, self.indent, self.verbose)
+        return "CmdAWSIdentity:{setup:%s, group-name:%s, core-name:%s, indent:%s, verbose:%s}" % \
+               (self.setup, self.group_name, self.core_name, self.indent, self.verbose)
