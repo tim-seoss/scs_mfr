@@ -44,14 +44,18 @@ https://docs.aws.amazon.com/iot/latest/developerguide/server-authentication.html
 """
 
 import os
+import requests
 import sys
 
 from botocore.exceptions import NoCredentialsError, ClientError
 
-from scs_core.aws.client.access_key import AccessKey
 from scs_core.aws.client.client import Client
 from scs_core.aws.config.aws import AWS
 from scs_core.aws.greengrass.aws_identity import AWSIdentity
+
+from scs_core.aws.security.access_key_manager import AccessKeyManager
+from scs_core.aws.security.cognito_device import CognitoDeviceCredentials
+from scs_core.aws.security.cognito_login_manager import CognitoLoginManager
 
 from scs_core.data.json import JSONify
 
@@ -96,18 +100,19 @@ if __name__ == '__main__':
     # resources
 
     if cmd.setup:
+        # credentials...
+        credentials = CognitoDeviceCredentials.load_credentials_for_device(Host)
 
-        # TODO: load key from API
+        # AccessKey...
+        gatekeeper = CognitoLoginManager(requests)
+        auth = gatekeeper.device_login(credentials)
 
-        try:
-            key = AccessKey.from_stdin() if cmd.stdin else AccessKey.from_user()
-        except ValueError:
-            logger.error("invalid key.")
+        if not auth.is_ok():
+            logger.error(auth.authentication_status.description)
             exit(1)
 
-        except KeyboardInterrupt:
-            print(file=sys.stderr)
-            exit(0)
+        manager = AccessKeyManager(requests)
+        key = manager.get(auth.id_token)
 
 
     # ----------------------------------------------------------------------------------------------------------------
