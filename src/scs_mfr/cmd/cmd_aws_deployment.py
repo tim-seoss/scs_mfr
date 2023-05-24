@@ -9,7 +9,7 @@ import optparse
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class CMDAWSDeployment(object):
+class CmdAWSDeployment(object):
     """unix command line handler"""
 
     def __init__(self):
@@ -63,5 +63,5 @@ class CMDAWSDeployment(object):
         self.__parser.print_help(file)
 
     def __str__(self, *args, **kwargs):
-        return "CMDAWSDeployment:{stdin:%s wait:%s indent:%s verbose:%s}" % \
+        return "CmdAWSDeployment:{stdin:%s wait:%s indent:%s verbose:%s}" % \
                (self.stdin, self.wait, self.indent, self.verbose)
